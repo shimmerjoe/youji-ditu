@@ -276,13 +276,20 @@ a:hover { text-decoration: underline; }
   margin-left: auto;
 }
 .global-search-box {
-  display: grid;
-  gap: 4px;
+  display: block;
   color: var(--muted);
   font-size: 12px;
 }
+/* 隐藏"全站搜索"文字标题，让搜索框与品牌、用户中心在同一行对齐（保留无障碍可读） */
+.global-search-box > span {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
 .global-search-box input {
-  min-height: 38px;
+  min-height: 40px;
 }
 .site-search-results {
   position: absolute;
@@ -1050,10 +1057,10 @@ button:active { transform: translateY(0); }
 .guide-section {
   position: relative;
   background:
-    linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,250,242,.9)),
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 24%);
+    linear-gradient(135deg, #fff, color-mix(in srgb, var(--sc, var(--accent)) 5%, #fff)),
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--sc, var(--accent)) 16%, transparent), transparent 26%);
   border: 1px solid var(--line);
-  border-top: 5px solid color-mix(in srgb, var(--accent) 66%, var(--sun));
+  border-top: 5px solid var(--sc, var(--accent));
   border-radius: var(--radius);
   padding: clamp(18px, 3vw, 32px);
   box-shadow: var(--shadow-sm);
@@ -1062,6 +1069,13 @@ button:active { transform: translateY(0); }
 .guide-section:hover {
   box-shadow: 0 16px 40px rgba(38, 31, 25, 0.10);
 }
+/* 章节配色轮转，告别单调 */
+.content > .guide-section:nth-of-type(6n+1) { --sc: var(--c4); }
+.content > .guide-section:nth-of-type(6n+2) { --sc: var(--c2); }
+.content > .guide-section:nth-of-type(6n+3) { --sc: var(--c3); }
+.content > .guide-section:nth-of-type(6n+4) { --sc: var(--c6); }
+.content > .guide-section:nth-of-type(6n+5) { --sc: var(--c1); }
+.content > .guide-section:nth-of-type(6n)   { --sc: var(--c5); }
 .guide-section h2,
 .guide-section h3 {
   margin: 0 0 14px;
@@ -1071,11 +1085,12 @@ button:active { transform: translateY(0); }
 .guide-section h2 {
   font-size: clamp(24px, 3.5vw, 36px);
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--hairline);
+  border-bottom: 2px solid color-mix(in srgb, var(--sc, var(--accent)) 30%, var(--hairline));
+  color: color-mix(in srgb, var(--sc, var(--accent)) 82%, #111);
 }
 .guide-section h3 {
   font-size: 22px;
-  color: color-mix(in srgb, var(--accent) 75%, #111);
+  color: color-mix(in srgb, var(--sc, var(--accent)) 78%, #111);
 }
 
 .md-list {
@@ -1097,17 +1112,53 @@ button:active { transform: translateY(0); }
 .md-list.depth-0 > .list-card.fact {
   grid-column: 1 / -1;
 }
+/* 嵌套列表去掉树状连接线与缩进，改为干净的分组（不再像思维导图） */
 .md-list.depth-1,
 .md-list.depth-2,
 .md-list.depth-3 {
-  margin-top: 10px;
-  padding-left: 14px;
-  border-left: 2px solid color-mix(in srgb, var(--accent) 18%, transparent);
+  margin-top: 12px;
+  padding-left: 0;
+  border-left: 0;
 }
-/* 纯叶子列表平铺为多列卡片 */
+/* 纯叶子列表平铺为多列小卡片 */
 .md-list.leaf-list {
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 248px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
   gap: 8px;
+}
+/* 顶层带子项的卡片 = 彩色专题面板 */
+.md-list.depth-0 > .list-card.has-children {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 0;
+  border-top: 4px solid var(--tc, var(--accent));
+  border-radius: var(--radius);
+  padding: 16px 18px 18px;
+  box-shadow: var(--shadow-sm);
+}
+.md-list.depth-0 > .list-card.has-children:hover { box-shadow: var(--shadow); }
+.md-list.depth-0 > .list-card.has-children > .item-label,
+.md-list.depth-0 > .list-card.has-children > .item-body {
+  font-size: 16.5px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.md-list.depth-0 > .list-card.has-children > .item-label {
+  background: var(--tc, var(--accent-soft));
+  color: #fff;
+}
+/* 顶层卡片按位置轮转多彩主色（呼应主题卡的活力配色） */
+.md-list.depth-0 > .list-card:nth-child(6n+1) { --tc: var(--c4); }
+.md-list.depth-0 > .list-card:nth-child(6n+2) { --tc: var(--c2); }
+.md-list.depth-0 > .list-card:nth-child(6n+3) { --tc: var(--c3); }
+.md-list.depth-0 > .list-card:nth-child(6n+4) { --tc: var(--c6); }
+.md-list.depth-0 > .list-card:nth-child(6n+5) { --tc: var(--c1); }
+.md-list.depth-0 > .list-card:nth-child(6n)   { --tc: var(--c5); }
+/* 深色模式下面板与卡片不要白底 */
+html[data-theme="dark"] .md-list.depth-0 > .list-card.has-children,
+html[data-theme="dark"] .list-card { background: #1b2326; }
+html[data-theme="dark"] .list-card .list-card { background: rgba(255,255,255,0.05); }
+html[data-theme="dark"] .guide-section {
+  background: linear-gradient(135deg, #1a2225, #161d1f);
 }
 
 /* 章节条目计数徽标 */
@@ -1146,22 +1197,26 @@ button:active { transform: translateY(0); }
 }
 .section-toggle:hover { background: var(--accent-soft); }
 .list-card {
-  background: rgba(255,255,255,.70);
-  border: 1px solid rgba(29, 37, 37, 0.08);
-  border-left: 4px solid color-mix(in srgb, var(--accent) 28%, #ffffff);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--tc, color-mix(in srgb, var(--accent) 40%, var(--line)));
   border-radius: var(--radius-sm);
   padding: 11px 13px;
-  transition: border-color .2s var(--ease), background .2s var(--ease), transform .2s var(--ease);
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease), transform .2s var(--ease);
 }
 .list-card:hover {
-  border-left-color: var(--accent);
-  background: rgba(255,255,255,.95);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
 }
-.depth-0 > .list-card {
-  background: rgba(255,255,255,.92);
+/* 面板内的子卡片用更轻的样式，避免"盒子套盒子" */
+.list-card .list-card {
+  border: 1px solid var(--hairline);
+  border-left: 3px solid color-mix(in srgb, var(--tc, var(--accent)) 60%, var(--line));
+  background: color-mix(in srgb, var(--tc, var(--accent)) 5%, #fff);
 }
 .list-card.fact {
-  background: var(--accent-soft);
+  background: color-mix(in srgb, var(--tc, var(--accent)) 10%, #fff);
+  border-left-color: var(--tc, var(--accent));
 }
 .visual-card {
   padding: 12px;
@@ -2034,7 +2089,7 @@ a.hero-slide:hover img { filter: brightness(1.04); }
     min-height: 38px;
   }
   .header-links { display: none; }
-  .brand-name { display: none; }
+  .nav-toggle { font-size: 18px; padding: 0 12px; }
   .header-user { order: 2; margin-left: auto; }
   .header-user-name { display: none; }
   .global-search {

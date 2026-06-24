@@ -97,11 +97,13 @@
   function webSearchLinks(q) {
     const kw = encodeURIComponent(q);
     const kwt = encodeURIComponent(q + " 旅游攻略");
+    // 小红书 web 端需登录才显示结果；携程/抖音/马蜂窝/百度图片可直接浏览。
     return '<div class="search-web"><span>联网搜索</span>' +
-      '<a href="https://www.xiaohongshu.com/search_result?keyword=' + kw + '" target="_blank" rel="noreferrer">小红书</a>' +
-      '<a href="https://www.baidu.com/s?wd=' + kwt + '" target="_blank" rel="noreferrer">百度</a>' +
-      '<a href="https://image.baidu.com/search/index?tn=baiduimage&word=' + kwt + '" target="_blank" rel="noreferrer">百度图片</a>' +
+      '<a href="https://you.ctrip.com/searchsite/?query=' + kwt + '" target="_blank" rel="noreferrer">携程攻略</a>' +
       '<a href="https://www.mafengwo.cn/search/q.php?q=' + kwt + '" target="_blank" rel="noreferrer">马蜂窝</a>' +
+      '<a href="https://www.douyin.com/search/' + kwt + '" target="_blank" rel="noreferrer">抖音</a>' +
+      '<a href="https://image.baidu.com/search/index?tn=baiduimage&word=' + kwt + '" target="_blank" rel="noreferrer">百度图片</a>' +
+      '<a href="https://www.xiaohongshu.com/search_result?keyword=' + kw + '&type=54" target="_blank" rel="noreferrer">小红书</a>' +
       '</div>';
   }
 

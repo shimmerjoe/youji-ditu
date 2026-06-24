@@ -1,0 +1,25 @@
+{
+  "name": "游记地图 · 旅游攻略",
+  "short_name": "游记地图",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6efe1",
+  "theme_color": "#0f9e8c",
+  "lang": "zh-CN",
+  "description": "跨城市旅游攻略：景点、美食、季节、路线与行程编排。",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

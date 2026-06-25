@@ -487,6 +487,34 @@
     });
   });
 
+  // ===== 城市页速览：收藏 / 加入行程（带文字标签）=====
+  document.querySelectorAll(".co-fav").forEach((btn) => {
+    const key = btn.dataset.key;
+    const sync = () => { const f = isFav(key); btn.classList.toggle("on", f); btn.textContent = f ? "★ 已收藏" : "☆ 收藏"; };
+    sync();
+    btn.addEventListener("click", () => {
+      let favs = getFavs();
+      const i = favs.findIndex((f) => f.key === key);
+      if (i >= 0) favs.splice(i, 1);
+      else favs.unshift({ key: key, name: btn.dataset.name, href: btn.dataset.href, sub: btn.dataset.sub });
+      setFavs(favs);
+      sync();
+    });
+  });
+  document.querySelectorAll(".co-trip").forEach((btn) => {
+    const key = btn.dataset.key;
+    const sync = () => { const t = LS.get("tay_trip", []).some((x) => x.key === key); btn.classList.toggle("on", t); btn.textContent = t ? "✓ 已在行程" : "＋ 加入行程"; };
+    sync();
+    btn.addEventListener("click", () => {
+      let trip = LS.get("tay_trip", []);
+      const i = trip.findIndex((x) => x.key === key);
+      if (i >= 0) trip.splice(i, 1);
+      else trip.push({ key: key, name: btn.dataset.name, href: btn.dataset.href, sub: btn.dataset.sub });
+      LS.set("tay_trip", trip);
+      sync();
+    });
+  });
+
   // ===== Hero 大图轮播 =====
   (function () {
     const car = document.getElementById("heroCarousel");

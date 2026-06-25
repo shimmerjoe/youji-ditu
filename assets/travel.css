@@ -2078,6 +2078,55 @@ a.hero-slide:hover img { filter: brightness(1.04); }
 .changelog-block h3 { margin: 0 0 8px; font-size: 17px; color: var(--accent-deep); }
 .changelog-block ul { margin: 0; padding-left: 18px; color: var(--muted); line-height: 1.7; }
 
+/* 城市页 · 速览名片 */
+.city-overview {
+  margin: 0 clamp(16px, 5vw, 72px) 24px;
+  padding: clamp(16px, 3vw, 24px);
+  display: grid;
+  gap: 14px;
+  background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--accent) 7%, #fff));
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.co-facts { display: flex; flex-wrap: wrap; gap: 10px 30px; }
+.co-cell { display: flex; align-items: baseline; gap: 8px; }
+.co-k { color: var(--muted); font-size: 13px; }
+.co-v { font-weight: 800; font-size: 16px; }
+.co-block { display: grid; gap: 8px; }
+.co-bk { font-weight: 800; color: var(--accent-deep); }
+.co-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.co-chips em {
+  font-style: normal;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+.co-chips em.food {
+  background: color-mix(in srgb, var(--food) 16%, #fff);
+  color: color-mix(in srgb, var(--food) 80%, #111);
+}
+.co-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.co-fav, .co-trip {
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-weight: 800;
+  border: 1px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+  transition: transform .15s var(--ease), box-shadow .2s var(--ease);
+}
+.co-fav:hover, .co-trip:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.co-fav.on { color: #fff; background: linear-gradient(135deg, var(--c2), var(--c1)); border-color: transparent; }
+.co-trip.on { color: #fff; background: linear-gradient(135deg, var(--c5), var(--c4)); border-color: transparent; }
+html[data-theme="dark"] .city-overview { background: linear-gradient(135deg, #1b2326, #161d1f); }
+html[data-theme="dark"] .co-fav, html[data-theme="dark"] .co-trip { background: #1b2326; color: var(--ink); }
+
 @media (max-width: 920px) {
   .hero { grid-template-columns: 1fr; }
   .hero-stage { min-height: 0; }
@@ -2189,6 +2238,7 @@ a.hero-slide:hover img { filter: brightness(1.04); }
   }
   .city-explorer,
   .source-media,
+  .city-overview,
   .home-section {
     margin-left: 12px;
     margin-right: 12px;

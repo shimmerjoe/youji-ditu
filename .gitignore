@@ -1,18 +1,18 @@
-# 构建脚本与数据源（公网站点不需要）
-tools/
-城市/
-记录.md
+# 本地辅助资料与发布外壳
 聊天记录整理.md
 便携运行说明.md
 移动端与APK说明.md
 *.bat
 .claude/
 app-capacitor/
-# 缓存与原始大图（站点不引用）
-assets/photo-cache.json
-assets/source-media-cache.json
+# 本机密钥配置、浏览器报告与原始大图
+assets/roadtrip-config.js
+artifacts/
 assets/photos/*/cityphoto-src.*
+docs/image-candidates/
 # 临时/隐藏
+__pycache__/
+*.pyc
 .build*.txt
 .cityfetch*.txt
 .jschk.js

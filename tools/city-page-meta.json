@@ -1,0 +1,1087 @@
+{
+  "北京": {
+    "slug": "beijing",
+    "title": "北京旅游攻略",
+    "subtitle": "故宫、长城、胡同、博物馆和京味小吃",
+    "accent": "#5f6f73",
+    "image_query": "北京 北京 china travel"
+  },
+  "上海": {
+    "slug": "shanghai",
+    "title": "上海旅游攻略",
+    "subtitle": "外滩、海派街区、博物馆、迪士尼和本帮菜",
+    "accent": "#5f6f73",
+    "image_query": "上海 上海 china travel"
+  },
+  "天津": {
+    "slug": "tianjin",
+    "title": "天津旅游攻略",
+    "subtitle": "海河夜景、五大道、瓷房子、相声和津味早点",
+    "accent": "#5f6f73",
+    "image_query": "天津 天津 china travel"
+  },
+  "河北_承德": {
+    "slug": "chengde",
+    "title": "河北承德旅游攻略",
+    "subtitle": "避暑山庄、外八庙、坝上草原和满蒙风味",
+    "accent": "#5f6f73",
+    "image_query": "承德 河北 china travel"
+  },
+  "河北_秦皇岛": {
+    "slug": "qinhuangdao",
+    "title": "河北秦皇岛旅游攻略",
+    "subtitle": "北戴河海滨、山海关、阿那亚和海鲜烧烤",
+    "accent": "#5f6f73",
+    "image_query": "秦皇岛 河北 china travel"
+  },
+  "山西_大同": {
+    "slug": "datong",
+    "title": "山西大同旅游攻略",
+    "subtitle": "云冈石窟、古城、悬空寺和刀削面",
+    "accent": "#5f6f73",
+    "image_query": "大同 山西 china travel"
+  },
+  "山西_太原": {
+    "slug": "taiyuan",
+    "title": "山西太原旅游攻略",
+    "subtitle": "晋祠、山西博物院、汾河夜景和面食",
+    "accent": "#5f6f73",
+    "image_query": "太原 山西 china travel"
+  },
+  "山西_忻州": {
+    "slug": "xinzhou",
+    "title": "山西忻州旅游攻略",
+    "subtitle": "五台山、雁门关、古城和山西面食",
+    "accent": "#5f6f73",
+    "image_query": "忻州 山西 china travel"
+  },
+  "内蒙古_呼和浩特": {
+    "slug": "hohhot",
+    "title": "内蒙古呼和浩特旅游攻略",
+    "subtitle": "草原门户、昭君博物院、大召寺和奶茶烧麦",
+    "accent": "#5f6f73",
+    "image_query": "呼和浩特 内蒙古 china travel"
+  },
+  "内蒙古_呼伦贝尔": {
+    "slug": "hulunbuir",
+    "title": "内蒙古呼伦贝尔旅游攻略",
+    "subtitle": "草原、湿地、边境小城、驯鹿和俄式风味",
+    "accent": "#5f6f73",
+    "image_query": "呼伦贝尔 内蒙古 china travel"
+  },
+  "辽宁_大连": {
+    "slug": "dalian",
+    "title": "辽宁大连旅游攻略",
+    "subtitle": "滨海路、星海广场、海鲜、旅顺和浪漫海岸",
+    "accent": "#5f6f73",
+    "image_query": "大连 辽宁 china travel"
+  },
+  "辽宁_沈阳": {
+    "slug": "shenyang",
+    "title": "辽宁沈阳旅游攻略",
+    "subtitle": "故宫、张氏帅府、老北市和东北烧烤",
+    "accent": "#5f6f73",
+    "image_query": "沈阳 辽宁 china travel"
+  },
+  "吉林_长春": {
+    "slug": "changchun",
+    "title": "吉林长春旅游攻略",
+    "subtitle": "伪满皇宫、净月潭、电影文化和东北菜",
+    "accent": "#5f6f73",
+    "image_query": "长春 吉林 china travel"
+  },
+  "吉林_延边": {
+    "slug": "yanbian",
+    "title": "吉林延边旅游攻略",
+    "subtitle": "延吉美食、长白山门户、朝鲜族风情和咖啡街",
+    "accent": "#5f6f73",
+    "image_query": "延边 吉林 china travel"
+  },
+  "黑龙江_哈尔滨": {
+    "slug": "harbin",
+    "title": "黑龙江哈尔滨旅游攻略",
+    "subtitle": "冰雪大世界、中央大街、索菲亚教堂和俄式西餐",
+    "accent": "#5f6f73",
+    "image_query": "哈尔滨 黑龙江 china travel"
+  },
+  "黑龙江_牡丹江": {
+    "slug": "mudanjiang",
+    "title": "黑龙江牡丹江旅游攻略",
+    "subtitle": "镜泊湖、雪乡、火山地貌和东北风味",
+    "accent": "#5f6f73",
+    "image_query": "牡丹江 黑龙江 china travel"
+  },
+  "山东_青岛": {
+    "slug": "qingdao",
+    "title": "山东青岛旅游攻略",
+    "subtitle": "海滨栈桥、崂山、啤酒、八大关和海鲜",
+    "accent": "#5f6f73",
+    "image_query": "青岛 山东 china travel"
+  },
+  "山东_济南": {
+    "slug": "jinan",
+    "title": "山东济南旅游攻略",
+    "subtitle": "泉城、趵突泉、大明湖、鲁菜和把子肉",
+    "accent": "#5f6f73",
+    "image_query": "济南 山东 china travel"
+  },
+  "山东_烟台": {
+    "slug": "yantai",
+    "title": "山东烟台旅游攻略",
+    "subtitle": "蓬莱阁、长岛、葡萄酒、海鲜和滨海慢游",
+    "accent": "#5f6f73",
+    "image_query": "烟台 山东 china travel"
+  },
+  "山东_威海": {
+    "slug": "weihai",
+    "title": "山东威海旅游攻略",
+    "subtitle": "环海路、刘公岛、成山头、海鲜和海边日落",
+    "accent": "#5f6f73",
+    "image_query": "威海 山东 china travel"
+  },
+  "山东_泰安": {
+    "slug": "taian",
+    "title": "山东泰安旅游攻略",
+    "subtitle": "泰山日出、岱庙、封禅文化和山东面食",
+    "accent": "#5f6f73",
+    "image_query": "泰安 山东 china travel"
+  },
+  "山东_济宁": {
+    "slug": "jining",
+    "title": "山东济宁旅游攻略",
+    "subtitle": "曲阜三孔、孔子文化、微山湖和鲁西南小吃",
+    "accent": "#5f6f73",
+    "image_query": "济宁 山东 china travel"
+  },
+  "河南_洛阳": {
+    "slug": "luoyang",
+    "title": "河南洛阳旅游攻略",
+    "subtitle": "龙门石窟、洛邑古城、牡丹和牛肉汤",
+    "accent": "#5f6f73",
+    "image_query": "洛阳 河南 china travel"
+  },
+  "河南_开封": {
+    "slug": "kaifeng",
+    "title": "河南开封旅游攻略",
+    "subtitle": "清明上河园、宋都夜市、铁塔和灌汤包",
+    "accent": "#5f6f73",
+    "image_query": "开封 河南 china travel"
+  },
+  "湖北_武汉": {
+    "slug": "wuhan",
+    "title": "湖北武汉旅游攻略",
+    "subtitle": "黄鹤楼、东湖、湖北省博和过早",
+    "accent": "#5f6f73",
+    "image_query": "武汉 湖北 china travel"
+  },
+  "湖北_宜昌": {
+    "slug": "yichang",
+    "title": "湖北宜昌旅游攻略",
+    "subtitle": "三峡大坝、两坝一峡、清江画廊和凉虾",
+    "accent": "#5f6f73",
+    "image_query": "宜昌 湖北 china travel"
+  },
+  "湖北_十堰": {
+    "slug": "shiyan",
+    "title": "湖北十堰旅游攻略",
+    "subtitle": "武当山、丹江口、汽车城和鄂西北风味",
+    "accent": "#5f6f73",
+    "image_query": "十堰 湖北 china travel"
+  },
+  "湖北_恩施": {
+    "slug": "enshi",
+    "title": "湖北恩施旅游攻略",
+    "subtitle": "恩施大峡谷、屏山峡谷、土家风情和合渣",
+    "accent": "#5f6f73",
+    "image_query": "恩施 湖北 china travel"
+  },
+  "江西_南昌": {
+    "slug": "nanchang",
+    "title": "江西南昌旅游攻略",
+    "subtitle": "滕王阁、八一起义、赣江夜景和拌粉瓦罐汤",
+    "accent": "#5f6f73",
+    "image_query": "南昌 江西 china travel"
+  },
+  "江西_景德镇": {
+    "slug": "jingdezhen",
+    "title": "江西景德镇旅游攻略",
+    "subtitle": "陶瓷、御窑、陶溪川、三宝村和瓷都小吃",
+    "accent": "#5f6f73",
+    "image_query": "景德镇 江西 china travel"
+  },
+  "江西_上饶": {
+    "slug": "shangrao",
+    "title": "江西上饶旅游攻略",
+    "subtitle": "婺源、三清山、望仙谷和赣东北风味",
+    "accent": "#5f6f73",
+    "image_query": "上饶 江西 china travel"
+  },
+  "江西_九江": {
+    "slug": "jiujiang",
+    "title": "江西九江旅游攻略",
+    "subtitle": "庐山、长江、鄱阳湖和浔阳楼",
+    "accent": "#5f6f73",
+    "image_query": "九江 江西 china travel"
+  },
+  "安徽_黄山": {
+    "slug": "huangshan",
+    "title": "安徽黄山旅游攻略",
+    "subtitle": "黄山、宏村、西递、徽州古城和臭鳜鱼",
+    "accent": "#5f6f73",
+    "image_query": "黄山 安徽 china travel"
+  },
+  "安徽_合肥": {
+    "slug": "hefei",
+    "title": "安徽合肥旅游攻略",
+    "subtitle": "安徽博物院、包公园、巢湖和庐州小吃",
+    "accent": "#5f6f73",
+    "image_query": "合肥 安徽 china travel"
+  },
+  "安徽_池州": {
+    "slug": "chizhou",
+    "title": "安徽池州旅游攻略",
+    "subtitle": "九华山、平天湖、杏花村和徽皖风味",
+    "accent": "#5f6f73",
+    "image_query": "池州 安徽 china travel"
+  },
+  "福建_福州": {
+    "slug": "fuzhou",
+    "title": "福建福州旅游攻略",
+    "subtitle": "三坊七巷、鼓山、闽江夜景和鱼丸肉燕",
+    "accent": "#5f6f73",
+    "image_query": "福州 福建 china travel"
+  },
+  "福建_泉州": {
+    "slug": "quanzhou",
+    "title": "福建泉州旅游攻略",
+    "subtitle": "世遗古城、开元寺、蟳埔女和闽南小吃",
+    "accent": "#5f6f73",
+    "image_query": "泉州 福建 china travel"
+  },
+  "福建_南平": {
+    "slug": "nanping",
+    "title": "福建南平旅游攻略",
+    "subtitle": "武夷山、九曲溪、岩茶和闽北山水",
+    "accent": "#5f6f73",
+    "image_query": "南平 福建 china travel"
+  },
+  "广东_广州": {
+    "slug": "guangzhou",
+    "title": "广东广州旅游攻略",
+    "subtitle": "早茶、珠江夜游、粤博、沙面和广府老城",
+    "accent": "#5f6f73",
+    "image_query": "广州 广东 china travel"
+  },
+  "广东_深圳": {
+    "slug": "shenzhen",
+    "title": "广东深圳旅游攻略",
+    "subtitle": "城市海岸、设计街区、主题公园和粤式夜生活",
+    "accent": "#5f6f73",
+    "image_query": "深圳 广东 china travel"
+  },
+  "广东_珠海": {
+    "slug": "zhuhai",
+    "title": "广东珠海旅游攻略",
+    "subtitle": "情侣路、长隆海洋王国、海岛和葡式风味",
+    "accent": "#5f6f73",
+    "image_query": "珠海 广东 china travel"
+  },
+  "广东_潮州": {
+    "slug": "chaozhou",
+    "title": "广东潮州旅游攻略",
+    "subtitle": "广济桥、牌坊街、潮汕小吃和工夫茶",
+    "accent": "#5f6f73",
+    "image_query": "潮州 广东 china travel"
+  },
+  "广西_北海": {
+    "slug": "beihai",
+    "title": "广西北海旅游攻略",
+    "subtitle": "涠洲岛、银滩、侨港风情街和海鲜糖水",
+    "accent": "#5f6f73",
+    "image_query": "北海 广西 china travel"
+  },
+  "广西_柳州": {
+    "slug": "liuzhou",
+    "title": "广西柳州旅游攻略",
+    "subtitle": "螺蛳粉、龙潭公园、工业博物馆和夜景",
+    "accent": "#5f6f73",
+    "image_query": "柳州 广西 china travel"
+  },
+  "海南_三亚": {
+    "slug": "sanya",
+    "title": "海南三亚旅游攻略",
+    "subtitle": "海湾度假、热带雨林、免税购物和海鲜",
+    "accent": "#5f6f73",
+    "image_query": "三亚 海南 china travel"
+  },
+  "海南_海口": {
+    "slug": "haikou",
+    "title": "海南海口旅游攻略",
+    "subtitle": "骑楼老街、火山口、云洞图书馆和海南粉",
+    "accent": "#5f6f73",
+    "image_query": "海口 海南 china travel"
+  },
+  "甘肃_兰州": {
+    "slug": "lanzhou",
+    "title": "甘肃兰州旅游攻略",
+    "subtitle": "黄河风情线、甘博、牛肉面和西北中转",
+    "accent": "#5f6f73",
+    "image_query": "兰州 甘肃 china travel"
+  },
+  "甘肃_敦煌": {
+    "slug": "dunhuang",
+    "title": "甘肃敦煌旅游攻略",
+    "subtitle": "莫高窟、鸣沙山月牙泉、雅丹和西北夜市",
+    "accent": "#5f6f73",
+    "image_query": "敦煌 甘肃 china travel"
+  },
+  "甘肃_张掖": {
+    "slug": "zhangye",
+    "title": "甘肃张掖旅游攻略",
+    "subtitle": "七彩丹霞、马蹄寺、平山湖峡谷和甘州小吃",
+    "accent": "#5f6f73",
+    "image_query": "张掖 甘肃 china travel"
+  },
+  "青海_西宁": {
+    "slug": "xining",
+    "title": "青海西宁旅游攻略",
+    "subtitle": "塔尔寺、青海湖门户、手抓羊肉和高原凉爽",
+    "accent": "#5f6f73",
+    "image_query": "西宁 青海 china travel"
+  },
+  "宁夏_银川": {
+    "slug": "yinchuan",
+    "title": "宁夏银川旅游攻略",
+    "subtitle": "西夏陵、镇北堡、贺兰山和羊肉滩羊",
+    "accent": "#5f6f73",
+    "image_query": "银川 宁夏 china travel"
+  },
+  "新疆_乌鲁木齐": {
+    "slug": "urumqi",
+    "title": "新疆乌鲁木齐旅游攻略",
+    "subtitle": "新疆博物馆、天山天池、大巴扎和新疆美食",
+    "accent": "#5f6f73",
+    "image_query": "乌鲁木齐 新疆 china travel"
+  },
+  "新疆_喀什": {
+    "slug": "kashgar",
+    "title": "新疆喀什旅游攻略",
+    "subtitle": "喀什古城、帕米尔高原、牛羊巴扎和南疆风味",
+    "accent": "#5f6f73",
+    "image_query": "喀什 新疆 china travel"
+  },
+  "新疆_伊犁": {
+    "slug": "ili",
+    "title": "新疆伊犁旅游攻略",
+    "subtitle": "赛里木湖、那拉提、喀拉峻和薰衣草草原",
+    "accent": "#5f6f73",
+    "image_query": "伊犁 新疆 china travel"
+  },
+  "新疆_吐鲁番": {
+    "slug": "turpan",
+    "title": "新疆吐鲁番旅游攻略",
+    "subtitle": "火焰山、葡萄沟、交河故城和新疆瓜果",
+    "accent": "#5f6f73",
+    "image_query": "吐鲁番 新疆 china travel"
+  },
+  "西藏_拉萨": {
+    "slug": "lhasa",
+    "title": "西藏拉萨旅游攻略",
+    "subtitle": "布达拉宫、大昭寺、八廓街和藏餐甜茶",
+    "accent": "#5f6f73",
+    "image_query": "拉萨 西藏 china travel"
+  },
+  "西藏_林芝": {
+    "slug": "nyingchi",
+    "title": "西藏林芝旅游攻略",
+    "subtitle": "桃花、雅鲁藏布江、南迦巴瓦和藏东南森林",
+    "accent": "#5f6f73",
+    "image_query": "林芝 西藏 china travel"
+  },
+  "安徽_安庆": {
+    "slug": "anqing",
+    "title": "安徽安庆旅游攻略",
+    "subtitle": "天柱山、迎江寺、桐城文脉和江鲜小吃",
+    "accent": "#5f6f73",
+    "image_query": "安庆 安徽 china travel"
+  },
+  "安徽_宣城": {
+    "slug": "xuancheng",
+    "title": "安徽宣城旅游攻略",
+    "subtitle": "皖南山水、查济古村、敬亭山和徽菜小吃",
+    "accent": "#5f6f73",
+    "image_query": "宣城 安徽 china travel"
+  },
+  "安徽_滁州": {
+    "slug": "chuzhou",
+    "title": "安徽滁州旅游攻略",
+    "subtitle": "琅琊山、醉翁亭、明皇陵和江淮风味",
+    "accent": "#5f6f73",
+    "image_query": "滁州 安徽 china travel"
+  },
+  "安徽_芜湖": {
+    "slug": "wuhu",
+    "title": "安徽芜湖旅游攻略",
+    "subtitle": "鸠兹古镇、方特、长江夜景和小吃街",
+    "accent": "#5f6f73",
+    "image_query": "芜湖 安徽 china travel"
+  },
+  "安徽_亳州": {
+    "slug": "bozhou",
+    "title": "安徽亳州旅游攻略",
+    "subtitle": "曹操故里、花戏楼、中药文化和牛肉馍",
+    "accent": "#5f6f73",
+    "image_query": "亳州 安徽 china travel"
+  },
+  "福建_漳州": {
+    "slug": "zhangzhou",
+    "title": "福建漳州旅游攻略",
+    "subtitle": "土楼、火山岛、古城、片仔癀和闽南小吃",
+    "accent": "#5f6f73",
+    "image_query": "漳州 福建 china travel"
+  },
+  "福建_莆田": {
+    "slug": "putian",
+    "title": "福建莆田旅游攻略",
+    "subtitle": "湄洲岛、妈祖文化、南少林和兴化米粉",
+    "accent": "#5f6f73",
+    "image_query": "莆田 福建 china travel"
+  },
+  "福建_宁德": {
+    "slug": "ningde",
+    "title": "福建宁德旅游攻略",
+    "subtitle": "太姥山、霞浦滩涂、白水洋和闽东海鲜",
+    "accent": "#5f6f73",
+    "image_query": "宁德 福建 china travel"
+  },
+  "福建_龙岩": {
+    "slug": "longyan",
+    "title": "福建龙岩旅游攻略",
+    "subtitle": "永定土楼、古田会议、冠豸山和客家风味",
+    "accent": "#5f6f73",
+    "image_query": "龙岩 福建 china travel"
+  },
+  "福建_三明": {
+    "slug": "sanming",
+    "title": "福建三明旅游攻略",
+    "subtitle": "泰宁丹霞、沙县小吃、永安桃源洞和闽中山水",
+    "accent": "#5f6f73",
+    "image_query": "三明 福建 china travel"
+  },
+  "甘肃_天水": {
+    "slug": "tianshui",
+    "title": "甘肃天水旅游攻略",
+    "subtitle": "麦积山石窟、伏羲文化、古城和呱呱面皮",
+    "accent": "#5f6f73",
+    "image_query": "天水 甘肃 china travel"
+  },
+  "甘肃_武威": {
+    "slug": "wuwei",
+    "title": "甘肃武威旅游攻略",
+    "subtitle": "雷台汉墓、凉州文化、沙漠绿洲和三套车",
+    "accent": "#5f6f73",
+    "image_query": "武威 甘肃 china travel"
+  },
+  "甘肃_嘉峪关": {
+    "slug": "jiayuguan",
+    "title": "甘肃嘉峪关旅游攻略",
+    "subtitle": "天下第一雄关、悬壁长城、戈壁日落和西北面食",
+    "accent": "#5f6f73",
+    "image_query": "嘉峪关 甘肃 china travel"
+  },
+  "甘肃_甘南": {
+    "slug": "gannan",
+    "title": "甘肃甘南旅游攻略",
+    "subtitle": "拉卜楞寺、扎尕那、草原湿地和藏地风味",
+    "accent": "#5f6f73",
+    "image_query": "甘南 甘肃 china travel"
+  },
+  "甘肃_陇南": {
+    "slug": "longnan",
+    "title": "甘肃陇南旅游攻略",
+    "subtitle": "官鹅沟、万象洞、白龙江山水和陇南小吃",
+    "accent": "#5f6f73",
+    "image_query": "陇南 甘肃 china travel"
+  },
+  "广东_佛山": {
+    "slug": "foshan",
+    "title": "广东佛山旅游攻略",
+    "subtitle": "祖庙、岭南天地、顺德美食和醒狮武术",
+    "accent": "#5f6f73",
+    "image_query": "佛山 广东 china travel"
+  },
+  "广东_东莞": {
+    "slug": "dongguan",
+    "title": "广东东莞旅游攻略",
+    "subtitle": "可园、松山湖、潮玩工厂和莞香荔枝",
+    "accent": "#5f6f73",
+    "image_query": "东莞 广东 china travel"
+  },
+  "广东_惠州": {
+    "slug": "huizhou",
+    "title": "广东惠州旅游攻略",
+    "subtitle": "西湖、双月湾、罗浮山和客家海鲜",
+    "accent": "#5f6f73",
+    "image_query": "惠州 广东 china travel"
+  },
+  "广东_汕头": {
+    "slug": "shantou",
+    "title": "广东汕头旅游攻略",
+    "subtitle": "小公园、南澳岛、潮汕牛肉火锅和粿品",
+    "accent": "#5f6f73",
+    "image_query": "汕头 广东 china travel"
+  },
+  "广东_湛江": {
+    "slug": "zhanjiang",
+    "title": "广东湛江旅游攻略",
+    "subtitle": "湖光岩、赤坎老街、海鲜和雷州半岛",
+    "accent": "#5f6f73",
+    "image_query": "湛江 广东 china travel"
+  },
+  "广东_江门": {
+    "slug": "jiangmen",
+    "title": "广东江门旅游攻略",
+    "subtitle": "开平碉楼、赤坎华侨古镇、台山海岛和侨乡美食",
+    "accent": "#5f6f73",
+    "image_query": "江门 广东 china travel"
+  },
+  "广东_韶关": {
+    "slug": "shaoguan",
+    "title": "广东韶关旅游攻略",
+    "subtitle": "丹霞山、南华寺、乳源峡谷和粤北风味",
+    "accent": "#5f6f73",
+    "image_query": "韶关 广东 china travel"
+  },
+  "广东_肇庆": {
+    "slug": "zhaoqing",
+    "title": "广东肇庆旅游攻略",
+    "subtitle": "七星岩、鼎湖山、端砚和广府山水",
+    "accent": "#5f6f73",
+    "image_query": "肇庆 广东 china travel"
+  },
+  "广东_梅州": {
+    "slug": "meizhou",
+    "title": "广东梅州旅游攻略",
+    "subtitle": "客家围龙屋、雁南飞茶田、梅江老城和客家菜",
+    "accent": "#5f6f73",
+    "image_query": "梅州 广东 china travel"
+  },
+  "广西_南宁": {
+    "slug": "nanning",
+    "title": "广西南宁旅游攻略",
+    "subtitle": "青秀山、三街两巷、老友粉和绿城夜市",
+    "accent": "#5f6f73",
+    "image_query": "南宁 广西 china travel"
+  },
+  "广西_崇左": {
+    "slug": "chongzuo",
+    "title": "广西崇左旅游攻略",
+    "subtitle": "德天跨国瀑布、明仕田园、边关风情和越南风味",
+    "accent": "#5f6f73",
+    "image_query": "崇左 广西 china travel"
+  },
+  "广西_百色": {
+    "slug": "baise",
+    "title": "广西百色旅游攻略",
+    "subtitle": "百色起义、靖西山水、通灵峡谷和桂西风味",
+    "accent": "#5f6f73",
+    "image_query": "百色 广西 china travel"
+  },
+  "广西_贺州": {
+    "slug": "hezhou",
+    "title": "广西贺州旅游攻略",
+    "subtitle": "黄姚古镇、姑婆山、温泉和客家瑶乡风味",
+    "accent": "#5f6f73",
+    "image_query": "贺州 广西 china travel"
+  },
+  "广西_梧州": {
+    "slug": "wuzhou",
+    "title": "广西梧州旅游攻略",
+    "subtitle": "骑楼城、白云山、六堡茶和纸包鸡",
+    "accent": "#5f6f73",
+    "image_query": "梧州 广西 china travel"
+  },
+  "广西_防城港": {
+    "slug": "fangchenggang",
+    "title": "广西防城港旅游攻略",
+    "subtitle": "边海城市、东兴口岸、金滩和海鲜夜市",
+    "accent": "#5f6f73",
+    "image_query": "防城港 广西 china travel"
+  },
+  "河北_石家庄": {
+    "slug": "shijiazhuang",
+    "title": "河北石家庄旅游攻略",
+    "subtitle": "正定古城、赵州桥、河北博物院和驴肉火烧",
+    "accent": "#5f6f73",
+    "image_query": "石家庄 河北 china travel"
+  },
+  "河北_保定": {
+    "slug": "baoding",
+    "title": "河北保定旅游攻略",
+    "subtitle": "直隶总督署、古莲花池、白洋淀和驴火",
+    "accent": "#5f6f73",
+    "image_query": "保定 河北 china travel"
+  },
+  "河北_唐山": {
+    "slug": "tangshan",
+    "title": "河北唐山旅游攻略",
+    "subtitle": "工业记忆、南湖、清东陵和海鲜烧烤",
+    "accent": "#5f6f73",
+    "image_query": "唐山 河北 china travel"
+  },
+  "河北_张家口": {
+    "slug": "zhangjiakou",
+    "title": "河北张家口旅游攻略",
+    "subtitle": "崇礼滑雪、草原天路、大境门和坝上风光",
+    "accent": "#5f6f73",
+    "image_query": "张家口 河北 china travel"
+  },
+  "河北_邯郸": {
+    "slug": "handan",
+    "title": "河北邯郸旅游攻略",
+    "subtitle": "赵都文化、广府古城、娲皇宫和太极故里",
+    "accent": "#5f6f73",
+    "image_query": "邯郸 河北 china travel"
+  },
+  "河南_安阳": {
+    "slug": "anyang",
+    "title": "河南安阳旅游攻略",
+    "subtitle": "殷墟、文字博物馆、太行峡谷和扁粉菜",
+    "accent": "#5f6f73",
+    "image_query": "安阳 河南 china travel"
+  },
+  "河南_信阳": {
+    "slug": "xinyang",
+    "title": "河南信阳旅游攻略",
+    "subtitle": "鸡公山、南湾湖、毛尖茶和信阳菜",
+    "accent": "#5f6f73",
+    "image_query": "信阳 河南 china travel"
+  },
+  "河南_南阳": {
+    "slug": "nanyang",
+    "title": "河南南阳旅游攻略",
+    "subtitle": "卧龙岗、武侯祠、丹江口、玉文化和方城烩面",
+    "accent": "#5f6f73",
+    "image_query": "南阳 河南 china travel"
+  },
+  "河南_焦作": {
+    "slug": "jiaozuo",
+    "title": "河南焦作旅游攻略",
+    "subtitle": "云台山、青天河、太极文化和怀府小吃",
+    "accent": "#5f6f73",
+    "image_query": "焦作 河南 china travel"
+  },
+  "河南_许昌": {
+    "slug": "xuchang",
+    "title": "河南许昌旅游攻略",
+    "subtitle": "曹魏古城、神垕古镇、春秋楼和胡辣汤",
+    "accent": "#5f6f73",
+    "image_query": "许昌 河南 china travel"
+  },
+  "黑龙江_齐齐哈尔": {
+    "slug": "qiqihar",
+    "title": "黑龙江齐齐哈尔旅游攻略",
+    "subtitle": "扎龙湿地、烤肉、鹤城和嫩江风光",
+    "accent": "#5f6f73",
+    "image_query": "齐齐哈尔 黑龙江 china travel"
+  },
+  "黑龙江_伊春": {
+    "slug": "yichun",
+    "title": "黑龙江伊春旅游攻略",
+    "subtitle": "小兴安岭森林、汤旺河石林、五营红松和林区风味",
+    "accent": "#5f6f73",
+    "image_query": "伊春 黑龙江 china travel"
+  },
+  "湖北_荆州": {
+    "slug": "jingzhou",
+    "title": "湖北荆州旅游攻略",
+    "subtitle": "荆州古城、博物馆、楚文化和鱼糕",
+    "accent": "#5f6f73",
+    "image_query": "荆州 湖北 china travel"
+  },
+  "湖北_襄阳": {
+    "slug": "xiangyang",
+    "title": "湖北襄阳旅游攻略",
+    "subtitle": "古隆中、襄阳古城、汉江夜景和牛肉面",
+    "accent": "#5f6f73",
+    "image_query": "襄阳 湖北 china travel"
+  },
+  "湖北_神农架": {
+    "slug": "shennongjia",
+    "title": "湖北神农架旅游攻略",
+    "subtitle": "原始森林、金丝猴、高山草甸和避暑雪景",
+    "accent": "#5f6f73",
+    "image_query": "神农架 湖北 china travel"
+  },
+  "湖南_张家界": {
+    "slug": "zhangjiajie",
+    "title": "湖南张家界旅游攻略",
+    "subtitle": "武陵源峰林、天门山、玻璃桥和土家风味",
+    "accent": "#5f6f73",
+    "image_query": "张家界 湖南 china travel"
+  },
+  "湖南_湘西": {
+    "slug": "xiangxi",
+    "title": "湖南湘西旅游攻略",
+    "subtitle": "凤凰古城、芙蓉镇、矮寨大桥和苗寨风情",
+    "accent": "#5f6f73",
+    "image_query": "湘西 湖南 china travel"
+  },
+  "湖南_衡阳": {
+    "slug": "hengyang",
+    "title": "湖南衡阳旅游攻略",
+    "subtitle": "南岳衡山、石鼓书院、湘江夜景和衡阳菜",
+    "accent": "#5f6f73",
+    "image_query": "衡阳 湖南 china travel"
+  },
+  "湖南_岳阳": {
+    "slug": "yueyang",
+    "title": "湖南岳阳旅游攻略",
+    "subtitle": "岳阳楼、洞庭湖、君山岛和湘北小吃",
+    "accent": "#5f6f73",
+    "image_query": "岳阳 湖南 china travel"
+  },
+  "湖南_郴州": {
+    "slug": "chenzhou",
+    "title": "湖南郴州旅游攻略",
+    "subtitle": "高椅岭、东江湖、莽山和湘南风味",
+    "accent": "#5f6f73",
+    "image_query": "郴州 湖南 china travel"
+  },
+  "江苏_无锡": {
+    "slug": "wuxi",
+    "title": "江苏无锡旅游攻略",
+    "subtitle": "太湖鼋头渚、灵山、惠山古镇和甜口小吃",
+    "accent": "#5f6f73",
+    "image_query": "无锡 江苏 china travel"
+  },
+  "江苏_扬州": {
+    "slug": "yangzhou",
+    "title": "江苏扬州旅游攻略",
+    "subtitle": "瘦西湖、东关街、早茶和园林慢游",
+    "accent": "#5f6f73",
+    "image_query": "扬州 江苏 china travel"
+  },
+  "江苏_镇江": {
+    "slug": "zhenjiang",
+    "title": "江苏镇江旅游攻略",
+    "subtitle": "金山焦山北固山、锅盖面和香醋",
+    "accent": "#5f6f73",
+    "image_query": "镇江 江苏 china travel"
+  },
+  "江苏_常州": {
+    "slug": "changzhou",
+    "title": "江苏常州旅游攻略",
+    "subtitle": "恐龙园、天目湖、青果巷和江南小吃",
+    "accent": "#5f6f73",
+    "image_query": "常州 江苏 china travel"
+  },
+  "江苏_徐州": {
+    "slug": "xuzhou",
+    "title": "江苏徐州旅游攻略",
+    "subtitle": "汉文化、云龙湖、烧烤和地锅鸡",
+    "accent": "#5f6f73",
+    "image_query": "徐州 江苏 china travel"
+  },
+  "江苏_连云港": {
+    "slug": "lianyungang",
+    "title": "江苏连云港旅游攻略",
+    "subtitle": "花果山、连岛海滨、海鲜和西游文化",
+    "accent": "#5f6f73",
+    "image_query": "连云港 江苏 china travel"
+  },
+  "江西_赣州": {
+    "slug": "ganzhou",
+    "title": "江西赣州旅游攻略",
+    "subtitle": "宋城墙、通天岩、客家围屋和赣南小吃",
+    "accent": "#5f6f73",
+    "image_query": "赣州 江西 china travel"
+  },
+  "江西_宜春": {
+    "slug": "yichun",
+    "title": "江西宜春旅游攻略",
+    "subtitle": "明月山、温汤温泉、禅都文化和赣西风味",
+    "accent": "#5f6f73",
+    "image_query": "宜春 江西 china travel"
+  },
+  "辽宁_丹东": {
+    "slug": "dandong",
+    "title": "辽宁丹东旅游攻略",
+    "subtitle": "鸭绿江、凤凰山、边境风情和海鲜烧烤",
+    "accent": "#5f6f73",
+    "image_query": "丹东 辽宁 china travel"
+  },
+  "辽宁_本溪": {
+    "slug": "benxi",
+    "title": "辽宁本溪旅游攻略",
+    "subtitle": "本溪水洞、关门山红叶、地质奇观和东北菜",
+    "accent": "#5f6f73",
+    "image_query": "本溪 辽宁 china travel"
+  },
+  "内蒙古_包头": {
+    "slug": "baotou",
+    "title": "内蒙古包头旅游攻略",
+    "subtitle": "赛汗塔拉、五当召、黄河湿地和蒙餐烧麦",
+    "accent": "#5f6f73",
+    "image_query": "包头 内蒙古 china travel"
+  },
+  "内蒙古_鄂尔多斯": {
+    "slug": "ordos",
+    "title": "内蒙古鄂尔多斯旅游攻略",
+    "subtitle": "响沙湾、成吉思汗陵、草原沙漠和蒙餐",
+    "accent": "#5f6f73",
+    "image_query": "鄂尔多斯 内蒙古 china travel"
+  },
+  "内蒙古_赤峰": {
+    "slug": "chifeng",
+    "title": "内蒙古赤峰旅游攻略",
+    "subtitle": "乌兰布统、克什克腾、草原湖泊和蒙古风味",
+    "accent": "#5f6f73",
+    "image_query": "赤峰 内蒙古 china travel"
+  },
+  "山东_淄博": {
+    "slug": "zibo",
+    "title": "山东淄博旅游攻略",
+    "subtitle": "烧烤、陶琉、齐文化、周村古商城和鲁中山水",
+    "accent": "#5f6f73",
+    "image_query": "淄博 山东 china travel"
+  },
+  "山东_潍坊": {
+    "slug": "weifang",
+    "title": "山东潍坊旅游攻略",
+    "subtitle": "风筝之都、青州古城、寿光蔬菜和鲁中小吃",
+    "accent": "#5f6f73",
+    "image_query": "潍坊 山东 china travel"
+  },
+  "山东_临沂": {
+    "slug": "linyi",
+    "title": "山东临沂旅游攻略",
+    "subtitle": "沂蒙山、王羲之故居、地下大峡谷和糁汤",
+    "accent": "#5f6f73",
+    "image_query": "临沂 山东 china travel"
+  },
+  "山东_日照": {
+    "slug": "rizhao",
+    "title": "山东日照旅游攻略",
+    "subtitle": "海滨、灯塔、万平口、赶海和海鲜",
+    "accent": "#5f6f73",
+    "image_query": "日照 山东 china travel"
+  },
+  "山西_晋中": {
+    "slug": "jinzhong",
+    "title": "山西晋中旅游攻略",
+    "subtitle": "平遥古城、乔家大院、晋商文化和山西面食",
+    "accent": "#5f6f73",
+    "image_query": "晋中 山西 china travel"
+  },
+  "山西_临汾": {
+    "slug": "linfen",
+    "title": "山西临汾旅游攻略",
+    "subtitle": "壶口瀑布、洪洞大槐树、尧都文化和山西面食",
+    "accent": "#5f6f73",
+    "image_query": "临汾 山西 china travel"
+  },
+  "山西_运城": {
+    "slug": "yuncheng",
+    "title": "山西运城旅游攻略",
+    "subtitle": "盐湖、永乐宫、关帝庙和晋南小吃",
+    "accent": "#5f6f73",
+    "image_query": "运城 山西 china travel"
+  },
+  "陕西_宝鸡": {
+    "slug": "baoji",
+    "title": "陕西宝鸡旅游攻略",
+    "subtitle": "法门寺、青铜器、太白山和臊子面",
+    "accent": "#5f6f73",
+    "image_query": "宝鸡 陕西 china travel"
+  },
+  "陕西_汉中": {
+    "slug": "hanzhong",
+    "title": "陕西汉中旅游攻略",
+    "subtitle": "油菜花海、古汉台、武侯祠和热米皮",
+    "accent": "#5f6f73",
+    "image_query": "汉中 陕西 china travel"
+  },
+  "陕西_延安": {
+    "slug": "yanan",
+    "title": "陕西延安旅游攻略",
+    "subtitle": "红色圣地、宝塔山、壶口联动和陕北风味",
+    "accent": "#5f6f73",
+    "image_query": "延安 陕西 china travel"
+  },
+  "陕西_榆林": {
+    "slug": "yulin",
+    "title": "陕西榆林旅游攻略",
+    "subtitle": "镇北台、红石峡、波浪谷和陕北羊肉",
+    "accent": "#5f6f73",
+    "image_query": "榆林 陕西 china travel"
+  },
+  "四川_广元": {
+    "slug": "guangyuan",
+    "title": "四川广元旅游攻略",
+    "subtitle": "剑门关、昭化古城、女皇故里和川北小吃",
+    "accent": "#5f6f73",
+    "image_query": "广元 四川 china travel"
+  },
+  "四川_泸州": {
+    "slug": "luzhou",
+    "title": "四川泸州旅游攻略",
+    "subtitle": "酒城、尧坝古镇、长江沱江和川南美食",
+    "accent": "#5f6f73",
+    "image_query": "泸州 四川 china travel"
+  },
+  "四川_眉山": {
+    "slug": "meishan",
+    "title": "四川眉山旅游攻略",
+    "subtitle": "三苏祠、瓦屋山、东坡文化和泡菜",
+    "accent": "#5f6f73",
+    "image_query": "眉山 四川 china travel"
+  },
+  "四川_凉山": {
+    "slug": "liangshan",
+    "title": "四川凉山旅游攻略",
+    "subtitle": "西昌邛海、泸沽湖联动、螺髻山和彝族风情",
+    "accent": "#5f6f73",
+    "image_query": "凉山 四川 china travel"
+  },
+  "新疆_阿勒泰": {
+    "slug": "altay",
+    "title": "新疆阿勒泰旅游攻略",
+    "subtitle": "喀纳斯、禾木、可可托海和北疆秋色雪景",
+    "accent": "#5f6f73",
+    "image_query": "阿勒泰 新疆 china travel"
+  },
+  "新疆_哈密": {
+    "slug": "hami",
+    "title": "新疆哈密旅游攻略",
+    "subtitle": "大海道、哈密瓜、回王府和东疆戈壁",
+    "accent": "#5f6f73",
+    "image_query": "哈密 新疆 china travel"
+  },
+  "云南_红河": {
+    "slug": "honghe",
+    "title": "云南红河旅游攻略",
+    "subtitle": "建水、元阳梯田、蒙自米线和滇南古城",
+    "accent": "#5f6f73",
+    "image_query": "红河 云南 china travel"
+  },
+  "云南_德宏": {
+    "slug": "dehong",
+    "title": "云南德宏旅游攻略",
+    "subtitle": "芒市金塔银塔、瑞丽边城、傣味和热带风情",
+    "accent": "#5f6f73",
+    "image_query": "德宏 云南 china travel"
+  },
+  "云南_曲靖": {
+    "slug": "qujing",
+    "title": "云南曲靖旅游攻略",
+    "subtitle": "罗平油菜花、九龙瀑布、珠江源和宣威火腿",
+    "accent": "#5f6f73",
+    "image_query": "曲靖 云南 china travel"
+  },
+  "浙江_宁波": {
+    "slug": "ningbo",
+    "title": "浙江宁波旅游攻略",
+    "subtitle": "天一阁、老外滩、东钱湖、海鲜和汤圆",
+    "accent": "#5f6f73",
+    "image_query": "宁波 浙江 china travel"
+  },
+  "浙江_绍兴": {
+    "slug": "shaoxing",
+    "title": "浙江绍兴旅游攻略",
+    "subtitle": "鲁迅故里、仓桥直街、东湖和黄酒小吃",
+    "accent": "#5f6f73",
+    "image_query": "绍兴 浙江 china travel"
+  },
+  "浙江_温州": {
+    "slug": "wenzhou",
+    "title": "浙江温州旅游攻略",
+    "subtitle": "江心屿、雁荡山、楠溪江和温州小吃",
+    "accent": "#5f6f73",
+    "image_query": "温州 浙江 china travel"
+  },
+  "浙江_舟山": {
+    "slug": "zhoushan",
+    "title": "浙江舟山旅游攻略",
+    "subtitle": "普陀山、朱家尖、海岛沙滩和海鲜",
+    "accent": "#5f6f73",
+    "image_query": "舟山 浙江 china travel"
+  },
+  "浙江_湖州": {
+    "slug": "huzhou",
+    "title": "浙江湖州旅游攻略",
+    "subtitle": "南浔古镇、莫干山、太湖月亮湾和江南小吃",
+    "accent": "#5f6f73",
+    "image_query": "湖州 浙江 china travel"
+  },
+  "浙江_嘉兴": {
+    "slug": "jiaxing",
+    "title": "浙江嘉兴旅游攻略",
+    "subtitle": "南湖、乌镇、西塘、粽子和江南水乡",
+    "accent": "#5f6f73",
+    "image_query": "嘉兴 浙江 china travel"
+  },
+  "浙江_金华": {
+    "slug": "jinhua",
+    "title": "浙江金华旅游攻略",
+    "subtitle": "横店、双龙洞、古子城和金华火腿",
+    "accent": "#5f6f73",
+    "image_query": "金华 浙江 china travel"
+  },
+  "海南_万宁": {
+    "slug": "wanning",
+    "title": "海南万宁旅游攻略",
+    "subtitle": "日月湾冲浪、石梅湾、神州半岛和热带海鲜",
+    "accent": "#5f6f73",
+    "image_query": "万宁 海南 china travel"
+  },
+  "海南_文昌": {
+    "slug": "wenchang",
+    "title": "海南文昌旅游攻略",
+    "subtitle": "航天海岸、铜鼓岭、文昌鸡和椰子",
+    "accent": "#5f6f73",
+    "image_query": "文昌 海南 china travel"
+  },
+  "青海_海西": {
+    "slug": "haixi",
+    "title": "青海海西旅游攻略",
+    "subtitle": "茶卡盐湖、翡翠湖、水上雅丹和柴达木公路",
+    "accent": "#5f6f73",
+    "image_query": "海西 青海 china travel"
+  },
+  "宁夏_中卫": {
+    "slug": "zhongwei",
+    "title": "宁夏中卫旅游攻略",
+    "subtitle": "沙坡头、腾格里沙漠、黄河宿集和硒砂瓜",
+    "accent": "#5f6f73",
+    "image_query": "中卫 宁夏 china travel"
+  },
+  "香港_香港": {
+    "slug": "hong-kong",
+    "title": "香港旅游攻略",
+    "subtitle": "维港天际线、街区文化、山海步道和粤港风味",
+    "accent": "#b54d3e",
+    "image_query": "Hong Kong Victoria Harbour skyline travel"
+  },
+  "澳门_澳门": {
+    "slug": "macao",
+    "title": "澳门旅游攻略",
+    "subtitle": "历史城区、世遗建筑、氹仔街巷和海岛慢游",
+    "accent": "#31796d",
+    "image_query": "Macao historic centre travel"
+  },
+  "吉林_吉林市": {
+    "slug": "jilin-city",
+    "title": "吉林吉林市旅游攻略",
+    "subtitle": "松花江雾凇、冰雪度假、北山古迹和湖光山色",
+    "accent": "#397785",
+    "image_query": "Jilin City Songhua River rime China"
+  },
+  "辽宁_盘锦": {
+    "slug": "panjin",
+    "title": "辽宁盘锦旅游攻略",
+    "subtitle": "红海滩湿地、辽河口观鸟、稻田河蟹和自驾慢游",
+    "accent": "#a64b43",
+    "image_query": "Panjin Red Beach wetland China"
+  }
+}

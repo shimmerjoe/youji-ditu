@@ -7,7 +7,7 @@
   const toTop = document.getElementById("toTop");
   const printBtn = document.getElementById("printPage");
   const expandBtn = document.getElementById("expandAll");
-  const navGroups = Array.from(document.querySelectorAll(".nav-group"));
+  const navGroups = Array.from(document.querySelectorAll(".nav-group, .destination-nav"));
   const navToggle = document.getElementById("navToggle");
   const header = document.querySelector(".site-header");
   const siteSearch = document.getElementById("siteSearch");
@@ -17,8 +17,20 @@
   const cityExplorerSearch = document.getElementById("cityExplorerSearch");
   const cityExplorerCards = Array.from(document.querySelectorAll("#cityExplorer .city-card"));
   const provincePills = Array.from(document.querySelectorAll(".province-pill"));
+  const travelFinderForm = document.getElementById("travelFinderForm");
+  const travelQuery = document.getElementById("travelQuery");
+  const travelRegion = document.getElementById("travelRegion");
+  const travelSeason = document.getElementById("travelSeason");
+  const travelDays = document.getElementById("travelDays");
+  const travelTheme = document.getElementById("travelTheme");
+  const travelTransport = document.getElementById("travelTransport");
+  const travelFinderSummary = document.getElementById("travelFinderSummary");
+  const cityExplorerSummary = document.getElementById("cityExplorerSummary");
+  const cityLoadMore = document.getElementById("cityLoadMore");
+  const CITY_PAGE_SIZE = 36;
   let emptyBox = null;
   let activeProvince = "全部";
+  let cityVisibleLimit = CITY_PAGE_SIZE;
 
   function normalize(s) {
     return (s || "").toLowerCase().trim();
@@ -107,14 +119,74 @@
       '</div>';
   }
 
-  function filterCityExplorer() {
+  function filterCityExplorer(resetLimit) {
     if (!cityExplorerCards.length) return;
-    const q = normalize(cityExplorerSearch ? cityExplorerSearch.value : "");
-    cityExplorerCards.forEach((card) => {
+    if (resetLimit) cityVisibleLimit = CITY_PAGE_SIZE;
+    const q = normalize(travelQuery ? travelQuery.value : (cityExplorerSearch ? cityExplorerSearch.value : ""));
+    const region = travelRegion ? travelRegion.value : "";
+    const season = travelSeason ? travelSeason.value : "";
+    const days = travelDays ? travelDays.value : "";
+    const theme = travelTheme ? travelTheme.value : "";
+    const transport = travelTransport ? travelTransport.value : "";
+    const matches = cityExplorerCards.filter((card) => {
       const provinceHit = activeProvince === "全部" || card.dataset.province === activeProvince;
       const textHit = !q || normalize(card.dataset.search).includes(q);
-      card.classList.toggle("is-hidden", !(provinceHit && textHit));
+      const regionHit = !region || card.dataset.region === region;
+      const seasonHit = !season || normalize(card.dataset.season).includes(normalize(season));
+      const daysHit = !days || card.dataset.days === days;
+      const themeHit = !theme || normalize(card.dataset.theme).includes(normalize(theme));
+      const transportHit = !transport || normalize(card.dataset.transport).includes(normalize(transport));
+      return provinceHit && textHit && regionHit && seasonHit && daysHit && themeHit && transportHit;
     });
+    cityExplorerCards.forEach((card) => card.classList.add("is-hidden"));
+    matches.slice(0, cityVisibleLimit).forEach((card) => card.classList.remove("is-hidden"));
+    const shown = Math.min(matches.length, cityVisibleLimit);
+    const summary = matches.length
+      ? `已匹配 ${matches.length} 座城市，当前显示 ${shown} 座`
+      : "没有匹配城市，请放宽一个条件或重置筛选";
+    if (travelFinderSummary) travelFinderSummary.textContent = summary;
+    if (cityExplorerSummary) cityExplorerSummary.textContent = summary;
+    if (cityLoadMore) {
+      cityLoadMore.hidden = shown >= matches.length;
+      cityLoadMore.textContent = `再显示 ${Math.min(CITY_PAGE_SIZE, matches.length - shown)} 座`;
+    }
+  }
+
+  function readFinderState() {
+    if (!travelFinderForm) return;
+    const params = new URLSearchParams(window.location.search);
+    if (travelQuery) travelQuery.value = params.get("q") || "";
+    if (travelRegion) travelRegion.value = params.get("region") || "";
+    if (travelSeason) travelSeason.value = params.get("season") || "";
+    if (travelDays) travelDays.value = params.get("days") || "";
+    if (travelTheme) travelTheme.value = params.get("theme") || "";
+    if (travelTransport) travelTransport.value = params.get("transport") || "";
+    activeProvince = params.get("province") || "全部";
+    if (cityExplorerSearch) cityExplorerSearch.value = travelQuery ? travelQuery.value : "";
+    provincePills.forEach((pill) => {
+      pill.classList.toggle("active", (pill.dataset.province || "") === activeProvince);
+    });
+  }
+
+  function writeFinderState() {
+    if (!travelFinderForm) return;
+    const params = new URLSearchParams(window.location.search);
+    const values = {
+      q: travelQuery ? travelQuery.value.trim() : "",
+      region: travelRegion ? travelRegion.value : "",
+      season: travelSeason ? travelSeason.value : "",
+      days: travelDays ? travelDays.value : "",
+      theme: travelTheme ? travelTheme.value : "",
+      transport: travelTransport ? travelTransport.value : "",
+      province: activeProvince === "全部" ? "" : activeProvince,
+    };
+    Object.keys(values).forEach((key) => {
+      if (values[key]) params.set(key, values[key]);
+      else params.delete(key);
+    });
+    const query = params.toString();
+    const next = window.location.pathname + (query ? "?" + query : "") + window.location.hash;
+    history.replaceState({ finder: values }, "", next);
   }
 
   function keepTocLinkVisible(link) {
@@ -187,25 +259,73 @@
   });
 
   if (navToggle && header) {
+    function closeMobileNav() {
+      header.classList.remove("nav-open");
+      navToggle.setAttribute("aria-expanded", "false");
+    }
     navToggle.addEventListener("click", () => {
       const open = header.classList.toggle("nav-open");
       navToggle.setAttribute("aria-expanded", open ? "true" : "false");
     });
     document.querySelectorAll(".top-nav a").forEach((link) => {
       link.addEventListener("click", () => {
-        header.classList.remove("nav-open");
-        navToggle.setAttribute("aria-expanded", "false");
+        closeMobileNav();
       });
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && header.classList.contains("nav-open")) {
+        closeMobileNav();
+        navToggle.focus();
+      }
     });
   }
 
-  if (cityExplorerSearch) cityExplorerSearch.addEventListener("input", filterCityExplorer);
+  if (cityExplorerSearch) cityExplorerSearch.addEventListener("input", () => {
+    if (travelQuery) travelQuery.value = cityExplorerSearch.value;
+    filterCityExplorer(true);
+    writeFinderState();
+  });
+  if (travelQuery) travelQuery.addEventListener("input", () => {
+    if (cityExplorerSearch) cityExplorerSearch.value = travelQuery.value;
+    filterCityExplorer(true);
+    writeFinderState();
+  });
+  [travelRegion, travelSeason, travelDays, travelTheme, travelTransport].forEach((control) => {
+    if (control) control.addEventListener("change", () => {
+      filterCityExplorer(true);
+      writeFinderState();
+    });
+  });
+  if (travelFinderForm) {
+    travelFinderForm.addEventListener("submit", (event) => event.preventDefault());
+    travelFinderForm.addEventListener("reset", () => {
+      setTimeout(() => {
+        activeProvince = "全部";
+        provincePills.forEach((pill) => pill.classList.toggle("active", (pill.dataset.province || "") === "全部"));
+        if (cityExplorerSearch) cityExplorerSearch.value = "";
+        filterCityExplorer(true);
+        writeFinderState();
+      }, 0);
+    });
+  }
+  if (cityLoadMore) cityLoadMore.addEventListener("click", () => {
+    cityVisibleLimit += CITY_PAGE_SIZE;
+    filterCityExplorer(false);
+  });
   provincePills.forEach((pill) => {
     pill.addEventListener("click", () => {
       activeProvince = pill.dataset.province || "全部";
+      if (travelRegion) travelRegion.value = "";
       provincePills.forEach((item) => item.classList.toggle("active", item === pill));
-      filterCityExplorer();
+      filterCityExplorer(true);
+      writeFinderState();
     });
+  });
+  readFinderState();
+  filterCityExplorer(true);
+  window.addEventListener("popstate", () => {
+    readFinderState();
+    filterCityExplorer(true);
   });
 
   navGroups.forEach((group) => {
@@ -217,7 +337,7 @@
     });
   });
   document.addEventListener("click", (event) => {
-    if (event.target.closest(".nav-group")) return;
+    if (event.target.closest(".nav-group, .destination-nav")) return;
     navGroups.forEach((group) => { group.open = false; });
   });
 
@@ -303,9 +423,16 @@
   function gotoExplorer(kw) {
     if (cityExplorerSearch) {
       cityExplorerSearch.value = kw || "";
+      if (travelQuery) travelQuery.value = kw || "";
+      if (travelTheme && Array.from(travelTheme.options).some((option) => option.value === kw)) {
+        travelTheme.value = kw;
+        cityExplorerSearch.value = "";
+        if (travelQuery) travelQuery.value = "";
+      }
       activeProvince = "全部";
       provincePills.forEach((p) => p.classList.toggle("active", (p.dataset.province || "") === "全部"));
-      filterCityExplorer();
+      filterCityExplorer(true);
+      writeFinderState();
     }
     if (explorerSection) explorerSection.scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -437,6 +564,22 @@
   };
   const AVATARS = ["👤", "🧭", "🏔️", "🌊", "🏯", "🐼", "🌸", "🍜", "🚆", "⛺", "🦋", "🌅"];
 
+  // 城市页打开时记录最近浏览；不上传数据，最多保留 12 条。
+  (function recordCityVisit() {
+    const city = document.querySelector(".co-fav[data-key]");
+    if (!city) return;
+    const entry = {
+      key: city.dataset.key,
+      name: city.dataset.name,
+      href: city.dataset.href,
+      sub: city.dataset.sub,
+      viewedAt: new Date().toISOString()
+    };
+    const recent = LS.get("tay_recent", []).filter((item) => item.key !== entry.key);
+    recent.unshift(entry);
+    LS.set("tay_recent", recent.slice(0, 12));
+  })();
+
   // 把昵称 / 头像同步到顶部用户中心入口（所有页面）
   function applyProfileToHeader() {
     const p = LS.get("tay_profile", {});
@@ -512,6 +655,39 @@
       else trip.push({ key: key, name: btn.dataset.name, href: btn.dataset.href, sub: btn.dataset.sub });
       LS.set("tay_trip", trip);
       sync();
+    });
+  });
+  document.querySelectorAll(".co-share").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const original = "↗ 分享";
+      const title = btn.dataset.shareTitle || document.title;
+      const url = location.href.split("#")[0];
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: title, text: title, url: url });
+          return;
+        }
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(url);
+        } else {
+          const input = document.createElement("input");
+          input.value = url;
+          input.setAttribute("readonly", "");
+          input.style.position = "fixed";
+          input.style.opacity = "0";
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand("copy");
+          input.remove();
+        }
+        btn.textContent = "✓ 已复制链接";
+        btn.classList.add("copied");
+        setTimeout(() => { btn.textContent = original; btn.classList.remove("copied"); }, 1800);
+      } catch (error) {
+        if (error && error.name === "AbortError") return;
+        btn.textContent = "复制失败";
+        setTimeout(() => { btn.textContent = original; }, 1800);
+      }
     });
   });
 
@@ -636,8 +812,8 @@
     bindSeg("setMotion", "motion");
     const reset = document.getElementById("ucResetAll");
     if (reset) reset.addEventListener("click", () => {
-      if (confirm("确定清除本地保存的昵称、头像、收藏、行程和设置吗？")) {
-        ["tay_profile", "tay_settings", "tay_favs", "tay_trip"].forEach((k) => LS.del(k));
+      if (confirm("确定清除本地保存的昵称、收藏、行程、路书、旅行工具和设置吗？")) {
+        ["tay_profile", "tay_settings", "tay_favs", "tay_recent", "tay_trip", "tay_roadtrips", "tay_last_roadtrip", "tay_checklist", "tay_budget", "tay_notes"].forEach((k) => LS.del(k));
         location.reload();
       }
     });
@@ -658,7 +834,7 @@
         const div = document.createElement("div");
         div.className = "fav-item";
         div.innerHTML =
-          '<img src="assets/images/' + esc(f.key) + '.jpg" alt="' + esc(f.name) + '" loading="lazy">' +
+          '<img src="assets/images/' + esc(f.key) + '.jpg" alt="' + esc(f.name) + '" width="800" height="480" loading="lazy">' +
           '<div class="fav-item-body"><strong>' + esc(f.name) + '</strong><small>' + esc(f.sub) + '</small>' +
           '<a href="' + esc(f.href) + '">查看攻略 →</a></div>' +
           '<button class="fav-remove" data-key="' + esc(f.key) + '" aria-label="移除收藏">✕</button>';
@@ -671,17 +847,77 @@
     }
     renderFavs();
 
+    // 最近浏览
+    const historyList = document.getElementById("historyList");
+    const historyEmpty = document.getElementById("historyEmpty");
+    const historyClear = document.getElementById("historyClear");
+    function renderHistory() {
+      if (!historyList) return;
+      const recent = LS.get("tay_recent", []);
+      historyList.innerHTML = "";
+      if (!recent.length) {
+        if (historyEmpty) historyEmpty.hidden = false;
+        if (historyClear) historyClear.hidden = true;
+        return;
+      }
+      if (historyEmpty) historyEmpty.hidden = true;
+      if (historyClear) historyClear.hidden = false;
+      recent.forEach((item) => {
+        const when = item.viewedAt ? new Date(item.viewedAt).toLocaleDateString("zh-CN", { month: "numeric", day: "numeric" }) : "刚刚浏览";
+        const row = document.createElement("article");
+        row.className = "fav-item";
+        row.innerHTML =
+          '<img src="assets/images/' + esc(item.key) + '.jpg" alt="' + esc(item.name) + '" width="800" height="480" loading="lazy">' +
+          '<div class="fav-item-body"><strong>' + esc(item.name) + '</strong><small>' + esc(item.sub) + ' · ' + esc(when) + '</small>' +
+          '<a href="' + esc(item.href) + '">继续阅读 →</a></div>';
+        historyList.appendChild(row);
+      });
+    }
+    if (historyClear) historyClear.addEventListener("click", () => { LS.del("tay_recent"); renderHistory(); });
+    renderHistory();
+
     // 行程渲染
     const tripList = document.getElementById("tripList");
     const tripEmpty = document.getElementById("tripEmpty");
     const tripSummary = document.getElementById("tripSummary");
     const tripDaysInput = document.getElementById("tripPlanDays");
+    const tripCompare = document.getElementById("tripCompare");
+    const tripCompareTable = document.getElementById("tripCompareTable");
+    let compareOpen = false;
     function getTrip() { return LS.get("tay_trip", []); }
     function setTrip(v) { LS.set("tay_trip", v); }
+    function renderTripCompare() {
+      if (!tripCompareTable || !tripCompare) return;
+      const trip = getTrip();
+      tripCompare.disabled = trip.length < 2;
+      if (trip.length < 2) compareOpen = false;
+      tripCompare.textContent = compareOpen ? "收起对比" : "对比城市";
+      tripCompareTable.hidden = !compareOpen;
+      if (!compareOpen) { tripCompareTable.innerHTML = ""; return; }
+      const selected = trip.slice(0, 4).map((entry) => {
+        const profile = allSearchItems.find((item) => item.key === entry.key) || {};
+        return { trip: entry, profile: profile };
+      });
+      const cells = (render) => selected.map(render).join("");
+      const row = (label, render) => '<tr><th scope="row">' + label + '</th>' + cells((item) => '<td>' + render(item) + '</td>') + '</tr>';
+      const table =
+        '<table class="trip-compare-table"><thead><tr><th scope="col">对比项</th>' +
+        cells((item) => '<th scope="col"><a href="' + esc(item.trip.href) + '">' + esc(item.trip.name.replace("旅游攻略", "")) + '</a></th>') +
+        '</tr></thead><tbody>' +
+        row("地区", (item) => esc(item.profile.province || "待补充")) +
+        row("适宜季节", (item) => esc(item.profile.season || "见城市攻略")) +
+        row("旅行印象", (item) => esc(item.profile.subtitle || item.trip.sub || "见城市攻略")) +
+        row("代表景点", (item) => esc((item.profile.highlights || []).slice(0, 4).join("、") || "见城市攻略")) +
+        row("代表美食", (item) => esc((item.profile.foods || []).slice(0, 4).join("、") || "见城市攻略")) +
+        '</tbody></table>';
+      const note = trip.length > 4 ? '<p class="trip-compare-note">为保证可读性，仅对比行程中的前 4 座城市；可通过上移调整顺序。</p>' : "";
+      tripCompareTable.innerHTML = table + note;
+    }
     function renderTrip() {
       if (!tripList) return;
       const trip = getTrip();
       tripList.innerHTML = "";
+      renderTripCompare();
       if (!trip.length) {
         if (tripEmpty) tripEmpty.hidden = false;
         if (tripSummary) tripSummary.innerHTML = "";
@@ -698,7 +934,7 @@
         li.className = "trip-item";
         li.innerHTML =
           '<span class="trip-order">' + (idx + 1) + '</span>' +
-          '<img src="assets/images/' + esc(t.key) + '.jpg" alt="" loading="lazy">' +
+          '<img src="assets/images/' + esc(t.key) + '.jpg" alt="" width="800" height="480" loading="lazy">' +
           '<div class="trip-item-body"><strong>' + esc(t.name) + '</strong><small>' + esc(t.sub) + '</small><a href="' + esc(t.href) + '">查看攻略 →</a></div>' +
           '<div class="trip-actions">' +
           '<button data-act="up" data-key="' + esc(t.key) + '" aria-label="上移"' + (idx === 0 ? " disabled" : "") + '>↑</button>' +
@@ -719,9 +955,195 @@
       }));
     }
     if (tripDaysInput) tripDaysInput.addEventListener("input", renderTrip);
+    if (tripCompare) tripCompare.addEventListener("click", () => { compareOpen = !compareOpen; renderTripCompare(); });
     const tripClear = document.getElementById("tripClear");
     if (tripClear) tripClear.addEventListener("click", () => { if (confirm("清空行程？")) { setTrip([]); renderTrip(); } });
     renderTrip();
+
+    // 已保存的自驾路书
+    const roadbookList = document.getElementById("roadbookList");
+    const roadbookEmpty = document.getElementById("roadbookEmpty");
+    function getRoadbooks() { return LS.get("tay_roadtrips", []); }
+    function renderRoadbooks() {
+      if (!roadbookList) return;
+      const plans = getRoadbooks();
+      roadbookList.innerHTML = "";
+      if (!plans.length) { if (roadbookEmpty) roadbookEmpty.hidden = false; return; }
+      if (roadbookEmpty) roadbookEmpty.hidden = true;
+      plans.forEach((plan) => {
+        const div = document.createElement("article");
+        div.className = "roadbook-item";
+        const summary = plan.summary || {};
+        div.innerHTML =
+          '<div><strong>' + esc(plan.title) + '</strong><small>' + esc(summary.days) + ' 天 · 约 ' + esc(summary.totalKm) + ' 公里 · ' + esc(plan.generatedAt) + '</small></div>' +
+          '<div class="roadbook-actions"><a href="roadtrip.html?plan=' + encodeURIComponent(plan.id) + '">打开</a>' +
+          '<button type="button" data-roadbook-id="' + esc(plan.id) + '">删除</button></div>';
+        roadbookList.appendChild(div);
+      });
+      roadbookList.querySelectorAll("button[data-roadbook-id]").forEach((button) => button.addEventListener("click", () => {
+        LS.set("tay_roadtrips", getRoadbooks().filter((plan) => plan.id !== button.dataset.roadbookId));
+        renderRoadbooks();
+      }));
+    }
+    renderRoadbooks();
+
+    // 旅行工具：清单、预算和笔记均只保存在当前浏览器
+    const checklistForm = document.getElementById("checklistForm");
+    const checklistInput = document.getElementById("checklistInput");
+    const checklistList = document.getElementById("travelChecklist");
+    const checklistEmpty = document.getElementById("checklistEmpty");
+    const checklistProgress = document.getElementById("checklistProgress");
+    function uniqueId(prefix) {
+      return prefix + "-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7);
+    }
+    function getChecklist() {
+      const items = LS.get("tay_checklist", []);
+      return Array.isArray(items) ? items : [];
+    }
+    function setChecklist(items) { LS.set("tay_checklist", items); }
+    function renderChecklist() {
+      if (!checklistList) return;
+      const items = getChecklist();
+      const done = items.filter((item) => item.done).length;
+      checklistList.innerHTML = "";
+      if (checklistProgress) checklistProgress.textContent = done + " / " + items.length;
+      if (checklistEmpty) checklistEmpty.hidden = items.length > 0;
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = "checklist-item" + (item.done ? " done" : "");
+        li.innerHTML =
+          '<label><input type="checkbox" data-check-id="' + esc(item.id) + '"' + (item.done ? " checked" : "") + '><span>' + esc(item.text) + '</span></label>' +
+          '<button class="tool-delete" type="button" data-check-delete="' + esc(item.id) + '" title="删除事项" aria-label="删除清单事项">×</button>';
+        checklistList.appendChild(li);
+      });
+      checklistList.querySelectorAll("input[data-check-id]").forEach((box) => box.addEventListener("change", () => {
+        const items = getChecklist();
+        const item = items.find((entry) => entry.id === box.dataset.checkId);
+        if (item) item.done = box.checked;
+        setChecklist(items);
+        renderChecklist();
+      }));
+      checklistList.querySelectorAll("button[data-check-delete]").forEach((button) => button.addEventListener("click", () => {
+        setChecklist(getChecklist().filter((item) => item.id !== button.dataset.checkDelete));
+        renderChecklist();
+      }));
+    }
+    if (checklistForm) checklistForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const text = checklistInput ? checklistInput.value.trim() : "";
+      if (!text) { if (checklistInput) checklistInput.focus(); return; }
+      const items = getChecklist();
+      items.push({ id: uniqueId("check"), text: text, done: false });
+      setChecklist(items);
+      checklistInput.value = "";
+      checklistInput.focus();
+      renderChecklist();
+    });
+    renderChecklist();
+
+    const budgetForm = document.getElementById("budgetForm");
+    const budgetName = document.getElementById("budgetName");
+    const budgetCategory = document.getElementById("budgetCategory");
+    const budgetAmount = document.getElementById("budgetAmount");
+    const budgetList = document.getElementById("budgetList");
+    const budgetEmpty = document.getElementById("budgetEmpty");
+    const budgetTotal = document.getElementById("budgetTotal");
+    function getBudget() {
+      const items = LS.get("tay_budget", []);
+      return Array.isArray(items) ? items : [];
+    }
+    function setBudget(items) { LS.set("tay_budget", items); }
+    function formatMoney(value) {
+      const amount = Number(value) || 0;
+      return "¥" + amount.toFixed(2);
+    }
+    function renderBudget() {
+      if (!budgetList) return;
+      const items = getBudget();
+      const total = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+      budgetList.innerHTML = "";
+      if (budgetTotal) budgetTotal.textContent = formatMoney(total);
+      if (budgetEmpty) budgetEmpty.hidden = items.length > 0;
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = "budget-item";
+        li.innerHTML =
+          '<div class="budget-item-main"><strong>' + esc(item.name) + '</strong><small>' + esc(item.category) + '</small></div>' +
+          '<span class="budget-value">' + formatMoney(item.amount) + '</span>' +
+          '<button class="tool-delete" type="button" data-budget-delete="' + esc(item.id) + '" title="删除预算项目" aria-label="删除预算项目">×</button>';
+        budgetList.appendChild(li);
+      });
+      budgetList.querySelectorAll("button[data-budget-delete]").forEach((button) => button.addEventListener("click", () => {
+        setBudget(getBudget().filter((item) => item.id !== button.dataset.budgetDelete));
+        renderBudget();
+      }));
+    }
+    if (budgetForm) budgetForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = budgetName ? budgetName.value.trim() : "";
+      const amount = budgetAmount ? Number(budgetAmount.value) : 0;
+      if (!name) { if (budgetName) budgetName.focus(); return; }
+      if (!Number.isFinite(amount) || amount <= 0) { if (budgetAmount) budgetAmount.focus(); return; }
+      const items = getBudget();
+      items.push({ id: uniqueId("budget"), name: name, category: budgetCategory ? budgetCategory.value : "其他", amount: amount });
+      setBudget(items);
+      budgetName.value = "";
+      budgetAmount.value = "";
+      budgetName.focus();
+      renderBudget();
+    });
+    renderBudget();
+
+    const travelNotes = document.getElementById("travelNotes");
+    const notesSaveStatus = document.getElementById("notesSaveStatus");
+    let notesTimer = null;
+    if (travelNotes) {
+      travelNotes.value = LS.get("tay_notes", "");
+      travelNotes.addEventListener("input", () => {
+        LS.set("tay_notes", travelNotes.value);
+        if (notesSaveStatus) {
+          notesSaveStatus.textContent = "已保存";
+          notesSaveStatus.classList.add("saved");
+          clearTimeout(notesTimer);
+          notesTimer = setTimeout(() => {
+            notesSaveStatus.textContent = "自动保存在本机";
+            notesSaveStatus.classList.remove("saved");
+          }, 1400);
+        }
+      });
+    }
+
+    function markdownCell(value) {
+      return String(value || "").replace(/\|/g, "\\|").replace(/[\r\n]+/g, " ");
+    }
+    function downloadText(filename, value) {
+      const blob = new Blob(["\ufeff" + value], { type: "text/markdown;charset=utf-8" });
+      const href = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = href;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(href), 0);
+    }
+    const toolsExport = document.getElementById("toolsExport");
+    if (toolsExport) toolsExport.addEventListener("click", () => {
+      const checklist = getChecklist();
+      const budget = getBudget();
+      const notes = travelNotes ? travelNotes.value.trim() : LS.get("tay_notes", "").trim();
+      const lines = ["# 旅行工作台", "", "> 导出时间：" + new Date().toLocaleString("zh-CN", { hour12: false }), "", "## 出行清单", ""];
+      if (checklist.length) checklist.forEach((item) => lines.push("- [" + (item.done ? "x" : " ") + "] " + item.text));
+      else lines.push("暂无清单事项。");
+      lines.push("", "## 预算记录", "");
+      if (budget.length) {
+        lines.push("| 分类 | 项目 | 金额 |", "| --- | --- | ---: |");
+        budget.forEach((item) => lines.push("| " + markdownCell(item.category) + " | " + markdownCell(item.name) + " | " + formatMoney(item.amount) + " |"));
+        lines.push("", "合计：" + formatMoney(budget.reduce((sum, item) => sum + (Number(item.amount) || 0), 0)));
+      } else lines.push("暂无预算项目。");
+      lines.push("", "## 旅行笔记", "", notes || "暂无旅行笔记。", "");
+      downloadText("旅行工作台.md", lines.join("\n"));
+    });
   })();
 
   // 长章节折叠 + 顶层条目计数（渐进增强：无 JS 时正文完整展示）

@@ -2996,9 +2996,19 @@ def draw_hero_asset(page: Page) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     width, height = 1280, 720
     # 优先用抓到的真实城市照片；抓不到再画多样化插画。
-    photo_path, _ = city_photo_for(page)
-    if photo_path and save_cover_image(photo_path, path, (width, height)):
-        return path
+    photo_path, photo_meta = city_photo_for(page)
+    if photo_path:
+        # 已发布的封面本身就是版本库内的可复现照片衍生物。缓存指向它时
+        # 不要把文件作为自己的输入再次 JPEG 压缩；新抓取的原图则只在
+        # 首次生成时转成发布封面，并立即把缓存切换到该受版本控制的路径。
+        if photo_path.resolve() == path.resolve():
+            return path
+        if save_cover_image(photo_path, path, (width, height)):
+            if photo_meta:
+                photo_meta["path"] = rel_to(path, OUT)
+                PHOTO_CACHE[f"cityphoto|{page.key}"] = photo_meta
+                save_photo_cache()
+            return path
     accent = hex_to_rgb(page.accent)
     top = mix_rgb((255, 248, 235), accent, 0.06)
     bottom = mix_rgb((225, 238, 236), accent, 0.14)
@@ -9499,12 +9509,37 @@ def build_pwa_assets() -> None:
     (OUT / "sw.js").write_text(sw, encoding="utf-8")
 
 
+def prepare_image_output() -> None:
+    """Clean generated image output without deleting versioned photo derivatives."""
+    load_photo_cache()
+    IMAGES.mkdir(parents=True, exist_ok=True)
+    preserved: set[Path] = set()
+    for key, entry in PHOTO_CACHE.items():
+        if not (key.startswith("cityphoto|") and key.count("|") == 1):
+            continue
+        slug = key.split("|", 1)[1]
+        expected = IMAGES / f"{slug}.jpg"
+        cached_path = OUT / str(entry.get("path", ""))
+        if (
+            photo_is_publishable(entry, slug)
+            and expected.is_file()
+            and cached_path.resolve() == expected.resolve()
+        ):
+            preserved.add(expected.resolve())
+
+    for child in list(IMAGES.iterdir()):
+        if child.resolve() in preserved:
+            continue
+        if child.is_dir():
+            shutil.rmtree(child)
+        else:
+            child.unlink()
+
+
 def build() -> None:
     global ASSET_BUILD
     ASSETS.mkdir(parents=True, exist_ok=True)
-    if IMAGES.exists():
-        shutil.rmtree(IMAGES)
-    IMAGES.mkdir(parents=True, exist_ok=True)
+    prepare_image_output()
     if ITEM_IMAGES.exists():
         shutil.rmtree(ITEM_IMAGES)
     ITEM_IMAGES.mkdir(parents=True, exist_ok=True)

@@ -1929,7 +1929,7 @@
   },
   "cityphoto|guilin": {
     "status": "hit",
-    "path": "assets/photos/guilin/cityphoto-src.jpg",
+    "path": "assets/images/guilin.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Guilin_Scenery.jpg",
     "license": "Public domain",
     "artist": "Katie Crutchley",
@@ -1937,7 +1937,7 @@
   },
   "cityphoto|xian": {
     "status": "hit",
-    "path": "assets/photos/xian/cityphoto-src.jpg",
+    "path": "assets/images/xian.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:China_-_Xian_21_-_Terracotta_warriors_(135952563).jpg",
     "license": "CC BY 2.0",
     "artist": "McKay Savage from London, UK",
@@ -1945,7 +1945,7 @@
   },
   "cityphoto|xiamen": {
     "status": "hit",
-    "path": "assets/photos/xiamen/cityphoto-src.jpg",
+    "path": "assets/images/xiamen.jpg",
     "title": "File:Gulangyu xiamen skyline 2011 12.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Gulangyu_xiamen_skyline_2011_12.jpg",
     "license": "CC BY-SA 3.0",
@@ -1954,7 +1954,7 @@
   },
   "cityphoto|guiyang": {
     "status": "hit",
-    "path": "assets/photos/guiyang/cityphoto-src.jpg",
+    "path": "assets/images/guiyang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Nanming,_Guiyang,_Guizhou,_China_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "landagent",
@@ -1962,7 +1962,7 @@
   },
   "cityphoto|anshun": {
     "status": "hit",
-    "path": "assets/photos/anshun/cityphoto-src.jpg",
+    "path": "assets/images/anshun.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Waterfall_in_Anshun.jpg",
     "license": "CC0",
     "artist": "Robinliu",
@@ -1970,7 +1970,7 @@
   },
   "cityphoto|qiandongnan": {
     "status": "hit",
-    "path": "assets/photos/qiandongnan/cityphoto-src.jpg",
+    "path": "assets/images/qiandongnan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Miao_women_in_Langde_village_(2006).jpg",
     "license": "CC BY 2.0",
     "artist": "Tianjin24",
@@ -1978,7 +1978,7 @@
   },
   "cityphoto|ganzi": {
     "status": "hit",
-    "path": "assets/photos/ganzi/cityphoto-src.jpg",
+    "path": "assets/images/ganzi.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:DCY_Airport.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Frankmnl",
@@ -1986,7 +1986,7 @@
   },
   "cityphoto|mianyang": {
     "status": "hit",
-    "path": "assets/photos/mianyang/cityphoto-src.jpg",
+    "path": "assets/images/mianyang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Goshenite._Xuebaoding_Mt.,_Mianyang_City,_Sichuan_province,_China-9048.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Raimond Spekking",
@@ -1994,7 +1994,7 @@
   },
   "cityphoto|yibin": {
     "status": "hit",
-    "path": "assets/photos/yibin/cityphoto-src.jpg",
+    "path": "assets/images/yibin.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Qicai_Waterfall_(33000790668).jpg",
     "license": "CC BY 2.0",
     "artist": "David Stanley from Nanaimo, Canada",
@@ -2002,7 +2002,7 @@
   },
   "cityphoto|zigong": {
     "status": "hit",
-    "path": "assets/photos/zigong/cityphoto-src.jpg",
+    "path": "assets/images/zigong.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Zigong_Lantern_Festival,_Zigong,_Sichuan_-_Flickr_-_preetamrai.jpg",
     "license": "CC BY 2.0",
     "artist": "Yosomono from Fukuoka, Japan",
@@ -2010,7 +2010,7 @@
   },
   "cityphoto|deyang": {
     "status": "hit",
-    "path": "assets/photos/deyang/cityphoto-src.jpg",
+    "path": "assets/images/deyang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:View_of_the_nanxing_spring.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "User:方的1P",
@@ -2018,7 +2018,7 @@
   },
   "cityphoto|kunming": {
     "status": "hit",
-    "path": "assets/photos/kunming/cityphoto-src.jpg",
+    "path": "assets/images/kunming.jpg",
     "title": "",
     "source": "https://commons.wikimedia.org/wiki/File:Black-headed_Gulls_in_Lake_Dian,_Kunming,_China.jpg",
     "license": "CC BY-SA 3.0",
@@ -2027,7 +2027,7 @@
   },
   "cityphoto|yuxi": {
     "status": "hit",
-    "path": "assets/photos/yuxi/cityphoto-src.jpg",
+    "path": "assets/images/yuxi.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Fuxian_Lake_202107201.jpg",
     "license": "CC BY 3.0",
     "artist": "Huangdan2060",
@@ -2035,7 +2035,7 @@
   },
   "cityphoto|chuxiong": {
     "status": "hit",
-    "path": "assets/photos/chuxiong/cityphoto-src.jpg",
+    "path": "assets/images/chuxiong.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%85%83%E8%B0%8B%E7%89%A9%E8%8C%82%E5%9C%9F%E6%9E%97_06.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Kcx36",
@@ -2043,7 +2043,7 @@
   },
   "cityphoto|chongqing": {
     "status": "hit",
-    "path": "assets/photos/chongqing/cityphoto-src.jpg",
+    "path": "assets/images/chongqing.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Skyline_of_Chongqing,_Aug_2016.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "A Chinese user",
@@ -2051,7 +2051,7 @@
   },
   "cityphoto|suzhou": {
     "status": "hit",
-    "path": "assets/photos/suzhou/cityphoto-src.jpg",
+    "path": "assets/images/suzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Lion_Grove_Garden_Suzhou_November_2017_009.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "King of Hearts",
@@ -2059,7 +2059,7 @@
   },
   "cityphoto|jinhua": {
     "status": "hit",
-    "path": "assets/photos/jinhua/cityphoto-src.png",
+    "path": "assets/images/jinhua.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:202308_Jinhua_CBD_in_Duohu_and_Yanweizhou_%28cropped%29.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "MNXANL",
@@ -2068,7 +2068,7 @@
   },
   "cityphoto|wanning": {
     "status": "hit",
-    "path": "assets/photos/wanning/cityphoto-src.png",
+    "path": "assets/images/wanning.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E6%B5%B7%E5%8F%A3-%E4%B8%87%E5%AE%81%E5%B8%82-%E6%97%A5%E6%9C%88%E6%B9%BE_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Nyx Ning",
@@ -2077,7 +2077,7 @@
   },
   "cityphoto|sanya": {
     "status": "hit",
-    "path": "assets/photos/sanya/cityphoto-src.png",
+    "path": "assets/images/sanya.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Sanya,_Hainan,_China.jpg",
     "license": "CC BY 2.0",
     "artist": "Lex Kravetski",
@@ -2721,7 +2721,7 @@
   },
   "cityphoto|dali": {
     "status": "hit",
-    "path": "assets/photos/dali/cityphoto-src.jpg",
+    "path": "assets/images/dali.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:20260223_Erhai_Park_in_Dali,_Yunnan_NE.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Ngguls",
@@ -2729,7 +2729,7 @@
   },
   "cityphoto|lijiang": {
     "status": "hit",
-    "path": "assets/photos/lijiang/cityphoto-src.jpg",
+    "path": "assets/images/lijiang.jpg",
     "title": "",
     "source": "https://commons.wikimedia.org/wiki/File:%E4%BA%91%E5%8D%97-%E4%B8%BD%E6%B1%9F-%E7%9C%BA%E6%9C%9B%E6%9C%A8%E5%BA%9C_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
@@ -2738,7 +2738,7 @@
   },
   "cityphoto|hangzhou": {
     "status": "hit",
-    "path": "assets/photos/hangzhou/cityphoto-src.jpg",
+    "path": "assets/images/hangzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:20090524_Hangzhou_West_Lake_7531.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Jakub Hałun",
@@ -2746,7 +2746,7 @@
   },
   "cityphoto|nanjing": {
     "status": "hit",
-    "path": "assets/photos/nanjing/cityphoto-src.png",
+    "path": "assets/images/nanjing.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Nanjing_View.png",
     "license": "CC BY-SA 2.0",
     "artist": "alexrudd",
@@ -2754,7 +2754,7 @@
   },
   "cityphoto|aba": {
     "status": "hit",
-    "path": "assets/photos/aba/cityphoto-src.jpg",
+    "path": "assets/images/aba.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Jiuzhaigou_Sichuan_China_Panda-Lake-01.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "CEphoto, Uwe Aranas",
@@ -2762,7 +2762,7 @@
   },
   "cityphoto|bijie": {
     "status": "hit",
-    "path": "assets/photos/bijie/cityphoto-src.png",
+    "path": "assets/images/bijie.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Administrative_Division_Bijie_2.png",
     "license": "CC BY-SA 4.0",
     "artist": "Chk2011",
@@ -2770,7 +2770,7 @@
   },
   "cityphoto|changsha": {
     "status": "hit",
-    "path": "assets/photos/changsha/cityphoto-src.jpg",
+    "path": "assets/images/changsha.jpg",
     "title": "File:Xiang River and Orange Isle, Changsha.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Xiang_River_and_Orange_Isle,_Changsha.jpg",
     "license": "CC BY-SA 4.0",
@@ -2779,7 +2779,7 @@
   },
   "cityphoto|chengdu": {
     "status": "hit",
-    "path": "assets/photos/chengdu/cityphoto-src.jpg",
+    "path": "assets/images/chengdu.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Chengdu_Sichuan_China_Panda-breeding-and-research-center-02.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "CEphoto, Uwe Aranas",
@@ -2787,7 +2787,7 @@
   },
   "cityphoto|jianshui": {
     "status": "hit",
-    "path": "assets/photos/jianshui/cityphoto-src.jpg",
+    "path": "assets/images/jianshui.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Jianshui_-_southern_edge_of_old_city_-_P1370110.JPG",
     "license": "CC BY-SA 3.0",
     "artist": "User:Vmenkov",
@@ -2795,7 +2795,7 @@
   },
   "cityphoto|leshan": {
     "status": "hit",
-    "path": "assets/photos/leshan/cityphoto-src.jpg",
+    "path": "assets/images/leshan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Mount_Emei_Scenic_Area,_including_Leshan_Giant_Buddha_Scenic_Area-111502.jpg",
     "license": "CC BY-SA 3.0 igo",
     "artist": "Karalyn Monteil",
@@ -2803,7 +2803,7 @@
   },
   "cityphoto|zhengzhou": {
     "status": "hit",
-    "path": "assets/photos/zhengzhou/cityphoto-src.jpg",
+    "path": "assets/images/zhengzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%B5%A9%E5%B1%B1%E8%BF%9C%E7%9C%BA_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "山海风",
@@ -2811,7 +2811,7 @@
   },
   "cityphoto|zunyi": {
     "status": "hit",
-    "path": "assets/photos/zunyi/cityphoto-src.jpg",
+    "path": "assets/images/zunyi.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Zunyi.JPG",
     "license": "CC BY-SA 3.0",
     "artist": "YubYub41",
@@ -2819,7 +2819,7 @@
   },
   "cityphoto|xingyi": {
     "status": "hit",
-    "path": "assets/photos/xingyi/cityphoto-src.png",
+    "path": "assets/images/xingyi.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:ChinaQianxinanXingyi.png",
     "license": "CC BY-SA 4.0",
     "artist": "Slb nsk",
@@ -2827,7 +2827,7 @@
   },
   "cityphoto|tongren": {
     "status": "hit",
-    "path": "assets/photos/tongren/cityphoto-src.jpg",
+    "path": "assets/images/tongren.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Tongren_(53227763571).jpg",
     "license": "CC BY 2.0",
     "artist": "Francisco Anzola",
@@ -2835,7 +2835,7 @@
   },
   "cityphoto|qiannan": {
     "status": "hit",
-    "path": "assets/photos/qiannan/cityphoto-src.jpg",
+    "path": "assets/images/qiannan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Duyun,_Qiannan,_Guizhou,_China_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "kuaimei",
@@ -2843,7 +2843,7 @@
   },
   "cityphoto|yaan": {
     "status": "hit",
-    "path": "assets/photos/yaan/cityphoto-src.jpg",
+    "path": "assets/images/yaan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Ya%27an,_August_2020.jpg",
     "license": "CC0",
     "artist": "Song Yanbo",
@@ -2851,7 +2851,7 @@
   },
   "cityphoto|mile": {
     "status": "hit",
-    "path": "assets/photos/mile/cityphoto-src.jpg",
+    "path": "assets/images/mile.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Champions_Mile_(race)_20250427.jpg",
     "license": "CC0",
     "artist": "Will629",
@@ -2859,7 +2859,7 @@
   },
   "cityphoto|xishuangbanna": {
     "status": "hit",
-    "path": "assets/photos/xishuangbanna/cityphoto-src.jpg",
+    "path": "assets/images/xishuangbanna.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:20251225_Tropical_rainforest_in_the_Xishuangbanna_Tropical_Botanical_Garden,_Chinese_Academy_of_Sciences.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Yumeto",
@@ -2867,7 +2867,7 @@
   },
   "cityphoto|qujing": {
     "status": "hit",
-    "path": "assets/photos/qujing/cityphoto-src.jpg",
+    "path": "assets/images/qujing.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Huize,_Qujing,_Yunnan,_China_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "dgykx",
@@ -2875,7 +2875,7 @@
   },
   "cityphoto|honghe": {
     "status": "hit",
-    "path": "assets/photos/honghe/cityphoto-src.jpeg",
+    "path": "assets/images/honghe.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Jingkou_Sunrise_(151240987).jpeg",
     "license": "CC0",
     "artist": "Luocheng Li",
@@ -2883,7 +2883,7 @@
   },
   "cityphoto|hulunbuir": {
     "status": "hit",
-    "path": "assets/photos/hulunbuir/cityphoto-src.jpg",
+    "path": "assets/images/hulunbuir.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Hulunbuir.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Fanghong",
@@ -2891,7 +2891,7 @@
   },
   "cityphoto|hohhot": {
     "status": "hit",
-    "path": "assets/photos/hohhot/cityphoto-src.jpg",
+    "path": "assets/images/hohhot.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Hohhot_City_Stadium.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "CurtNeiMeng",
@@ -2899,7 +2899,7 @@
   },
   "cityphoto|chifeng": {
     "status": "hit",
-    "path": "assets/photos/chifeng/cityphoto-src.jpg",
+    "path": "assets/images/chifeng.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Hongshan,_Chifeng,_Inner_Mongolia,_China_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "feihuzhinv",
@@ -2907,7 +2907,7 @@
   },
   "cityphoto|beijing": {
     "status": "hit",
-    "path": "assets/photos/beijing/cityphoto-src.jpg",
+    "path": "assets/images/beijing.jpg",
     "title": "File:Forbidden City Panorama 1.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Forbidden_City_Panorama_1.jpg",
     "license": "CC BY-SA 3.0",
@@ -2916,7 +2916,7 @@
   },
   "cityphoto|yanbian": {
     "status": "hit",
-    "path": "assets/photos/yanbian/cityphoto-src.jpg",
+    "path": "assets/images/yanbian.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yanbian_University_2.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "EditQ",
@@ -2924,7 +2924,7 @@
   },
   "cityphoto|changchun": {
     "status": "hit",
-    "path": "assets/photos/changchun/cityphoto-src.jpg",
+    "path": "assets/images/changchun.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Changchun_Yatai_Stadium.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Francesc Fort",
@@ -2932,7 +2932,7 @@
   },
   "cityphoto|guangyuan": {
     "status": "hit",
-    "path": "assets/photos/guangyuan/cityphoto-src.jpg",
+    "path": "assets/images/guangyuan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Guangyuan_skyline.jpg",
     "license": "CC0",
     "artist": "Brian Dell",
@@ -2940,7 +2940,7 @@
   },
   "cityphoto|luzhou": {
     "status": "hit",
-    "path": "assets/photos/luzhou/cityphoto-src.jpg",
+    "path": "assets/images/luzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Luzhou_Yangtze_River_Bridge.JPG",
     "license": "CC BY-SA 3.0",
     "artist": "Glabb",
@@ -2948,7 +2948,7 @@
   },
   "cityphoto|zhongwei": {
     "status": "hit",
-    "path": "assets/photos/zhongwei/cityphoto-src.jpg",
+    "path": "assets/images/zhongwei.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Zhongwei_IGP4782.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "w0zny",
@@ -2956,7 +2956,7 @@
   },
   "cityphoto|yinchuan": {
     "status": "hit",
-    "path": "assets/photos/yinchuan/cityphoto-src.jpg",
+    "path": "assets/images/yinchuan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yongning,_Yinchuan,_Ningxia,_China_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "ping lin",
@@ -2964,7 +2964,7 @@
   },
   "cityphoto|xuancheng": {
     "status": "hit",
-    "path": "assets/photos/xuancheng/cityphoto-src.jpg",
+    "path": "assets/images/xuancheng.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Xuancheng_City_Skyline_(2).JPG",
     "license": "CC BY 2.0",
     "artist": "Zhousiyuan",
@@ -2972,7 +2972,7 @@
   },
   "cityphoto|chizhou": {
     "status": "hit",
-    "path": "assets/photos/chizhou/cityphoto-src.jpg",
+    "path": "assets/images/chizhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Chizhou_No.1_Middle_School.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "William Ng",
@@ -2980,7 +2980,7 @@
   },
   "cityphoto|chuzhou": {
     "status": "hit",
-    "path": "assets/photos/chuzhou/cityphoto-src.png",
+    "path": "assets/images/chuzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E9%86%89%E7%BF%81%E4%BA%AD%E5%89%8D%E6%99%AF.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "橙子木",
@@ -2989,7 +2989,7 @@
   },
   "cityphoto|huangshan": {
     "status": "hit",
-    "path": "assets/photos/huangshan/cityphoto-src.jpg",
+    "path": "assets/images/huangshan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Anhui_Huangshan.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Miaulian",
@@ -2997,7 +2997,7 @@
   },
   "cityphoto|linyi": {
     "status": "hit",
-    "path": "assets/photos/linyi/cityphoto-src.png",
+    "path": "assets/images/linyi.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Temple_of_Guandi_in_Linyi,_Shandong,_China.png",
     "license": "CC BY 2.0",
     "artist": "kanegen: https://www.flickr.com/photos/kanegen/",
@@ -3005,7 +3005,7 @@
   },
   "cityphoto|weihai": {
     "status": "hit",
-    "path": "assets/photos/weihai/cityphoto-src.jpg",
+    "path": "assets/images/weihai.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Huancui,_Weihai,_Shandong,_China_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "Chen Zhi",
@@ -3013,7 +3013,7 @@
   },
   "cityphoto|jinan": {
     "status": "hit",
-    "path": "assets/photos/jinan/cityphoto-src.jpg",
+    "path": "assets/images/jinan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E5%9C%8B_%E4%B8%AD%E5%9B%BD_China_%E5%A4%A7%E6%98%8E%E6%B9%96%E9%81%8E%E9%A6%AC%E8%B7%AF_Street_crossing_at_Daming_Lake_%E4%BA%BA%E6%B5%81_Human_Logistics_SML.20121011.G12.00744_(8367136282).jpg",
     "license": "CC BY 2.0",
     "artist": "See-ming Lee from Hong Kong SAR, China",
@@ -3021,7 +3021,7 @@
   },
   "cityphoto|jining": {
     "status": "hit",
-    "path": "assets/photos/jining/cityphoto-src.jpg",
+    "path": "assets/images/jining.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Jining,_Ulanqab,_Inner_Mongolia,_China_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "天王星",
@@ -3029,7 +3029,7 @@
   },
   "cityphoto|yantai": {
     "status": "hit",
-    "path": "assets/photos/yantai/cityphoto-src.jpg",
+    "path": "assets/images/yantai.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yantai_City_Seaside_Scenery.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Zhuo1221",
@@ -3037,7 +3037,7 @@
   },
   "cityphoto|qingdao": {
     "status": "hit",
-    "path": "assets/photos/qingdao/cityphoto-src.jpg",
+    "path": "assets/images/qingdao.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Qingdao_-_Drone_view_city_with_skyline_(Unsplash).jpg",
     "license": "CC0 1.0",
     "artist": "CHO EUNSEONG (being_es)",
@@ -3045,7 +3045,7 @@
   },
   "cityphoto|taiyuan": {
     "status": "hit",
-    "path": "assets/photos/taiyuan/cityphoto-src.png",
+    "path": "assets/images/taiyuan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Skyline_of_Taiyuan,_Oct_1_2023.png",
     "license": "CC BY-SA 4.0",
     "artist": "A Chinese ID",
@@ -3053,7 +3053,7 @@
   },
   "cityphoto|xinzhou": {
     "status": "hit",
-    "path": "assets/photos/xinzhou/cityphoto-src.jpg",
+    "path": "assets/images/xinzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:XINZHOU_RIVER,_SHENZHEN_(2).jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Dinkun Chen",
@@ -3061,7 +3061,7 @@
   },
   "cityphoto|jinzhong": {
     "status": "hit",
-    "path": "assets/photos/jinzhong/cityphoto-src.jpg",
+    "path": "assets/images/jinzhong.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:CADAL07004560_%E9%A3%A2%E9%A4%93%E7%9A%84%E4%B8%AD%E5%9C%8B.djvu",
     "license": "Public domain",
     "artist": "Walter.H.Mallory著  吴鹏飞译；《民国丛书》编辑委员会",
@@ -3069,7 +3069,7 @@
   },
   "cityphoto|dongguan": {
     "status": "hit",
-    "path": "assets/photos/dongguan/cityphoto-src.jpg",
+    "path": "assets/images/dongguan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:KE_YUAN,_DONGGUAN,_CHINA_(13).jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Dinkun Chen",
@@ -3077,7 +3077,7 @@
   },
   "cityphoto|foshan": {
     "status": "hit",
-    "path": "assets/photos/foshan/cityphoto-src.jpg",
+    "path": "assets/images/foshan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:39459-Foshan.jpg",
     "license": "CC BY 2.0",
     "artist": "xiquinhosilva from Cacau",
@@ -3085,7 +3085,7 @@
   },
   "cityphoto|meizhou": {
     "status": "hit",
-    "path": "assets/photos/meizhou/cityphoto-src.jpg",
+    "path": "assets/images/meizhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Meizhou_New_Century_Square.jpg",
     "license": "CC BY 2.0",
     "artist": "Anthony Hartman from Meizhou, China",
@@ -3093,7 +3093,7 @@
   },
   "cityphoto|shantou": {
     "status": "hit",
-    "path": "assets/photos/shantou/cityphoto-src.jpg",
+    "path": "assets/images/shantou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Shantou_University_Auditorium.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Ferox Seneca",
@@ -3101,7 +3101,7 @@
   },
   "cityphoto|zhanjiang": {
     "status": "hit",
-    "path": "assets/photos/zhanjiang/cityphoto-src.jpg",
+    "path": "assets/images/zhanjiang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Zhanjiang_beach.jpg",
     "license": "CC0",
     "artist": "Wikiwakhan",
@@ -3109,7 +3109,7 @@
   },
   "cityphoto|chaozhou": {
     "status": "hit",
-    "path": "assets/photos/chaozhou/cityphoto-src.jpg",
+    "path": "assets/images/chaozhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Chaozhou_Bridge.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Aokisang",
@@ -3117,7 +3117,7 @@
   },
   "cityphoto|zhuhai": {
     "status": "hit",
-    "path": "assets/photos/zhuhai/cityphoto-src.jpg",
+    "path": "assets/images/zhuhai.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Zhuhai_Fisher_Girl_statue_dllu.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Dllu",
@@ -3125,7 +3125,7 @@
   },
   "cityphoto|beihai": {
     "status": "hit",
-    "path": "assets/photos/beihai/cityphoto-src.jpg",
+    "path": "assets/images/beihai.jpg",
     "title": "File:北海银滩胜景 - panoramio.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%8C%97%E6%B5%B7%E9%93%B6%E6%BB%A9%E8%83%9C%E6%99%AF_-_panoramio.jpg",
     "license": "CC BY 3.0",
@@ -3134,7 +3134,7 @@
   },
   "cityphoto|nanning": {
     "status": "hit",
-    "path": "assets/photos/nanning/cityphoto-src.jpg",
+    "path": "assets/images/nanning.jpg",
     "title": "",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%8D%97%E5%AE%81%E9%9D%92%E7%A7%80%E5%B1%B1%E8%8B%8F%E9%93%81%E5%9B%AD.jpg",
     "license": "CC BY-SA 4.0",
@@ -3143,7 +3143,7 @@
   },
   "cityphoto|wuzhou": {
     "status": "hit",
-    "path": "assets/photos/wuzhou/cityphoto-src.jpg",
+    "path": "assets/images/wuzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Wuzhou_Veranda_20181102-3.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "DragonSamYU",
@@ -3151,7 +3151,7 @@
   },
   "cityphoto|baise": {
     "status": "hit",
-    "path": "assets/photos/baise/cityphoto-src.jpg",
+    "path": "assets/images/baise.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:M_N_Saha,_J_C_Bose,_J_C_Ghosh,_Snehamoy_Dutt,_S_N_Bose,_D_M_Bose,_N_R_Sen,_J_N_Mukherjee,_N_C_Nag.jpg",
     "license": "Public domain",
     "artist": "Unknown authorUnknown author",
@@ -3159,7 +3159,7 @@
   },
   "cityphoto|hezhou": {
     "status": "hit",
-    "path": "assets/photos/hezhou/cityphoto-src.jpg",
+    "path": "assets/images/hezhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Hezhou_Market_(39376034244).jpg",
     "license": "CC BY 2.0",
     "artist": "Rutger van der Maar",
@@ -3167,7 +3167,7 @@
   },
   "cityphoto|ili": {
     "status": "hit",
-    "path": "assets/photos/ili/cityphoto-src.jpg",
+    "path": "assets/images/ili.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:The_Ili_Commandery.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Voidvector",
@@ -3175,7 +3175,7 @@
   },
   "cityphoto|turpan": {
     "status": "hit",
-    "path": "assets/photos/turpan/cityphoto-src.jpg",
+    "path": "assets/images/turpan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Gaochang_Gu_Cheng,_Old_Town,_Gaochang_District,_Turpan,_Xinjiang,_China.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Giorgioglobe",
@@ -3183,7 +3183,7 @@
   },
   "cityphoto|altay": {
     "status": "hit",
-    "path": "assets/photos/altay/cityphoto-src.jpg",
+    "path": "assets/images/altay.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%86%AC%E5%A4%A9%E7%9A%84181%E5%9B%A2%E4%B8%BB%E8%A1%97%E9%81%93_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "陈琛",
@@ -3191,7 +3191,7 @@
   },
   "cityphoto|yangzhou": {
     "status": "hit",
-    "path": "assets/photos/yangzhou/cityphoto-src.jpg",
+    "path": "assets/images/yangzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yangzhou_am_Morgen.JPG",
     "license": "CC BY-SA 3.0",
     "artist": "Marc.Rosenberger",
@@ -3199,7 +3199,7 @@
   },
   "cityphoto|wuxi": {
     "status": "hit",
-    "path": "assets/photos/wuxi/cityphoto-src.jpg",
+    "path": "assets/images/wuxi.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Jiangsu_School_Governance_Department_House.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Synyan",
@@ -3207,7 +3207,7 @@
   },
   "cityphoto|shangrao": {
     "status": "hit",
-    "path": "assets/photos/shangrao/cityphoto-src.jpg",
+    "path": "assets/images/shangrao.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Shangrao_bus_53_20191018_142537.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "維基小霸王",
@@ -3215,7 +3215,7 @@
   },
   "cityphoto|jiujiang": {
     "status": "hit",
-    "path": "assets/photos/jiujiang/cityphoto-src.jpg",
+    "path": "assets/images/jiujiang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Jiujiang_Obelisk.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Canto101",
@@ -3223,7 +3223,7 @@
   },
   "cityphoto|nanchang": {
     "status": "hit",
-    "path": "assets/photos/nanchang/cityphoto-src.png",
+    "path": "assets/images/nanchang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Nanchang_Skyline.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Akira CA",
@@ -3232,7 +3232,7 @@
   },
   "cityphoto|jingdezhen": {
     "status": "hit",
-    "path": "assets/photos/jingdezhen/cityphoto-src.jpg",
+    "path": "assets/images/jingdezhen.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Jingdezhen_China_Ceramics_Museum_20231020_43.jpg",
     "license": "CC0",
     "artist": "沈澄心",
@@ -3240,7 +3240,7 @@
   },
   "cityphoto|ganzhou": {
     "status": "hit",
-    "path": "assets/photos/ganzhou/cityphoto-src.jpg",
+    "path": "assets/images/ganzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E4%BF%A1%E4%B8%B0%E5%A4%A7%E5%A1%98%E5%9F%A0%E9%95%87%E6%96%B0%E9%BE%99%E5%B0%8F%E5%AD%A6_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "JIANGJUN",
@@ -3248,7 +3248,7 @@
   },
   "cityphoto|shijiazhuang": {
     "status": "hit",
-    "path": "assets/photos/shijiazhuang/cityphoto-src.jpg",
+    "path": "assets/images/shijiazhuang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yuhua,_Shijiazhuang,_Hebei,_China_-_panoramio_(12).jpg",
     "license": "CC BY-SA 3.0",
     "artist": "ping lin",
@@ -3256,7 +3256,7 @@
   },
   "cityphoto|qinhuangdao": {
     "status": "hit",
-    "path": "assets/photos/qinhuangdao/cityphoto-src.jpg",
+    "path": "assets/images/qinhuangdao.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Qinhuangdao_%E7%A7%A6%E7%9A%87%E5%B2%9B.jpg",
     "license": "CC BY-SA 3.0 de",
     "artist": "Arne Müseler",
@@ -3264,7 +3264,7 @@
   },
   "cityphoto|nanyang": {
     "status": "hit",
-    "path": "assets/photos/nanyang/cityphoto-src.jpg",
+    "path": "assets/images/nanyang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Wolong,_Nanyang,_Henan,_China_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "goodde6",
@@ -3272,7 +3272,7 @@
   },
   "cityphoto|anyang": {
     "status": "hit",
-    "path": "assets/photos/anyang/cityphoto-src.jpg",
+    "path": "assets/images/anyang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Anyang_Hotel,_Anyang,_China_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "Randy Rambo",
@@ -3280,7 +3280,7 @@
   },
   "cityphoto|jiaozuo": {
     "status": "hit",
-    "path": "assets/photos/jiaozuo/cityphoto-src.jpg",
+    "path": "assets/images/jiaozuo.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:20250906_Taiyuan-Jiaozuo_HSR_in_Zezhou.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Windmemories",
@@ -3288,7 +3288,7 @@
   },
   "cityphoto|xuchang": {
     "status": "hit",
-    "path": "assets/photos/xuchang/cityphoto-src.jpg",
+    "path": "assets/images/xuchang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Aerial_View_of_Xuchang.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Windmemories",
@@ -3296,7 +3296,7 @@
   },
   "cityphoto|jiaxing": {
     "status": "hit",
-    "path": "assets/photos/jiaxing/cityphoto-src.jpg",
+    "path": "assets/images/jiaxing.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Jiaxing_Sports_Centre_Stadium.jpg",
     "license": "CC0",
     "artist": "Zhou Guanhuai",
@@ -3304,7 +3304,7 @@
   },
   "cityphoto|huzhou": {
     "status": "hit",
-    "path": "assets/photos/huzhou/cityphoto-src.jpg",
+    "path": "assets/images/huzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Sheraton_Huzhou_Hot_Spring_Resort_4.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "钉钉",
@@ -3312,7 +3312,7 @@
   },
   "cityphoto|shaoxing": {
     "status": "hit",
-    "path": "assets/photos/shaoxing/cityphoto-src.jpg",
+    "path": "assets/images/shaoxing.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Shaoxing_Cityscape.jpg",
     "license": "CC BY-SA 2.0",
     "artist": "serapio",
@@ -3320,7 +3320,7 @@
   },
   "cityphoto|haikou": {
     "status": "hit",
-    "path": "assets/photos/haikou/cityphoto-src.jpg",
+    "path": "assets/images/haikou.jpg",
     "title": "File:Century Bridge, Haikou - Jun 2023.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Century_Bridge,_Haikou_-_Jun_2023.jpg",
     "license": "CC BY-SA 4.0",
@@ -3329,7 +3329,7 @@
   },
   "cityphoto|shangrila": {
     "status": "hit",
-    "path": "assets/photos/shangrila/cityphoto-src.jpg",
+    "path": "assets/images/shangrila.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:View_from_Shangri-La_City,_Diqing_Tibetan_Autonomous_Prefecture,_Yunnan,_China.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Luke Chantrell",
@@ -3337,7 +3337,7 @@
   },
   "cityphoto|baotou": {
     "status": "hit",
-    "path": "assets/photos/baotou/cityphoto-src.jpg",
+    "path": "assets/images/baotou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Jiuyuan,_Baotou,_Inner_Mongolia,_China_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "18600025200",
@@ -3345,7 +3345,7 @@
   },
   "cityphoto|ordos": {
     "status": "hit",
-    "path": "assets/photos/ordos/cityphoto-src.jpg",
+    "path": "assets/images/ordos.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:OrdosX623.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "AthosworldLi",
@@ -3353,7 +3353,7 @@
   },
   "cityphoto|liangshan": {
     "status": "hit",
-    "path": "assets/photos/liangshan/cityphoto-src.jpg",
+    "path": "assets/images/liangshan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yanyuan,_Liangshan,_Sichuan,_China_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "Sirius Chen (丢丢)",
@@ -3361,7 +3361,7 @@
   },
   "cityphoto|wuhu": {
     "status": "hit",
-    "path": "assets/photos/wuhu/cityphoto-src.jpg",
+    "path": "assets/images/wuhu.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Wuhu_Skyline,_December_2019.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Wu Shan",
@@ -3369,7 +3369,7 @@
   },
   "cityphoto|rizhao": {
     "status": "hit",
-    "path": "assets/photos/rizhao/cityphoto-src.jpg",
+    "path": "assets/images/rizhao.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Rizhao_sea_port.jpg",
     "license": "CC BY 3.0",
     "artist": "Smainali3",
@@ -3377,7 +3377,7 @@
   },
   "cityphoto|linfen": {
     "status": "hit",
-    "path": "assets/photos/linfen/cityphoto-src.jpg",
+    "path": "assets/images/linfen.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yaodu,_Linfen,_Shanxi,_China_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "ping lin",
@@ -3385,7 +3385,7 @@
   },
   "cityphoto|huizhou": {
     "status": "hit",
-    "path": "assets/photos/huizhou/cityphoto-src.jpg",
+    "path": "assets/images/huizhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:XIANGSHAN_GUANYIN_TEMPLE,_HUIZHOU_(3).jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Dinkun Chen",
@@ -3393,7 +3393,7 @@
   },
   "cityphoto|jiangmen": {
     "status": "hit",
-    "path": "assets/photos/jiangmen/cityphoto-src.jpg",
+    "path": "assets/images/jiangmen.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Taishan,_Jiangmen,_Guangdong,_China_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "luchangjiang~鲁昌江",
@@ -3401,7 +3401,7 @@
   },
   "cityphoto|chongzuo": {
     "status": "hit",
-    "path": "assets/photos/chongzuo/cityphoto-src.jpg",
+    "path": "assets/images/chongzuo.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Pingxiang,_Chongzuo,_Guangxi,_China_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "huxuejiang",
@@ -3409,7 +3409,7 @@
   },
   "cityphoto|fangchenggang": {
     "status": "hit",
-    "path": "assets/photos/fangchenggang/cityphoto-src.jpg",
+    "path": "assets/images/fangchenggang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Gangkou,_Fangchenggang,_Guangxi,_China_-_panoramio_(1).jpg",
     "license": "CC BY 3.0",
     "artist": "liyuhanrenll",
@@ -3417,7 +3417,7 @@
   },
   "cityphoto|kashgar": {
     "status": "hit",
-    "path": "assets/photos/kashgar/cityphoto-src.jpg",
+    "path": "assets/images/kashgar.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Kashgar,_China_Bebop_Drone_2015-09-13T194555%2B0000_18F943.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "w0zny",
@@ -3425,7 +3425,7 @@
   },
   "cityphoto|xuzhou": {
     "status": "hit",
-    "path": "assets/photos/xuzhou/cityphoto-src.jpg",
+    "path": "assets/images/xuzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:TML_of_XUZ_(Xuzhou_Guanyin).jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Med Nyin (Nyin Yu)",
@@ -3433,7 +3433,7 @@
   },
   "cityphoto|lianyungang": {
     "status": "hit",
-    "path": "assets/photos/lianyungang/cityphoto-src.jpg",
+    "path": "assets/images/lianyungang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Cartoons_on_Streets_of_Lianyungang_2.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "钉钉",
@@ -3441,7 +3441,7 @@
   },
   "cityphoto|baoding": {
     "status": "hit",
-    "path": "assets/photos/baoding/cityphoto-src.jpg",
+    "path": "assets/images/baoding.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Baoding_balls2.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Stanislav Kozlovskiy",
@@ -3449,7 +3449,7 @@
   },
   "cityphoto|zhangjiakou": {
     "status": "hit",
-    "path": "assets/photos/zhangjiakou/cityphoto-src.png",
+    "path": "assets/images/zhangjiakou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:The_Great_Wall_near_Zhangjiakou,_Hebei_Province,_China,_1874_WDL2127.png",
     "license": "Public domain",
     "artist": "Adolf Nikolay Boyarsky",
@@ -3457,7 +3457,7 @@
   },
   "cityphoto|kaifeng": {
     "status": "hit",
-    "path": "assets/photos/kaifeng/cityphoto-src.jpg",
+    "path": "assets/images/kaifeng.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:20250622_Kaifeng_East_Mosque_01.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Windmemories",
@@ -3465,7 +3465,7 @@
   },
   "cityphoto|ningbo": {
     "status": "hit",
-    "path": "assets/photos/ningbo/cityphoto-src.jpg",
+    "path": "assets/images/ningbo.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:2023-04-07_University_of_Nottingham_Ningbo_China_01.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "源義信",
@@ -3473,7 +3473,7 @@
   },
   "cityphoto|shiyan": {
     "status": "hit",
-    "path": "assets/photos/shiyan/cityphoto-src.jpg",
+    "path": "assets/images/shiyan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Danjiangkou,_Shiyan,_Hubei,_China_-_panoramio_(1).jpg",
     "license": "CC BY-SA 3.0",
     "artist": "macredants",
@@ -3481,7 +3481,7 @@
   },
   "cityphoto|yichang": {
     "status": "hit",
-    "path": "assets/photos/yichang/cityphoto-src.jpg",
+    "path": "assets/images/yichang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yichang_skyline_6.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Fxqf",
@@ -3489,7 +3489,7 @@
   },
   "cityphoto|wuhan": {
     "status": "hit",
-    "path": "assets/photos/wuhan/cityphoto-src.jpg",
+    "path": "assets/images/wuhan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Wuhan_Botanical_Garden.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Sun Jiao (Interaccoonale)",
@@ -3497,7 +3497,7 @@
   },
   "cityphoto|xiangyang": {
     "status": "hit",
-    "path": "assets/photos/xiangyang/cityphoto-src.jpg",
+    "path": "assets/images/xiangyang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Xiangyang_skyline_02.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Fxqf",
@@ -3505,7 +3505,7 @@
   },
   "cityphoto|yueyang": {
     "status": "hit",
-    "path": "assets/photos/yueyang/cityphoto-src.jpg",
+    "path": "assets/images/yueyang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yueyang_01.jpg",
     "license": "CC BY 2.0",
     "artist": "Steve Webel from Yueyang (??), Hunan (??), China (??)",
@@ -3513,7 +3513,7 @@
   },
   "cityphoto|xiangxi": {
     "status": "hit",
-    "path": "assets/photos/xiangxi/cityphoto-src.jpg",
+    "path": "assets/images/xiangxi.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Fenghuang,_Xiangxi,_Hunan,_China_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "christiali",
@@ -3521,7 +3521,7 @@
   },
   "cityphoto|hengyang": {
     "status": "hit",
-    "path": "assets/photos/hengyang/cityphoto-src.jpg",
+    "path": "assets/images/hengyang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Changchong_Reservoir_in_Hengshan_County,_Hengyang,_Hunan,_China,_Picture1.jpg",
     "license": "CC0",
     "artist": "Huangdan2060",
@@ -3529,7 +3529,7 @@
   },
   "cityphoto|lanzhou": {
     "status": "hit",
-    "path": "assets/photos/lanzhou/cityphoto-src.jpg",
+    "path": "assets/images/lanzhou.jpg",
     "title": "File:ZhongShanBridgeLanzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:ZhongShanBridgeLanzhou.jpg",
     "license": "CC BY 4.0",
@@ -3538,7 +3538,7 @@
   },
   "cityphoto|jiayuguan": {
     "status": "hit",
-    "path": "assets/photos/jiayuguan/cityphoto-src.jpg",
+    "path": "assets/images/jiayuguan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:JiayuguanFort.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "User:Doron",
@@ -3546,7 +3546,7 @@
   },
   "cityphoto|tianshui": {
     "status": "hit",
-    "path": "assets/photos/tianshui/cityphoto-src.jpg",
+    "path": "assets/images/tianshui.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Tianshui_street.jpg",
     "license": "CC BY-SA 2.0",
     "artist": "shizhao from beijing, china",
@@ -3554,7 +3554,7 @@
   },
   "cityphoto|zhangye": {
     "status": "hit",
-    "path": "assets/photos/zhangye/cityphoto-src.jpg",
+    "path": "assets/images/zhangye.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Linze,_Zhangye,_Gansu,_China_-_panoramio_(4).jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Han Lei",
@@ -3562,7 +3562,7 @@
   },
   "cityphoto|dunhuang": {
     "status": "hit",
-    "path": "assets/photos/dunhuang/cityphoto-src.jpg",
+    "path": "assets/images/dunhuang.jpg",
     "title": "File:Crescent Lake from the Singing Sand Dunes (20230918101214).jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Crescent_Lake_from_the_Singing_Sand_Dunes_(20230918101214).jpg",
     "license": "CC BY-SA 4.0",
@@ -3571,7 +3571,7 @@
   },
   "cityphoto|wuwei": {
     "status": "hit",
-    "path": "assets/photos/wuwei/cityphoto-src.jpg",
+    "path": "assets/images/wuwei.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:20060423063512.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Yaohua2000",
@@ -3579,7 +3579,7 @@
   },
   "cityphoto|longnan": {
     "status": "hit",
-    "path": "assets/photos/longnan/cityphoto-src.jpg",
+    "path": "assets/images/longnan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Guanxi_Xinwei,_Longnan,_Jiangxi.JPG",
     "license": "CC BY-SA 4.0",
     "artist": "Underbar dk",
@@ -3587,7 +3587,7 @@
   },
   "cityphoto|nanping": {
     "status": "hit",
-    "path": "assets/photos/nanping/cityphoto-src.jpg",
+    "path": "assets/images/nanping.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E7%99%BD%E8%8A%B1%E5%B2%A9%E4%B8%8A%E7%9C%8B%E6%AD%A6%E5%A4%B7%E5%B1%B1%E5%B8%82_-_Wuyishan_City_Viewed_from_Baihua_Rock_-_2015.11_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "rheins",
@@ -3595,7 +3595,7 @@
   },
   "cityphoto|ningde": {
     "status": "hit",
-    "path": "assets/photos/ningde/cityphoto-src.jpg",
+    "path": "assets/images/ningde.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Jiaocheng,_Ningde,_Fujian,_China_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "琳飞",
@@ -3603,7 +3603,7 @@
   },
   "cityphoto|zhangzhou": {
     "status": "hit",
-    "path": "assets/photos/zhangzhou/cityphoto-src.jpg",
+    "path": "assets/images/zhangzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:201708_Zhangzhou_Subline.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "MNXANL",
@@ -3611,7 +3611,7 @@
   },
   "cityphoto|fuzhou": {
     "status": "hit",
-    "path": "assets/photos/fuzhou/cityphoto-src.jpg",
+    "path": "assets/images/fuzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Sister_City_of_Fuzhou,_China_2770.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Chris Light",
@@ -3619,7 +3619,7 @@
   },
   "cityphoto|longyan": {
     "status": "hit",
-    "path": "assets/photos/longyan/cityphoto-src.jpg",
+    "path": "assets/images/longyan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E8%8E%B2%E8%8A%B1%E5%B1%B1%E7%9C%8B%E9%BE%99%E5%B2%A9_-_Longyan_City_Viewed_from_Lotus_Mountain_-_2016.09_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "rheins",
@@ -3627,7 +3627,7 @@
   },
   "cityphoto|lhasa": {
     "status": "hit",
-    "path": "assets/photos/lhasa/cityphoto-src.jpg",
+    "path": "assets/images/lhasa.jpg",
     "title": "File:Potala Palace Lhasa Tibet Autonomous Region China 西藏 拉萨 布达拉宫 - panoramio.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Potala_Palace_Lhasa_Tibet_Autonomous_Region_China_%E8%A5%BF%E8%97%8F_%E6%8B%89%E8%90%A8_%E5%B8%83%E8%BE%BE%E6%8B%89%E5%AE%AB_-_panoramio.jpg",
     "license": "CC BY 3.0",
@@ -3636,7 +3636,7 @@
   },
   "cityphoto|nyingchi": {
     "status": "hit",
-    "path": "assets/photos/nyingchi/cityphoto-src.jpg",
+    "path": "assets/images/nyingchi.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Mainling,_Nyingchi,_Tibet,_China_-_panoramio_(41).jpg",
     "license": "CC BY-SA 3.0",
     "artist": "ping lin",
@@ -3644,7 +3644,7 @@
   },
   "cityphoto|dalian": {
     "status": "hit",
-    "path": "assets/photos/dalian/cityphoto-src.jpg",
+    "path": "assets/images/dalian.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Dalian_Liaoning_China_Two-Chinese-at-Xinghai-Bay-01.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "CEphoto, Uwe Aranas",
@@ -3662,7 +3662,7 @@
   },
   "cityphoto|baoji": {
     "status": "hit",
-    "path": "assets/photos/baoji/cityphoto-src.jpg",
+    "path": "assets/images/baoji.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Baoji_point.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Nihongarden",
@@ -3674,12 +3674,12 @@
     "source": "https://commons.wikimedia.org/wiki/File:Baota_Mountain_4.jpg",
     "license": "CC0",
     "artist": "H2v5o68z",
-    "path": "assets/photos/yanan/cityphoto-src.jpg",
+    "path": "assets/images/yanan.jpg",
     "query": "wiki:延安"
   },
   "cityphoto|yulin": {
     "status": "hit",
-    "path": "assets/photos/yulin/cityphoto-src.jpg",
+    "path": "assets/images/yulin.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yulin_Cave_10,_Apsara_playing_Guzheng_or_Guqin.jpg",
     "license": "Public domain",
     "artist": "unknown artist from Western Xia, (1036-1227 C.E.)",
@@ -3687,7 +3687,7 @@
   },
   "cityphoto|haixi": {
     "status": "hit",
-    "path": "assets/photos/haixi/cityphoto-src.jpg",
+    "path": "assets/images/haixi.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Haixi_Mongol_Prefecture2.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Jaryiah Khan",
@@ -3695,7 +3695,7 @@
   },
   "cityphoto|xining": {
     "status": "hit",
-    "path": "assets/photos/xining/cityphoto-src.jpg",
+    "path": "assets/images/xining.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Datong,_Xining,_Qinghai,_China_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "伊盛昌",
@@ -3703,7 +3703,7 @@
   },
   "cityphoto|mudanjiang": {
     "status": "hit",
-    "path": "assets/photos/mudanjiang/cityphoto-src.jpg",
+    "path": "assets/images/mudanjiang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:A_closed_Postal_Press_Kiosk_in_Mudanjiang,_Heilongjiang_Province,_China.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "HCCB3947",
@@ -3711,7 +3711,7 @@
   },
   "cityphoto|qiqihar": {
     "status": "hit",
-    "path": "assets/photos/qiqihar/cityphoto-src.jpg",
+    "path": "assets/images/qiqihar.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Qiqihar_(%E5%8E%A6%E9%97%A8)_Stra%C3%9Fenansicht_(1904)_03.jpg",
     "license": "Public domain",
     "artist": "Unlisted author.",
@@ -3719,7 +3719,7 @@
   },
   "cityphoto|tengchong": {
     "status": "hit",
-    "path": "assets/photos/tengchong/cityphoto-src.jpg",
+    "path": "assets/images/tengchong.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Rehai,_Tengchong_07.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Kcx36",
@@ -3727,7 +3727,7 @@
   },
   "cityphoto|lincang": {
     "status": "hit",
-    "path": "assets/photos/lincang/cityphoto-src.jpg",
+    "path": "assets/images/lincang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E4%B8%B4%E6%B2%A7%E8%80%83%E5%8F%A4%E5%8D%9A%E7%89%A9%E9%A6%86-%E6%97%A7%E7%9F%B3%E5%99%A8%E6%97%B6%E4%BB%A3-%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%E7%9A%84%E7%A0%94%E7%A9%B6.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "瑞丽江的河水",
@@ -3735,7 +3735,7 @@
   },
   "cityphoto|liupanshui": {
     "status": "hit",
-    "path": "assets/photos/liupanshui/cityphoto-src.jpg",
+    "path": "assets/images/liupanshui.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%85%AD%E7%9B%98%E6%B0%B4%E7%AB%99%E6%96%B0%E7%AB%99%E6%88%BF%EF%BC%882017%EF%BC%89.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "BMSBridge",
@@ -3743,7 +3743,7 @@
   },
   "cityphoto|shanghai": {
     "status": "hit",
-    "path": "assets/photos/shanghai/cityphoto-src.jpg",
+    "path": "assets/images/shanghai.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E4%B8%8A%E6%B5%B7%E5%8C%97%E5%A4%96%E6%BB%A9.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "钉钉",
@@ -3751,7 +3751,7 @@
   },
   "cityphoto|dehong": {
     "status": "hit",
-    "path": "assets/photos/dehong/cityphoto-src.jpg",
+    "path": "assets/images/dehong.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E8%8A%92%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF_-_2024-05-27_03.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "瑞丽江的河水",
@@ -3759,7 +3759,7 @@
   },
   "cityphoto|datong": {
     "status": "hit",
-    "path": "assets/photos/datong/cityphoto-src.jpg",
+    "path": "assets/images/datong.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yungang11_2010.JPG",
     "license": "CC BY-SA 4.0",
     "artist": "Marcin Białek",
@@ -3767,7 +3767,7 @@
   },
   "cityphoto|guangzhou": {
     "status": "hit",
-    "path": "assets/photos/guangzhou/cityphoto-src.jpg",
+    "path": "assets/images/guangzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Southern_Han_Mausoleums_Museum_20220604-A.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Jasonjiang.1998",
@@ -3775,7 +3775,7 @@
   },
   "cityphoto|zhenjiang": {
     "status": "hit",
-    "path": "assets/photos/zhenjiang/cityphoto-src.jpg",
+    "path": "assets/images/zhenjiang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:201806_Zhenjiang_Suning_Plaza.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "MNXANL",
@@ -3783,7 +3783,7 @@
   },
   "cityphoto|tangshan": {
     "status": "hit",
-    "path": "assets/photos/tangshan/cityphoto-src.jpg",
+    "path": "assets/images/tangshan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%94%90%E5%B1%B1%E5%8D%97%E6%B9%96%E9%BE%99%E6%B3%89%E6%B9%BE%E6%B9%96%E5%BF%83%E5%B2%9B%E5%8D%97%E5%90%91.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "董辰兴",
@@ -3791,7 +3791,7 @@
   },
   "cityphoto|chengde": {
     "status": "hit",
-    "path": "assets/photos/chengde/cityphoto-src.jpg",
+    "path": "assets/images/chengde.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Chengde_Mountain_Resort_1.jpg",
     "license": "CC BY-SA 2.0",
     "artist": "takwing.kwong",
@@ -3799,7 +3799,7 @@
   },
   "cityphoto|luoyang": {
     "status": "hit",
-    "path": "assets/photos/luoyang/cityphoto-src.jpg",
+    "path": "assets/images/luoyang.jpg",
     "title": "File:20231119 Yingtian Gate 02.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:20231119_Yingtian_Gate_02.jpg",
     "license": "CC BY-SA 4.0",
@@ -3808,7 +3808,7 @@
   },
   "cityphoto|wenzhou": {
     "status": "hit",
-    "path": "assets/photos/wenzhou/cityphoto-src.jpg",
+    "path": "assets/images/wenzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E9%9B%81%E8%8D%A1%E5%B1%B1%E5%B1%B1%E5%BA%84_Yandangshan_Mountain_Villa_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "wanghongliu",
@@ -3816,7 +3816,7 @@
   },
   "cityphoto|wenchang": {
     "status": "hit",
-    "path": "assets/photos/wenchang/cityphoto-src.jpg",
+    "path": "assets/images/wenchang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Tonggu_Ridge.jpg",
     "license": "CC0",
     "artist": "Shujianyang",
@@ -3824,7 +3824,7 @@
   },
   "cityphoto|yuncheng": {
     "status": "hit",
-    "path": "assets/photos/yuncheng/cityphoto-src.jpg",
+    "path": "assets/images/yuncheng.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E8%BF%90%E5%9F%8E%E7%9B%90%E6%B9%96.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "ysd1123",
@@ -3832,7 +3832,7 @@
   },
   "cityphoto|zhaoqing": {
     "status": "hit",
-    "path": "assets/photos/zhaoqing/cityphoto-src.jpg",
+    "path": "assets/images/zhaoqing.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Wulong_Pavilion,_Seven_Star_Crags_20260217.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Jasonjiang.1998",
@@ -3840,7 +3840,7 @@
   },
   "cityphoto|shennongjia": {
     "status": "hit",
-    "path": "assets/photos/shennongjia/cityphoto-src.jpg",
+    "path": "assets/images/shennongjia.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E7%A5%9E%E5%86%9C%E6%9E%B6_347%E5%9B%BD%E9%81%93%E7%A5%9E%E5%86%9C%E9%A1%B6%E6%AE%B5.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Liuxingy",
@@ -3848,7 +3848,7 @@
   },
   "cityphoto|city-9845bf4f54": {
     "status": "hit",
-    "path": "assets/photos/city-9845bf4f54/cityphoto-src.jpg",
+    "path": "assets/images/city-9845bf4f54.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:20260503_Swan_Lake,_Sanmenxia.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Windmemories",
@@ -3856,7 +3856,7 @@
   },
   "cityphoto|city-01c5f8d4bd": {
     "status": "hit",
-    "path": "assets/photos/city-01c5f8d4bd/cityphoto-src.jpg",
+    "path": "assets/images/city-01c5f8d4bd.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%A4%AA%E6%98%8A%E9%99%B5.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Lordary",
@@ -3864,7 +3864,7 @@
   },
   "cityphoto|city-c815eff127": {
     "status": "hit",
-    "path": "assets/photos/city-c815eff127/cityphoto-src.jpg",
+    "path": "assets/images/city-c815eff127.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Jiyuan_-_view_from_Jiyuan_Century_Hotel_to_Manghe_N_St,_pic01.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "RomanM82",
@@ -3892,7 +3892,7 @@
   },
   "cityphoto|city-b3b41f77aa": {
     "status": "hit",
-    "path": "assets/photos/city-b3b41f77aa/cityphoto-src.png",
+    "path": "assets/images/city-b3b41f77aa.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Zhumadian_mcp.png",
     "license": "CC BY-SA 4.0",
     "artist": "Slb nsk",
@@ -3900,7 +3900,7 @@
   },
   "cityphoto|puer": {
     "status": "hit",
-    "path": "assets/photos/puer/cityphoto-src.jpg",
+    "path": "assets/images/puer.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E6%99%AE%E6%B4%B1%E5%A4%AA%E9%98%B3%E6%B2%B3%E5%9B%BD%E5%AE%B6%E6%A3%AE%E6%9E%97%E5%85%AC%E5%9B%AD%E7%AE%A1%E7%90%86%E5%A4%84_-_2024-10-07.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "瑞丽江的河水",
@@ -3908,7 +3908,7 @@
   },
   "cityphoto|city-26d8854046": {
     "status": "hit",
-    "path": "assets/photos/city-26d8854046/cityphoto-src.jpg",
+    "path": "assets/images/city-26d8854046.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E5%9B%BD%E5%86%85%E8%92%99%E5%8F%A4%E8%87%AA%E6%B2%BB%E5%8C%BA%E5%85%B4%E5%AE%89%E7%9B%9F%E7%A7%91%E5%B0%94%E6%B2%81%E5%8F%B3%E7%BF%BC%E5%89%8D%E6%97%97%E4%B8%89%E8%83%9C%E4%BB%A5%E4%B8%9C.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "維基小霸王",
@@ -3916,7 +3916,7 @@
   },
   "cityphoto|meishan": {
     "status": "hit",
-    "path": "assets/photos/meishan/cityphoto-src.jpg",
+    "path": "assets/images/meishan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:South_gate_of_Sansu_Shrine_(20250115173325).jpg",
     "license": "CC BY-SA 4.0",
     "artist": "N509FZ",
@@ -3924,7 +3924,7 @@
   },
   "cityphoto|taian": {
     "status": "hit",
-    "path": "assets/photos/taian/cityphoto-src.jpg",
+    "path": "assets/images/taian.jpg",
     "title": "File:20200127 泰安山脚下.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:20200127_%E6%B3%B0%E5%AE%89%E5%B1%B1%E8%84%9A%E4%B8%8B.jpg",
     "license": "CC BY-SA 4.0",
@@ -3933,7 +3933,7 @@
   },
   "cityphoto|zibo": {
     "status": "hit",
-    "path": "assets/photos/zibo/cityphoto-src.jpg",
+    "path": "assets/images/zibo.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E6%B7%84%E5%8D%9A%E5%AE%9E%E9%AA%8C%E4%B8%AD%E5%AD%A62018%E5%B9%B46%E6%9C%886%E6%97%A5%E6%B8%85%E6%99%A8%EF%BC%8C%E5%AD%A6%E7%94%9F%E5%8F%82%E6%8B%9C%E5%AD%94%E5%AD%90%E5%83%8F.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "SunRuikang",
@@ -3941,7 +3941,7 @@
   },
   "cityphoto|weifang": {
     "status": "hit",
-    "path": "assets/photos/weifang/cityphoto-src.jpg",
+    "path": "assets/images/weifang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Weifang_World_Kite_Museum.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Ngguls",
@@ -3949,7 +3949,7 @@
   },
   "cityphoto|liuzhou": {
     "status": "hit",
-    "path": "assets/photos/liuzhou/cityphoto-src.jpg",
+    "path": "assets/images/liuzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Liuzhou_City_seen_from_Ma%27an_Mountain.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "EditQ",
@@ -3957,7 +3957,7 @@
   },
   "cityphoto|urumqi": {
     "status": "hit",
-    "path": "assets/photos/urumqi/cityphoto-src.jpg",
+    "path": "assets/images/urumqi.jpg",
     "title": "File:Urumqi skyline (3).jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Urumqi_skyline_(3).jpg",
     "license": "CC BY 3.0 pl",
@@ -3966,7 +3966,7 @@
   },
   "cityphoto|handan": {
     "status": "hit",
-    "path": "assets/photos/handan/cityphoto-src.jpg",
+    "path": "assets/images/handan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Hongji_Bridge_2.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "我乃野云鹤",
@@ -3974,7 +3974,7 @@
   },
   "cityphoto|jingzhou": {
     "status": "hit",
-    "path": "assets/photos/jingzhou/cityphoto-src.jpg",
+    "path": "assets/images/jingzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E8%8D%86%E5%B7%9E%E5%8F%A4%E5%9F%8E%E5%AE%BE%E9%98%B3%E6%A5%BC.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Fxqf",
@@ -3982,7 +3982,7 @@
   },
   "cityphoto|sanming": {
     "status": "hit",
-    "path": "assets/photos/sanming/cityphoto-src.jpg",
+    "path": "assets/images/sanming.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E6%B3%B0%E5%AE%81%E5%A4%A7%E9%87%91%E6%B9%96%E9%A3%8E%E5%85%89_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "江上清风1961",
@@ -3990,7 +3990,7 @@
   },
   "cityphoto|quanzhou": {
     "status": "hit",
-    "path": "assets/photos/quanzhou/cityphoto-src.jpg",
+    "path": "assets/images/quanzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:The_courtyard_of_Quanzhou_Kaiyuan_Temple_20170727.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Tyg728",
@@ -3998,7 +3998,7 @@
   },
   "cityphoto|tianjin": {
     "status": "hit",
-    "path": "assets/photos/tianjin/cityphoto-src.jpg",
+    "path": "assets/images/tianjin.jpg",
     "title": "File:Tianjin Eye and Tianjin.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Tianjin_Eye_and_Tianjin.jpg",
     "license": "CC BY-SA 4.0",
@@ -4007,7 +4007,7 @@
   },
   "cityphoto|anqing": {
     "status": "hit",
-    "path": "assets/photos/anqing/cityphoto-src.jpg",
+    "path": "assets/images/anqing.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Daguan,_Anqing,_Anhui,_China_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "孤单海洋",
@@ -4015,7 +4015,7 @@
   },
   "cityphoto|city-aca7238373": {
     "status": "hit",
-    "path": "assets/photos/city-aca7238373/cityphoto-src.jpg",
+    "path": "assets/images/city-aca7238373.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Kong_Family_Mansion_49265-Qufu_(49055653481).jpg",
     "license": "CC BY 2.0",
     "artist": "xiquinhosilva",
@@ -4023,7 +4023,7 @@
   },
   "cityphoto|city-75ea8ef32e": {
     "status": "hit",
-    "path": "assets/photos/city-75ea8ef32e/cityphoto-src.jpg",
+    "path": "assets/images/city-75ea8ef32e.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E6%99%8B%E5%9F%8E%E7%9A%87%E5%9F%8E%E7%9B%B8%E5%BA%9C_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "江上清风1961",
@@ -4031,7 +4031,7 @@
   },
   "cityphoto|shenzhen": {
     "status": "hit",
-    "path": "assets/photos/shenzhen/cityphoto-src.jpg",
+    "path": "assets/images/shenzhen.jpg",
     "title": "File:Commercial area of futian to east2020.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Commercial_area_of_futian_to_east2020.jpg",
     "license": "CC BY-SA 4.0",
@@ -4040,7 +4040,7 @@
   },
   "cityphoto|city-89fbc8de32": {
     "status": "hit",
-    "path": "assets/photos/city-89fbc8de32/cityphoto-src.jpg",
+    "path": "assets/images/city-89fbc8de32.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Yangjiang_Hailing_Dao_Dajiao_Wan_2013.09.15_06-57-28.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Zhangzhugang",
@@ -4048,7 +4048,7 @@
   },
   "cityphoto|shaoguan": {
     "status": "hit",
-    "path": "assets/photos/shaoguan/cityphoto-src.jpg",
+    "path": "assets/images/shaoguan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E9%9F%B6%E5%85%B3%E5%B8%82_%E5%8D%97%E5%8D%8E%E5%AF%BA%E5%A4%A7%E9%97%A8_-_By_%E7%A7%91%E6%8A%80%E5%B0%8F%E8%BE%9B_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "科技小辛",
@@ -4056,7 +4056,7 @@
   },
   "cityphoto|yichun": {
     "status": "hit",
-    "path": "assets/photos/yichun/cityphoto-src.jpg",
+    "path": "assets/images/yichun.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:YiChun.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "PanShiBo",
@@ -4064,7 +4064,7 @@
   },
   "cityphoto|city-24d7bb1283": {
     "status": "hit",
-    "path": "assets/photos/city-24d7bb1283/cityphoto-src.jpg",
+    "path": "assets/images/city-24d7bb1283.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E6%AD%A6%E5%8A%9F%E5%B1%B1%E7%9A%84%E4%BA%91%E6%B5%B7.jpg",
     "license": "CC BY 4.0",
     "artist": "Leeinm",
@@ -4072,7 +4072,7 @@
   },
   "cityphoto|zhoushan": {
     "status": "hit",
-    "path": "assets/photos/zhoushan/cityphoto-src.jpg",
+    "path": "assets/images/zhoushan.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Downtown_Dinghai.JPG",
     "license": "CC BY-SA 3.0",
     "artist": "Maeshima hiroki",
@@ -4080,7 +4080,7 @@
   },
   "cityphoto|city-70a162c4c8": {
     "status": "hit",
-    "path": "assets/photos/city-70a162c4c8/cityphoto-src.jpg",
+    "path": "assets/images/city-70a162c4c8.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E6%B1%9F%E9%83%8E%E5%B1%B1_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "江上清风1961",
@@ -4088,7 +4088,7 @@
   },
   "cityphoto|city-bba2efc317": {
     "status": "hit",
-    "path": "assets/photos/city-bba2efc317/cityphoto-src.jpg",
+    "path": "assets/images/city-bba2efc317.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Pepper_Peak_and_Camel_Peak_Scenic_Area,_Mount_Langshan_in_Hunan,_Picture101.jpg",
     "license": "CC BY 3.0",
     "artist": "Huangdan2060",
@@ -4096,7 +4096,7 @@
   },
   "cityphoto|chenzhou": {
     "status": "hit",
-    "path": "assets/photos/chenzhou/cityphoto-src.jpg",
+    "path": "assets/images/chenzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E9%83%B4%E5%B7%9E%E5%B8%82%E8%A3%95%E5%90%8E%E8%A1%97%E9%83%B4%E6%B1%9F%E6%B2%B3%E6%AE%B5.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "朱瑞烯",
@@ -4104,7 +4104,7 @@
   },
   "cityphoto|shenyang": {
     "status": "hit",
-    "path": "assets/photos/shenyang/cityphoto-src.jpg",
+    "path": "assets/images/shenyang.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Shenyang-shiboyuan2.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Emmanuel Grolleau",
@@ -4112,7 +4112,7 @@
   },
   "cityphoto|hanzhong": {
     "status": "hit",
-    "path": "assets/photos/hanzhong/cityphoto-src.jpg",
+    "path": "assets/images/hanzhong.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%8F%A4%E6%B1%89%E5%8F%B0%E9%81%97%E5%9D%80%EF%BC%88%E5%86%85%E8%97%8F%E6%B1%89%E9%AD%8F%E5%8D%81%E4%B8%89%E5%93%81%E7%AD%89%E7%9F%B3%E5%88%BB%E4%B9%A6%E6%B3%95%E4%BD%9C%E5%93%81%EF%BC%89_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "monicker",
@@ -4120,7 +4120,7 @@
   },
   "cityphoto|city-f620e8bf11": {
     "status": "hit",
-    "path": "assets/photos/city-f620e8bf11/cityphoto-src.jpg",
+    "path": "assets/images/city-f620e8bf11.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%A4%A9%E6%B1%A0%EF%BC%88%E9%95%BF%E7%99%BD%E5%B1%B1%EF%BC%89.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Doge24190",
@@ -4128,7 +4128,7 @@
   },
   "cityphoto|city-9248f3349f": {
     "status": "hit",
-    "path": "assets/photos/city-9248f3349f/cityphoto-src.jpg",
+    "path": "assets/images/city-9248f3349f.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Waldbillig_(LU),_Schiessent%C3%BCmpel_--_2015_--_6033.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Dietmar Rabich",
@@ -4136,7 +4136,7 @@
   },
   "cityphoto|city-ce8f4e324f": {
     "status": "hit",
-    "path": "assets/photos/city-ce8f4e324f/cityphoto-src.jpg",
+    "path": "assets/images/city-ce8f4e324f.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E7%BC%99%E4%BA%91%E4%BB%99%E9%83%BD%E5%B0%8F%E8%B5%A4%E5%A3%81%E9%A3%8E%E5%85%89_-_panoramio_(9).jpg",
     "license": "CC BY 3.0",
     "artist": "江上清风1961",
@@ -4144,7 +4144,7 @@
   },
   "cityphoto|hefei": {
     "status": "hit",
-    "path": "assets/photos/hefei/cityphoto-src.jpg",
+    "path": "assets/images/hefei.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%90%88%E8%82%A5%E5%8C%85%E5%85%AC%E5%9B%AD%E4%BA%AB%E5%A0%82.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "钉钉",
@@ -4152,7 +4152,7 @@
   },
   "cityphoto|city-46fb46ca60": {
     "status": "hit",
-    "path": "assets/photos/city-46fb46ca60/cityphoto-src.png",
+    "path": "assets/images/city-46fb46ca60.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Qingtan_Temple,_Yicheng,_Zaozhuang,_Shandong.png",
     "license": "CC BY-SA 4.0",
     "artist": "Vitsuha",
@@ -4160,7 +4160,7 @@
   },
   "cityphoto|city-063ad2b3a1": {
     "status": "hit",
-    "path": "assets/photos/city-063ad2b3a1/cityphoto-src.jpg",
+    "path": "assets/images/city-063ad2b3a1.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Qingyuan_Xiaoshi_Skyline.JPG",
     "license": "Public domain",
     "artist": "Alex Liu (Feelmore at Chinese Wikipedia)",
@@ -4176,7 +4176,7 @@
   },
   "cityphoto|city-fe917b462d": {
     "status": "hit",
-    "path": "assets/photos/city-fe917b462d/cityphoto-src.jpg",
+    "path": "assets/images/city-fe917b462d.jpg",
     "title": "File:Tianning Temple in Nantong 14 2013-01.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Tianning_Temple_in_Nantong_14_2013-01.jpg",
     "license": "CC BY-SA 3.0",
@@ -4185,7 +4185,7 @@
   },
   "cityphoto|changzhou": {
     "status": "hit",
-    "path": "assets/photos/changzhou/cityphoto-src.jpg",
+    "path": "assets/images/changzhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:ChangzhouOldCityDistrict.jpg",
     "license": "CC BY-SA 3.0",
     "artist": "Chen Yihan",
@@ -4205,7 +4205,7 @@
   },
   "cityphoto|city-a85ccb681c": {
     "status": "hit",
-    "path": "assets/photos/city-a85ccb681c/cityphoto-src.jpg",
+    "path": "assets/images/city-a85ccb681c.jpg",
     "title": "File:Taizhou Sculpture.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Taizhou_Sculpture.jpg",
     "license": "CC BY-SA 4.0",
@@ -4214,7 +4214,7 @@
   },
   "cityphoto|enshi": {
     "status": "hit",
-    "path": "assets/photos/enshi/cityphoto-src.jpg",
+    "path": "assets/images/enshi.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E6%81%A9%E6%96%BD%E5%A4%A7%E5%B3%A1%E8%B0%B76Enshi_grand_canyon_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "图片上传者：吴显胜（China）",
@@ -4222,7 +4222,7 @@
   },
   "cityphoto|zhangjiajie": {
     "status": "hit",
-    "path": "assets/photos/zhangjiajie/cityphoto-src.jpg",
+    "path": "assets/images/zhangjiajie.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:1_zhangjiajie_huangshizhai_wulingyuan_panorama_2012.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "chensiyuan",
@@ -4238,7 +4238,7 @@
   },
   "cityphoto|putian": {
     "status": "hit",
-    "path": "assets/photos/putian/cityphoto-src.jpg",
+    "path": "assets/images/putian.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Sanshan,_Xitianwei,_Putian_(20170124121511).jpg",
     "license": "CC BY-SA 4.0",
     "artist": "N509FZ",
@@ -4246,7 +4246,7 @@
   },
   "cityphoto|dandong": {
     "status": "hit",
-    "path": "assets/photos/dandong/cityphoto-src.jpg",
+    "path": "assets/images/dandong.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E9%B8%AD%E7%BB%BF%E6%B1%9F%E6%96%AD%E6%A1%A5_-_Yalu_River_Broken_Bridge_-_2011.05_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "rheins",
@@ -4262,7 +4262,7 @@
   },
   "cityphoto|city-bb8f71d8bb": {
     "status": "hit",
-    "path": "assets/photos/city-bb8f71d8bb/cityphoto-src.jpg",
+    "path": "assets/images/city-bb8f71d8bb.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E9%9D%92%E6%B5%B7%E6%B9%96%E8%88%AA%E6%8B%8D.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "三猎",
@@ -4270,7 +4270,7 @@
   },
   "cityphoto|city-74cb733382": {
     "status": "hit",
-    "path": "assets/photos/city-74cb733382/cityphoto-src.jpg",
+    "path": "assets/images/city-74cb733382.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Tashilhunpo_Monastery_Shigatse_Tibet_China_%E8%A5%BF%E8%97%8F_%E6%97%A5%E5%96%80%E5%88%99_%E6%89%8E%E4%BB%80%E4%BC%A6%E5%B8%83%E5%AF%BA_-_panoramio_(1).jpg",
     "license": "CC BY 3.0",
     "artist": "Hiroki Ogawa",
@@ -4278,7 +4278,7 @@
   },
   "cityphoto|city-b4ea58c862": {
     "status": "hit",
-    "path": "assets/photos/city-b4ea58c862/cityphoto-src.jpg",
+    "path": "assets/images/city-b4ea58c862.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%B9%BF%E5%AE%89%E7%99%BD%E5%A1%94%E7%85%A7%E7%89%87.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "Nekitarc",
@@ -4286,7 +4286,7 @@
   },
   "cityphoto|harbin": {
     "status": "hit",
-    "path": "assets/photos/harbin/cityphoto-src.jpg",
+    "path": "assets/images/harbin.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E5%93%88%E5%B0%94%E6%BB%A8%E4%B8%AD%E5%A4%AE%E5%A4%A7%E8%A1%97%E5%A4%A7%E9%97%A8_20081124.jpg",
     "license": "CC BY-SA 2.0",
     "artist": "hellomatt",
@@ -4294,7 +4294,7 @@
   },
   "cityphoto|bozhou": {
     "status": "hit",
-    "path": "assets/photos/bozhou/cityphoto-src.jpg",
+    "path": "assets/images/bozhou.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E8%8A%B1%E6%88%8F%E6%A5%BC_%E5%B1%B1%E9%97%A8_%E5%89%AF%E6%9C%AC.jpg",
     "license": "CC BY-SA 4.0",
     "artist": "三猎",
@@ -4302,7 +4302,7 @@
   },
   "cityphoto|jilin-city": {
     "status": "hit",
-    "path": "assets/photos/jilin-city/cityphoto-src.jpg",
+    "path": "assets/images/jilin-city.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Songhua_River_in_Jilin_City_1.jpg",
     "license": "CC0 1.0",
     "artist": "H2v5o68z",
@@ -4310,7 +4310,7 @@
   },
   "cityphoto|macao": {
     "status": "hit",
-    "path": "assets/photos/macao/cityphoto-src.jpg",
+    "path": "assets/images/macao.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:Macau_Night_1.jpg",
     "license": "CC BY 4.0",
     "artist": "Philip Nalangan",
@@ -4318,7 +4318,7 @@
   },
   "cityphoto|panjin": {
     "status": "hit",
-    "path": "assets/photos/panjin/cityphoto-src.jpg",
+    "path": "assets/images/panjin.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E7%9B%98%E9%94%A6%E7%BA%A2%E6%B5%B7%E6%BB%A9.JPG",
     "license": "CC BY-SA 3.0",
     "artist": "吴张帆",
@@ -4326,7 +4326,7 @@
   },
   "cityphoto|hong-kong": {
     "status": "hit",
-    "path": "assets/photos/hong-kong/cityphoto-src.jpg",
+    "path": "assets/images/hong-kong.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:%E9%A6%99%E6%B8%AF%E5%A4%AA%E5%B9%B3%E5%B1%B1%E9%A1%B6_-_panoramio.jpg",
     "license": "CC BY 3.0",
     "artist": "gdczjkk",

@@ -1,7 +1,9 @@
 import json
 import re
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from PIL import Image, ImageStat
 from tools import build_travel_html as builder
@@ -73,15 +75,60 @@ class PriorityCityImageTests(unittest.TestCase):
                 sources.add(entry["source"])
         self.assertEqual(len(CITY_SLUGS), len(sources))
 
+    def test_published_city_photo_cache_uses_reproducible_cover_derivatives(self):
+        primary_hits = {
+            key: entry for key, entry in self.cache.items()
+            if key.startswith("cityphoto|") and key.count("|") == 1 and entry.get("status") == "hit"
+        }
+        self.assertGreaterEqual(len(primary_hits), 200)
+        for key, entry in primary_hits.items():
+            slug = key.split("|", 1)[1]
+            expected = f"assets/images/{slug}.jpg"
+            with self.subTest(city=slug):
+                self.assertEqual(expected, entry["path"])
+                self.assertTrue((ROOT / expected).exists())
+
+    def test_image_cleanup_preserves_cache_backed_cover_and_removes_stale_output(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output = Path(temp_dir)
+            images = output / "assets" / "images"
+            images.mkdir(parents=True)
+            kept = images / "kept.jpg"
+            stale = images / "stale.jpg"
+            kept.write_bytes(b"licensed-cover")
+            stale.write_bytes(b"obsolete-output")
+            cache = {
+                "cityphoto|kept": {
+                    "status": "hit",
+                    "path": "assets/images/kept.jpg",
+                    "source": "https://commons.wikimedia.org/wiki/File:Kept.jpg",
+                    "license": "CC0 1.0",
+                    "artist": "",
+                }
+            }
+
+            with (
+                patch.object(builder, "OUT", output),
+                patch.object(builder, "IMAGES", images),
+                patch.object(builder, "PHOTO_CACHE", cache),
+                patch.object(builder, "PHOTO_CACHE_LOADED", True),
+            ):
+                builder.prepare_image_output()
+
+            self.assertEqual(b"licensed-cover", kept.read_bytes())
+            self.assertFalse(stale.exists())
+
     def test_jinhua_and_chuzhou_have_three_local_gallery_sources(self):
         for slug in ("jinhua", "chuzhou"):
             with self.subTest(city=slug):
                 photo_dir = ROOT / "assets" / "photos" / slug
-                photos = [
+                photos = [ROOT / self.cache[f"cityphoto|{slug}"]["path"]] + [
                     path for path in photo_dir.iterdir()
-                    if path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}
+                    if path.name.startswith("scenery-")
+                    and path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}
                 ]
                 self.assertGreaterEqual(len(photos), 3)
+                self.assertTrue(all(path.exists() for path in photos))
                 self.assertTrue(any(path.name.startswith("scenery-") for path in photos))
 
     def test_published_city_photos_have_republication_metadata(self):

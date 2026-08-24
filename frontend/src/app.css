@@ -1,0 +1,43 @@
+.app-runtime-status {
+  position: fixed;
+  right: clamp(12px, 3vw, 28px);
+  bottom: clamp(88px, 10vh, 112px);
+  z-index: 1200;
+  max-width: min(360px, calc(100vw - 24px));
+  padding: 11px 14px;
+  color: #f8fffd;
+  background: #173e39;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(12, 31, 28, 0.22);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.app-runtime-status[data-kind="offline"] {
+  color: #2d2414;
+  background: #fff0c7;
+  border-color: #d9b65f;
+}
+
+.app-runtime-status[hidden] {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .app-runtime-status {
+    right: 12px;
+    bottom: 86px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .app-runtime-status:not([hidden]) {
+    animation: app-status-in 180ms ease-out;
+  }
+
+  @keyframes app-status-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}

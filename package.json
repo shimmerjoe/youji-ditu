@@ -1,0 +1,24 @@
+{
+  "name": "travel-ayuan",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "构建期 Python + Vite/TypeScript、运行期纯静态的中国旅行攻略 PWA",
+  "scripts": {
+    "build:app": "vite build",
+    "build": "npm run build:app && python -X utf8 tools/build_travel_html.py",
+    "typecheck": "tsc --noEmit",
+    "test:node": "node --test frontend/test/app-status.test.ts frontend/test/site-search.test.ts tools/test_roadtrip_core.js",
+    "test:python": "python -X utf8 -m unittest discover -s tools -p \"test_*.py\"",
+    "test": "npm run typecheck && npm run test:node && npm run test:python",
+    "validate": "python -X utf8 tools/validate_travel_site.py",
+    "check": "npm run build && npm test && npm run validate",
+    "stage": "python -X utf8 tools/stage_pages.py",
+    "preview": "python -m http.server 8765"
+  },
+  "devDependencies": {
+    "@types/node": "26.2.0",
+    "typescript": "7.0.2",
+    "vite": "8.2.1"
+  }
+}

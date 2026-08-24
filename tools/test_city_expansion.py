@@ -64,24 +64,24 @@ class CityExpansionTests(unittest.TestCase):
         self.assertIn('SPECIAL_REGIONS = {"香港", "澳门"}', generator)
         self.assertIn("TOP_LEVEL_REGIONS = DIRECT_MUNICIPALITIES | SPECIAL_REGIONS", generator)
 
-    def test_special_regions_have_their_own_destination_group(self):
+    def test_special_regions_have_a_dedicated_discovery_route(self):
         index = (ROOT / "index.html").read_text(encoding="utf-8")
-        municipality = index.split("<h3>直辖市</h3>", 1)[1].split("</section>", 1)[0]
-        special = index.split("<h3>特别行政区</h3>", 1)[1].split("</section>", 1)[0]
-        self.assertIn(">北京</a>", municipality)
-        self.assertNotIn(">香港</a>", municipality)
-        self.assertNotIn(">澳门</a>", municipality)
-        self.assertIn(">香港</a>", special)
-        self.assertIn(">澳门</a>", special)
+        destinations = (ROOT / "destinations.html").read_text(encoding="utf-8")
+        self.assertIn("destinations.html?region=%E6%B8%AF%E6%BE%B3", index)
+        self.assertIn('data-province="香港"', destinations)
+        self.assertIn('data-province="澳门"', destinations)
+        self.assertIn('data-province="直辖市"', destinations)
+        self.assertIn('href="cities/beijing.html"', destinations)
 
     def test_generated_site_exposes_all_new_destinations(self):
         index = (ROOT / "index.html").read_text(encoding="utf-8")
+        catalog = (ROOT / "city-guides.html").read_text(encoding="utf-8")
         self.assertIn("222 个城市", index)
         for stem, config in self.cities.items():
             with self.subTest(city=stem):
                 output = ROOT / "cities" / f'{config["slug"]}.html'
                 self.assertTrue(output.exists())
-                self.assertIn(f'cities/{config["slug"]}.html', index)
+                self.assertIn(f'cities/{config["slug"]}.html', catalog)
 
     def test_new_city_quick_find_exposes_all_four_core_sections(self):
         for config in self.cities.values():

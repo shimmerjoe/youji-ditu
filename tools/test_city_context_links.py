@@ -43,15 +43,15 @@ class CityContextLinkTests(unittest.TestCase):
     def test_destination_navigation_uses_one_compact_mega_menu(self):
         self.assertEqual(self.city_html.count('class="destination-nav'), 1)
         self.assertIn('class="destination-panel"', self.city_html)
-        self.assertIn('class="destination-groups"', self.city_html)
+        self.assertIn('class="destination-groups region-groups"', self.city_html)
         self.assertIn("全国目的地", self.city_html)
         self.assertRegex(self.city_html, r"<small>\d+ 个城市</small>")
 
-    def test_destination_navigation_still_exposes_provinces_and_current_city(self):
-        self.assertIn('<h3>山东</h3>', self.city_html)
+    def test_destination_navigation_links_to_catalog_and_current_region(self):
+        self.assertIn('href="../destinations.html"', self.city_html)
         self.assertRegex(
             self.city_html,
-            r'class="destination-city active" href="qingdao\.html">青岛</a>',
+            r'class="destination-city active" href="\.\./destinations\.html\?region=%E5%8D%8E%E4%B8%9C">华东</a>',
         )
 
 

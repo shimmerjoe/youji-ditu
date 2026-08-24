@@ -1,0 +1,483 @@
+{
+  "schemaVersion": 1,
+  "purpose": "城市主图人工语义与视觉审核；拒绝记录与具体来源绑定，替换来源后自动失效。",
+  "decisions": {
+    "altay": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:%E5%86%AC%E5%A4%A9%E7%9A%84181%E5%9B%A2%E4%B8%BB%E8%A1%97%E9%81%93_-_panoramio.jpg",
+      "reason": "团场住宅与积雪道路缺少阿勒泰自然目的地特征。",
+      "reviewedAt": "2026-08-24"
+    },
+    "anqing": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Daguan,_Anqing,_Anhui,_China_-_panoramio.jpg",
+      "reason": "道路花坛与卡通标识缺少目的地辨识度，不宜作为旅游封面。",
+      "reviewedAt": "2026-08-24"
+    },
+    "anyang": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Anyang_Hotel,_Anyang,_China_-_panoramio.jpg",
+      "reason": "普通酒店外观无法代表城市旅行体验。",
+      "reviewedAt": "2026-08-24"
+    },
+    "baise": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:M_N_Saha,_J_C_Bose,_J_C_Ghosh,_Snehamoy_Dutt,_S_N_Bose,_D_M_Bose,_N_R_Sen,_J_N_Mukherjee,_N_C_Nag.jpg",
+      "reason": "人物历史照片与广西百色目的地无关。",
+      "reviewedAt": "2026-08-24"
+    },
+    "baoding": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Baoding_balls2.jpg",
+      "reason": "局部工艺品特写不能承担城市封面信息。",
+      "reviewedAt": "2026-08-24"
+    },
+    "baoji": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Baoji_point.jpg",
+      "reason": "铁路线路画面缺少游客视角和目的地价值。",
+      "reviewedAt": "2026-08-24"
+    },
+    "baotou": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Jiuyuan,_Baotou,_Inner_Mongolia,_China_-_panoramio.jpg",
+      "reason": "荒凉公路和风机远景缺少旅游信息与视觉吸引力。",
+      "reviewedAt": "2026-08-24"
+    },
+    "beihai": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:BeiHaiYanTan.jpg",
+      "reason": "球形雕塑与硬质广场没有展示广西北海的海滨旅行特征。",
+      "reviewedAt": "2026-08-24",
+      "previousRejections": [
+        {
+          "source": "https://commons.wikimedia.org/wiki/File:Peking_Beihai_Park-20131229-RM-151208.jpg",
+          "reason": "素材是北京北海公园，并非广西北海市。",
+          "reviewedAt": "2026-08-24"
+        }
+      ]
+    },
+    "beijing": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:CADAL11101282_%E4%B8%AD%E5%9C%8B%E5%90%8D%E5%8B%9D%E7%AC%AC%E5%8D%81%E4%B8%80%E7%A8%AE%EF%BC%9A%E5%A4%A9%E5%8F%B0%E5%B1%B1%E4%B8%80%E9%9B%86.djvu",
+      "reason": "扫描书页不是北京实景，且主题指向天台山。",
+      "reviewedAt": "2026-08-24"
+    },
+    "benxi": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:China_Benxi_3.jpg",
+      "reason": "清晰度和地标辨识度不足，不适合作为城市封面。",
+      "reviewedAt": "2026-08-24"
+    },
+    "bijie": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Administrative_Division_Bijie_2.png",
+      "reason": "行政区划图不是城市或景点实景。",
+      "reviewedAt": "2026-08-24"
+    },
+    "changsha": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Jiuzhitang,_Changsha,_Hunan,_China_2023022402.jpg",
+      "reason": "药企办公楼与道路交叉口不能代表长沙旅行体验。",
+      "reviewedAt": "2026-08-24"
+    },
+    "changchun": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Changchun_Yatai_Stadium.jpg",
+      "reason": "商业招牌局部和体育场入口不具代表性。",
+      "reviewedAt": "2026-08-24"
+    },
+    "chifeng": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Hongshan,_Chifeng,_Inner_Mongolia,_China_-_panoramio.jpg",
+      "reason": "电线与树影主导画面，无法支持目的地判断。",
+      "reviewedAt": "2026-08-24"
+    },
+    "chizhou": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Chizhou_No.1_Middle_School.jpg",
+      "reason": "普通学校外观不适合作为旅游封面。",
+      "reviewedAt": "2026-08-24"
+    },
+    "city-9248f3349f": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Waldbillig_(LU),_Schiessent%C3%BCmpel_--_2015_--_6033.jpg",
+      "reason": "素材位于卢森堡，与当前中国目的地无关。",
+      "reviewedAt": "2026-08-24"
+    },
+    "city-b3b41f77aa": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Zhumadian_mcp.png",
+      "reason": "行政区划示意图不是目的地实景。",
+      "reviewedAt": "2026-08-24"
+    },
+    "city-c815eff127": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Jiyuan_-_view_from_Jiyuan_Century_Hotel_to_Manghe_N_St,_pic01.jpg",
+      "reason": "酒店高层拍摄的普通道路与住宅缺少济源旅行代表性。",
+      "reviewedAt": "2026-08-24"
+    },
+    "city-cd061af662": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Skyline_of_Shangluo,_April_30_2023.jpg",
+      "reason": "施工场地占据前景，视觉质量和旅行决策价值不足。",
+      "reviewedAt": "2026-08-24"
+    },
+    "city-e3ec02a30b": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Ankang_Station_Outside.jpg",
+      "reason": "普通车站外观不适合作为城市旅游封面。",
+      "reviewedAt": "2026-08-24"
+    },
+    "deyang": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:View_of_the_nanxing_spring.jpg",
+      "reason": "空置硬质广场缺少可识别景观和旅行信息。",
+      "reviewedAt": "2026-08-24"
+    },
+    "dunhuang": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:CrescentLake.jpg",
+      "reason": "石碑占据主体且没有展示月牙泉湖体，不适合作为敦煌封面。",
+      "reviewedAt": "2026-08-24",
+      "previousRejections": [
+        {
+          "source": "https://commons.wikimedia.org/wiki/File:Dunhuang_Museum_China_%E6%95%A6%E7%85%8C%E5%8D%9A%E7%89%A9%E9%A6%86_-_panoramio_(2).jpg",
+          "reason": "室内浮雕展墙不能展示敦煌核心景观与旅行体验。",
+          "reviewedAt": "2026-08-24"
+        }
+      ]
+    },
+    "fuzhou": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Sister_City_of_Fuzhou,_China_2770.jpg",
+      "reason": "境外友城说明牌不是福州目的地实景。",
+      "reviewedAt": "2026-08-24"
+    },
+    "ganzi": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:DCY_Airport.jpg",
+      "reason": "机场航站楼不能代表甘孜自然与人文旅行体验。",
+      "reviewedAt": "2026-08-24"
+    },
+    "ganzhou": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:%E4%BF%A1%E4%B8%B0%E5%A4%A7%E5%A1%98%E5%9F%A0%E9%95%87%E6%96%B0%E9%BE%99%E5%B0%8F%E5%AD%A6_-_panoramio.jpg",
+      "reason": "普通学校门口与赣州旅游主题关联弱。",
+      "reviewedAt": "2026-08-24"
+    },
+    "haikou": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Haikou_hainan_china_by_gegecircle_djans7h.jpg",
+      "reason": "树干和天空占据主体，无法辨识海口城市或景点。",
+      "reviewedAt": "2026-08-24"
+    },
+    "hohhot": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Hohhot_City_Stadium.jpg",
+      "reason": "体育场外观缺少城市旅行代表性。",
+      "reviewedAt": "2026-08-24"
+    },
+    "huizhou": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:XIANGSHAN_GUANYIN_TEMPLE,_HUIZHOU_(3).jpg",
+      "reason": "杂物与简易设施主导画面，景点主体不清晰。",
+      "reviewedAt": "2026-08-24"
+    },
+    "ili": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:The_Ili_Commandery.jpg",
+      "reason": "石碑局部无法展示伊犁目的地特征。",
+      "reviewedAt": "2026-08-24"
+    },
+    "jiangmen": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Taishan,_Jiangmen,_Guangdong,_China_-_panoramio.jpg",
+      "reason": "普通建筑外观缺少江门辨识度和旅行决策价值。",
+      "reviewedAt": "2026-08-24"
+    },
+    "jianshui": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Jianshui_-_southern_edge_of_old_city_-_P1370110.JPG",
+      "reason": "牲畜圈舍画面不适合作为城市旅游封面。",
+      "reviewedAt": "2026-08-24"
+    },
+    "jiaozuo": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:20250906_Taiyuan-Jiaozuo_HSR_in_Zezhou.jpg",
+      "reason": "高铁线路不是焦作目的地实景。",
+      "reviewedAt": "2026-08-24"
+    },
+    "jiaxing": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Jiaxing_Sports_Centre_Stadium.jpg",
+      "reason": "体育场看台缺少嘉兴旅行代表性。",
+      "reviewedAt": "2026-08-24"
+    },
+    "jinan": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E5%9C%8B_%E4%B8%AD%E5%9B%BD_China_%E5%A4%A7%E6%98%8E%E6%B9%96%E9%81%8E%E9%A6%AC%E8%B7%AF_Street_crossing_at_Daming_Lake_%E4%BA%BA%E6%B5%81_Human_Logistics_SML.20121011.G12.00744_(8367136282).jpg",
+      "reason": "路口行人和车辆主导画面，未呈现大明湖或济南景观。",
+      "reviewedAt": "2026-08-24"
+    },
+    "jining": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Jining,_Ulanqab,_Inner_Mongolia,_China_-_panoramio.jpg",
+      "reason": "素材是乌兰察布集宁，并非山东济宁。",
+      "reviewedAt": "2026-08-24"
+    },
+    "jinzhong": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:CADAL07004560_%E9%A3%A2%E9%A4%93%E7%9A%84%E4%B8%AD%E5%9C%8B.djvu",
+      "reason": "扫描书页不是晋中目的地实景。",
+      "reviewedAt": "2026-08-24"
+    },
+    "jiujiang": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Jiujiang_Obelisk.jpg",
+      "reason": "远景纪念柱主体过小，目的地辨识度不足。",
+      "reviewedAt": "2026-08-24"
+    },
+    "kunming": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Kunming_Yunnan_China_Pet-Market-01.jpg",
+      "reason": "宠物市场局部不能代表昆明整体旅行体验。",
+      "reviewedAt": "2026-08-24"
+    },
+    "lanzhou": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Playground_in_Lanzhou,_China_1.jpg",
+      "reason": "社区健身设施缺少城市与景点辨识度。",
+      "reviewedAt": "2026-08-24"
+    },
+    "lhasa": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:An_elderly_Tibetan_women_holding_a_prayer_wheel_on_Lhasa,_Barkhor.jpg",
+      "reason": "单人肖像不宜承担拉萨城市封面，且没有展示目的地空间。",
+      "reviewedAt": "2026-08-24"
+    },
+    "liangshan": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Yanyuan,_Liangshan,_Sichuan,_China_-_panoramio.jpg",
+      "reason": "酒店入口与道路画面不能代表凉山旅行体验。",
+      "reviewedAt": "2026-08-24"
+    },
+    "lianyungang": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Cartoons_on_Streets_of_Lianyungang_2.jpg",
+      "reason": "街边卡通摆件缺少目的地信息。",
+      "reviewedAt": "2026-08-24"
+    },
+    "lijiang": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Lijiang_Yunnan_China-Naxi-people-carrying-baskets-01.jpg",
+      "reason": "单人肖像不宜承担丽江城市封面，目的地环境信息不足。",
+      "reviewedAt": "2026-08-24"
+    },
+    "lincang": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:%E4%B8%B4%E6%B2%A7%E8%80%83%E5%8F%A4%E5%8D%9A%E7%89%A9%E9%A6%86-%E6%97%A7%E7%9F%B3%E5%99%A8%E6%97%B6%E4%BB%A3-%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%E7%9A%84%E7%A0%94%E7%A9%B6.jpg",
+      "reason": "室内展板局部不适合作为城市封面。",
+      "reviewedAt": "2026-08-24"
+    },
+    "liupanshui": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:%E5%85%AD%E7%9B%98%E6%B0%B4%E7%AB%99%E6%96%B0%E7%AB%99%E6%88%BF%EF%BC%882017%EF%BC%89.jpg",
+      "reason": "火车站外观不能代表六盘水旅行体验。",
+      "reviewedAt": "2026-08-24"
+    },
+    "longnan": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Guanxi_Xinwei,_Longnan,_Jiangxi.JPG",
+      "reason": "素材是江西龙南，并非甘肃陇南。",
+      "reviewedAt": "2026-08-24"
+    },
+    "mianyang": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Goshenite._Xuebaoding_Mt.,_Mianyang_City,_Sichuan_province,_China-9048.jpg",
+      "reason": "矿物标本特写不适合作为绵阳城市封面。",
+      "reviewedAt": "2026-08-24"
+    },
+    "mile": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Champions_Mile_(race)_20250427.jpg",
+      "reason": "香港赛马画面与云南弥勒目的地无关。",
+      "reviewedAt": "2026-08-24"
+    },
+    "mudanjiang": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:A_closed_Postal_Press_Kiosk_in_Mudanjiang,_Heilongjiang_Province,_China.jpg",
+      "reason": "关闭的报刊亭缺少旅游价值和视觉吸引力。",
+      "reviewedAt": "2026-08-24"
+    },
+    "nanning": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Nanning_China_(11352818715).jpg",
+      "reason": "夜间列车与站台不能代表南宁目的地体验。",
+      "reviewedAt": "2026-08-24"
+    },
+    "nanyang": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Wolong,_Nanyang,_Henan,_China_-_panoramio.jpg",
+      "reason": "无地标的冰雪道路缺少南阳辨识度。",
+      "reviewedAt": "2026-08-24"
+    },
+    "ningbo": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:2023-04-07_University_of_Nottingham_Ningbo_China_01.jpg",
+      "reason": "校园草坪与教学楼不适合作为宁波旅游封面。",
+      "reviewedAt": "2026-08-24"
+    },
+    "ningde": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Jiaocheng,_Ningde,_Fujian,_China_-_panoramio.jpg",
+      "reason": "空置体育看台缺少目的地内容。",
+      "reviewedAt": "2026-08-24"
+    },
+    "ordos": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:OrdosX623.jpg",
+      "reason": "普通公路入口无法代表鄂尔多斯旅行体验。",
+      "reviewedAt": "2026-08-24"
+    },
+    "puer": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:%E6%99%AE%E6%B4%B1%E5%A4%AA%E9%98%B3%E6%B2%B3%E5%9B%BD%E5%AE%B6%E6%A3%AE%E6%9E%97%E5%85%AC%E5%9B%AD%E7%AE%A1%E7%90%86%E5%A4%84_-_2024-10-07.jpg",
+      "reason": "关闭的管理处门面没有展示普洱森林、茶山或城市体验。",
+      "reviewedAt": "2026-08-24"
+    },
+    "qiqihar": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Qiqihar_(%E5%8E%A6%E9%97%A8)_Stra%C3%9Fenansicht_(1904)_03.jpg",
+      "reason": "百年前的档案街景不能作为当前齐齐哈尔实景封面。",
+      "reviewedAt": "2026-08-24"
+    },
+    "qiannan": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Duyun,_Qiannan,_Guizhou,_China_-_panoramio.jpg",
+      "reason": "杂乱林地和垃圾影响内容质量，且无目的地辨识度。",
+      "reviewedAt": "2026-08-24"
+    },
+    "rizhao": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Rizhao_sea_port.jpg",
+      "reason": "工业港口作业画面不适合作为休闲旅行封面。",
+      "reviewedAt": "2026-08-24"
+    },
+    "shangrao": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Shangrao_bus_53_20191018_142537.jpg",
+      "reason": "公交车辆特写缺少目的地内容。",
+      "reviewedAt": "2026-08-24"
+    },
+    "shantou": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Shantou_University_Auditorium.jpg",
+      "reason": "普通校园礼堂缺少汕头旅行代表性。",
+      "reviewedAt": "2026-08-24"
+    },
+    "tengchong": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Rehai,_Tengchong_07.jpg",
+      "reason": "景区说明石碑局部不能展示热海景观。",
+      "reviewedAt": "2026-08-24"
+    },
+    "tianjin": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:%E5%A4%A9%E6%B4%A5%E4%BA%94%E5%A4%A7%E9%81%93%E8%BF%91%E4%BB%A3%E5%BB%BA%E7%AD%91%E7%BE%A4%E9%93%AD%E7%89%8C.JPG",
+      "reason": "文保说明牌局部不能代表天津五大道体验。",
+      "reviewedAt": "2026-08-24"
+    },
+    "urumqi": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Xinjiang_Uygur_Autonomous_Region_Museum_Urumqi_Xinjiang_China_%E6%96%B0%E7%96%86_%E4%B9%8C%E9%B2%81%E6%9C%A8%E9%BD%90_%E6%96%B0%E7%96%86%E7%BB%B4%E5%90%BE%E5%B0%94%E8%87%AA%E6%B2%BB%E5%8C%BA%E5%8D%9A%E7%89%A9%E9%A6%86_-_panoramio.jpg",
+      "reason": "干尸展柜特写不适合作为乌鲁木齐城市入口视觉。",
+      "reviewedAt": "2026-08-24"
+    },
+    "xiamen": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:%E5%8E%A6%E9%97%A8_%E9%BC%93%E6%B5%AA%E5%B1%BF_-_panoramio.jpg",
+      "reason": "雾中树冠遮蔽景观主体，无法辨识鼓浪屿或厦门目的地。",
+      "reviewedAt": "2026-08-24",
+      "previousRejections": [
+        {
+          "source": "https://commons.wikimedia.org/wiki/File:Xiamen_China_Gulangyu_Island_2_by_D_Ramey_Logan.jpg",
+          "reason": "导览石刻局部无法展示鼓浪屿或厦门景观。",
+          "reviewedAt": "2026-08-24"
+        }
+      ]
+    },
+    "xingyi": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:ChinaQianxinanXingyi.png",
+      "reason": "行政位置图不是兴义目的地实景。",
+      "reviewedAt": "2026-08-24"
+    },
+    "xining": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Datong,_Xining,_Qinghai,_China_-_panoramio.jpg",
+      "reason": "花朵微距缺少西宁城市与景点辨识度。",
+      "reviewedAt": "2026-08-24"
+    },
+    "xinzhou": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:XINZHOU_RIVER,_SHENZHEN_(2).jpg",
+      "reason": "素材是深圳新洲河，并非山西忻州。",
+      "reviewedAt": "2026-08-24"
+    },
+    "xuzhou": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:TML_of_XUZ_(Xuzhou_Guanyin).jpg",
+      "reason": "机场航站楼局部不能代表徐州旅行体验。",
+      "reviewedAt": "2026-08-24"
+    },
+    "wuxi": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Jiangsu_School_Governance_Department_House.jpg",
+      "reason": "素材标题与画面语义不清，无法确认其代表无锡旅行目的地。",
+      "reviewedAt": "2026-08-24"
+    },
+    "yanan": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Shwe_Yan_Pyay_03.jpg",
+      "reason": "素材是缅甸瑞严派寺，并非陕西延安。",
+      "reviewedAt": "2026-08-24"
+    },
+    "yanbian": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Yanbian_University_2.jpg",
+      "reason": "普通校园建筑缺少延边旅行代表性。",
+      "reviewedAt": "2026-08-24"
+    },
+    "yinchuan": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Yongning,_Yinchuan,_Ningxia,_China_-_panoramio.jpg",
+      "reason": "远景风机画面过于泛化，缺少银川辨识度。",
+      "reviewedAt": "2026-08-24"
+    },
+    "zhangzhou": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:201708_Zhangzhou_Subline.jpg",
+      "reason": "铁路线路不是漳州目的地实景。",
+      "reviewedAt": "2026-08-24"
+    },
+    "zhenjiang": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:201806_Zhenjiang_Suning_Plaza.jpg",
+      "reason": "电线遮挡的商业楼远景缺少镇江旅行辨识度。",
+      "reviewedAt": "2026-08-24"
+    },
+    "zibo": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:%E6%B7%84%E5%8D%9A%E5%AE%9E%E9%AA%8C%E4%B8%AD%E5%AD%A62018%E5%B9%B46%E6%9C%886%E6%97%A5%E6%B8%85%E6%99%A8%EF%BC%8C%E5%AD%A6%E7%94%9F%E5%8F%82%E6%8B%9C%E5%AD%94%E5%AD%90%E5%83%8F.jpg",
+      "reason": "校园孔子像画面不适合作为淄博旅游封面。",
+      "reviewedAt": "2026-08-24"
+    },
+    "zhongwei": {
+      "status": "rejected",
+      "source": "https://commons.wikimedia.org/wiki/File:Zhongwei_IGP4782.jpg",
+      "reason": "远景风电设施缺少中卫沙漠与黄河旅行特征。",
+      "reviewedAt": "2026-08-24"
+    }
+  }
+}

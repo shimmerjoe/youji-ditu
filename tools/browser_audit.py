@@ -72,6 +72,9 @@ def inspect_dom(page: Page) -> dict:
           const unsizedImages = Array.from(document.images)
             .filter((img) => (img.currentSrc || img.src) && (!img.hasAttribute('width') || !img.hasAttribute('height')))
             .map(label).slice(0, 30);
+          const resources = performance.getEntriesByType('resource');
+          const imageResources = resources.filter((entry) => entry.initiatorType === 'img');
+          const carouselImages = Array.from(document.querySelectorAll('#heroCarousel img'));
           return {
             title: document.title,
             url: location.href,
@@ -84,6 +87,15 @@ def inspect_dom(page: Page) -> dict:
             emptyLinks,
             brokenImages,
             unsizedImages,
+            nodeCount: all.length,
+            imageCount: document.images.length,
+            loadedImageCount: Array.from(document.images).filter((img) => Boolean(img.currentSrc || img.src)).length,
+            carouselImageCount: carouselImages.length,
+            hydratedCarouselImageCount: carouselImages.filter((img) => Boolean(img.currentSrc || img.src)).length,
+            resourceCount: resources.length,
+            imageResourceCount: imageResources.length,
+            transferSize: resources.reduce((sum, entry) => sum + Number(entry.transferSize || 0), 0),
+            decodedBodySize: resources.reduce((sum, entry) => sum + Number(entry.decodedBodySize || 0), 0),
             h1Count: document.querySelectorAll('h1').length,
             mainCount: document.querySelectorAll('main').length,
           };
@@ -92,13 +104,13 @@ def inspect_dom(page: Page) -> dict:
     )
 
 
-def exercise_page(page: Page, page_name: str) -> dict:
+def exercise_page(page: Page, page_name: str, interaction_screenshot: Path | None = None) -> dict:
     result: dict[str, object] = {}
     if page_name == "home":
         search = page.locator("#siteSearch")
         if search.count():
             search.fill("青岛")
-            page.wait_for_timeout(250)
+            page.wait_for_function("() => Array.isArray(window.TRAVEL_SEARCH_INDEX) && window.TRAVEL_SEARCH_INDEX.length > 0")
             result["searchResults"] = page.locator("#siteSearchResults a").count()
             search.fill("")
         destination = page.locator(".destination-nav > summary")
@@ -106,6 +118,21 @@ def exercise_page(page: Page, page_name: str) -> dict:
             destination.click()
             result["destinationMenuVisible"] = page.locator(".destination-panel").is_visible()
             destination.click()
+        trip_button = page.locator(".trip-btn:visible").first
+        if trip_button.count():
+            trip_button.click()
+            result["tripDockCountAfterAdd"] = page.locator("#tripDockCount").text_content()
+            dock_toggle = page.locator("#tripDockToggle")
+            dock_toggle.click()
+            result["tripDockVisible"] = page.locator("#tripDock").is_visible()
+            result["tripDockItems"] = page.locator("#tripDockList .trip-dock-item").count()
+            result["tripDockFirstHref"] = page.locator("#tripDockList a").first.get_attribute("href")
+            if interaction_screenshot is not None:
+                page.screenshot(path=str(interaction_screenshot), full_page=False, animations="disabled")
+                result["tripDockScreenshot"] = str(interaction_screenshot)
+            page.keyboard.press("Escape")
+            result["tripDockClosedWithEscape"] = not page.locator("#tripDock").is_visible()
+            result["tripDockFocusReturned"] = page.evaluate("() => document.activeElement === document.getElementById('tripDockToggle')")
     elif page_name == "qingdao":
         favorite = page.locator(".co-fav")
         if favorite.count():
@@ -113,21 +140,45 @@ def exercise_page(page: Page, page_name: str) -> dict:
             result["favoriteSaved"] = page.evaluate("() => JSON.parse(localStorage.getItem('tay_favs') || '[]').some((item) => item.key === 'qingdao')")
         share = page.locator(".co-share")
         result["shareAvailable"] = bool(share.count())
+        trip = page.locator(".co-trip")
+        if trip.count():
+            trip.click()
+            page.locator("#tripDockToggle").click()
+            result["tripDockCityHref"] = page.locator("#tripDockList a").first.get_attribute("href")
+            result["tripDockCityItemVisible"] = page.locator("#tripDockList .trip-dock-item").first.is_visible()
+            page.locator("#tripDockClose").click()
     elif page_name == "user":
         history = page.locator('[data-tab="history"]')
         result["historyTabAvailable"] = bool(history.count())
+        profile = page.locator('[data-tab="profile"]')
+        if profile.count():
+            profile.focus()
+            profile.press("End")
+            result["keyboardEndTab"] = page.locator('[role="tab"][aria-selected="true"]').get_attribute("data-tab")
+            page.locator('[role="tab"][aria-selected="true"]').press("Home")
+            result["keyboardHomeTab"] = page.locator('[role="tab"][aria-selected="true"]').get_attribute("data-tab")
         tools_tab = page.locator('[data-tab="tools"]')
         if tools_tab.count():
             tools_tab.click()
             result["toolsPanelVisible"] = page.locator('[data-panel="tools"]').is_visible()
     elif page_name == "roadtrip":
+        idle_box = page.locator(".rt-map-frame").bounding_box()
+        result["idleMapHeight"] = round(idle_box["height"]) if idle_box else None
+        result["resultActionsInitiallyHidden"] = not page.locator(".rt-result-actions").is_visible()
         page.locator("#rtOrigin").fill("上海")
         page.locator("#rtDestination").fill("杭州")
         page.locator("#rtDays").fill("3")
+        page.locator('[data-rt-next="2"]').click()
+        result["step2Visible"] = page.locator('[data-rt-step="2"]').is_visible()
+        page.locator('[data-rt-next="3"]').click()
+        result["step3Visible"] = page.locator('[data-rt-step="3"]').is_visible()
         page.locator("#rtGenerate").click()
         page.wait_for_timeout(350)
         result["planVisible"] = page.locator("#rtResults").is_visible()
         result["planDays"] = page.locator("#rtResults .rt-day").count()
+        result["resultActionsVisible"] = page.locator(".rt-result-actions").is_visible()
+        expanded_box = page.locator(".rt-map-frame").bounding_box()
+        result["expandedMapHeight"] = round(expanded_box["height"]) if expanded_box else None
     return result
 
 
@@ -166,9 +217,21 @@ def run(base_url: str, output: Path, phase: str) -> dict:
                 url = urljoin(base_url.rstrip("/") + "/", relative_url)
                 response = page.goto(url, wait_until="domcontentloaded")
                 page.wait_for_timeout(250)
+                initial_resources = page.evaluate(
+                    """() => {
+                      const resources = performance.getEntriesByType('resource');
+                      return {
+                        count: resources.length,
+                        transferSize: resources.reduce((sum, entry) => sum + Number(entry.transferSize || 0), 0),
+                        decodedBodySize: resources.reduce((sum, entry) => sum + Number(entry.decodedBodySize || 0), 0),
+                        searchIndexRequested: resources.some((entry) => entry.name.includes('/search-index.js')),
+                      };
+                    }"""
+                )
                 above_fold = phase_dir / f"{safe_name(viewport_name)}-{safe_name(page_name)}-above-fold.png"
                 page.screenshot(path=str(above_fold), full_page=False, animations="disabled")
-                interaction = exercise_page(page, page_name)
+                interaction_screenshot = phase_dir / f"{safe_name(viewport_name)}-{safe_name(page_name)}-interaction.png"
+                interaction = exercise_page(page, page_name, interaction_screenshot if page_name == "home" else None)
                 page.wait_for_timeout(150)
                 screenshot = phase_dir / f"{safe_name(viewport_name)}-{safe_name(page_name)}.png"
                 page.screenshot(path=str(screenshot), full_page=True, animations="disabled")
@@ -180,6 +243,7 @@ def run(base_url: str, output: Path, phase: str) -> dict:
                     "pageErrors": page_errors,
                     "failedRequests": failed_requests,
                     "badResponses": bad_responses,
+                    "initialResources": initial_resources,
                     "interaction": interaction,
                     "dom": inspect_dom(page),
                 }

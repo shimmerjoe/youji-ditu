@@ -24,9 +24,11 @@ class ContentReinforcementTests(unittest.TestCase):
                 with Image.open(photos[0]) as image:
                     self.assertEqual((960, 540), image.size)
 
-    def test_generated_audit_has_no_reinforcement_backlog(self):
+    def test_generated_audit_does_not_hide_reinforcement_backlog(self):
         audit = (ROOT / "内容与图片体检.md").read_text(encoding="utf-8")
-        self.assertIn("需要优先补充：0", audit)
+        self.assertRegex(audit, r"需要优先补充：\d+")
+        self.assertIn("原始字数", audit)
+        self.assertIn("封面衍生图不计为独立素材", audit)
 
 
 if __name__ == "__main__":

@@ -10,13 +10,10 @@
   const navGroups = Array.from(document.querySelectorAll(".nav-group, .destination-nav"));
   const navToggle = document.getElementById("navToggle");
   const header = document.querySelector(".site-header");
-  const siteSearch = document.getElementById("siteSearch");
-  const siteSearchResults = document.getElementById("siteSearchResults");
-  const siteSearchData = document.getElementById("siteSearchData");
-  const siteRoot = document.body.dataset.siteRoot || ".";
-  const cityExplorerSearch = document.getElementById("cityExplorerSearch");
-  const cityExplorerCards = Array.from(document.querySelectorAll("#cityExplorer .city-card"));
-  const provincePills = Array.from(document.querySelectorAll(".province-pill"));
+   const cityExplorerSearch = document.getElementById("cityExplorerSearch");
+   const cityExplorerCards = Array.from(document.querySelectorAll("#cityExplorer .city-card"));
+   const provincePills = Array.from(document.querySelectorAll(".province-pill"));
+   const reviewPills = Array.from(document.querySelectorAll(".review-pill"));
   const travelFinderForm = document.getElementById("travelFinderForm");
   const travelQuery = document.getElementById("travelQuery");
   const travelRegion = document.getElementById("travelRegion");
@@ -27,96 +24,16 @@
   const travelFinderSummary = document.getElementById("travelFinderSummary");
   const cityExplorerSummary = document.getElementById("cityExplorerSummary");
   const cityLoadMore = document.getElementById("cityLoadMore");
-  const CITY_PAGE_SIZE = 36;
-  let emptyBox = null;
-  let activeProvince = "全部";
-  let cityVisibleLimit = CITY_PAGE_SIZE;
+  const CITY_PAGE_SIZE = window.matchMedia("(max-width: 640px)").matches ? 12
+    : window.matchMedia("(max-width: 1100px)").matches ? 24
+    : 36;
+   let emptyBox = null;
+   let activeProvince = "全部";
+   let activeReview = "all";
+   let cityVisibleLimit = CITY_PAGE_SIZE;
 
   function normalize(s) {
     return (s || "").toLowerCase().trim();
-  }
-
-  function readSearchData() {
-    if (Array.isArray(window.TRAVEL_SEARCH_INDEX)) return window.TRAVEL_SEARCH_INDEX;
-    if (!siteSearchData) return [];
-    try {
-      return JSON.parse(siteSearchData.textContent || "[]");
-    } catch (error) {
-      return [];
-    }
-  }
-
-  const allSearchItems = readSearchData();
-
-  function rootHref(path) {
-    if (!path || /^(https?:|mailto:|tel:)/.test(path)) return path || "#";
-    const prefix = (siteRoot || ".").replace(/\/?$/, "/");
-    return prefix + path.replace(/^\//, "");
-  }
-
-  function searchScore(item, query) {
-    const tokens = normalize(query).split(/\s+/).filter(Boolean);
-    if (!tokens.length) return 0;
-    const title = normalize(item.title);
-    const city = normalize(item.city);
-    const province = normalize(item.province);
-    const text = normalize([
-      item.title,
-      item.subtitle,
-      item.province,
-      item.city,
-      (item.highlights || []).join(" "),
-      (item.foods || []).join(" "),
-      item.keywords || "",
-    ].join(" "));
-    let score = 0;
-    for (const token of tokens) {
-      if (!text.includes(token)) return 0;
-      if (title.includes(token)) score += 10;
-      if (city.includes(token)) score += 8;
-      if (province.includes(token)) score += 4;
-      score += 1;
-    }
-    return score;
-  }
-
-  function renderSiteSearch() {
-    if (!siteSearch || !siteSearchResults) return;
-    const q = siteSearch.value.trim();
-    if (!q) {
-      siteSearchResults.hidden = true;
-      siteSearchResults.innerHTML = "";
-      return;
-    }
-    const results = allSearchItems
-      .map((item) => ({ item, score: searchScore(item, q) }))
-      .filter((result) => result.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10);
-    siteSearchResults.hidden = false;
-    const local = results.length
-      ? results.map(({ item }) => {
-          const highlights = (item.highlights || []).slice(0, 3).join("、") || item.subtitle;
-          const foods = (item.foods || []).slice(0, 3).join("、");
-          const meta = [item.province, highlights, foods ? "吃：" + foods : ""].filter(Boolean).join(" · ");
-          return `<a class="search-result" href="${item.href || rootHref(item.path)}"><strong>${item.title}</strong><span>${meta}</span><small>${item.subtitle}</small></a>`;
-        }).join("")
-      : '<div class="search-empty">本站没有匹配，试试下方联网搜索。</div>';
-    siteSearchResults.innerHTML = local + webSearchLinks(q);
-  }
-
-  // 联网搜索入口（新标签打开外部搜索，网页端与 App 内置浏览器都可用）
-  function webSearchLinks(q) {
-    const kw = encodeURIComponent(q);
-    const kwt = encodeURIComponent(q + " 旅游攻略");
-    // 小红书 web 端需登录才显示结果；携程/抖音/马蜂窝/百度图片可直接浏览。
-    return '<div class="search-web"><span>联网搜索</span>' +
-      '<a href="https://you.ctrip.com/searchsite/?query=' + kwt + '" target="_blank" rel="noreferrer">携程攻略</a>' +
-      '<a href="https://www.mafengwo.cn/search/q.php?q=' + kwt + '" target="_blank" rel="noreferrer">马蜂窝</a>' +
-      '<a href="https://www.douyin.com/search/' + kwt + '" target="_blank" rel="noreferrer">抖音</a>' +
-      '<a href="https://image.baidu.com/search/index?tn=baiduimage&word=' + kwt + '" target="_blank" rel="noreferrer">百度图片</a>' +
-      '<a href="https://www.xiaohongshu.com/search_result?keyword=' + kw + '&type=54" target="_blank" rel="noreferrer">小红书</a>' +
-      '</div>';
   }
 
   function filterCityExplorer(resetLimit) {
@@ -126,17 +43,18 @@
     const region = travelRegion ? travelRegion.value : "";
     const season = travelSeason ? travelSeason.value : "";
     const days = travelDays ? travelDays.value : "";
-    const theme = travelTheme ? travelTheme.value : "";
-    const transport = travelTransport ? travelTransport.value : "";
-    const matches = cityExplorerCards.filter((card) => {
-      const provinceHit = activeProvince === "全部" || card.dataset.province === activeProvince;
-      const textHit = !q || normalize(card.dataset.search).includes(q);
+     const theme = travelTheme ? travelTheme.value : "";
+     const transport = travelTransport ? travelTransport.value : "";
+     const matches = cityExplorerCards.filter((card) => {
+       const provinceHit = activeProvince === "全部" || card.dataset.province === activeProvince;
+       const reviewHit = activeReview === "all" || card.dataset.reviewStatus === activeReview;
+       const textHit = !q || normalize(card.dataset.search).includes(q);
       const regionHit = !region || card.dataset.region === region;
       const seasonHit = !season || normalize(card.dataset.season).includes(normalize(season));
       const daysHit = !days || card.dataset.days === days;
       const themeHit = !theme || normalize(card.dataset.theme).includes(normalize(theme));
       const transportHit = !transport || normalize(card.dataset.transport).includes(normalize(transport));
-      return provinceHit && textHit && regionHit && seasonHit && daysHit && themeHit && transportHit;
+       return provinceHit && reviewHit && textHit && regionHit && seasonHit && daysHit && themeHit && transportHit;
     });
     cityExplorerCards.forEach((card) => card.classList.add("is-hidden"));
     matches.slice(0, cityVisibleLimit).forEach((card) => card.classList.remove("is-hidden"));
@@ -150,36 +68,40 @@
       cityLoadMore.hidden = shown >= matches.length;
       cityLoadMore.textContent = `再显示 ${Math.min(CITY_PAGE_SIZE, matches.length - shown)} 座`;
     }
-  }
+   }
 
-  function readFinderState() {
-    if (!travelFinderForm) return;
-    const params = new URLSearchParams(window.location.search);
+   function readFinderState() {
+     const params = new URLSearchParams(window.location.search);
     if (travelQuery) travelQuery.value = params.get("q") || "";
     if (travelRegion) travelRegion.value = params.get("region") || "";
     if (travelSeason) travelSeason.value = params.get("season") || "";
     if (travelDays) travelDays.value = params.get("days") || "";
     if (travelTheme) travelTheme.value = params.get("theme") || "";
-    if (travelTransport) travelTransport.value = params.get("transport") || "";
-    activeProvince = params.get("province") || "全部";
-    if (cityExplorerSearch) cityExplorerSearch.value = travelQuery ? travelQuery.value : "";
-    provincePills.forEach((pill) => {
-      pill.classList.toggle("active", (pill.dataset.province || "") === activeProvince);
-    });
-  }
+     if (travelTransport) travelTransport.value = params.get("transport") || "";
+     activeProvince = params.get("province") || "全部";
+     const review = params.get("review") || "all";
+     activeReview = ["all", "reviewed", "pending"].includes(review) ? review : "all";
+     if (cityExplorerSearch) cityExplorerSearch.value = travelQuery ? travelQuery.value : (params.get("q") || "");
+     provincePills.forEach((pill) => {
+       pill.classList.toggle("active", (pill.dataset.province || "") === activeProvince);
+     });
+     reviewPills.forEach((pill) => {
+       pill.classList.toggle("active", (pill.dataset.review || "") === activeReview);
+     });
+   }
 
-  function writeFinderState() {
-    if (!travelFinderForm) return;
-    const params = new URLSearchParams(window.location.search);
-    const values = {
-      q: travelQuery ? travelQuery.value.trim() : "",
+   function writeFinderState() {
+     const params = new URLSearchParams(window.location.search);
+     const values = {
+       q: travelQuery ? travelQuery.value.trim() : (cityExplorerSearch ? cityExplorerSearch.value.trim() : ""),
       region: travelRegion ? travelRegion.value : "",
       season: travelSeason ? travelSeason.value : "",
       days: travelDays ? travelDays.value : "",
       theme: travelTheme ? travelTheme.value : "",
-      transport: travelTransport ? travelTransport.value : "",
-      province: activeProvince === "全部" ? "" : activeProvince,
-    };
+       transport: travelTransport ? travelTransport.value : "",
+       province: activeProvince === "全部" ? "" : activeProvince,
+       review: activeReview === "all" ? "" : activeReview,
+     };
     Object.keys(values).forEach((key) => {
       if (values[key]) params.set(key, values[key]);
       else params.delete(key);
@@ -231,33 +153,6 @@
     });
   }
 
-  if (siteSearch) {
-    siteSearch.addEventListener("input", renderSiteSearch);
-    siteSearch.addEventListener("focus", renderSiteSearch);
-    siteSearch.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        siteSearch.value = "";
-        renderSiteSearch();
-        return;
-      }
-      const items = siteSearchResults ? Array.from(siteSearchResults.querySelectorAll(".search-result")) : [];
-      if (!items.length) return;
-      let idx = items.findIndex((el) => el.classList.contains("active"));
-      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-        event.preventDefault();
-        idx = event.key === "ArrowDown" ? (idx + 1) % items.length : (idx - 1 + items.length) % items.length;
-        items.forEach((el, i) => el.classList.toggle("active", i === idx));
-        items[idx].scrollIntoView({ block: "nearest" });
-      } else if (event.key === "Enter") {
-        (items[idx] || items[0]).click();
-      }
-    });
-  }
-  document.addEventListener("click", (event) => {
-    if (event.target.closest(".global-search")) return;
-    if (siteSearchResults) siteSearchResults.hidden = true;
-  });
-
   if (navToggle && header) {
     function closeMobileNav() {
       header.classList.remove("nav-open");
@@ -298,11 +193,13 @@
   });
   if (travelFinderForm) {
     travelFinderForm.addEventListener("submit", (event) => event.preventDefault());
-    travelFinderForm.addEventListener("reset", () => {
-      setTimeout(() => {
-        activeProvince = "全部";
-        provincePills.forEach((pill) => pill.classList.toggle("active", (pill.dataset.province || "") === "全部"));
-        if (cityExplorerSearch) cityExplorerSearch.value = "";
+     travelFinderForm.addEventListener("reset", () => {
+       setTimeout(() => {
+         activeProvince = "全部";
+         activeReview = "all";
+         provincePills.forEach((pill) => pill.classList.toggle("active", (pill.dataset.province || "") === "全部"));
+         reviewPills.forEach((pill) => pill.classList.toggle("active", (pill.dataset.review || "") === "all"));
+         if (cityExplorerSearch) cityExplorerSearch.value = "";
         filterCityExplorer(true);
         writeFinderState();
       }, 0);
@@ -312,15 +209,23 @@
     cityVisibleLimit += CITY_PAGE_SIZE;
     filterCityExplorer(false);
   });
-  provincePills.forEach((pill) => {
+   provincePills.forEach((pill) => {
     pill.addEventListener("click", () => {
       activeProvince = pill.dataset.province || "全部";
       if (travelRegion) travelRegion.value = "";
       provincePills.forEach((item) => item.classList.toggle("active", item === pill));
       filterCityExplorer(true);
-      writeFinderState();
-    });
-  });
+       writeFinderState();
+     });
+   });
+   reviewPills.forEach((pill) => {
+     pill.addEventListener("click", () => {
+       activeReview = ["all", "reviewed", "pending"].includes(pill.dataset.review || "") ? pill.dataset.review : "all";
+       reviewPills.forEach((item) => item.classList.toggle("active", item === pill));
+       filterCityExplorer(true);
+       writeFinderState();
+     });
+   });
   readFinderState();
   filterCityExplorer(true);
   window.addEventListener("popstate", () => {
@@ -356,25 +261,24 @@
   }, { rootMargin: "-20% 0px -65% 0px", threshold: [0.1, 0.3, 0.6] });
   sections.forEach((section) => observer.observe(section));
 
-  window.addEventListener("scroll", () => {
-    if (toTop) toTop.classList.toggle("visible", window.scrollY > 720);
-  });
+  if (toTop && "IntersectionObserver" in window) {
+    const scrollThreshold = document.createElement("span");
+    scrollThreshold.className = "scroll-threshold";
+    scrollThreshold.setAttribute("aria-hidden", "true");
+    document.body.appendChild(scrollThreshold);
+    const topObserver = new IntersectionObserver(([entry]) => {
+      const passedThreshold = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+      toTop.classList.toggle("visible", passedThreshold);
+    });
+    topObserver.observe(scrollThreshold);
+  }
   if (toTop) toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
-  // 顶部阅读进度条
+  // 顶部阅读进度条由 CSS scroll-driven animation 驱动，避免逐帧执行 JavaScript。
   const progress = document.createElement("div");
   progress.className = "read-progress";
+  progress.setAttribute("aria-hidden", "true");
   document.body.appendChild(progress);
-  function updateProgress() {
-    const doc = document.documentElement;
-    const max = doc.scrollHeight - doc.clientHeight;
-    const top = window.scrollY || doc.scrollTop || 0;
-    const pct = max > 0 ? Math.min(top / max, 1) : 0;
-    progress.style.width = (pct * 100).toFixed(2) + "%";
-  }
-  window.addEventListener("scroll", updateProgress, { passive: true });
-  window.addEventListener("resize", updateProgress);
-  updateProgress();
 
   // 滚动渐入
   const revealEls = Array.from(document.querySelectorAll(".reveal"));
@@ -531,7 +435,8 @@
       const visible = cityExplorerCards.filter((c) => !c.classList.contains("is-hidden"));
       const pool = visible.length ? visible : cityExplorerCards;
       if (!pool.length) return;
-      const href = pool[Math.floor(Math.random() * pool.length)].getAttribute("href");
+      const card = pool[Math.floor(Math.random() * pool.length)];
+      const href = card.dataset.href || (card.querySelector(".city-card-title") || {}).href;
       if (href) window.location.href = href;
     });
   }
@@ -546,22 +451,108 @@
     img.addEventListener("error", show, { once: true });
   });
 
-  // 跳到主要内容（无障碍）
-  const main = document.getElementById("guideContent") || document.querySelector("main");
-  if (main) {
-    const skip = document.createElement("a");
-    skip.href = "#" + (main.id || (main.id = "guideContent"));
-    skip.className = "skip-link";
-    skip.textContent = "跳到主要内容";
-    document.body.insertBefore(skip, document.body.firstChild);
-  }
-
   // ===== 本地存储工具 =====
+  // Values remain backward-compatible JSON, while a small schema envelope
+  // records migrations and rejects malformed data instead of rendering it.
+  const STORAGE_SCHEMA = 2;
+  const STORAGE_META_KEY = "tay_storage_meta";
+  const STORAGE_ARRAY_KEYS = new Set(["tay_favs", "tay_recent", "tay_trip", "tay_roadtrips", "tay_checklist", "tay_budget"]);
+  const STORAGE_OBJECT_KEYS = new Set(["tay_profile", "tay_settings", "tay_last_roadtrip"]);
+  const STORAGE_STRING_KEYS = new Set(["tay_notes"]);
+  const STORAGE_KNOWN_KEYS = new Set([
+    ...STORAGE_ARRAY_KEYS,
+    ...STORAGE_OBJECT_KEYS,
+    ...STORAGE_STRING_KEYS,
+  ]);
+
+  function parseStored(raw) {
+    if (raw == null) return null;
+    try { return JSON.parse(raw); } catch (_) { return null; }
+  }
+  function readStored(key, raw) {
+    const value = parseStored(raw);
+    // Early versions of the notes field may have been written as plain text;
+    // migrate that form instead of treating it as a corrupt object.
+    if (value == null && raw != null && STORAGE_STRING_KEYS.has(key)) return raw;
+    return value;
+  }
+  function validStoredValue(key, value) {
+    if (STORAGE_ARRAY_KEYS.has(key)) return Array.isArray(value);
+    if (STORAGE_OBJECT_KEYS.has(key)) return Boolean(value && typeof value === "object" && !Array.isArray(value));
+    if (STORAGE_STRING_KEYS.has(key)) return typeof value === "string";
+    return true;
+  }
+  function migrateStorage() {
+    let meta = parseStored(localStorage.getItem(STORAGE_META_KEY));
+    const version = Number(meta && meta.version) || 1;
+    if (version < STORAGE_SCHEMA) {
+      STORAGE_KNOWN_KEYS.forEach((key) => {
+        const raw = localStorage.getItem(key);
+        if (raw == null) return;
+        const value = readStored(key, raw);
+        if (!validStoredValue(key, value)) localStorage.removeItem(key);
+      });
+      meta = { version: STORAGE_SCHEMA, migratedAt: new Date().toISOString() };
+      try { localStorage.setItem(STORAGE_META_KEY, JSON.stringify(meta)); } catch (_) {}
+    } else if (!meta || version !== STORAGE_SCHEMA) {
+      meta = { version: STORAGE_SCHEMA, migratedAt: new Date().toISOString() };
+      try { localStorage.setItem(STORAGE_META_KEY, JSON.stringify(meta)); } catch (_) {}
+    }
+    return meta;
+  }
+  function emitStorageChange(key, action) {
+    window.dispatchEvent(new CustomEvent("tay:storage-change", { detail: { key: key, action: action } }));
+  }
   const LS = {
-    get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } },
-    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
-    del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+    get(k, d) {
+      migrateStorage();
+      const value = readStored(k, localStorage.getItem(k));
+      if (value == null || !validStoredValue(k, value)) {
+        if (value == null && localStorage.getItem(k) != null) {
+          try { localStorage.removeItem(k); } catch (_) {}
+        }
+        return d;
+      }
+      return value;
+    },
+    set(k, v) {
+      migrateStorage();
+      if (!validStoredValue(k, v)) return false;
+      try { localStorage.setItem(k, JSON.stringify(v)); emitStorageChange(k, "set"); return true; } catch (_) { return false; }
+    },
+    del(k) {
+      try { localStorage.removeItem(k); emitStorageChange(k, "delete"); } catch (_) {}
+    },
+    exportData() {
+      migrateStorage();
+      const data = {};
+      STORAGE_KNOWN_KEYS.forEach((key) => {
+        const value = readStored(key, localStorage.getItem(key));
+        if (value != null && validStoredValue(key, value)) data[key] = value;
+      });
+      return { schemaVersion: STORAGE_SCHEMA, exportedAt: new Date().toISOString(), data: data };
+    },
+    importData(payload) {
+      if (!payload || typeof payload !== "object" || !payload.data || typeof payload.data !== "object") return false;
+      let imported = 0;
+      STORAGE_KNOWN_KEYS.forEach((key) => {
+        if (!Object.prototype.hasOwnProperty.call(payload.data, key)) return;
+        const value = payload.data[key];
+        if (!validStoredValue(key, value)) return;
+        try { localStorage.setItem(key, JSON.stringify(value)); imported += 1; emitStorageChange(key, "import"); } catch (_) {}
+      });
+      migrateStorage();
+      return imported > 0 || Object.keys(payload.data).length === 0;
+    }
   };
+  migrateStorage();
+  window.TAY_STORAGE = LS;
+  window.addEventListener("storage", (event) => {
+    if (event.storageArea === localStorage && event.key && event.key.indexOf("tay_") === 0) {
+      migrateStorage();
+      emitStorageChange(event.key, "external");
+    }
+  });
   const AVATARS = ["👤", "🧭", "🏔️", "🌊", "🏯", "🐼", "🌸", "🍜", "🚆", "⛺", "🦋", "🌅"];
 
   // 城市页打开时记录最近浏览；不上传数据，最多保留 12 条。
@@ -589,6 +580,130 @@
     if (nm && p.name) nm.textContent = p.name;
   }
   applyProfileToHeader();
+
+  // ===== 全站行程工作台 =====
+  const tripDockToggle = document.getElementById("tripDockToggle");
+  const tripDockCount = document.getElementById("tripDockCount");
+  const tripDock = document.getElementById("tripDock");
+  const tripDockList = document.getElementById("tripDockList");
+  const tripDockEmpty = document.getElementById("tripDockEmpty");
+  const tripDockClose = document.getElementById("tripDockClose");
+  const tripDockBackdrop = document.getElementById("tripDockBackdrop");
+  const tripDockClear = document.getElementById("tripDockClear");
+  let tripDockPreviousFocus = null;
+
+  function rootHref(path) {
+    const href = String(path || "").trim();
+    if (!href || /^(?:https?:|mailto:|tel:|#|\/)/i.test(href)) return href || "#";
+    const root = (document.body.dataset.siteRoot || ".").replace(/\/$/, "");
+    const normalized = href.replace(/^(?:\.\.\/|\.\/)+/, "");
+    return root + "/" + normalized;
+  }
+
+  function syncTripControls() {
+    const keys = new Set(LS.get("tay_trip", []).map((item) => item && item.key).filter(Boolean));
+    document.querySelectorAll(".trip-btn[data-key]").forEach((button) => {
+      const added = keys.has(button.dataset.key);
+      button.classList.toggle("added", added);
+      button.textContent = added ? "✓" : "＋";
+      button.setAttribute("aria-label", (added ? "从行程移除 " : "加入行程 ") + (button.dataset.name || "城市"));
+    });
+    document.querySelectorAll(".co-trip[data-key]").forEach((button) => {
+      const added = keys.has(button.dataset.key);
+      button.classList.toggle("on", added);
+      button.textContent = added ? "✓ 已在行程" : "＋ 加入行程";
+    });
+  }
+
+  function renderTripDock() {
+    if (!tripDockList) return;
+    const trip = LS.get("tay_trip", []).filter((item) => item && item.key);
+    tripDockList.replaceChildren();
+    trip.forEach((item, index) => {
+      const row = document.createElement("div");
+      row.className = "trip-dock-item";
+      const link = document.createElement("a");
+      link.className = "trip-dock-item-main";
+      link.href = rootHref(item.href);
+      const name = document.createElement("strong");
+      name.textContent = item.name || "未命名城市";
+      const summary = document.createElement("span");
+      summary.textContent = item.sub || "打开攻略查看行程信息";
+      link.append(name, summary);
+      const remove = document.createElement("button");
+      remove.className = "trip-dock-remove";
+      remove.type = "button";
+      remove.textContent = "×";
+      remove.setAttribute("aria-label", "从行程移除 " + name.textContent);
+      remove.addEventListener("click", () => {
+        const next = LS.get("tay_trip", []).filter((entry) => entry && entry.key !== item.key);
+        LS.set("tay_trip", next);
+      });
+      row.append(link, remove);
+      row.style.setProperty("--trip-index", String(index + 1));
+      tripDockList.appendChild(row);
+    });
+    if (tripDockCount) {
+      tripDockCount.textContent = String(trip.length);
+      tripDockCount.setAttribute("aria-label", "行程中有 " + trip.length + " 座城市");
+    }
+    if (tripDockEmpty) tripDockEmpty.hidden = trip.length > 0;
+    if (tripDockClear) tripDockClear.disabled = trip.length === 0;
+    syncTripControls();
+  }
+
+  function tripDockFocusables() {
+    if (!tripDock) return [];
+    return Array.from(tripDock.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+      .filter((element) => !element.hidden && element.offsetParent !== null);
+  }
+
+  function openTripDock() {
+    if (!tripDock || !tripDockToggle) return;
+    tripDockPreviousFocus = document.activeElement;
+    renderTripDock();
+    tripDock.hidden = false;
+    if (tripDockBackdrop) tripDockBackdrop.hidden = false;
+    tripDockToggle.setAttribute("aria-expanded", "true");
+    document.body.classList.add("trip-dock-open");
+    requestAnimationFrame(() => tripDock.focus());
+  }
+
+  function closeTripDock() {
+    if (!tripDock || tripDock.hidden) return;
+    tripDock.hidden = true;
+    if (tripDockBackdrop) tripDockBackdrop.hidden = true;
+    if (tripDockToggle) tripDockToggle.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("trip-dock-open");
+    if (tripDockPreviousFocus && typeof tripDockPreviousFocus.focus === "function") tripDockPreviousFocus.focus();
+    tripDockPreviousFocus = null;
+  }
+
+  if (tripDockToggle && tripDock) {
+    tripDockToggle.addEventListener("click", () => tripDock.hidden ? openTripDock() : closeTripDock());
+    if (tripDockClose) tripDockClose.addEventListener("click", closeTripDock);
+    if (tripDockBackdrop) tripDockBackdrop.addEventListener("click", closeTripDock);
+    if (tripDockClear) tripDockClear.addEventListener("click", () => {
+      const trip = LS.get("tay_trip", []);
+      if (!trip.length || !window.confirm("清空当前行程中的全部城市？")) return;
+      LS.set("tay_trip", []);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (tripDock.hidden) return;
+      if (event.key === "Escape") { event.preventDefault(); closeTripDock(); return; }
+      if (event.key !== "Tab") return;
+      const focusable = tripDockFocusables();
+      if (!focusable.length) { event.preventDefault(); tripDock.focus(); return; }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    });
+    window.addEventListener("tay:storage-change", (event) => {
+      if (event.detail && event.detail.key === "tay_trip") renderTripDock();
+    });
+    renderTripDock();
+  }
 
   // ===== 收藏 =====
   function getFavs() { return LS.get("tay_favs", []); }
@@ -697,16 +812,51 @@
     if (!car) return;
     const slides = Array.from(car.querySelectorAll(".hero-slide"));
     const dots = Array.from(car.querySelectorAll(".hero-dot"));
+    const pauseButton = car.querySelector(".hero-pause");
     if (slides.length <= 1) return;
     let idx = 0, timer = null;
+    let userPaused = false;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    function hydrateSlide(n) {
+      const slide = slides[(n + slides.length) % slides.length];
+      const image = slide && slide.querySelector("img[data-src]");
+      if (!image) return;
+      image.src = image.dataset.src;
+      image.removeAttribute("data-src");
+    }
+    function motionDisabled() {
+      return userPaused || reducedMotion.matches || document.documentElement.getAttribute("data-motion") === "off";
+    }
+    function syncPauseButton() {
+      if (!pauseButton) return;
+      const systemPaused = reducedMotion.matches || document.documentElement.getAttribute("data-motion") === "off";
+      const paused = userPaused || systemPaused;
+      pauseButton.setAttribute("aria-pressed", String(paused));
+      pauseButton.textContent = paused ? "▶" : "Ⅱ";
+      pauseButton.disabled = systemPaused;
+      const label = systemPaused ? "已按减少动态设置关闭自动轮播" : (paused ? "恢复自动轮播" : "暂停自动轮播");
+      pauseButton.setAttribute("aria-label", label);
+      pauseButton.title = label;
+    }
     function go(n) {
       idx = (n + slides.length) % slides.length;
-      slides.forEach((s, i) => s.classList.toggle("active", i === idx));
-      dots.forEach((d, i) => d.classList.toggle("active", i === idx));
+      hydrateSlide(idx);
+      hydrateSlide(idx + 1);
+      slides.forEach((s, i) => {
+        const active = i === idx;
+        s.classList.toggle("active", active);
+        s.setAttribute("aria-hidden", String(!active));
+        if (s.matches("a")) s.tabIndex = active ? 0 : -1;
+      });
+      dots.forEach((d, i) => {
+        d.classList.toggle("active", i === idx);
+        if (i === idx) d.setAttribute("aria-current", "true");
+        else d.removeAttribute("aria-current");
+      });
     }
     function start() {
       stop();
-      if (document.documentElement.getAttribute("data-motion") === "off") return;
+      if (motionDisabled()) return;
       timer = setInterval(() => go(idx + 1), 4800);
     }
     function stop() { if (timer) clearInterval(timer); timer = null; }
@@ -718,6 +868,11 @@
     }));
     car.addEventListener("mouseenter", stop);
     car.addEventListener("mouseleave", start);
+    if (pauseButton) pauseButton.addEventListener("click", () => {
+      userPaused = !userPaused;
+      syncPauseButton();
+      if (userPaused) stop(); else start();
+    });
     // 触控滑动
     let tx = 0;
     car.addEventListener("touchstart", (e) => { tx = e.touches[0].clientX; stop(); }, { passive: true });
@@ -727,6 +882,11 @@
       start();
     }, { passive: true });
     document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else start(); });
+    const onMotionChange = () => { syncPauseButton(); if (motionDisabled()) stop(); else start(); };
+    if (reducedMotion.addEventListener) reducedMotion.addEventListener("change", onMotionChange);
+    else if (reducedMotion.addListener) reducedMotion.addListener(onMotionChange);
+    go(0);
+    syncPauseButton();
     start();
   })();
 
@@ -736,10 +896,49 @@
     if (!tabsWrap) return;
     const tabBtns = Array.from(tabsWrap.querySelectorAll(".user-tab"));
     const panels = Array.from(document.querySelectorAll(".user-panel"));
-    tabBtns.forEach((b) => b.addEventListener("click", () => {
-      tabBtns.forEach((x) => x.classList.toggle("active", x === b));
-      panels.forEach((p) => { p.hidden = p.dataset.panel !== b.dataset.tab; });
-    }));
+    function activateUserTab(button, options) {
+      if (!button) return;
+      const settings = options || {};
+      tabBtns.forEach((candidate) => {
+        const active = candidate === button;
+        candidate.classList.toggle("active", active);
+        candidate.setAttribute("aria-selected", String(active));
+        candidate.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach((panel) => { panel.hidden = panel.dataset.panel !== button.dataset.tab; });
+      button.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      if (settings.focus) button.focus();
+      if (settings.updateHash) {
+        const next = new URL(location.href);
+        next.hash = "tab=" + encodeURIComponent(button.dataset.tab || "profile");
+        history.pushState({ userTab: button.dataset.tab }, "", next);
+      }
+    }
+    function tabFromHash() {
+      const rawHash = decodeURIComponent(location.hash.replace(/^#/, ""));
+      const key = new URLSearchParams(rawHash).get("tab") || rawHash.replace(/^user-panel-/, "");
+      return tabBtns.find((button) => button.dataset.tab === key) || null;
+    }
+    tabBtns.forEach((button) => {
+      button.addEventListener("click", () => activateUserTab(button, { updateHash: true }));
+      button.addEventListener("keydown", (event) => {
+        const current = tabBtns.indexOf(button);
+        let target = -1;
+        if (event.key === "ArrowRight") target = (current + 1) % tabBtns.length;
+        if (event.key === "ArrowLeft") target = (current - 1 + tabBtns.length) % tabBtns.length;
+        if (event.key === "Home") target = 0;
+        if (event.key === "End") target = tabBtns.length - 1;
+        if (target < 0) return;
+        event.preventDefault();
+        activateUserTab(tabBtns[target], { focus: true, updateHash: true });
+      });
+    });
+    const initialTab = tabFromHash();
+    if (initialTab) activateUserTab(initialTab);
+    window.addEventListener("popstate", () => {
+      const requested = tabFromHash();
+      if (requested) activateUserTab(requested);
+    });
 
     // 个人信息
     const profile = LS.get("tay_profile", { name: "", avatar: "👤", slogan: "" });
@@ -1127,6 +1326,42 @@
       anchor.remove();
       setTimeout(() => URL.revokeObjectURL(href), 0);
     }
+    function downloadJson(filename, value) {
+      const blob = new Blob([JSON.stringify(value, null, 2)], { type: "application/json;charset=utf-8" });
+      const href = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = href;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(href), 0);
+    }
+    const dataExport = document.getElementById("dataExport");
+    const dataImport = document.getElementById("dataImport");
+    const dataTransferStatus = document.getElementById("dataTransferStatus");
+    function showTransferStatus(message, isError) {
+      if (!dataTransferStatus) return;
+      dataTransferStatus.hidden = false;
+      dataTransferStatus.textContent = message;
+      dataTransferStatus.classList.toggle("error", Boolean(isError));
+    }
+    if (dataExport) dataExport.addEventListener("click", () => {
+      downloadJson("游记地图-本机数据备份.json", LS.exportData());
+      showTransferStatus("已导出本机数据备份", false);
+    });
+    if (dataImport) dataImport.addEventListener("change", () => {
+      const file = dataImport.files && dataImport.files[0];
+      if (!file) return;
+      file.text().then((text) => {
+        let payload;
+        try { payload = JSON.parse(text); } catch (_) { showTransferStatus("导入失败：JSON 文件无法解析", true); return; }
+        if (!LS.importData(payload)) { showTransferStatus("导入失败：备份格式或字段不受支持", true); return; }
+        showTransferStatus("已恢复本机数据，页面即将刷新", false);
+        setTimeout(() => location.reload(), 450);
+      }).catch(() => showTransferStatus("导入失败：无法读取文件", true));
+      dataImport.value = "";
+    });
     const toolsExport = document.getElementById("toolsExport");
     if (toolsExport) toolsExport.addEventListener("click", () => {
       const checklist = getChecklist();
@@ -1179,19 +1414,74 @@
     });
   });
 
-  // 图片灯箱：点击正文配图 / 参考图放大查看
-  const lb = document.createElement("div");
-  lb.className = "lightbox";
-  lb.innerHTML = '<img alt=""><button class="lightbox-close" type="button" aria-label="关闭">✕</button>';
-  document.body.appendChild(lb);
-  const lbImg = lb.querySelector("img");
-  function openLightbox(src, alt) { lbImg.src = src; lbImg.alt = alt || ""; lb.classList.add("open"); }
-  lb.addEventListener("click", () => lb.classList.remove("open"));
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") lb.classList.remove("open"); });
-  document.querySelectorAll(".item-thumb, .media-card img").forEach((img) => {
-    img.style.cursor = "zoom-in";
-    img.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openLightbox(img.currentSrc || img.src, img.alt); });
-  });
+  // 图片灯箱：保留触发元素焦点，支持键盘打开、关闭与焦点返回。
+  const zoomImages = Array.from(document.querySelectorAll(".item-thumb, .media-card img"));
+  if (zoomImages.length) {
+    const lb = document.createElement("div");
+    lb.className = "lightbox";
+    lb.setAttribute("role", "dialog");
+    lb.setAttribute("aria-modal", "true");
+    lb.setAttribute("aria-label", "旅行图片预览");
+    const lbImg = document.createElement("img");
+    lbImg.alt = "";
+    const closeButton = document.createElement("button");
+    closeButton.className = "lightbox-close";
+    closeButton.type = "button";
+    closeButton.setAttribute("aria-label", "关闭图片预览");
+    closeButton.textContent = "✕";
+    lb.append(lbImg, closeButton);
+    document.body.appendChild(lb);
+    let lightboxTrigger = null;
+
+    function closeLightbox() {
+      if (!lb.classList.contains("open")) return;
+      lb.classList.remove("open");
+      document.documentElement.classList.remove("lightbox-active");
+      lbImg.removeAttribute("src");
+      if (lightboxTrigger) lightboxTrigger.focus();
+    }
+
+    function openLightbox(img) {
+      lightboxTrigger = img;
+      lbImg.src = img.currentSrc || img.src;
+      lbImg.alt = img.alt || "旅行图片大图";
+      lb.classList.add("open");
+      document.documentElement.classList.add("lightbox-active");
+      closeButton.focus();
+    }
+
+    closeButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      closeLightbox();
+    });
+    lb.addEventListener("click", (event) => {
+      if (event.target === lb) closeLightbox();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (!lb.classList.contains("open")) return;
+      if (event.key === "Escape") closeLightbox();
+      if (event.key === "Tab") {
+        event.preventDefault();
+        closeButton.focus();
+      }
+    });
+    zoomImages.forEach((img) => {
+      img.style.cursor = "zoom-in";
+      img.setAttribute("role", "button");
+      img.tabIndex = 0;
+      img.setAttribute("aria-label", "查看大图：" + (img.alt || "旅行图片"));
+      img.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openLightbox(img);
+      });
+      img.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        openLightbox(img);
+      });
+    });
+  }
 
   // PWA Service Worker（仅在 http/https 下注册；file:// 直接打开会自动跳过）
   if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {

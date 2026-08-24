@@ -7,10 +7,12 @@
 app-capacitor/
 # 本机密钥配置、浏览器报告与原始大图
 assets/roadtrip-config.js
+/dist/
 artifacts/
 assets/photos/*/cityphoto-src.*
 docs/image-candidates/
 # 临时/隐藏
+node_modules/
 __pycache__/
 *.pyc
 .build*.txt

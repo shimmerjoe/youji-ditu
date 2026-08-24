@@ -20,11 +20,17 @@ class PwaCacheTests(unittest.TestCase):
         self.assertIn("fetch(e.request)", self.sw)
         self.assertNotIn("return hit||net", self.sw)
 
+    def test_navigation_has_a_readable_offline_fallback(self):
+        self.assertIn("return await c.match(e.request)||offlineResponse()", self.sw)
+        self.assertNotIn("c.match(OFFLINE_FALLBACK)", self.sw)
+        self.assertIn("离线", self.sw)
+        self.assertIn("status:503", self.sw)
+
     def test_scripts_and_styles_are_network_first_to_avoid_stale_interactions(self):
         self.assertIn("e.request.destination==='script'||e.request.destination==='style'", self.sw)
         self.assertIn("catch(_){return await c.match(e.request)||Response.error();}", self.sw)
 
-    def test_app_shell_assets_have_a_build_version_for_existing_service_workers(self):
+    def test_runtime_assets_have_a_build_version_for_existing_service_workers(self):
         for asset in ("travel.css", "search-index.js", "travel.js"):
             with self.subTest(asset=asset):
                 self.assertRegex(self.home, rf'assets/{re.escape(asset)}\?v=[0-9a-f]{{10}}')
@@ -40,11 +46,13 @@ class PwaCacheTests(unittest.TestCase):
             "./index.html",
             "./assets/travel.css",
             "./assets/travel.js",
-            "./assets/search-index.js",
             "./assets/icon-192.png",
         ):
             with self.subTest(resource=resource):
                 self.assertIn(resource, self.sw)
+
+    def test_large_search_index_is_cached_only_after_the_user_searches(self):
+        self.assertNotIn("./assets/search-index.js?v=", self.sw)
 
     def test_install_does_not_download_large_destination_catalogs(self):
         for resource in (

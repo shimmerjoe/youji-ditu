@@ -8,6 +8,20 @@
   const form = $('roadtripForm');
   if (!core || !form) return;
 
+  // Prefer the shared schema-aware adapter. The small fallback keeps this
+  // asset usable when opened in isolation or before travel.js has booted.
+  const storage = window.TAY_STORAGE || {
+    get(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw == null ? fallback : JSON.parse(raw);
+      } catch (_) { return fallback; }
+    },
+    set(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch (_) { return false; }
+    },
+  };
+
   const refs = {
     origin: $('rtOrigin'), destination: $('rtDestination'), days: $('rtDays'), startDate: $('rtStartDate'),
     tripType: $('rtTripType'), maxDailyHours: $('rtMaxDailyHours'), routeStrategy: $('rtRouteStrategy'),
@@ -15,12 +29,38 @@
     energyPrice: $('rtEnergyPrice'), hotel: $('rtHotel'), meals: $('rtMeals'), tickets: $('rtTickets'),
     estimatedKm: $('rtEstimatedKm'), estimatedTolls: $('rtEstimatedTolls'), error: $('rtError'),
     results: $('rtResults'), status: $('rtMapStatus'), submit: $('rtGenerate'), save: $('rtSave'),
-    export: $('rtExport'), print: $('rtPrint'), saveTip: $('rtSaveTip'), map: $('rtMap'), cityList: $('rtCityList'),
+    export: $('rtExport'), share: $('rtShare'), print: $('rtPrint'), saveTip: $('rtSaveTip'), map: $('rtMap'), cityList: $('rtCityList'),
   };
+  const mapFrame = document.querySelector('.rt-map-frame');
+  const resultActions = document.querySelector('.rt-result-actions');
+  const roadtripSteps = Array.from(form.querySelectorAll('[data-rt-step]'));
+  const roadtripStepButtons = Array.from(form.querySelectorAll('[data-rt-step-target]'));
   let currentPlan = null;
   let amap = null;
   let driving = null;
   let geocoder = null;
+
+  function setRoadtripStep(step, options) {
+    const target = Math.max(1, Math.min(3, Number(step) || 1));
+    const shouldFocus = !options || options.focus !== false;
+    roadtripSteps.forEach((section) => {
+      const active = Number(section.dataset.rtStep) === target;
+      section.classList.toggle('is-active', active);
+      section.setAttribute('aria-hidden', active ? 'false' : 'true');
+    });
+    roadtripStepButtons.forEach((button) => {
+      if (Number(button.dataset.rtStepTarget) === target) button.setAttribute('aria-current', 'step');
+      else button.removeAttribute('aria-current');
+    });
+    if (shouldFocus) {
+      const activeStep = roadtripSteps.find((section) => Number(section.dataset.rtStep) === target);
+      const focusTarget = activeStep && activeStep.querySelector('input:not([type="radio"]), select, button');
+      if (focusTarget) focusTarget.focus({ preventScroll: true });
+    }
+  }
+
+  form.classList.add('rt-stepped');
+  setRoadtripStep(1, { focus: false });
 
   function esc(value) {
     return String(value == null ? '' : value).replace(/[&<>"']/g, (char) => ({
@@ -103,7 +143,10 @@
 
   function renderPlan(plan) {
     currentPlan = plan;
+    if (mapFrame) mapFrame.classList.remove('is-idle');
+    if (resultActions) resultActions.hidden = false;
     refs.save.disabled = refs.export.disabled = refs.print.disabled = false;
+    if (refs.share) refs.share.disabled = false;
     const destination = plan.destination || {};
     const dayHtml = plan.days.map((day) => `
       <article class="rt-day">
@@ -248,19 +291,58 @@
       setBusy(false);
     }
     renderPlan(plan);
-    try { localStorage.setItem('tay_last_roadtrip', JSON.stringify(plan)); } catch (_) {}
+    storage.set('tay_last_roadtrip', plan);
     refs.results.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function savePlan() {
     if (!currentPlan) return;
-    let saved = [];
-    try { saved = JSON.parse(localStorage.getItem('tay_roadtrips') || '[]'); } catch (_) {}
+    let saved = storage.get('tay_roadtrips', []);
+    if (!Array.isArray(saved)) saved = [];
     saved = saved.filter((plan) => plan.id !== currentPlan.id);
     saved.unshift(currentPlan);
-    try { localStorage.setItem('tay_roadtrips', JSON.stringify(saved.slice(0, 20))); } catch (_) {}
+    storage.set('tay_roadtrips', saved.slice(0, 20));
     refs.saveTip.hidden = false;
     setTimeout(() => { refs.saveTip.hidden = true; }, 1800);
+  }
+
+  function encodeSharePlan(plan) {
+    const bytes = new TextEncoder().encode(JSON.stringify(plan));
+    let binary = '';
+    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+    return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  }
+
+  function decodeSharePlan(token) {
+    if (!token || token.length > 16000) return null;
+    try {
+      const padded = token.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - (token.length % 4)) % 4);
+      const binary = atob(padded);
+      const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+      const plan = JSON.parse(new TextDecoder().decode(bytes));
+      if (!plan || typeof plan !== 'object' || !plan.input || !Array.isArray(plan.days) || !plan.summary) return null;
+      return plan;
+    } catch (_) { return null; }
+  }
+
+  async function sharePlan() {
+    if (!currentPlan) return;
+    const url = new URL(location.href);
+    url.searchParams.delete('plan');
+    url.hash = `plan=${encodeSharePlan(currentPlan)}`;
+    history.replaceState(null, '', url);
+    const shareUrl = url.toString();
+    setMapStatus('已生成便携分享链接；链接包含本次路书数据，不会上传到服务器。');
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: currentPlan.title, text: '游记地图自驾路书', url: shareUrl });
+      } else if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(shareUrl);
+        setMapStatus('分享链接已复制到剪贴板；接收方打开后可直接恢复路书。');
+      }
+    } catch (_) {
+      // Browser share dialogs can be dismissed; the URL remains in the address bar.
+    }
   }
 
   function exportPlan() {
@@ -277,14 +359,25 @@
   }
 
   function restoreSavedPlan() {
+    const sharedToken = new URLSearchParams(location.hash.replace(/^#/, '')).get('plan');
+    const sharedPlan = decodeSharePlan(sharedToken);
+    if (sharedPlan) {
+      fillForm(sharedPlan.input);
+      renderPlan(sharedPlan);
+      setMapStatus('已从分享链接恢复路书；这是链接内的快照，重新生成可刷新路线数据。');
+      return;
+    }
     const id = new URLSearchParams(location.search).get('plan');
-    let saved = [];
-    try { saved = JSON.parse(localStorage.getItem('tay_roadtrips') || '[]'); } catch (_) {}
+    let saved = storage.get('tay_roadtrips', []);
+    if (!Array.isArray(saved)) saved = [];
     const plan = id ? saved.find((item) => item.id === id) : null;
     if (plan) { fillForm(plan.input); renderPlan(plan); setMapStatus('已打开本机保存的路书；重新生成可刷新路线数据。'); return; }
-    let last = null;
-    try { last = JSON.parse(localStorage.getItem('tay_last_roadtrip') || 'null'); } catch (_) {}
-    if (last && last.input) fillForm(last.input);
+    const last = storage.get('tay_last_roadtrip', null);
+    if (last && last.input) {
+      fillForm(last.input);
+      renderPlan(last);
+      setMapStatus('已恢复上次生成的路书；重新生成可刷新路线数据。');
+    }
   }
 
   if (refs.cityList) {
@@ -292,9 +385,13 @@
     refs.cityList.innerHTML = names.map((name) => `<option value="${esc(name)}"></option>`).join('');
   }
   if (!refs.startDate.value) refs.startDate.value = new Date().toISOString().slice(0, 10);
+  roadtripStepButtons.forEach((button) => button.addEventListener('click', () => setRoadtripStep(button.dataset.rtStepTarget)));
+  form.querySelectorAll('[data-rt-next]').forEach((button) => button.addEventListener('click', () => setRoadtripStep(button.dataset.rtNext)));
+  form.querySelectorAll('[data-rt-back]').forEach((button) => button.addEventListener('click', () => setRoadtripStep(button.dataset.rtBack)));
   refs.vehicle.addEventListener('change', () => updateVehicleDefaults(true));
   form.addEventListener('submit', (event) => { event.preventDefault(); generate(); });
   refs.save.addEventListener('click', savePlan);
+  if (refs.share) refs.share.addEventListener('click', sharePlan);
   refs.export.addEventListener('click', exportPlan);
   refs.print.addEventListener('click', () => window.print());
   updateVehicleDefaults(false);

@@ -1,0 +1,11 @@
+{
+  "frontend/src/app.ts": {
+    "file": "travel-app.js",
+    "name": "app",
+    "src": "frontend/src/app.ts",
+    "isEntry": true,
+    "css": [
+      "travel-app.css"
+    ]
+  }
+}

@@ -1946,10 +1946,11 @@
   "cityphoto|xiamen": {
     "status": "hit",
     "path": "assets/photos/xiamen/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Xiamen_China_Gulangyu_Island_2_by_D_Ramey_Logan.jpg",
+    "title": "File:Gulangyu xiamen skyline 2011 12.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Gulangyu_xiamen_skyline_2011_12.jpg",
     "license": "CC BY-SA 3.0",
-    "artist": "Don Ramey Logan",
-    "query": "xiamen gulangyu china"
+    "artist": "Rolfmueller",
+    "query": "manual:File:Gulangyu xiamen skyline 2011 12.jpg"
   },
   "cityphoto|guiyang": {
     "status": "hit",
@@ -2018,9 +2019,10 @@
   "cityphoto|kunming": {
     "status": "hit",
     "path": "assets/photos/kunming/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Kunming_Yunnan_China_Pet-Market-01.jpg",
+    "title": "",
+    "source": "https://commons.wikimedia.org/wiki/File:Black-headed_Gulls_in_Lake_Dian,_Kunming,_China.jpg",
     "license": "CC BY-SA 3.0",
-    "artist": "CEphoto, Uwe Aranas",
+    "artist": "Zhangmoon618",
     "query": "kunming yunnan flowers"
   },
   "cityphoto|yuxi": {
@@ -2728,9 +2730,10 @@
   "cityphoto|lijiang": {
     "status": "hit",
     "path": "assets/photos/lijiang/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Lijiang_Yunnan_China-Naxi-people-carrying-baskets-01.jpg",
+    "title": "",
+    "source": "https://commons.wikimedia.org/wiki/File:%E4%BA%91%E5%8D%97-%E4%B8%BD%E6%B1%9F-%E7%9C%BA%E6%9C%9B%E6%9C%A8%E5%BA%9C_-_panoramio.jpg",
     "license": "CC BY-SA 3.0",
-    "artist": "CEphoto, Uwe Aranas",
+    "artist": "Nyx Ning",
     "query": "lijiang yunnan snow mountain"
   },
   "cityphoto|hangzhou": {
@@ -2768,10 +2771,11 @@
   "cityphoto|changsha": {
     "status": "hit",
     "path": "assets/photos/changsha/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Jiuzhitang,_Changsha,_Hunan,_China_2023022402.jpg",
-    "license": "CC BY 4.0",
-    "artist": "Huangdan2060",
-    "query": "changsha hunan china"
+    "title": "File:Xiang River and Orange Isle, Changsha.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Xiang_River_and_Orange_Isle,_Changsha.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "JULIANISME",
+    "query": "manual:File:Xiang River and Orange Isle, Changsha.jpg"
   },
   "cityphoto|chengdu": {
     "status": "hit",
@@ -2904,10 +2908,11 @@
   "cityphoto|beijing": {
     "status": "hit",
     "path": "assets/photos/beijing/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:CADAL11101282_%E4%B8%AD%E5%9C%8B%E5%90%8D%E5%8B%9D%E7%AC%AC%E5%8D%81%E4%B8%80%E7%A8%AE%EF%BC%9A%E5%A4%A9%E5%8F%B0%E5%B1%B1%E4%B8%80%E9%9B%86.djvu",
-    "license": "Public domain",
-    "artist": "蒋维乔；张元济",
-    "query": "北京 北京 china travel"
+    "title": "File:Forbidden City Panorama 1.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Forbidden_City_Panorama_1.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Tojan76",
+    "query": "manual:File:Forbidden City Panorama 1.jpg"
   },
   "cityphoto|yanbian": {
     "status": "hit",
@@ -3121,17 +3126,19 @@
   "cityphoto|beihai": {
     "status": "hit",
     "path": "assets/photos/beihai/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Peking_Beihai_Park-20131229-RM-151208.jpg",
-    "license": "CC BY-SA 4.0",
-    "artist": "Reinhold Möller Ermell",
-    "query": "北海 广西 china travel"
+    "title": "File:北海银滩胜景 - panoramio.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:%E5%8C%97%E6%B5%B7%E9%93%B6%E6%BB%A9%E8%83%9C%E6%99%AF_-_panoramio.jpg",
+    "license": "CC BY 3.0",
+    "artist": "史氏",
+    "query": "manual:File:北海银滩胜景 - panoramio.jpg"
   },
   "cityphoto|nanning": {
     "status": "hit",
     "path": "assets/photos/nanning/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Nanning_China_(11352818715).jpg",
-    "license": "CC BY-SA 2.0",
-    "artist": "Clay Gilliland",
+    "title": "",
+    "source": "https://commons.wikimedia.org/wiki/File:%E5%8D%97%E5%AE%81%E9%9D%92%E7%A7%80%E5%B1%B1%E8%8B%8F%E9%93%81%E5%9B%AD.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "EditQ",
     "query": "南宁 广西 china travel"
   },
   "cityphoto|wuzhou": {
@@ -3314,10 +3321,11 @@
   "cityphoto|haikou": {
     "status": "hit",
     "path": "assets/photos/haikou/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Haikou_hainan_china_by_gegecircle_djans7h.jpg",
-    "license": "CC BY-SA 3.0",
-    "artist": "Gege Circle",
-    "query": "海口 海南 china travel"
+    "title": "File:Century Bridge, Haikou - Jun 2023.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Century_Bridge,_Haikou_-_Jun_2023.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Weilong artpg",
+    "query": "manual:File:Century Bridge, Haikou - Jun 2023.jpg"
   },
   "cityphoto|shangrila": {
     "status": "hit",
@@ -3522,10 +3530,11 @@
   "cityphoto|lanzhou": {
     "status": "hit",
     "path": "assets/photos/lanzhou/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Playground_in_Lanzhou,_China_1.jpg",
-    "license": "CC BY-SA 3.0",
-    "artist": "Sigismund von Dobschütz",
-    "query": "兰州 甘肃 china travel"
+    "title": "File:ZhongShanBridgeLanzhou.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:ZhongShanBridgeLanzhou.jpg",
+    "license": "CC BY 4.0",
+    "artist": "OofMon",
+    "query": "manual:File:ZhongShanBridgeLanzhou.jpg"
   },
   "cityphoto|jiayuguan": {
     "status": "hit",
@@ -3554,10 +3563,11 @@
   "cityphoto|dunhuang": {
     "status": "hit",
     "path": "assets/photos/dunhuang/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Dunhuang_Museum_China_%E6%95%A6%E7%85%8C%E5%8D%9A%E7%89%A9%E9%A6%86_-_panoramio_(2).jpg",
-    "license": "CC BY 3.0",
-    "artist": "Hiroki Ogawa",
-    "query": "敦煌 甘肃 china travel"
+    "title": "File:Crescent Lake from the Singing Sand Dunes (20230918101214).jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Crescent_Lake_from_the_Singing_Sand_Dunes_(20230918101214).jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "N509FZ",
+    "query": "manual:File:Crescent Lake from the Singing Sand Dunes (20230918101214).jpg"
   },
   "cityphoto|wuwei": {
     "status": "hit",
@@ -3618,10 +3628,11 @@
   "cityphoto|lhasa": {
     "status": "hit",
     "path": "assets/photos/lhasa/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:An_elderly_Tibetan_women_holding_a_prayer_wheel_on_Lhasa,_Barkhor.jpg",
-    "license": "CC BY-SA 2.5",
-    "artist": "Luca Galuzzi (Lucag)",
-    "query": "拉萨 西藏 china travel"
+    "title": "File:Potala Palace Lhasa Tibet Autonomous Region China 西藏 拉萨 布达拉宫 - panoramio.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Potala_Palace_Lhasa_Tibet_Autonomous_Region_China_%E8%A5%BF%E8%97%8F_%E6%8B%89%E8%90%A8_%E5%B8%83%E8%BE%BE%E6%8B%89%E5%AE%AB_-_panoramio.jpg",
+    "license": "CC BY 3.0",
+    "artist": "Hiroki Ogawa",
+    "query": "manual:File:Potala Palace Lhasa Tibet Autonomous Region China 西藏 拉萨 布达拉宫 - panoramio.jpg"
   },
   "cityphoto|nyingchi": {
     "status": "hit",
@@ -3640,12 +3651,14 @@
     "query": "大连 辽宁 china travel"
   },
   "cityphoto|benxi": {
-    "status": "hit",
+    "status": "rejected",
     "path": "assets/photos/benxi/cityphoto-src.jpg",
+    "title": "File:China Benxi 3.jpg",
     "source": "https://commons.wikimedia.org/wiki/File:China_Benxi_3.jpg",
     "license": "CC BY 2.0",
-    "artist": "",
-    "query": "本溪 辽宁 china travel"
+    "artist": "sarcozona",
+    "query": "本溪 辽宁 china travel",
+    "rejection_reason": "画面清晰度和地标辨识度不足，不适合作为城市封面"
   },
   "cityphoto|baoji": {
     "status": "hit",
@@ -3657,11 +3670,12 @@
   },
   "cityphoto|yanan": {
     "status": "hit",
+    "title": "File:Baota Mountain 4.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Baota_Mountain_4.jpg",
+    "license": "CC0",
+    "artist": "H2v5o68z",
     "path": "assets/photos/yanan/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Shwe_Yan_Pyay_03.jpg",
-    "license": "CC BY-SA 4.0",
-    "artist": "LBM1948",
-    "query": "延安 陕西 china travel"
+    "query": "wiki:延安"
   },
   "cityphoto|yulin": {
     "status": "hit",
@@ -3786,9 +3800,10 @@
   "cityphoto|luoyang": {
     "status": "hit",
     "path": "assets/photos/luoyang/cityphoto-src.jpg",
-    "source": "https://upload.wikimedia.org/wikipedia/commons/5/51/20231119_Yingtian_Gate_02.jpg",
-    "license": "Wikipedia",
-    "artist": "",
+    "title": "File:20231119 Yingtian Gate 02.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:20231119_Yingtian_Gate_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Windmemories",
     "query": "wiki:洛阳市"
   },
   "cityphoto|wenzhou": {
@@ -3856,20 +3871,24 @@
     "query": "济源 河南 china travel"
   },
   "cityphoto|city-cd061af662": {
-    "status": "hit",
+    "status": "rejected",
     "path": "assets/photos/city-cd061af662/cityphoto-src.jpg",
-    "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Skyline_of_Shangluo%2C_April_30_2023.jpg/3840px-Skyline_of_Shangluo%2C_April_30_2023.jpg",
-    "license": "Wikipedia",
-    "artist": "",
-    "query": "wiki:商洛市"
+    "title": "File:Skyline of Shangluo, April 30 2023.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Skyline_of_Shangluo,_April_30_2023.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "A Chinese ID",
+    "query": "wiki:商洛市",
+    "rejection_reason": "施工场地占据前景，旅游决策价值和视觉质量不足"
   },
   "cityphoto|city-e3ec02a30b": {
-    "status": "hit",
+    "status": "rejected",
     "path": "assets/photos/city-e3ec02a30b/cityphoto-src.jpg",
-    "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Ankang_Station_Outside.jpg/3840px-Ankang_Station_Outside.jpg",
-    "license": "Wikipedia",
-    "artist": "",
-    "query": "wiki:安康市"
+    "title": "File:Ankang Station Outside.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Ankang_Station_Outside.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Jucember",
+    "query": "wiki:安康市",
+    "rejection_reason": "普通车站外观不适合作为城市旅游封面"
   },
   "cityphoto|city-b3b41f77aa": {
     "status": "hit",
@@ -3906,9 +3925,10 @@
   "cityphoto|taian": {
     "status": "hit",
     "path": "assets/photos/taian/cityphoto-src.jpg",
-    "source": "https://upload.wikimedia.org/wikipedia/commons/e/e0/20200127_%E6%B3%B0%E5%AE%89%E5%B1%B1%E8%84%9A%E4%B8%8B.jpg",
-    "license": "Wikipedia",
-    "artist": "",
+    "title": "File:20200127 泰安山脚下.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:20200127_%E6%B3%B0%E5%AE%89%E5%B1%B1%E8%84%9A%E4%B8%8B.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "WFan",
     "query": "wiki:泰安市"
   },
   "cityphoto|zibo": {
@@ -3938,10 +3958,11 @@
   "cityphoto|urumqi": {
     "status": "hit",
     "path": "assets/photos/urumqi/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Xinjiang_Uygur_Autonomous_Region_Museum_Urumqi_Xinjiang_China_%E6%96%B0%E7%96%86_%E4%B9%8C%E9%B2%81%E6%9C%A8%E9%BD%90_%E6%96%B0%E7%96%86%E7%BB%B4%E5%90%BE%E5%B0%94%E8%87%AA%E6%B2%BB%E5%8C%BA%E5%8D%9A%E7%89%A9%E9%A6%86_-_panoramio.jpg",
-    "license": "CC BY 3.0",
-    "artist": "Hiroki Ogawa",
-    "query": "乌鲁木齐 新疆 china travel"
+    "title": "File:Urumqi skyline (3).jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Urumqi_skyline_(3).jpg",
+    "license": "CC BY 3.0 pl",
+    "artist": "Radosław Botev",
+    "query": "manual:File:Urumqi skyline (3).jpg"
   },
   "cityphoto|handan": {
     "status": "hit",
@@ -3978,10 +3999,11 @@
   "cityphoto|tianjin": {
     "status": "hit",
     "path": "assets/photos/tianjin/cityphoto-src.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:%E5%A4%A9%E6%B4%A5%E4%BA%94%E5%A4%A7%E9%81%93%E8%BF%91%E4%BB%A3%E5%BB%BA%E7%AD%91%E7%BE%A4%E9%93%AD%E7%89%8C.JPG",
+    "title": "File:Tianjin Eye and Tianjin.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Tianjin_Eye_and_Tianjin.jpg",
     "license": "CC BY-SA 4.0",
-    "artist": "ScareCriterion12",
-    "query": "天津 天津 china travel"
+    "artist": "KangTyngrwey",
+    "query": "manual:File:Tianjin Eye and Tianjin.jpg"
   },
   "cityphoto|anqing": {
     "status": "hit",
@@ -4010,9 +4032,10 @@
   "cityphoto|shenzhen": {
     "status": "hit",
     "path": "assets/photos/shenzhen/cityphoto-src.jpg",
-    "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Commercial_area_of_futian_to_east2020.jpg/3840px-Commercial_area_of_futian_to_east2020.jpg",
-    "license": "Wikipedia",
-    "artist": "",
+    "title": "File:Commercial area of futian to east2020.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Commercial_area_of_futian_to_east2020.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Charlie fong",
     "query": "wiki:深圳"
   },
   "cityphoto|city-89fbc8de32": {
@@ -4154,9 +4177,10 @@
   "cityphoto|city-fe917b462d": {
     "status": "hit",
     "path": "assets/photos/city-fe917b462d/cityphoto-src.jpg",
-    "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Tianning_Temple_in_Nantong_14_2013-01.jpg/3840px-Tianning_Temple_in_Nantong_14_2013-01.jpg",
-    "license": "Wikipedia",
-    "artist": "",
+    "title": "File:Tianning Temple in Nantong 14 2013-01.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Tianning_Temple_in_Nantong_14_2013-01.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "猫猫的日记本",
     "query": "wiki:南通市"
   },
   "cityphoto|changzhou": {
@@ -4182,9 +4206,10 @@
   "cityphoto|city-a85ccb681c": {
     "status": "hit",
     "path": "assets/photos/city-a85ccb681c/cityphoto-src.jpg",
-    "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Taizhou_Sculpture.jpg/3840px-Taizhou_Sculpture.jpg",
-    "license": "Wikipedia",
-    "artist": "",
+    "title": "File:Taizhou Sculpture.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Taizhou_Sculpture.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Rowingbohe",
     "query": "wiki:台州市"
   },
   "cityphoto|enshi": {
@@ -4777,5 +4802,123 @@
   "d047816c25eeec2e558b90b8287cc6b0": {
     "status": "miss",
     "query": "甑皮岩遗址博物馆"
+  },
+  "865b2968743d208465c5b8fea52ba45e": {
+    "status": "miss",
+    "query": "贵安樱花园"
+  },
+  "ffb664a134104170618f950425e52624": {
+    "status": "miss",
+    "query": "青岩古镇"
+  },
+  "a8ab4f594714e2233c6f82f14b73a5ff": {
+    "status": "miss",
+    "query": "民生路、正新街、蔡家街"
+  },
+  "6e0fa89dafd3552614bd6ca3ecfa322b": {
+    "status": "miss",
+    "query": "民生路好吃街"
+  },
+  "c0769de86580c575f7ba3d3646e7a7a0": {
+    "status": "miss",
+    "query": "贵州龙地质公园博物馆"
+  },
+  "32dd390dfa87c7f6d5ff48f562db4bc7": {
+    "status": "miss",
+    "query": "黔西南州博物馆"
+  },
+  "ced2ce0d90ae066185ddedcc6ab74e83": {
+    "status": "miss",
+    "query": "郑州商都遗址博物院"
+  },
+  "984dfbb4898481d7491df56937b72158": {
+    "status": "miss",
+    "query": "二七纪念塔/二七广场"
+  },
+  "c6d3afb920353cc09bae83a053481f13": {
+    "status": "miss",
+    "query": "郑州博物馆"
+  },
+  "1af222010a465ab4af6bc04cfd49e7df": {
+    "status": "miss",
+    "query": "龙泉山桃花"
+  },
+  "32803d0c301543cca570046a722bb557": {
+    "status": "miss",
+    "query": "武侯祠"
+  },
+  "4458343a588441e14b6f1451cf7df2e9": {
+    "status": "miss",
+    "query": "成都博物馆"
+  },
+  "1c375a20fed1eb1b0d7c4c66726a9b47": {
+    "status": "miss",
+    "query": "三星堆博物馆"
+  },
+  "0ab4cffea55632bead0ccaf4de61bdd9": {
+    "status": "miss",
+    "query": "武侯祠博物馆"
+  },
+  "726714f9ccd3879ea6c10e76249eac3d": {
+    "status": "miss",
+    "query": "金沙遗址博物馆"
+  },
+  "b93428f4695b48b8e606848b7fe3ac13": {
+    "status": "miss",
+    "query": "三星堆"
+  },
+  "95c9f48b22f3f7ed38a958baa4c6ee8b": {
+    "status": "miss",
+    "query": "圆通山樱花"
+  },
+  "dc1659cac592dce217d93549a829ca54": {
+    "status": "miss",
+    "query": "湖泉生态园"
+  },
+  "82174e9e907340a8cfe9991dbcf5e1d2": {
+    "status": "miss",
+    "query": "锦屏山风景区"
+  },
+  "8ca6dbdfcbfc8f84618ef71523a08f3a": {
+    "status": "hit",
+    "path": "assets/photos/dali/place-8ca6dbdfcbfc8f84618ef71523a08f3a.jpg",
+    "title": "File:JizuShan.jpg",
+    "query": "云南大理 鸡足山",
+    "source": "https://commons.wikimedia.org/wiki/File:JizuShan.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "NoGhost"
+  },
+  "ced5a9edc8e13c8411163243e36ca44e": {
+    "status": "hit",
+    "path": "assets/photos/dali/place-ced5a9edc8e13c8411163243e36ca44e.jpg",
+    "title": "File:大理市博物馆-云南提督总兵官印.jpg",
+    "query": "云南大理 大理市博物馆",
+    "source": "https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E7%90%86%E5%B8%82%E5%8D%9A%E7%89%A9%E9%A6%86-%E4%BA%91%E5%8D%97%E6%8F%90%E7%9D%A3%E6%80%BB%E5%85%B5%E5%AE%98%E5%8D%B0.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "瑞丽江的河水"
+  },
+  "00d495b60ba2a4b7f502911c8d6726f4": {
+    "status": "miss",
+    "query": "丽江古城"
+  },
+  "8df17f289da7c8d78c8feb4323cab862": {
+    "status": "miss",
+    "query": "虎跳峡"
+  },
+  "69f0cdfa11a5ebb4a8c93834140b4994": {
+    "status": "miss",
+    "query": "东巴文化博物馆/丽江市博物院"
+  },
+  "8540e925e697384953bd5403e479f591": {
+    "status": "miss",
+    "query": "长江索道"
+  },
+  "84b688ff3173f3578bd58a615b73be4b": {
+    "status": "miss",
+    "query": "西湖"
+  },
+  "78e55288e49deeddd60416dde4fc025d": {
+    "status": "miss",
+    "query": "桂林博物馆"
   }
 }

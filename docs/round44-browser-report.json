@@ -1,0 +1,245 @@
+{
+  "baseUrl": "http://127.0.0.1:8765",
+  "viewports": {
+    "desktop-1920": {
+      "home": {
+        "interaction": {
+          "firstGroup": "直辖市",
+          "directCities": [
+            "北京",
+            "重庆",
+            "上海",
+            "天津"
+          ],
+          "shandongCities": [
+            "济南",
+            "济宁",
+            "临沂",
+            "青岛",
+            "曲阜",
+            "日照",
+            "泰安",
+            "威海",
+            "潍坊",
+            "烟台",
+            "枣庄",
+            "淄博"
+          ],
+          "recentSearchRestored": true,
+          "historyCleared": true
+        },
+        "metrics": {
+          "clientWidth": 1920,
+          "scrollWidth": 1920,
+          "duplicateIds": [],
+          "brokenImages": []
+        },
+        "errors": {
+          "console": [],
+          "page": [],
+          "requests": [],
+          "responses": []
+        }
+      },
+      "qingdao": {
+        "interaction": {
+          "activeGroup": "山东",
+          "currentCity": "青岛",
+          "cityCount": 12
+        },
+        "metrics": {
+          "clientWidth": 1920,
+          "scrollWidth": 1920,
+          "duplicateIds": [],
+          "brokenImages": []
+        },
+        "errors": {
+          "console": [],
+          "page": [],
+          "requests": [],
+          "responses": []
+        }
+      }
+    },
+    "desktop-1366": {
+      "home": {
+        "interaction": {
+          "firstGroup": "直辖市",
+          "directCities": [
+            "北京",
+            "重庆",
+            "上海",
+            "天津"
+          ],
+          "shandongCities": [
+            "济南",
+            "济宁",
+            "临沂",
+            "青岛",
+            "曲阜",
+            "日照",
+            "泰安",
+            "威海",
+            "潍坊",
+            "烟台",
+            "枣庄",
+            "淄博"
+          ],
+          "recentSearchRestored": true,
+          "historyCleared": true
+        },
+        "metrics": {
+          "clientWidth": 1366,
+          "scrollWidth": 1366,
+          "duplicateIds": [],
+          "brokenImages": []
+        },
+        "errors": {
+          "console": [],
+          "page": [],
+          "requests": [],
+          "responses": []
+        }
+      },
+      "qingdao": {
+        "interaction": {
+          "activeGroup": "山东",
+          "currentCity": "青岛",
+          "cityCount": 12
+        },
+        "metrics": {
+          "clientWidth": 1366,
+          "scrollWidth": 1366,
+          "duplicateIds": [],
+          "brokenImages": []
+        },
+        "errors": {
+          "console": [],
+          "page": [],
+          "requests": [],
+          "responses": []
+        }
+      }
+    },
+    "mobile-390": {
+      "home": {
+        "interaction": {
+          "firstGroup": "直辖市",
+          "directCities": [
+            "北京",
+            "重庆",
+            "上海",
+            "天津"
+          ],
+          "shandongCities": [
+            "济南",
+            "济宁",
+            "临沂",
+            "青岛",
+            "曲阜",
+            "日照",
+            "泰安",
+            "威海",
+            "潍坊",
+            "烟台",
+            "枣庄",
+            "淄博"
+          ],
+          "recentSearchRestored": true,
+          "historyCleared": true
+        },
+        "metrics": {
+          "clientWidth": 390,
+          "scrollWidth": 390,
+          "duplicateIds": [],
+          "brokenImages": []
+        },
+        "errors": {
+          "console": [],
+          "page": [],
+          "requests": [],
+          "responses": []
+        }
+      },
+      "qingdao": {
+        "interaction": {
+          "activeGroup": "山东",
+          "currentCity": "青岛",
+          "cityCount": 12
+        },
+        "metrics": {
+          "clientWidth": 390,
+          "scrollWidth": 390,
+          "duplicateIds": [],
+          "brokenImages": []
+        },
+        "errors": {
+          "console": [],
+          "page": [],
+          "requests": [],
+          "responses": []
+        }
+      }
+    },
+    "mobile-360": {
+      "home": {
+        "interaction": {
+          "firstGroup": "直辖市",
+          "directCities": [
+            "北京",
+            "重庆",
+            "上海",
+            "天津"
+          ],
+          "shandongCities": [
+            "济南",
+            "济宁",
+            "临沂",
+            "青岛",
+            "曲阜",
+            "日照",
+            "泰安",
+            "威海",
+            "潍坊",
+            "烟台",
+            "枣庄",
+            "淄博"
+          ],
+          "recentSearchRestored": true,
+          "historyCleared": true
+        },
+        "metrics": {
+          "clientWidth": 360,
+          "scrollWidth": 360,
+          "duplicateIds": [],
+          "brokenImages": []
+        },
+        "errors": {
+          "console": [],
+          "page": [],
+          "requests": [],
+          "responses": []
+        }
+      },
+      "qingdao": {
+        "interaction": {
+          "activeGroup": "山东",
+          "currentCity": "青岛",
+          "cityCount": 12
+        },
+        "metrics": {
+          "clientWidth": 360,
+          "scrollWidth": 360,
+          "duplicateIds": [],
+          "brokenImages": []
+        },
+        "errors": {
+          "console": [],
+          "page": [],
+          "requests": [],
+          "responses": []
+        }
+      }
+    }
+  }
+}

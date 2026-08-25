@@ -5,7 +5,7 @@ import {
   workerUpdateStatus,
   type ConnectionStatus,
 } from "./connection-status";
-import { bootstrapSiteSearch } from "./site-search";
+import { bootstrapDestinationNavigation, bootstrapSiteSearch } from "./site-search";
 
 function bootstrapRuntime(): void {
   const node = document.createElement("div");
@@ -41,6 +41,7 @@ function bootstrapRuntime(): void {
   document.documentElement.dataset.appRuntime = "ready";
   if (!navigator.onLine) show(connectionStatus(false));
   bootstrapSiteSearch();
+  bootstrapDestinationNavigation();
 }
 
 if (typeof document !== "undefined") {

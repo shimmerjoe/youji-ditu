@@ -104,11 +104,16 @@ class ProductContractTests(unittest.TestCase):
         typed_source = (ROOT / "frontend" / "src" / "site-search.ts").read_text(encoding="utf-8")
         self.assertIn('role="combobox"', home)
         self.assertIn('aria-autocomplete="list"', home)
-        self.assertIn('aria-controls="siteSearchOptions"', home)
+        self.assertIn('aria-controls="siteSearchResults"', home)
         self.assertIn('role="listbox"', home)
+        self.assertIn('id="siteSearchRecent"', home)
+        self.assertIn('aria-label="最近搜索与浏览"', home)
         self.assertNotIn("renderSiteSearch", legacy_script)
         self.assertNotIn("innerHTML", typed_source)
         self.assertIn("aria-activedescendant", typed_source)
+        for marker in ("tay_search_recent", "normalizeRecentSearches", "normalizeRecentVisits"):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, typed_source)
 
     def test_lightbox_has_keyboard_and_focus_lifecycle_without_layout_animation(self):
         script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
@@ -151,11 +156,20 @@ class ProductContractTests(unittest.TestCase):
         self.assertLess(self.qingdao.count('class="city-card'), 24)
         self.assertIn('href="../city-guides.html"', self.qingdao)
 
-    def test_global_destination_menu_is_a_lightweight_discovery_gateway(self):
-        self.assertLessEqual(self.qingdao.count('class="destination-city'), 8)
-        self.assertIn('href="../destinations.html"', self.qingdao)
-        self.assertIn('destinations.html?region=%E5%8D%8E%E4%B8%9C', self.qingdao)
-        self.assertIn('aria-label="按大区发现目的地"', self.qingdao)
+    def test_global_destination_menu_is_a_lightweight_province_gateway(self):
+        self.assertIn('class="province-nav-list"', self.qingdao)
+        self.assertIn('aria-label="按省份选择城市"', self.qingdao)
+        self.assertIn('data-nav-group="直辖市"', self.qingdao)
+        self.assertIn('data-nav-group="山东"', self.qingdao)
+        self.assertNotIn("全国目的地", self.qingdao)
+        self.assertNotIn('class="destination-quick"', self.qingdao)
+        self.assertLessEqual(self.qingdao.count('class="destination-city'), 4)
+
+    def test_recent_search_history_participates_in_local_backup_and_reset(self):
+        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        self.assertIn('"tay_search_recent"', script)
+        self.assertRegex(script, r'STORAGE_ARRAY_KEYS[^\n]+tay_search_recent')
+        self.assertRegex(script, r'ucResetAll[\s\S]+tay_search_recent')
 
     def test_trip_finder_state_is_shareable_and_restored_from_the_url(self):
         script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")

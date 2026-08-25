@@ -1950,41 +1950,64 @@ def hero_quickfind_html(anchor_index: AnchorIndex) -> str:
 
 def nav_html(current: Page) -> str:
     current_out = current.output
-    popular_keys = ("beijing", "shanghai", "chengdu", "xian", "hangzhou", "qingdao", "chongqing", "kunming")
-    by_key = {page.key: page for page in PAGES}
-    current_profile = city_profile(by_key[current.key]) if current.key in by_key and current.key != "record" else None
-    current_region = current_profile["region"] if current_profile else ""
+    current_profile = city_profile(current) if current.key != "record" else None
     catalog_href = rel_to(OUT / "destinations.html", current_out.parent)
-    region_links = []
-    for region in REGION_PROVINCES:
-        href = f'{catalog_href}?region={quote(region)}'
-        active = " active" if region == current_region else ""
-        region_links.append(
-            f'<a class="destination-city{active}" href="{href}">{html.escape(region)}</a>'
-        )
-    quick_links = []
-    for key in popular_keys:
-        page = by_key.get(key)
-        if not page:
+    counts: dict[str, int] = {}
+    for page in PAGES:
+        if page.key == "record":
             continue
-        _, city = split_city_filename(page.source)
-        rel = rel_to(page.output, current_out.parent)
-        active = " active" if page.output.resolve() == current_out.resolve() else ""
-        quick_links.append(f'<a class="destination-quick-link{active}" href="{rel}">{html.escape(city)}</a>')
+        province = city_profile(page)["province"]
+        if province in DIRECT_MUNICIPALITIES:
+            label = "直辖市"
+        elif province in SPECIAL_REGIONS:
+            label = "港澳"
+        else:
+            label = province
+        counts[label] = counts.get(label, 0) + 1
 
-    city_count = sum(1 for page in PAGES if page.key != "record")
-    active_class = " active" if current_profile or current.key in {"destinations", "cities"} else ""
-    return (
-        f'<details class="destination-nav{active_class}">'
-        '<summary><span>全国目的地</span>'
-        f'<small>{city_count} 个城市</small><i aria-hidden="true"></i></summary>'
-        '<div class="destination-panel">'
-        '<div class="destination-panel-head"><strong>按大区发现</strong><span>进入目录后可继续按省份、季节与主题筛选</span>'
-        f'<a class="destination-all-link" href="{catalog_href}">查看全部 {city_count} 座城市 →</a></div>'
-        f'<div class="destination-groups region-groups" aria-label="按大区发现目的地">{"".join(region_links)}</div>'
-        '</div></details>'
-        f'<div class="destination-quick" aria-label="热门目的地">{"".join(quick_links)}</div>'
+    provinces = sorted(
+        (label for label in counts if label not in {"直辖市", "港澳"}),
+        key=lambda label: nav_label_sort_key(label, PROVINCE_SORT_KEYS),
     )
+    labels = (["直辖市"] if counts.get("直辖市") else []) + provinces
+    if counts.get("港澳"):
+        labels.append("港澳")
+
+    current_group = ""
+    if current_profile:
+        current_province = current_profile["province"]
+        if current_province in DIRECT_MUNICIPALITIES:
+            current_group = "直辖市"
+        elif current_province in SPECIAL_REGIONS:
+            current_group = "港澳"
+        else:
+            current_group = current_province
+
+    menus = []
+    for label in labels:
+        if label == "直辖市":
+            kind = "municipality"
+            directory_href = catalog_href
+        elif label == "港澳":
+            kind = "special"
+            directory_href = f'{catalog_href}?region={quote("港澳")}'
+        else:
+            kind = "province"
+            directory_href = f'{catalog_href}?province={quote(label)}'
+        active = " active" if label == current_group else ""
+        menus.append(
+            f'<details class="destination-nav province-nav{active}" data-nav-group="{html.escape(label)}" '
+            f'data-nav-kind="{kind}">'
+            f'<summary><span>{html.escape(label)}</span><small>{counts[label]} 城</small><i aria-hidden="true"></i></summary>'
+            f'<div class="destination-panel province-menu" aria-label="{html.escape(label)}城市菜单">'
+            '<div class="province-menu-head">'
+            f'<div><strong>{html.escape(label)}</strong><span>选城市，或先按季节、天数与主题筛选</span></div>'
+            f'<a class="province-directory-link" href="{directory_href}">条件筛选 →</a></div>'
+            f'<div class="province-city-list" data-destination-menu aria-label="{html.escape(label)}城市列表" '
+            'aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div>'
+            '</div></details>'
+        )
+    return f'<div class="province-nav-list" aria-label="按省份选择城市">{"".join(menus)}</div>'
 
 
 def card_links(current: Page, limit: int = 10) -> str:
@@ -3177,9 +3200,10 @@ def site_header_html(page: Page, active_key: str = "") -> str:
       <div class="global-search">
         <label class="global-search-box">
           <span>全站搜索</span>
-          <input id="siteSearch" type="search" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="siteSearchOptions" placeholder="搜索城市、景点、美食、季节">
+          <input id="siteSearch" type="search" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="siteSearchResults" placeholder="搜索城市、景点、美食、季节">
         </label>
         <div class="site-search-results" id="siteSearchResults" hidden>
+          <div class="site-search-recent" id="siteSearchRecent" aria-label="最近搜索与浏览" hidden></div>
           <div class="site-search-options" id="siteSearchOptions" role="listbox" aria-label="城市与攻略搜索建议"></div>
         </div>
       </div>
@@ -4477,6 +4501,77 @@ a:hover { text-decoration: underline; }
   box-shadow: var(--shadow);
 }
 .site-search-results[hidden] { display: none; }
+.site-search-recent[hidden] { display: none; }
+.site-search-recent {
+  padding: 4px 4px 8px;
+}
+.search-recent-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 6px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.search-recent-head strong {
+  font-size: 13px;
+  letter-spacing: .04em;
+}
+.search-recent-clear {
+  min-height: 32px;
+  padding: 0 8px;
+  color: var(--muted);
+  font-size: 12px;
+  background: transparent;
+  border-color: transparent;
+}
+.search-recent-clear:hover {
+  color: var(--ink);
+  border-color: var(--line);
+  background: var(--accent-tint);
+}
+.search-recent-group {
+  padding: 10px 6px 2px;
+}
+.search-recent-group + .search-recent-group {
+  margin-top: 4px;
+  border-top: 1px solid var(--hairline);
+}
+.search-recent-group h3 {
+  margin: 0 0 7px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.search-recent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.search-recent-query,
+.search-recent-visit {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 0 11px;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+.search-recent-query:hover,
+.search-recent-query:focus-visible,
+.search-recent-visit:hover,
+.search-recent-visit:focus-visible {
+  text-decoration: none;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: var(--accent-tint);
+}
 .search-result {
   display: grid;
   gap: 4px;
@@ -7197,6 +7292,105 @@ select {
   background: var(--accent-tint);
   border-radius: var(--radius-sm);
 }
+.province-nav-list {
+  position: relative;
+  z-index: 140;
+  display: flex;
+  flex: 1 1 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.province-nav {
+  position: static;
+  z-index: auto;
+}
+.province-nav summary {
+  gap: 7px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 750;
+}
+.province-nav:first-child summary {
+  color: var(--accent-deep);
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
+  background: var(--accent-tint);
+}
+.province-nav.active summary,
+.province-nav[open] summary {
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--line));
+  background: var(--accent-soft);
+}
+.province-menu {
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  width: auto;
+  max-height: min(460px, calc(100vh - 150px));
+  padding: 16px;
+}
+.province-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.province-menu-head > div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+.province-menu-head strong { font-size: 17px; }
+.province-menu-head span {
+  color: var(--muted);
+  font-size: 13px;
+}
+.province-directory-link {
+  flex: 0 0 auto;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 11px;
+  color: var(--accent-deep);
+  font-size: 13px;
+  font-weight: 800;
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--line));
+  border-radius: var(--radius-sm);
+}
+.province-directory-link:hover {
+  text-decoration: none;
+  background: var(--accent-tint);
+}
+.province-city-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: 6px;
+}
+.province-city-list .destination-city {
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+}
+.province-city-list .destination-city:hover,
+.province-city-list .destination-city.active {
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--line));
+}
+.province-menu-status {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 14px;
+  color: var(--muted);
+  text-align: center;
+  background: var(--accent-tint);
+  border-radius: var(--radius-sm);
+}
 .nav-link,
 .nav-group summary {
   min-height: 34px;
@@ -7803,7 +7997,11 @@ html[data-theme="dark"] .media-card,
 html[data-theme="dark"] .poi-action,
 html[data-theme="dark"] .global-search-box,
 html[data-theme="dark"] .nav-link,
-html[data-theme="dark"] .nav-group summary {
+html[data-theme="dark"] .nav-group summary,
+html[data-theme="dark"] .destination-nav summary,
+html[data-theme="dark"] .province-menu,
+html[data-theme="dark"] .search-recent-query,
+html[data-theme="dark"] .search-recent-visit {
   background: #202a28;
 }
 
@@ -7836,6 +8034,22 @@ html[data-theme="dark"] .nav-group summary {
     overflow: visible;
   }
   .destination-quick-link { min-height: 40px; }
+  .province-nav-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: start;
+    width: 100%;
+  }
+  .province-nav { width: auto; }
+  .province-nav[open] { grid-column: 1 / -1; }
+  .province-nav summary {
+    min-width: 0;
+    padding: 0 9px;
+  }
+  .province-menu {
+    width: 100%;
+    max-height: 52vh;
+  }
   .mobile-primary-nav {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -7872,6 +8086,26 @@ html[data-theme="dark"] .nav-group summary {
 }
 
 @media (max-width: 720px) {
+  .top-nav {
+    max-height: calc(100vh - 116px);
+    max-height: calc(100dvh - 116px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .site-header.nav-open ~ .mobile-quickbar,
+  .site-header.nav-open ~ .trip-dock-toggle { display: none; }
+  .province-nav-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .province-menu-head {
+    align-items: flex-start;
+  }
+  .province-menu-head > div {
+    display: grid;
+    gap: 2px;
+  }
+  .province-city-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .search-recent-query,
+  .search-recent-visit { min-height: 42px; }
   .destination-panel-head { display: block; }
   .destination-panel-head span { display: block; margin-top: 2px; }
   .destination-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -8391,7 +8625,7 @@ JS = r"""
   // records migrations and rejects malformed data instead of rendering it.
   const STORAGE_SCHEMA = 2;
   const STORAGE_META_KEY = "tay_storage_meta";
-  const STORAGE_ARRAY_KEYS = new Set(["tay_favs", "tay_recent", "tay_trip", "tay_roadtrips", "tay_checklist", "tay_budget"]);
+  const STORAGE_ARRAY_KEYS = new Set(["tay_favs", "tay_recent", "tay_search_recent", "tay_trip", "tay_roadtrips", "tay_checklist", "tay_budget"]);
   const STORAGE_OBJECT_KEYS = new Set(["tay_profile", "tay_settings", "tay_last_roadtrip"]);
   const STORAGE_STRING_KEYS = new Set(["tay_notes"]);
   const STORAGE_KNOWN_KEYS = new Set([
@@ -8947,7 +9181,7 @@ JS = r"""
     const reset = document.getElementById("ucResetAll");
     if (reset) reset.addEventListener("click", () => {
       if (confirm("确定清除本地保存的昵称、收藏、行程、路书、旅行工具和设置吗？")) {
-        ["tay_profile", "tay_settings", "tay_favs", "tay_recent", "tay_trip", "tay_roadtrips", "tay_last_roadtrip", "tay_checklist", "tay_budget", "tay_notes"].forEach((k) => LS.del(k));
+        ["tay_profile", "tay_settings", "tay_favs", "tay_recent", "tay_search_recent", "tay_trip", "tay_roadtrips", "tay_last_roadtrip", "tay_checklist", "tay_budget", "tay_notes"].forEach((k) => LS.del(k));
         location.reload();
       }
     });

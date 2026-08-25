@@ -76,7 +76,8 @@ class CityExpansionTests(unittest.TestCase):
     def test_generated_site_exposes_all_new_destinations(self):
         index = (ROOT / "index.html").read_text(encoding="utf-8")
         catalog = (ROOT / "city-guides.html").read_text(encoding="utf-8")
-        self.assertIn("222 个城市", index)
+        self.assertIn('data-count="222">222</span><small>座</small>', index)
+        self.assertIn('data-nav-group="直辖市"', index)
         for stem, config in self.cities.items():
             with self.subTest(city=stem):
                 output = ROOT / "cities" / f'{config["slug"]}.html'

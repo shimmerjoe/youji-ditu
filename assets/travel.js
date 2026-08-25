@@ -456,7 +456,7 @@
   // records migrations and rejects malformed data instead of rendering it.
   const STORAGE_SCHEMA = 2;
   const STORAGE_META_KEY = "tay_storage_meta";
-  const STORAGE_ARRAY_KEYS = new Set(["tay_favs", "tay_recent", "tay_trip", "tay_roadtrips", "tay_checklist", "tay_budget"]);
+  const STORAGE_ARRAY_KEYS = new Set(["tay_favs", "tay_recent", "tay_search_recent", "tay_trip", "tay_roadtrips", "tay_checklist", "tay_budget"]);
   const STORAGE_OBJECT_KEYS = new Set(["tay_profile", "tay_settings", "tay_last_roadtrip"]);
   const STORAGE_STRING_KEYS = new Set(["tay_notes"]);
   const STORAGE_KNOWN_KEYS = new Set([
@@ -1012,7 +1012,7 @@
     const reset = document.getElementById("ucResetAll");
     if (reset) reset.addEventListener("click", () => {
       if (confirm("确定清除本地保存的昵称、收藏、行程、路书、旅行工具和设置吗？")) {
-        ["tay_profile", "tay_settings", "tay_favs", "tay_recent", "tay_trip", "tay_roadtrips", "tay_last_roadtrip", "tay_checklist", "tay_budget", "tay_notes"].forEach((k) => LS.del(k));
+        ["tay_profile", "tay_settings", "tay_favs", "tay_recent", "tay_search_recent", "tay_trip", "tay_roadtrips", "tay_last_roadtrip", "tay_checklist", "tay_budget", "tay_notes"].forEach((k) => LS.del(k));
         location.reload();
       }
     });

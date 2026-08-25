@@ -40,19 +40,29 @@ class CityContextLinkTests(unittest.TestCase):
         self.assertIn("实用信息与资料来源", self.city_html)
         self.assertIn("出行前复核", self.city_html)
 
-    def test_destination_navigation_uses_one_compact_mega_menu(self):
-        self.assertEqual(self.city_html.count('class="destination-nav'), 1)
-        self.assertIn('class="destination-panel"', self.city_html)
-        self.assertIn('class="destination-groups region-groups"', self.city_html)
-        self.assertIn("全国目的地", self.city_html)
-        self.assertRegex(self.city_html, r"<small>\d+ 个城市</small>")
+    def test_destination_navigation_lists_provinces_without_a_nationwide_or_hot_city_strip(self):
+        self.assertIn('class="province-nav-list"', self.city_html)
+        self.assertGreaterEqual(self.city_html.count('class="destination-nav province-nav'), 20)
+        self.assertNotIn("全国目的地", self.city_html)
+        self.assertNotIn('class="destination-quick"', self.city_html)
+        self.assertNotIn('aria-label="热门目的地"', self.city_html)
 
-    def test_destination_navigation_links_to_catalog_and_current_region(self):
-        self.assertIn('href="../destinations.html"', self.city_html)
+    def test_municipalities_are_the_first_group_and_current_province_is_active(self):
+        municipality_at = self.city_html.index('data-nav-group="直辖市"')
+        anhui_at = self.city_html.index('data-nav-group="安徽"')
+        self.assertLess(municipality_at, anhui_at)
         self.assertRegex(
             self.city_html,
-            r'class="destination-city active" href="\.\./destinations\.html\?region=%E5%8D%8E%E4%B8%9C">华东</a>',
+            r'class="destination-nav province-nav active" data-nav-group="山东"',
         )
+        self.assertIn('data-nav-group="港澳"', self.city_html)
+        self.assertRegex(self.city_html, r'<small>\d+ 城</small>')
+
+    def test_province_city_lists_are_progressively_loaded_instead_of_duplicated_per_page(self):
+        self.assertIn('data-destination-menu', self.city_html)
+        self.assertIn('aria-live="polite"', self.city_html)
+        self.assertLessEqual(self.city_html.count('class="destination-city'), 4)
+        self.assertIn('href="../destinations.html?province=%E5%B1%B1%E4%B8%9C"', self.city_html)
 
 
 if __name__ == "__main__":

@@ -12,6 +12,7 @@
 | 可访问性与错误状态 | `frontend/src/site-search.ts`、生成页面 | 当前城市使用 `aria-current`，列表有 `aria-live`/`aria-busy`，加载失败有状态文本 | 8 组浏览器检查无控制台/页面/网络错误、坏图或重复 ID | 已验收 |
 | 父目录项目说明 | `D:\2Life\1Travel\README.md` | 含在线链接、仓库、本地入口、架构、命令、目录、隐私和发布说明 | UTF-8 回读并核对路径/命令；该文件位于产品 Git 仓库外 | 已验收 |
 | 构建与发布包 | `package.json`、`tools/stage_pages.py`、生成站点 | Node/Vite + Python 全站生成，静态 PWA 运行 | `npm run check` 与 `npm run stage` 的最终结果见本轮验证摘要 | 已验收 |
+| GitHub Pages 公开发布 | `.github/workflows/pages.yml`、公开站点 | 工作流 `32871028594` 成功，公开资源版本 `8f0dbe106e` | 1366×768、390×844 × 首页/青岛共 4 组线上真实浏览器回归通过 | 已验收 |
 
 ## 验证摘要
 
@@ -19,10 +20,12 @@
 - Playwright：1920×1080、1366×768、390×844、360×800 × 首页/青岛，共 8 组全部通过。
 - 浏览器错误：控制台、页面脚本、失败请求、HTTP 4xx/5xx、横向溢出、坏图、重复 ID 均为 0。
 - 证据：`docs/round44-browser-report.json` 与四张 `docs/round44-*.png`。
+- GitHub Pages：工作流 `32871028594` 的 build/deploy 成功；公开地址返回 200，资源版本为 `8f0dbe106e`。
+- 公开站点 Playwright：1366×768、390×844 × 首页/青岛，共 4 组通过；直辖市、山东、当前城市、最近搜索恢复/清理以及错误/溢出/坏图检查均通过。机器可读摘要见 `docs/round44-public-browser-report.json`。
 
 ## 未纳入本轮的真实限制
 
 - 最近记录仍是浏览器本地数据，不是账号云同步。
 - 省份菜单第一次打开需按需读取搜索索引；从未加载过索引的首次离线会显示失败状态。
 - 本轮不重新核验 222 城的全部动态票价、开放时间或外链；这些仍按来源和复核日期持续维护。
-- 本地验收不能替代本轮提交后的 GitHub Pages 部署与公开 URL 复核；在远端工作流和线上浏览器检查完成前，公开发布状态应标记为未验证。
+- GitHub Actions 当前提示部分官方 action 仍以 Node 20 为目标并由 runner 强制改用 Node 24；本轮未影响构建，但需在上游或工作流版本更新时继续关注。

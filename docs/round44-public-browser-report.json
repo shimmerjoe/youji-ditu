@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-08-26",
+  "baseUrl": "https://shimmerjoe.github.io/youji-ditu",
+  "resourceVersion": "8f0dbe106e",
+  "workflowRun": "https://github.com/shimmerjoe/youji-ditu/actions/runs/32871028594",
+  "viewports": [
+    "1366x768",
+    "390x844"
+  ],
+  "pages": [
+    "index.html",
+    "cities/qingdao.html"
+  ],
+  "assertions": {
+    "firstDestinationGroup": "直辖市",
+    "municipalityCities": [
+      "北京",
+      "重庆",
+      "上海",
+      "天津"
+    ],
+    "shandongCityCount": 12,
+    "qingdaoCurrentState": true,
+    "recentSearchRestored": true,
+    "recentHistoryCleared": true,
+    "horizontalOverflow": 0,
+    "duplicateIds": 0,
+    "brokenImages": 0,
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "failedRequests": 0,
+    "httpErrors": 0
+  },
+  "result": "passed"
+}

@@ -37,7 +37,7 @@ class MaintenanceDocumentationTests(unittest.TestCase):
 
     def test_readme_documents_the_reviewed_photo_workflow(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("assets\\photo-editorial-decisions.json", readme)
+        self.assertIn("site/assets/photo-editorial-decisions.json", readme)
         self.assertIn("tools\\import_commons_city_photo.py", readme)
         self.assertIn("TRAVEL_FETCH_CITY_KEYS", readme)
         self.assertIn("授权合规", readme)

@@ -329,6 +329,31 @@ a.chip:hover { color: var(--accent-ink); border-color: color-mix(in srgb, var(--
 .hero-pause { position: absolute; right: 16px; bottom: 12px; z-index: 2; width: 34px; height: 34px; border: 1px solid rgba(255, 255, 255, .5); border-radius: 50%; background: rgba(0, 0, 0, .28); color: #fff; font-size: 12px; }
 .hero-pause:disabled { opacity: .5; }
 
+/* 继续上次 */
+.home-continue { margin-top: clamp(32px, 5vw, 56px); }
+.continue-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.continue-card { display: grid; gap: 8px; align-content: start; padding: 18px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--hairline); box-shadow: var(--shadow-sm); }
+.continue-plan { background: linear-gradient(135deg, var(--brand-soft), var(--surface)); border-color: color-mix(in srgb, var(--brand) 25%, var(--line)); }
+.continue-kicker { color: var(--brand-strong); font-size: 12.5px; font-weight: 800; letter-spacing: .04em; }
+.continue-card h3 { font-size: 18px; }
+.continue-card > p:not(.continue-kicker) { color: var(--muted); font-size: 14px; }
+.continue-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.continue-actions .btn { min-height: 40px; font-size: 14px; }
+.continue-list { display: grid; gap: 6px; list-style: none; }
+.continue-list a { display: flex; align-items: center; gap: 10px; padding: 6px; border-radius: var(--radius-sm); color: var(--ink); font-weight: 700; }
+.continue-list a:hover { background: var(--surface-2); }
+.continue-list img { width: 56px; height: 42px; border-radius: 8px; object-fit: cover; background: var(--surface-3); }
+
+/* 已选条件 / 排序 / 无结果 */
+.city-sort { display: grid; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.city-sort select { min-height: 46px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.finder-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.filter-chip { min-height: 34px; padding: 0 12px; border: 1px solid color-mix(in srgb, var(--brand) 40%, var(--line)); border-radius: var(--radius-pill); background: var(--brand-soft); color: var(--brand-strong); font-size: 13.5px; font-weight: 700; }
+.filter-chip:hover { background: var(--brand); color: #fff; }
+.filter-chip.clear-all, .filter-chip.ghost { border-color: var(--line); background: var(--surface); color: var(--ink-2); }
+.city-explorer-empty { display: grid; gap: 8px; justify-items: start; margin-top: 8px; padding: 22px; border: 1px dashed var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+.city-explorer-empty p { color: var(--muted); }
+
 /* 精选横滑 */
 .featured-strip { display: grid; grid-auto-flow: column; grid-auto-columns: clamp(170px, 19vw, 230px); gap: 14px; overflow-x: auto; padding: 4px 2px 14px; scroll-snap-type: x mandatory; scrollbar-width: thin; }
 .featured-card { position: relative; display: block; overflow: hidden; border-radius: var(--radius); aspect-ratio: 3 / 4; scroll-snap-align: start; background: var(--surface-3); box-shadow: var(--shadow-sm); }

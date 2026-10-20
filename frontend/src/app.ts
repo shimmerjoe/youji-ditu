@@ -46,6 +46,9 @@ function bootstrapRuntime(): void {
   if (document.querySelector("[data-plan-add]")) {
     void import("./plan-picker").then((module) => module.bootstrapPlanPicker());
   }
+  if (document.getElementById("homeContinue")) {
+    void import("./home-continue").then((module) => module.bootstrapHomeContinue());
+  }
   if (document.getElementById("planApp")) {
     void import("./planner-page").then((module) => module.bootstrapPlannerPage());
   }

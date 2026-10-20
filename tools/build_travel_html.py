@@ -2644,7 +2644,8 @@ def city_explorer_html(current: Page) -> str:
             f'data-season="{html.escape(profile["seasonTags"])}" data-days="{html.escape(profile["daysClass"])}" '
             f'data-theme="{html.escape(profile["themeTags"])}" data-transport="{html.escape(profile["transportTags"])}" '
             f'data-review-status="{review_status}" data-review-date="{html.escape(review_date)}" '
-            f'data-search="{html.escape(search_text)}" data-key="{html.escape(page.key)}" data-index="{card_index}"'
+            f'data-search="{html.escape(search_text)}" data-key="{html.escape(page.key)}" data-index="{card_index}" '
+            f'data-city="{html.escape(profile["city"])}"'
         )
         has_photo = photo_is_publishable(photo_meta, page.key)
         if has_photo:
@@ -2673,10 +2674,19 @@ def city_explorer_html(current: Page) -> str:
         '<div class="city-explorer-row">'
         '<label class="city-explorer-search"><span>筛选城市</span>'
         '<input id="cityExplorerSearch" type="search" placeholder="例如：雪山、夜市、博物馆、春花、避暑"></label>'
+        '<label class="city-sort"><span>排序</span><select id="citySort">'
+        '<option value="">推荐顺序</option><option value="photo">有实景照片优先</option>'
+        '<option value="reviewed">已标注核验日期优先</option><option value="name">按城市名</option></select></label>'
         '<button id="randomCity" type="button" class="random-city">🎲 随机一座</button>'
         '</div>'
+        '<div class="finder-chips" id="finderChips" aria-label="已选条件" hidden></div>'
         '</div>'
         f'<div class="city-grid rich-grid" id="cityExplorer">{"".join(cards)}</div>'
+        '<div class="city-explorer-empty" id="cityExplorerEmpty" hidden>'
+        '<strong>没有完全符合的城市</strong>'
+        '<p>可以先去掉一个条件，或换个关键词：</p>'
+        '<div class="chip-row" id="cityExplorerSuggest"></div>'
+        '</div>'
         '<div class="city-explorer-footer">'
         '<p id="cityExplorerSummary" aria-live="polite"></p>'
         '<button id="cityLoadMore" class="city-load-more" type="button">显示更多城市</button>'
@@ -4495,6 +4505,17 @@ def home_hero_html(page: Page) -> str:
     )
 
 
+def home_continue_html() -> str:
+    """“继续上次”占位：由 home-continue.ts 读取本机行程、浏览和收藏后填充，无数据时保持隐藏。"""
+    return (
+        '<section class="home-continue" id="homeContinue" aria-labelledby="homeContinueTitle" hidden>'
+        '<div class="home-section-head"><p class="eyebrow">Pick up where you left off</p>'
+        '<h2 id="homeContinueTitle">继续上次的旅行准备</h2></div>'
+        '<div class="continue-grid" id="homeContinueGrid"></div>'
+        '</section>'
+    )
+
+
 def home_overview_teaser_html(page: Page) -> str:
     base = page.output.parent
     overview = rel_to(OVERVIEW_PAGE.output, base)
@@ -4524,6 +4545,7 @@ def home_overview_teaser_html(page: Page) -> str:
 def home_page_html(page: Page) -> str:
     main = "\n".join([
         home_hero_html(page),
+        home_continue_html(),
         home_featured_html(page),
         home_themes_html(),
         home_finder_html(page),

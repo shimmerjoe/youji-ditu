@@ -23,6 +23,15 @@
   const travelFinderSummary = document.getElementById("travelFinderSummary");
   const cityExplorerSummary = document.getElementById("cityExplorerSummary");
   const cityLoadMore = document.getElementById("cityLoadMore");
+  const citySort = document.getElementById("citySort");
+  const finderChips = document.getElementById("finderChips");
+  const cityExplorerEmpty = document.getElementById("cityExplorerEmpty");
+  const cityExplorerSuggest = document.getElementById("cityExplorerSuggest");
+  const FILTER_LABELS = {
+    days: { "1": "1 天内", "2-3": "2-3 天", "4+": "4 天以上" },
+    season: { "春": "春季", "夏": "夏季", "秋": "秋季", "冬": "冬季" },
+    review: { reviewed: "已标注核验日期", pending: "资料待复核" },
+  };
   const CITY_PAGE_SIZE = window.matchMedia("(max-width: 640px)").matches ? 12
     : window.matchMedia("(max-width: 1100px)").matches ? 24
     : 36;
@@ -44,7 +53,7 @@
     const days = travelDays ? travelDays.value : "";
      const theme = travelTheme ? travelTheme.value : "";
      const transport = travelTransport ? travelTransport.value : "";
-     const matches = cityExplorerCards.filter((card) => {
+     const matches = sortedCityCards().filter((card) => {
        const provinceHit = activeProvince === "全部" || card.dataset.province === activeProvince;
        const reviewHit = activeReview === "all" || card.dataset.reviewStatus === activeReview;
        const textHit = !q || normalize(card.dataset.search).includes(q);
@@ -57,6 +66,7 @@
     });
     cityExplorerCards.forEach((card) => card.classList.add("is-hidden"));
     matches.slice(0, cityVisibleLimit).forEach((card) => card.classList.remove("is-hidden"));
+    renderFinderChips(matches.length);
     const shown = Math.min(matches.length, cityVisibleLimit);
     const summary = matches.length
       ? `已匹配 ${matches.length} 座城市，当前显示 ${shown} 座`
@@ -69,6 +79,83 @@
     }
    }
 
+  // 排序只改 CSS order，不移动 DOM，筛选与“显示更多”沿用同一顺序。
+  function sortedCityCards() {
+    const mode = citySort ? citySort.value : "";
+    const ordered = cityExplorerCards.slice().sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index));
+    const name = (card) => card.dataset.city || ((card.querySelector(".city-card-title") || {}).textContent || "");
+    if (mode === "name") ordered.sort((a, b) => name(a).localeCompare(name(b), "zh-CN"));
+    else if (mode === "photo") ordered.sort((a, b) => Number(b.classList.contains("rich")) - Number(a.classList.contains("rich")));
+    else if (mode === "reviewed") ordered.sort((a, b) => Number(b.dataset.reviewStatus === "reviewed") - Number(a.dataset.reviewStatus === "reviewed"));
+    ordered.forEach((card, index) => { card.style.order = String(index); });
+    return ordered;
+  }
+
+  function activeFilters() {
+    const list = [];
+    const q = travelQuery ? travelQuery.value.trim() : (cityExplorerSearch ? cityExplorerSearch.value.trim() : "");
+    if (q) list.push({ key: "q", label: "关键词：" + q });
+    if (travelRegion && travelRegion.value) list.push({ key: "region", label: "地区：" + travelRegion.value });
+    if (activeProvince !== "全部") list.push({ key: "province", label: "省份：" + activeProvince });
+    if (travelSeason && travelSeason.value) list.push({ key: "season", label: FILTER_LABELS.season[travelSeason.value] || travelSeason.value });
+    if (travelDays && travelDays.value) list.push({ key: "days", label: FILTER_LABELS.days[travelDays.value] || travelDays.value });
+    if (travelTheme && travelTheme.value) list.push({ key: "theme", label: "主题：" + travelTheme.value });
+    if (travelTransport && travelTransport.value) list.push({ key: "transport", label: "交通：" + travelTransport.value });
+    if (activeReview !== "all") list.push({ key: "review", label: FILTER_LABELS.review[activeReview] || activeReview });
+    return list;
+  }
+
+  function clearFilter(key) {
+    if (key === "q") { if (travelQuery) travelQuery.value = ""; if (cityExplorerSearch) cityExplorerSearch.value = ""; }
+    if (key === "region" && travelRegion) travelRegion.value = "";
+    if (key === "season" && travelSeason) travelSeason.value = "";
+    if (key === "days" && travelDays) travelDays.value = "";
+    if (key === "theme" && travelTheme) travelTheme.value = "";
+    if (key === "transport" && travelTransport) travelTransport.value = "";
+    if (key === "province") activeProvince = "全部";
+    if (key === "review") activeReview = "all";
+    provincePills.forEach((pill) => pill.classList.toggle("active", (pill.dataset.province || "") === activeProvince));
+    reviewPills.forEach((pill) => pill.classList.toggle("active", (pill.dataset.review || "") === activeReview));
+    filterCityExplorer(true);
+    writeFinderState();
+  }
+
+  function filterChip(text, onClick, extraClass) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "filter-chip" + (extraClass ? " " + extraClass : "");
+    button.textContent = text;
+    button.addEventListener("click", onClick);
+    return button;
+  }
+
+  function renderFinderChips(matchCount) {
+    const filters = activeFilters();
+    if (finderChips) {
+      finderChips.replaceChildren();
+      finderChips.hidden = filters.length === 0;
+      filters.forEach((filter) => {
+        const chip = filterChip(filter.label + " ×", () => clearFilter(filter.key));
+        chip.setAttribute("aria-label", "移除条件：" + filter.label);
+        finderChips.appendChild(chip);
+      });
+      if (filters.length > 1) finderChips.appendChild(filterChip("清空全部", () => { filters.forEach((filter) => clearFilter(filter.key)); }, "clear-all"));
+    }
+    if (cityExplorerEmpty) {
+      cityExplorerEmpty.hidden = matchCount > 0;
+      if (matchCount === 0 && cityExplorerSuggest) {
+        cityExplorerSuggest.replaceChildren();
+        filters.forEach((filter) => cityExplorerSuggest.appendChild(filterChip("去掉「" + filter.label + "」", () => clearFilter(filter.key))));
+        ["古城", "海边", "博物馆", "美食", "避暑"].forEach((word) => cityExplorerSuggest.appendChild(filterChip("试试：" + word, () => {
+          if (travelQuery) travelQuery.value = word;
+          if (cityExplorerSearch) cityExplorerSearch.value = word;
+          filterCityExplorer(true);
+          writeFinderState();
+        }, "ghost")));
+      }
+    }
+  }
+
    function readFinderState() {
      const params = new URLSearchParams(window.location.search);
     if (travelQuery) travelQuery.value = params.get("q") || "";
@@ -78,6 +165,7 @@
     if (travelTheme) travelTheme.value = params.get("theme") || "";
      if (travelTransport) travelTransport.value = params.get("transport") || "";
      activeProvince = params.get("province") || "全部";
+     if (citySort) citySort.value = ["photo", "reviewed", "name"].includes(params.get("sort")) ? params.get("sort") : "";
      const review = params.get("review") || "all";
      activeReview = ["all", "reviewed", "pending"].includes(review) ? review : "all";
      if (cityExplorerSearch) cityExplorerSearch.value = travelQuery ? travelQuery.value : (params.get("q") || "");
@@ -100,6 +188,7 @@
        transport: travelTransport ? travelTransport.value : "",
        province: activeProvince === "全部" ? "" : activeProvince,
        review: activeReview === "all" ? "" : activeReview,
+       sort: citySort ? citySort.value : "",
      };
     Object.keys(values).forEach((key) => {
       if (values[key]) params.set(key, values[key]);
@@ -218,6 +307,10 @@
       }, 0);
     });
   }
+  if (citySort) citySort.addEventListener("change", () => {
+    filterCityExplorer(true);
+    writeFinderState();
+  });
   if (cityLoadMore) cityLoadMore.addEventListener("click", () => {
     cityVisibleLimit += CITY_PAGE_SIZE;
     filterCityExplorer(false);

@@ -338,6 +338,22 @@ class ProductContractTests(unittest.TestCase):
             self.assertIn(f'id="{anchor}"', self.qingdao)
         self.assertNotIn("data-plan-add", self.home)
 
+    def test_discovery_shows_active_filters_sorting_and_no_result_help(self):
+        destinations = (ROOT / "site" / "destinations.html").read_text(encoding="utf-8")
+        for marker in ('id="citySort"', 'id="finderChips"', 'id="cityExplorerEmpty"', 'id="cityExplorerSuggest"'):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, destinations)
+        self.assertRegex(destinations, r'data-city="[^"]+"')
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
+        for marker in ("function renderFinderChips", "function clearFilter", 'params.get("sort")', "style.order"):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, script)
+
+    def test_home_offers_to_continue_saved_plans_without_showing_empty_shells(self):
+        self.assertIn('id="homeContinue" aria-labelledby="homeContinueTitle" hidden', self.home)
+        self.assertIn('class="hero-search"', self.home)
+        self.assertIn('action="destinations.html"', self.home)
+
     def test_trip_planner_page_and_storage_are_wired_into_backup_and_reset(self):
         planner = (ROOT / "site" / "plan.html").read_text(encoding="utf-8")
         self.assertIn('id="planApp"', planner)

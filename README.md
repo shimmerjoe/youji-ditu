@@ -67,6 +67,7 @@ youji-ditu/
 │  └─ manifest.webmanifest、sw.js、sitemap.xml、robots.txt
 ├─ scripts/windows/        Windows 一键预览、重建、补图、推送脚本
 ├─ docs/                   指南、体检报告、截图与历史记录
+├─ backup/                 本地迁移快照的清单与比对说明（压缩包在 Release）
 ├─ app-capacitor/          可选的 Android 封装模板
 └─ .github/workflows/      GitHub Pages 构建与部署
 ```
@@ -130,7 +131,8 @@ python -X utf8 tools\import_commons_city_photo.py --city beijing --source "https
 1. **可见性**：免费账号的私有仓库不能使用 Pages。需要把仓库改为 Public（Settings → General → Danger Zone → Change visibility），或者升级到 GitHub Pro 等支持私有 Pages 的方案。
 2. **开启 Pages**：在 Settings → Pages → Build and deployment 中，把 Source 选为 **GitHub Actions**。
 3. **触发部署**：把本分支合并到 `main`，或者在 Actions 页手动运行 “Build, verify, and deploy GitHub Pages”。
-4. **验收**：等部署成功后打开 <https://shimmerjoe.github.io/youji-ditu/>，用桌面和手机各检查一遍首页、城市页、搜索和行程面板。公开地址核验之前，发布状态只能记为“未验证”。
+4. **About 信息**：在仓库首页右侧 About 的齿轮里，把 Website 填为 `https://shimmerjoe.github.io/youji-ditu/`，并勾选“Use your GitHub Pages website”；Topics 可填 `travel`、`travel-guide`、`china`、`pwa`、`itinerary-planner`、`static-site`。
+5. **验收**：等部署成功后打开 <https://shimmerjoe.github.io/youji-ditu/>，用桌面和手机各检查一遍首页、城市页、搜索和行程面板。公开地址核验之前，发布状态只能记为“未验证”。
 
 如果公开地址发生变化，构建前用环境变量 `TRAVEL_PUBLIC_URL` 覆盖默认地址，不要把本地路径写进 canonical 或分享元数据。
 

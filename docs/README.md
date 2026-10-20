@@ -16,7 +16,7 @@
 ## 历史记录
 
 - [2026-10-20 界面重构与目录整理](history/ui-redesign-2026-10-20.md)
-- [2026-10-20 云端迁移记录](history/cloud-migration-2026-10-20.md)
+- [2026-10-20 云端迁移记录](history/cloud-migration-2026-10-20.md)；迁移快照清单与比对见 [backup/](../backup/README.md)
 - [迭代日志](history/iteration-log.md)、[交接说明](history/handoff.md)、`history/audits/` 验收审计、`history/superpowers/` 早期计划
 - [原项目聊天整理](history/聊天记录整理.md)：历史需求材料，不代表当前功能已全部验收。
 - `archive/image-candidates/`：早期图片候选，未进入公开站点。

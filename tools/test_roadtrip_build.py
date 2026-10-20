@@ -115,8 +115,16 @@ class RoadtripBuildContractTests(unittest.TestCase):
         self.assertIn('class="rt-map-frame is-idle"', self.page)
         self.assertRegex(self.page, r'class="rt-result-actions"[^>]*hidden')
         source = (ROOT / "tools" / "roadtrip-app.js").read_text(encoding="utf-8")
-        self.assertIn("mapFrame.classList.remove('is-idle')", source)
+        # 只有拿到真实路网时地图区才展开；离线粗估没有可画的路线。
+        self.assertIn("mapFrame.classList.toggle('is-idle', plan.mapMode !== 'amap')", source)
         self.assertIn("resultActions.hidden = false", source)
+
+
+    def test_offline_mileage_is_labelled_as_rough_estimate(self):
+        source = (ROOT / "tools" / "roadtrip-app.js").read_text(encoding="utf-8")
+        self.assertIn("里程是粗估，不是道路里程", source)
+        self.assertIn("data-rt-fill-km", source)
+        self.assertIn("不是道路里程", self.page)
 
 
 if __name__ == "__main__":

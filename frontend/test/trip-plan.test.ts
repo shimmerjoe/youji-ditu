@@ -101,6 +101,10 @@ test("day load flags overfull and cross-city days", () => {
   addItem(cross, 0, { name: "A", cityKey: "a", hours: 3 });
   addItem(cross, 0, { name: "B", cityKey: "b", hours: 3 });
   assert.equal(dayLoad(cross.days[0]).level, "full");
+  const park = createPlan("乐园", 1);
+  addItem(park, 0, { name: "主题乐园", cityKey: "x", hours: 10 });
+  assert.equal(dayLoad(park.days[0]).level, "full");
+  assert.match(dayLoad(park.days[0]).label, /整天项目/);
 });
 
 

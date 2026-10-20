@@ -143,25 +143,33 @@
 
   function renderPlan(plan) {
     currentPlan = plan;
-    if (mapFrame) mapFrame.classList.remove('is-idle');
+    // 离线模式没有真实路网可画，地图区保持紧凑，让路书结果尽早出现在屏幕上。
+    if (mapFrame) mapFrame.classList.toggle('is-idle', plan.mapMode !== 'amap');
     if (resultActions) resultActions.hidden = false;
     refs.save.disabled = refs.export.disabled = refs.print.disabled = false;
     if (refs.share) refs.share.disabled = false;
     const destination = plan.destination || {};
+    const rough = plan.distanceBasis === 'heuristic';
+    const kmLabel = rough ? '总里程（粗估）' : '总里程';
+    const hoursLabel = rough ? '预计驾驶（粗估）' : '预计驾驶';
+    const estimateWarning = rough
+      ? `<div class="rt-estimate-warning" role="note"><strong>里程是粗估，不是道路里程</strong><p>没有地图服务时，系统只按同城、同省或跨省和出行天数推算单程公里数，能源和道路收费也随之估算。用导航应用查到单程公里数后填进来，结果会准确得多。</p><button type="button" class="rt-action" data-rt-fill-km>填写实际里程</button></div>`
+      : '';
     const dayHtml = plan.days.map((day) => `
       <article class="rt-day">
         <span class="rt-day-index">D${day.day}</span>
         <div><h4>${esc(day.title)}</h4><ul>${(day.activities || []).map((item) => `<li>${esc(item)}</li>`).join('')}</ul></div>
-        <div class="rt-day-meta"><strong>${day.distanceKm} 公里</strong><span>${esc(formatHours(day.driveMinutes))}</span></div>
+        <div class="rt-day-meta"><strong>${rough ? '约 ' : ''}${day.distanceKm} 公里</strong><span>${esc(formatHours(day.driveMinutes))}</span></div>
       </article>`).join('');
     const riskHtml = plan.risks.map((risk) => `<div class="rt-risk"><strong>${esc(risk.title)}</strong><p>${esc(risk.detail)}</p></div>`).join('');
     const sources = (destination.sources || []).slice(0, 6);
     const sourceLinks = sources.map((url) => `<a href="${esc(url)}" target="_blank" rel="noreferrer">${esc(domain(url))}</a>`).join('');
     refs.results.innerHTML = `
       <div class="rt-result-head"><p class="eyebrow">Roadbook</p><h2>${esc(plan.title)}</h2><p>${esc(plan.sourceNote)}</p></div>
+      ${estimateWarning}
       <div class="rt-summary-grid">
-        <div class="rt-metric"><span>总里程</span><strong>${plan.summary.totalKm} 公里</strong></div>
-        <div class="rt-metric"><span>预计驾驶</span><strong>${plan.summary.driveHours} 小时</strong></div>
+        <div class="rt-metric${rough ? ' is-rough' : ''}"><span>${kmLabel}</span><strong>${rough ? '约 ' : ''}${plan.summary.totalKm} 公里</strong></div>
+        <div class="rt-metric${rough ? ' is-rough' : ''}"><span>${hoursLabel}</span><strong>${rough ? '约 ' : ''}${plan.summary.driveHours} 小时</strong></div>
         <div class="rt-metric"><span>行程天数</span><strong>${plan.summary.days} 天</strong></div>
         <div class="rt-metric"><span>参考预算</span><strong>${currency(plan.budget.low)}–${currency(plan.budget.high).replace('¥', '')}</strong></div>
       </div>
@@ -282,7 +290,7 @@
         setMapStatus('已使用高德地图路网；出发前仍需复核实时管制和天气。');
       } else {
         plan = core.buildPlan(input, null, cities);
-        setMapStatus('离线估算模式：填写高德 JS Key 后可显示真实地图、里程、时间和道路收费。');
+        setMapStatus(plan.distanceBasis === 'user' ? '离线模式：地图服务未配置，里程按你填写的公里数计算。' : '离线模式：地图服务未配置，里程为粗估，请见下方说明。');
       }
     } catch (error) {
       plan = core.buildPlan(input, null, cities);
@@ -394,6 +402,14 @@
   if (refs.share) refs.share.addEventListener('click', sharePlan);
   refs.export.addEventListener('click', exportPlan);
   refs.print.addEventListener('click', () => window.print());
+  refs.results.addEventListener('click', (event) => {
+    if (!event.target.closest('[data-rt-fill-km]')) return;
+    setRoadtripStep('3');
+    const details = refs.estimatedKm.closest('details');
+    if (details) details.open = true;
+    refs.estimatedKm.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    refs.estimatedKm.focus({ preventScroll: true });
+  });
   updateVehicleDefaults(false);
   restoreSavedPlan();
   if (config.amapJsKey) setMapStatus('地图服务已配置，生成路书时将计算真实路网。');

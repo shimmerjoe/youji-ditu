@@ -19,6 +19,12 @@ class NavigationRegressionTests(unittest.TestCase):
         self.assertIsNotNone(rule, "missing shared container rule")
         self.assertIn("margin-inline: auto", rule.group(1))
 
+    def test_phone_landscape_keeps_only_the_header_pinned(self):
+        block = re.search(r"@media \(max-width: 920px\) and \(max-height: 500px\) and \(orientation: landscape\) \{([\s\S]*?)\n\}", self.css)
+        self.assertIsNotNone(block, "missing phone landscape rule")
+        self.assertIn(".mobile-tabbar { display: none; }", block.group(1))
+        self.assertIn(".section-tabs { position: relative; top: auto; }", block.group(1))
+
     def test_province_menu_is_a_toggled_panel_instead_of_permanent_rows(self):
         self.assertRegex(self.css, r"\.top-nav\s*\{\s*display:\s*none;")
         self.assertRegex(self.css, r"\.site-header\.nav-open \.top-nav\s*\{\s*display:\s*block;")

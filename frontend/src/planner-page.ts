@@ -64,13 +64,45 @@ export function bootstrapPlannerPage(): void {
   const params = new URLSearchParams(location.search);
   if (params.get("plan") && plans.some((plan) => plan.id === params.get("plan"))) activeId = params.get("plan") as string;
   let view: View = params.get("view") === "today" ? "today" : "days";
-  let notice = loaded.repaired ? `检测到部分行程数据损坏，已保留可用内容；原始数据另存为 ${PLANS_BACKUP_KEY}。` : "";
+  let notice = loaded.unreadable
+    ? `本机保存的行程数据无法读取（可能被浏览器扩展或手动修改过）。原始内容已另存为 ${PLANS_BACKUP_KEY}，可以用之前导出的 JSON 备份恢复。`
+    : loaded.repaired ? `检测到部分行程数据损坏，已保留可读取的行程；原始数据另存为 ${PLANS_BACKUP_KEY}。` : "";
   let status = "";
   let undoSnapshot: string | null = null;
   let undoLabel = "";
   let includeNotesInShare = false;
   let shareUrl = "";
   let sharedPreview: TripPlan | null = null;
+  let offlineNote = "";
+  const cachedGuides = new Set<string>();
+
+  /** 旅途中常常没信号：把行程里涉及的城市攻略预先取一遍，交给 Service Worker 缓存。 */
+  const cacheGuidesFor = (plan: TripPlan): void => {
+    const worker = navigator.serviceWorker;
+    if (!worker || !worker.controller || !navigator.onLine) return;
+    const pages = new Set<string>();
+    plan.days.forEach((day) => day.items.forEach((item) => {
+      if (!item.href) return;
+      const url = new URL(siteHref(item.href), location.href);
+      url.hash = "";
+      if (url.origin === location.origin) pages.add(url.href);
+    }));
+    const pending = [...pages].filter((page) => !cachedGuides.has(page));
+    if (!pending.length) return;
+    pending.forEach((page) => cachedGuides.add(page));
+    Promise.allSettled(pending.map((page) => fetch(page, { credentials: "same-origin" }).then((response) => {
+      if (!response.ok) throw new Error(String(response.status));
+    }))).then((results) => {
+      const failed = results.filter((result) => result.status === "rejected").length;
+      offlineNote = failed
+        ? `有 ${failed} 篇城市攻略没能存到本机，联网后再打开本页会重试。`
+        : `行程涉及的 ${pages.size} 篇城市攻略已存到本机，没有网络时也能打开（图片可能不显示）。`;
+      results.forEach((result, index) => { if (result.status === "rejected") cachedGuides.delete(pending[index]); });
+      const note = root.querySelector(".plan-offline-note");
+      if (note) note.textContent = offlineNote;
+      else render();
+    });
+  };
 
   const shareMatch = location.hash.match(/share=([A-Za-z0-9_-]+)/);
   if (shareMatch) sharedPreview = decodeShare(shareMatch[1]);
@@ -136,7 +168,10 @@ export function bootstrapPlannerPage(): void {
       h("div", { class: "plan-empty-actions" },
         h("button", { type: "button", class: "btn btn-primary", "data-action": "new-plan" }, "新建行程"),
         h("a", { class: "btn btn-ghost", href: siteHref("destinations.html") }, "先去选城市"),
+        // 换手机或误删后，最需要从导出的 JSON 恢复的正是这个空状态。
+        h("label", { class: "btn btn-ghost file-btn" }, "导入 JSON 备份", h("input", { type: "file", accept: "application/json,.json", hidden: true, "data-action": "import-json" })),
       ),
+      status ? h("p", { class: "plan-status", role: "status", "aria-live": "polite", text: status }) : null,
       shortlist.length ? renderShortlist(shortlist) : null,
     );
   }
@@ -264,6 +299,7 @@ export function bootstrapPlannerPage(): void {
     return h("section", { class: "plan-card plan-share", "aria-labelledby": "planShareTitle" },
       h("h3", { id: "planShareTitle", text: "保存、分享与导出" }),
       h("p", { class: "plan-hint", text: "行程自动保存在这台设备的浏览器里，清除浏览器数据会丢失；换设备前请导出 JSON。" }),
+      offlineNote ? h("p", { class: "plan-hint plan-offline-note", text: offlineNote }) : null,
       h("div", { class: "plan-share-actions" },
         h("button", { type: "button", class: "btn btn-ghost", "data-action": "export-md" }, "导出 Markdown"),
         h("button", { type: "button", class: "btn btn-ghost", "data-action": "export-json" }, "导出 JSON"),
@@ -284,7 +320,10 @@ export function bootstrapPlannerPage(): void {
   function renderChecks(plan: TripPlan): HTMLElement | null {
     const bookings = plan.days.flatMap((day, index) => day.items.filter((item) => item.booking).map((item) => ({ item, index })));
     const noCost = plan.days.flatMap((day) => day.items).filter((item) => item.kind !== "custom" && !item.cost).length;
-    const full = plan.days.map((day, index) => ({ load: dayLoad(day), index })).filter(({ load }) => load.level === "full");
+    const loads = plan.days.map((day, index) => ({ load: dayLoad(day), index })).filter(({ load }) => load.level === "full");
+    // 单个整天项目（乐园、徒步）没有“删掉一个点”的余地，单独提醒。
+    const allDay = loads.filter(({ load }) => load.stops === 1);
+    const full = loads.filter(({ load }) => load.stops > 1);
     return h("section", { class: "plan-card plan-checks", "aria-labelledby": "planChecksTitle" },
       h("h3", { id: "planChecksTitle", text: "出发前核验" }),
       h("ul", {},
@@ -292,6 +331,7 @@ export function bootstrapPlannerPage(): void {
           ? h("li", {}, `需要预约：${bookings.map(({ item, index }) => `第${index + 1}天 ${item.name}`).join("、")}。在官方渠道确认可约日期和时段。`)
           : h("li", { text: "还没有标记“需预约”的地点。博物馆、热门景区、索道和演出通常需要提前预约。" }),
         full.length ? h("li", { text: `第 ${full.map(({ index }) => index + 1).join("、")} 天偏满：考虑删掉一个点或挪到别的天，并留出吃饭和路上的时间。` }) : null,
+        allDay.length ? h("li", { text: `第 ${allDay.map(({ index }) => index + 1).join("、")} 天是整天项目：前一晚住近一点，查好入园/开放时间和返程末班车。` }) : null,
         noCost ? h("li", { text: `${noCost} 个地点的费用待核验，预算可能偏低。` }) : null,
         h("li", { text: "准备雨天备选：每天至少留一个室内点（博物馆、商场、老街）。" }),
         h("li", { text: "出发前一天再看一次天气预警、闭馆日和末班车。" }),
@@ -384,6 +424,7 @@ export function bootstrapPlannerPage(): void {
     root.replaceChildren(...nodes.filter((node): node is Node => node instanceof Node));
     restoreFocus(saved);
     writeUrl();
+    cacheGuidesFor(plan);
   }
 
   /* ---------- 交互 ---------- */

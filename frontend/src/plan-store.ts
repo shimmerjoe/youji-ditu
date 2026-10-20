@@ -13,6 +13,8 @@ export interface PlanLoadResult {
   plans: TripPlan[];
   /** 存储中的原始数据无法解析或部分条目被丢弃 */
   repaired: boolean;
+  /** 整份数据都无法解析，一份行程也没能留下 */
+  unreadable?: boolean;
 }
 
 function storage(): Storage | null {
@@ -40,11 +42,11 @@ export function loadPlans(): PlanLoadResult {
   }
   const plans = normalizePlans(parsed);
   const repaired = !Array.isArray(parsed) || plans.length !== parsed.length;
-  if (repaired && store && !store.getItem(PLANS_BACKUP_KEY)) {
+  if (repaired && store && store.getItem(PLANS_BACKUP_KEY) !== raw) {
     // 保留一份原始数据，避免修复逻辑误伤时无法找回。
     try { store.setItem(PLANS_BACKUP_KEY, raw); } catch { /* 空间不足时放弃备份，不阻塞使用 */ }
   }
-  return { plans, repaired };
+  return { plans, repaired, unreadable: repaired && plans.length === 0 };
 }
 
 export function savePlans(plans: TripPlan[]): boolean {

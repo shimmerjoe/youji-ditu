@@ -59,12 +59,17 @@ class PwaCacheTests(unittest.TestCase):
             "./destinations.html",
             "./themes.html",
             "./city-guides.html",
-            "./roadtrip.html",
             "./tools.html",
             "./user.html",
         ):
             with self.subTest(resource=resource):
                 self.assertNotIn(resource, self.sw)
+
+    def test_on_trip_tools_work_offline_without_a_prior_visit(self):
+        # 行程计划和自驾路书是旅途中（常常没信号）才打开的页面，必须随安装预缓存。
+        for resource in ("./plan.html", "./roadtrip.html", "./assets/roadtrip-app.js", "./assets/travel-chunk-"):
+            with self.subTest(resource=resource):
+                self.assertIn(resource, self.sw)
 
 
 if __name__ == "__main__":

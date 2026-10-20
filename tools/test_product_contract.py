@@ -367,6 +367,12 @@ class ProductContractTests(unittest.TestCase):
         self.assertIn('"plan.html"', stage)
         self.assertIn("travel-chunk-*.js", stage)
 
+    def test_planner_can_restore_a_backup_from_the_empty_state_and_cache_guides(self):
+        source = (ROOT / "frontend" / "src" / "planner-page.ts").read_text(encoding="utf-8")
+        empty = source[source.index("function renderEmpty"):source.index("function renderShortlist")]
+        self.assertIn('"data-action": "import-json"', empty)
+        self.assertIn("cacheGuidesFor(plan)", source)
+
     def test_user_center_exposes_local_data_backup_and_restore(self):
         for control_id in ("dataExport", "dataImport", "dataTransferStatus"):
             with self.subTest(control_id=control_id):

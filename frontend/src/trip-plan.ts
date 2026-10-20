@@ -326,6 +326,8 @@ export function dayLoad(day: PlanDay): DayLoad {
   if (stops === 0) return { hours: 0, stops, level: "empty", label: "还没有安排" };
   // 跨城当天额外计入通勤；游玩达到 8 小时或超过 6 个点（还没算吃饭和路上）视为偏满。
   const effective = hours + Math.max(0, cities.size - 1) * 2;
+  // 主题乐园、徒步这类单个整天项目，再“减一个点”就没东西了，提示改为留出往返与排队时间。
+  if (stops === 1 && hours >= 8) return { hours, stops, level: "full", label: "整天项目，别再加点，留出往返、排队和休息时间" };
   if (effective >= 8 || stops > 6) return { hours, stops, level: "full", label: "偏满，考虑减一个点或拆到别的天" };
   if (effective <= 4) return { hours, stops, level: "light", label: "轻松，适合留白、休息或加一个顺路点" };
   return { hours, stops, level: "balanced", label: "节奏适中" };

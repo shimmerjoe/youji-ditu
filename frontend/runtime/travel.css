@@ -1273,6 +1273,15 @@ html.lightbox-active { overflow: hidden; }
 [data-motion="off"] .read-progress { display: none; }
 
 /* ---------- 13. 打印 ---------- */
+/* 手机横屏只有 ~390px 高：页头、章节标签和底部导航同时吸附会占掉近一半屏幕。
+   横屏时只保留页头吸顶，章节标签随页面滚动，底部导航收起（页头菜单仍可进入各栏目）。 */
+@media (max-width: 920px) and (max-height: 500px) and (orientation: landscape) {
+  :root { --tabbar-h: 0px; --tabs-h: 0px; }
+  .mobile-tabbar { display: none; }
+  .section-tabs { position: relative; top: auto; }
+  .section-tabs-track, .section-tabs-track.toc { height: 48px; }
+}
+
 @media print {
   .site-header, .section-tabs, .guide-aside, .mobile-tabbar, .trip-dock-toggle, .trip-dock, .to-top, .read-progress, .co-actions, .poi-actions, .site-footer, .hero-carousel .hero-dots, .hero-pause { display: none !important; }
   body { background: #fff; padding: 0; }

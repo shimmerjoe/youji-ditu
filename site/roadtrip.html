@@ -18,13 +18,13 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/icon-180.png">
-  <link rel="stylesheet" href="assets/travel.css?v=afb0b12206">
-  <link rel="stylesheet" href="assets/travel-app.css?v=afb0b12206">
-  <link rel="stylesheet" href="assets/roadtrip.css?v=afb0b12206">
+  <link rel="stylesheet" href="assets/travel.css?v=15b89bcb2a">
+  <link rel="stylesheet" href="assets/travel-app.css?v=15b89bcb2a">
+  <link rel="stylesheet" href="assets/roadtrip.css?v=15b89bcb2a">
   <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
   <script>try{var s=JSON.parse(localStorage.getItem("tay_settings")||"{}"),r=document.documentElement;if(s.vibrancy)r.setAttribute("data-vibrancy",s.vibrancy);if(s.font)r.setAttribute("data-font",s.font);if(s.motion)r.setAttribute("data-motion",s.motion);var t=s.theme||"auto";if(t==="auto")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";r.setAttribute("data-theme",t);}catch(e){}</script>
 </head>
-<body id="top" data-page="roadtrip" data-site-root="." data-search-index="assets/search-index.js?v=afb0b12206" style="--accent:#176b5d">
+<body id="top" data-page="roadtrip" data-site-root="." data-search-index="assets/search-index.js?v=15b89bcb2a" style="--accent:#176b5d">
   <a class="skip-link" href="#mainContent">跳到主要内容</a>
   <header class="site-header">
     <div class="header-bar">
@@ -107,9 +107,9 @@
                 <label class="rt-field"><span>每人门票参考</span><input id="rtTickets" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">填 0 时优先读取目的地攻略中的明确票价。</small></label>
               </div>
               <details class="rt-details">
-                <summary>离线估算参数</summary>
+                <summary>里程与收费（从导航应用查到后填入更准）</summary>
                 <div class="rt-field-grid" id="rtOfflineFields">
-                  <label class="rt-field"><span>预计单程公里数</span><input id="rtEstimatedKm" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">留 0 由系统估算。</small></label>
+                  <label class="rt-field"><span>预计单程公里数</span><input id="rtEstimatedKm" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">留 0 时系统按同城、同省或跨省和天数粗估，不是道路里程。</small></label>
                   <label class="rt-field"><span>预计道路收费</span><input id="rtEstimatedTolls" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">留 0 按里程估算。</small></label>
                 </div>
               </details>
@@ -169,11 +169,11 @@
     </footer>
   </aside>
   <button class="to-top" id="toTop" type="button" aria-label="返回顶部" title="返回顶部">↑</button>
-  <script src="assets/travel.js?v=afb0b12206"></script>
-  <script type="module" src="assets/travel-app.js?v=afb0b12206"></script>
+  <script src="assets/travel.js?v=15b89bcb2a"></script>
+  <script type="module" src="assets/travel-app.js?v=15b89bcb2a"></script>
   <script>window.TRAVEL_ROADTRIP_CONFIG = {"amapJsKey":"","amapSecurityCode":""};</script>
-  <script src="assets/roadtrip-data.js?v=afb0b12206"></script>
-  <script src="assets/roadtrip-core.js?v=afb0b12206"></script>
-  <script src="assets/roadtrip-app.js?v=afb0b12206"></script>
+  <script src="assets/roadtrip-data.js?v=15b89bcb2a"></script>
+  <script src="assets/roadtrip-core.js?v=15b89bcb2a"></script>
+  <script src="assets/roadtrip-app.js?v=15b89bcb2a"></script>
 </body>
 </html>

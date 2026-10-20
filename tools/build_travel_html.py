@@ -2494,8 +2494,34 @@ def city_season_summary(markdown: str) -> str:
     return "全年可查，按天气取舍"
 
 
+_CITY_BOILERPLATE: set[str] | None = None
+
+
+def city_boilerplate() -> set[str]:
+    global _CITY_BOILERPLATE
+    if _CITY_BOILERPLATE is None:
+        _CITY_BOILERPLATE = boilerplate_values([page for page in PAGES if page.key not in HUB_KEYS])
+    return _CITY_BOILERPLATE
+
+
+def without_boilerplate(markdown: str) -> str:
+    """去掉跨城模板句所在的行，只留下这座城市自己的内容。"""
+    templates = city_boilerplate()
+    kept = []
+    for line in markdown.splitlines():
+        match = re.match(r"^\s*-\s+(.+)$", line)
+        if match:
+            label, body = split_label(match.group(1))
+            if (body if label else match.group(1)).strip() in templates:
+                continue
+        kept.append(line)
+    return "\n".join(kept)
+
+
 def city_filter_metadata(markdown: str, foods: list[str]) -> dict[str, str]:
-    compact = re.sub(r"\s+", "", markdown)
+    # 主题和季节标签只看城市专属内容：模板句（如 201 城共用的“亲子：博物馆、低强度景区和夜市小吃”）
+    # 会让“亲子”筛选命中几乎所有城市，失去筛选意义。
+    compact = re.sub(r"\s+", "", without_boilerplate(markdown))
     season_rules = {
         "春": ("春", "花期", "踏青", "樱花", "油菜花"),
         "夏": ("夏", "避暑", "丰水期", "海滨", "草原"),
@@ -2511,7 +2537,6 @@ def city_filter_metadata(markdown: str, foods: list[str]) -> dict[str, str]:
         "美食": ("美食", "小吃", "夜市", "餐厅"),
         "避暑": ("避暑", "清凉", "夏季"),
         "冬季": ("冬季", "雪景", "温泉", "避寒", "冰雪"),
-        "周末短途": ("周末", "半天", "1天", "1 天", "2天", "2 天"),
     }
     theme_tags = [name for name, words in theme_rules.items() if any(word in compact for word in words)]
     if foods and "美食" not in theme_tags:
@@ -2529,6 +2554,9 @@ def city_filter_metadata(markdown: str, foods: list[str]) -> dict[str, str]:
     day_numbers += [int(value) for value in re.findall(r"[—-]\s*(\d+)\s*天", arrangement_text)]
     max_days = max(day_numbers, default=3)
     days_class = "1" if max_days <= 1 else "2-3" if max_days <= 3 else "4+"
+    # 周末短途按推荐天数判断；原来匹配“1天/2天”字样，几乎每座城市都命中。
+    if days_class != "4+" and "周末短途" not in theme_tags:
+        theme_tags.append("周末短途")
     return {
         "region": "",
         "seasonTags": " ".join(season_tags) or "全年",
@@ -4053,9 +4081,9 @@ def roadtrip_body() -> str:
                 <label class="rt-field"><span>每人门票参考</span><input id="rtTickets" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">填 0 时优先读取目的地攻略中的明确票价。</small></label>
               </div>
               <details class="rt-details">
-                <summary>离线估算参数</summary>
+                <summary>里程与收费（从导航应用查到后填入更准）</summary>
                 <div class="rt-field-grid" id="rtOfflineFields">
-                  <label class="rt-field"><span>预计单程公里数</span><input id="rtEstimatedKm" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">留 0 由系统估算。</small></label>
+                  <label class="rt-field"><span>预计单程公里数</span><input id="rtEstimatedKm" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">留 0 时系统按同城、同省或跨省和天数粗估，不是道路里程。</small></label>
                   <label class="rt-field"><span>预计道路收费</span><input id="rtEstimatedTolls" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">留 0 按里程估算。</small></label>
                 </div>
               </details>
@@ -4910,9 +4938,12 @@ def build_pwa_assets() -> None:
     (OUT / "manifest.webmanifest").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     build_digest = ASSET_BUILD or hashlib.sha256((CSS + "\n" + JS).encode("utf-8")).hexdigest()[:10]
     # Keep first-install work small. Destination catalog pages are cached after a
-    # successful visit, so downloading the entire catalog is unnecessary here.
+    # successful visit (and the planner caches the cities in a saved itinerary),
+    # so downloading the entire catalog is unnecessary here. The itinerary and
+    # road-trip tools are what travellers open on the road, often offline, so
+    # they are precached even if never visited.
     app_shell = [
-        "./index.html", "./manifest.webmanifest",
+        "./index.html", "./plan.html", "./roadtrip.html", "./manifest.webmanifest",
         f"./assets/travel.css?v={build_digest}",
         f"./assets/travel.js?v={build_digest}",
         "./assets/icon-180.png", "./assets/icon-192.png", "./assets/icon-512.png",
@@ -4921,6 +4952,9 @@ def build_pwa_assets() -> None:
     for bundle_file in [entry_file, *imported_files, *css_files]:
         if bundle_file:
             app_shell.append(f"./assets/{bundle_file}?v={build_digest}")
+    # Lazy chunks are requested by dynamic import without the version query.
+    app_shell.extend(f"./assets/{chunk.name}" for chunk in sorted(ASSETS.glob("travel-chunk-*.js")))
+    app_shell.extend(f"./assets/{name}?v={build_digest}" for name in ("roadtrip.css", "roadtrip-data.js", "roadtrip-core.js", "roadtrip-app.js"))
     app_shell_json = json.dumps(app_shell, ensure_ascii=False, separators=(",", ","))
     sw = (
         f"const CACHE='tay-{build_digest}';\n"
@@ -5035,6 +5069,10 @@ def build() -> None:
     CITIES_OUT.mkdir(parents=True, exist_ok=True)
     search_index = site_search_index_js()
     build_hash = hashlib.sha256((CSS + "\n" + JS + "\n" + search_index).encode("utf-8"))
+    # 路书脚本和数据也用同一个 ?v=，改动它们必须换版本号，否则回访用户会拿到旧缓存。
+    for name in ("roadtrip-core.js", "roadtrip-app.js", "roadtrip.css"):
+        build_hash.update((ROOT / "tools" / name).read_bytes())
+    build_hash.update(roadtrip_data_js().encode("utf-8"))
     entry_file, imported_files, css_files = vite_bundle_files()
     for bundle_file in [entry_file, *imported_files, *css_files]:
         if bundle_file:

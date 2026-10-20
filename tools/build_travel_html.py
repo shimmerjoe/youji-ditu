@@ -1672,6 +1672,25 @@ def item_visual_html(page: Page, node: dict, section_id: str | None, css_class: 
     )
 
 
+PLAN_SECTION_IDS = {"attractions", "seasonal", "museums", "nature", "food", "streets", "shops", "markets", "day-trips"}
+
+
+def plan_add_button(page: Page, name: str, section_id: str | None, anchor_id: str | None, kind: str) -> str:
+    """“加入行程”按钮：数据由 plan-ui.ts 读取，写进按天编排的本机行程。"""
+    if page.key in HUB_KEYS or section_id not in PLAN_SECTION_IDS:
+        return ""
+    name = re.sub(r"\s+", " ", name).strip()
+    if len(name) < 2 or len(name) > 40 or name in FACT_LABELS or name in {"使用说明", "农贸市场", "伴手礼"}:
+        return ""
+    href = rel_to(page.output, OUT) + (f"#{anchor_id}" if anchor_id else "")
+    city = city_profile(page)["city"]
+    return (
+        f'<button class="poi-add" type="button" data-plan-add data-name="{html.escape(name)}" '
+        f'data-city="{html.escape(city)}" data-city-key="{html.escape(page.key)}" data-href="{html.escape(href)}" '
+        f'data-kind="{"food" if kind == "food" else "place"}">＋ 加入行程</button>'
+    )
+
+
 def render_card(page: Page, node: dict, section_id: str | None, anchors: dict[str, str] | None) -> str:
     anchor_id = item_anchor_id(section_id, node)
     label, body = split_label(node["text"])
@@ -1714,7 +1733,11 @@ def render_card(page: Page, node: dict, section_id: str | None, anchors: dict[st
         classes.append("has-media")
     if kind:
         classes.append(f"kind-{kind}")
+    plan_kind = "food" if section_id == "food" or kind == "food" else "place"
+    plan_button = plan_add_button(page, title if section_id == "food" else item_title(node["text"]), section_id, anchor_id, plan_kind)
     actions = poi_action_links_html(page, item_title(node["text"]), section_id, 0)
+    if plan_button:
+        actions = f'<div class="card-actions">{plan_button}{actions}</div>'
     return (
         f'<article class="{" ".join(classes)}"{id_attr(anchor_id)}>'
         f'{visual}'
@@ -1893,6 +1916,10 @@ def render_block(nodes: list[dict], page: Page, section_id: str | None, anchor_i
                 if label and body else f'<span>{inline_markup(node["text"], anchors, item_anchor_id(section_id, node))}</span>'
             )
             actions = poi_action_links_html(page, item_title(node["text"]), section_id, 0)
+            row_kind = "food" if section_id in FOOD_SECTION_IDS or item_kind(section_id, item_title(node["text"]), node["text"]) == "food" else "place"
+            plan_button = plan_add_button(page, item_title(node["text"]), section_id, item_anchor_id(section_id, node), row_kind)
+            if plan_button:
+                actions = f'<div class="card-actions">{plan_button}{actions}</div>'
             items.append(
                 f'<li class="row-item{" has-media" if visual else ""}"{id_attr(item_anchor_id(section_id, node))}>'
                 f'{visual}<div class="row-text">{text_html}{render_sub_list(node["children"], anchors)}{actions}</div></li>'
@@ -2906,7 +2933,7 @@ def trip_toggle_html() -> str:
 
 def trip_workspace_html(current: Page) -> str:
     """Render the global, browser-local trip workspace entry and drawer."""
-    user_href = rel_to(OUT / "user.html", current.output.parent) + "#user-panel-trip"
+    user_href = rel_to(OUT / "plan.html", current.output.parent)
     return f"""  <div class="trip-dock-backdrop" id="tripDockBackdrop" hidden></div>
   <aside class="trip-dock" id="tripDock" role="dialog" aria-modal="true" aria-labelledby="tripDockTitle" tabindex="-1" hidden>
     <header class="trip-dock-head">
@@ -2914,13 +2941,13 @@ def trip_workspace_html(current: Page) -> str:
       <button class="trip-dock-close" id="tripDockClose" type="button" aria-label="关闭行程工作台" title="关闭">×</button>
     </header>
     <div class="trip-dock-body">
-      <p class="trip-dock-intro">把城市先放进同一张清单，再去用户中心按天排序和补充计划。数据只保存在这台设备。</p>
+      <p class="trip-dock-intro">这里是想去的城市清单。具体景点请在城市攻略里点“＋ 加入行程”，再到“行程计划”按天安排。数据只保存在这台设备。</p>
       <div class="trip-dock-list" id="tripDockList"></div>
       <div class="trip-dock-empty" id="tripDockEmpty"><strong>行程还是空的</strong><span>在城市卡片或攻略速览中点击“加入行程”。</span></div>
     </div>
     <footer class="trip-dock-footer">
       <button id="tripDockClear" type="button">清空行程</button>
-      <a href="{html.escape(user_href)}">进入行程计划 <span aria-hidden="true">→</span></a>
+      <a href="{html.escape(user_href)}">按天排行程 <span aria-hidden="true">→</span></a>
     </footer>
   </aside>"""
 
@@ -3350,9 +3377,11 @@ PRIMARY_NAV = (
     ("destinations", "目的地", "destinations.html", "compass"),
     ("themes", "主题玩法", "themes.html", "layers"),
     ("cities", "城市攻略", "city-guides.html", "book"),
+    ("plan", "行程计划", "plan.html", "calendar"),
     ("roadtrip", "自驾路书", "roadtrip.html", "car"),
-    ("tools", "实用工具", "tools.html", "tool"),
 )
+# 抽屉菜单比顶栏多放两项，手机上所有入口都能找到。
+DRAWER_NAV = PRIMARY_NAV + (("tools", "实用工具", "tools.html", "tool"),)
 
 
 def site_header_html(page: Page, active_key: str = "") -> str:
@@ -3369,7 +3398,7 @@ def site_header_html(page: Page, active_key: str = "") -> str:
     mobile_links = "".join(
         f'<a class="header-link{" active" if key == active_key else ""}" href="{html.escape(rel_to(OUT / href, base))}">'
         f'{icon(icon_name)}<span>{label}</span></a>'
-        for key, label, href, icon_name in PRIMARY_NAV
+        for key, label, href, icon_name in DRAWER_NAV
     ) + f'<a class="header-link{user_active}" href="{user}">{icon("user")}<span>用户中心</span></a>'
     return f"""  <header class="site-header">
     <div class="header-bar">
@@ -3411,6 +3440,7 @@ def mobile_tabbar_html(page: Page, active_key: str) -> str:
     tabs = (
         ("home", "首页", "index.html", "home"),
         ("destinations", "目的地", "destinations.html", "compass"),
+        ("plan", "行程", "plan.html", "calendar"),
         ("roadtrip", "自驾", "roadtrip.html", "car"),
     )
     links = "".join(
@@ -3422,8 +3452,6 @@ def mobile_tabbar_html(page: Page, active_key: str) -> str:
     return (
         '  <nav class="mobile-tabbar" aria-label="移动端主导航">'
         f'{links}'
-        f'<button class="tab" type="button" data-open-trip aria-controls="tripDock">{icon("bag")}<span>行程</span>'
-        '<b class="tab-badge" data-trip-count hidden>0</b></button>'
         f'<a class="tab{" active" if active_key == "user" else ""}" href="{html.escape(user_href)}">{icon("user")}<span>我的</span></a>'
         '</nav>'
     )
@@ -3507,7 +3535,7 @@ def footer_html(page: Page) -> str:
         <p>个人整理的全国城市旅游攻略，收录 {city_count} 座城市的景点、美食、季节与路线。运行期纯静态，可安装到手机离线阅读。</p>
       </div>
       <nav class="footer-links" aria-label="浏览攻略"><strong>浏览</strong><a href="{href("destinations.html")}">目的地筛选</a><a href="{href("themes.html")}">主题玩法</a><a href="{href("city-guides.html")}">城市攻略</a><a href="{href("overview.html")}">跨城市总览</a></nav>
-      <nav class="footer-links" aria-label="旅行工具"><strong>工具</strong><a href="{href("roadtrip.html")}">自驾路书</a><a href="{href("tools.html")}">实用工具</a><a href="{href("user.html")}">用户中心</a></nav>
+      <nav class="footer-links" aria-label="旅行工具"><strong>工具</strong><a href="{href("plan.html")}">行程计划</a><a href="{href("roadtrip.html")}">自驾路书</a><a href="{href("tools.html")}">实用工具</a><a href="{href("user.html")}">用户中心</a></nav>
       <div class="footer-note">
         <strong>资料说明</strong>
         <p>内容来自公开资料的归纳，仅供出行参考；门票、开放时间与预约请以官方景区、本地文旅和票务系统为准。</p>
@@ -3672,7 +3700,7 @@ def user_center_body() -> str:
       </section>
       <section class="user-panel guide-section" id="user-panel-trip" data-panel="trip" role="tabpanel" aria-labelledby="user-tab-trip" tabindex="0" hidden>
         <h2>我的行程</h2>
-        <p class="panel-hint">在城市卡片右上角点 ＋ 加入行程，这里可排序、估算节奏，规划一条出行线路。</p>
+        <p class="panel-hint">这里是想去的城市清单：可排序、对比和估算节奏。要把景点排进具体某一天、估算预算和分享，请用 <a href="plan.html">行程计划</a>。</p>
         <div class="trip-tools">
           <label for="tripPlanDays">计划天数</label>
           <input id="tripPlanDays" type="number" min="1" max="60" value="5" inputmode="numeric">
@@ -3868,7 +3896,7 @@ def build_catalog_pages() -> None:
 def build_seo_files() -> None:
     """Emit deployment metadata from the same page inventory as the generator."""
     paths = {page.output for page in PAGES}
-    paths.update(OUT / name for name in ("overview.html", "destinations.html", "themes.html", "city-guides.html", "tools.html", "user.html", "roadtrip.html"))
+    paths.update(OUT / name for name in ("overview.html", "plan.html", "destinations.html", "themes.html", "city-guides.html", "tools.html", "user.html", "roadtrip.html"))
     urls = sorted({public_page_url(path) for path in paths})
     entries = "".join(f"  <url><loc>{html.escape(url)}</loc></url>\n" for url in urls)
     sitemap = (
@@ -4004,6 +4032,24 @@ def roadtrip_body() -> str:
         </section>
       </div>
     </section>"""
+
+
+def build_plan_page() -> None:
+    page = Page(RECORD_SOURCE, OUT / "plan.html", "plan", "行程计划 · 游记地图",
+                "把景点放进每一天，估算预算，保存、分享与旅途中查看今天安排。", "#2f6f9f", "")
+    masthead = catalog_masthead(
+        "Trip Planner",
+        "行程计划",
+        "把攻略里的景点和美食放进具体某一天，调整顺序和时间，查看每天的强度和参考预算；旅途中切到“今天”看当天安排和导航。",
+        [("本机保存", "刷新、关闭后可恢复"), ("不含交易", "费用均为自填估算")],
+    )
+    body = masthead + (
+        '<section class="plan-app" id="planApp" aria-label="行程计划工作台">'
+        '<p class="plan-loading">正在载入本机保存的行程…</p>'
+        '<noscript><p class="plan-notice">行程计划需要启用 JavaScript；攻略页面本身无需脚本即可阅读。</p></noscript>'
+        '</section>'
+    )
+    page.output.write_text(shell_page_html(page, page.title, body, "plan"), encoding="utf-8")
 
 
 def build_roadtrip_page() -> None:
@@ -4650,6 +4696,7 @@ def build() -> None:
     OVERVIEW_PAGE.output.write_text(page_html(OVERVIEW_PAGE, OVERVIEW_PAGE.source.read_text(encoding="utf-8")), encoding="utf-8")
     build_user_page()
     build_roadtrip_page()
+    build_plan_page()
     build_catalog_pages()
     build_seo_files()
     build_content_audit()

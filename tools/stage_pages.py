@@ -12,6 +12,7 @@ ROOT_FILES = (
     ".nojekyll",
     "index.html",
     "overview.html",
+    "plan.html",
     "destinations.html",
     "themes.html",
     "city-guides.html",
@@ -68,6 +69,9 @@ def stage() -> None:
         copy_required(SITE / name, DIST / name)
     for name in ASSET_FILES:
         copy_required(SITE / "assets" / name, DIST / "assets" / name)
+    # Vite 按需加载的分块（行程计划等），文件名带内容哈希。
+    for chunk in sorted((SITE / "assets").glob("travel-chunk-*.js")):
+        copy_required(chunk, DIST / "assets" / chunk.name)
     for name in ASSET_DIRECTORIES:
         copy_required(SITE / "assets" / name, DIST / "assets" / name)
 

@@ -710,6 +710,144 @@ h3.section-title { font-size: 19px; font-weight: 800; }
 .source-link b { grid-row: 1 / 3; grid-column: 2; align-self: center; color: var(--faint); font-weight: 400; }
 .source-link:hover { background: var(--accent-soft); color: var(--ink); }
 
+/* 加入行程按钮 */
+.card-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 4px; }
+.card-actions .poi-actions { margin-top: 0; }
+.poi-add {
+  display: inline-flex; align-items: center; min-height: 34px; padding: 0 14px; border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-radius: var(--radius-pill); background: var(--accent-soft); color: var(--accent-ink); font-size: 13.5px; font-weight: 800;
+}
+.poi-add:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.poi-add.added { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* 加入行程弹窗 */
+.plan-picker { width: min(460px, calc(100vw - 24px)); max-height: min(86vh, 640px); padding: 20px; border: 0; border-radius: var(--radius-lg); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-lg); }
+.plan-picker::backdrop { background: var(--overlay); }
+.plan-picker-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.plan-picker-head h2 { font-size: 20px; }
+.plan-picker-close { width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--surface-2); font-size: 22px; }
+.plan-picker-item { display: grid; gap: 2px; padding: 10px 14px; margin-bottom: 12px; border-radius: var(--radius-sm); background: var(--accent-soft); }
+.plan-picker-item span { color: var(--muted); font-size: 13px; }
+.plan-picker-field { display: grid; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.plan-picker-field select { min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.plan-picker-label { margin: 14px 0 8px; font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.plan-picker-days { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.plan-day-choice { display: grid; gap: 2px; justify-items: start; min-height: 56px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); text-align: left; }
+.plan-day-choice small { color: var(--muted); font-size: 12px; }
+.plan-day-choice:hover, .plan-day-choice:focus-visible { border-color: var(--accent); background: var(--accent-soft); }
+.plan-day-choice.add { place-items: center; border-style: dashed; }
+.plan-picker-status { min-height: 1.6em; margin-top: 10px; color: var(--brand-strong); font-weight: 700; font-size: 14px; }
+.plan-picker-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; }
+.plan-picker-hint { color: var(--muted); font-size: 12.5px; flex: 1 1 200px; }
+
+/* 行程计划页 */
+.plan-app { margin-top: 24px; }
+.plan-loading, .plan-notice { padding: 14px 16px; border-radius: var(--radius); background: var(--surface-2); color: var(--ink-2); }
+.plan-notice { background: var(--warm-soft); color: color-mix(in srgb, var(--warm) 60%, #2a1406); margin-bottom: 14px; }
+.plan-bar {
+  position: sticky; top: calc(var(--header-h) + 8px); z-index: 60; display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  padding: 10px 12px; margin-bottom: 16px; border: 1px solid var(--hairline); border-radius: var(--radius); background: color-mix(in srgb, var(--surface) 94%, transparent);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: var(--shadow-sm);
+}
+.plan-bar select { min-height: 42px; max-width: 100%; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); font-weight: 700; }
+.plan-bar-actions { display: flex; gap: 6px; }
+.plan-bar-actions button, .plan-day-actions button, .pi-actions button, .plan-view-toggle button {
+  min-height: 38px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-pill); background: var(--surface); color: var(--ink-2); font-size: 13.5px; font-weight: 700;
+}
+.plan-bar-actions button:hover, .plan-day-actions button:hover, .pi-actions button:hover { border-color: var(--brand); color: var(--brand-strong); }
+button.danger:hover { border-color: var(--danger) !important; color: var(--danger) !important; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.plan-status { flex: 1 1 220px; margin-left: auto; color: var(--muted); font-size: 13px; text-align: right; }
+.link-btn { margin-left: 8px; padding: 0; border: 0; background: none; color: var(--brand-strong); font-weight: 800; text-decoration: underline; }
+.plan-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; }
+.plan-main { display: grid; gap: 14px; min-width: 0; }
+.plan-side { position: sticky; top: calc(var(--header-h) + 76px); display: grid; gap: 14px; max-height: calc(100vh - var(--header-h) - 92px); overflow-y: auto; scrollbar-width: thin; }
+.plan-meta { display: grid; grid-template-columns: 2fr 1fr 110px; gap: 10px; padding: 14px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--hairline); }
+.plan-field { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.plan-field input, .plan-field select { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font-size: 15px; }
+.plan-field small { color: var(--muted); font-weight: 500; font-size: 12px; }
+.plan-field.compact input { min-height: 40px; }
+.plan-view-toggle { display: inline-flex; gap: 4px; justify-self: start; padding: 4px; border-radius: var(--radius-pill); background: var(--surface-2); }
+.plan-view-toggle button { border: 0; background: transparent; }
+.plan-view-toggle button[aria-selected="true"] { background: var(--surface); color: var(--brand-strong); box-shadow: var(--shadow-sm); }
+.plan-days { display: grid; gap: 14px; }
+.plan-day { padding: 16px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--hairline); box-shadow: var(--shadow-sm); scroll-margin-top: calc(var(--header-h) + 80px); }
+.plan-day.is-today { border-color: var(--brand); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 18%, transparent), var(--shadow-sm); }
+.plan-day-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.plan-day-head h3 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; font-size: 19px; }
+.plan-day-head h3 small { color: var(--muted); font-size: 13.5px; font-weight: 600; }
+.today-badge { padding: 1px 8px; border-radius: var(--radius-pill); background: var(--brand); color: #fff; font-size: 12px; }
+.plan-load { margin-top: 2px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.plan-load.load-full { color: var(--danger); }
+.plan-load.load-light { color: var(--brand-strong); }
+.plan-day-actions { display: flex; gap: 6px; }
+.plan-day-note { width: 100%; min-height: 0; padding: 8px 12px; margin-bottom: 10px; border: 1px dashed var(--line); border-radius: var(--radius-sm); background: var(--surface-2); color: var(--ink-2); font-size: 14px; resize: vertical; }
+.plan-day-note-text { margin-bottom: 8px; color: var(--ink-2); font-size: 14px; }
+.plan-items { display: grid; gap: 8px; list-style: none; }
+.plan-item { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 10px; border-radius: var(--radius); background: var(--surface-2); }
+.pi-time { width: 100%; min-height: 40px; padding: 0 6px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); font-weight: 700; }
+.pi-main { display: grid; gap: 6px; min-width: 0; }
+.pi-title { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.pi-name { color: var(--ink); font-weight: 800; font-size: 15.5px; }
+a.pi-name:hover { color: var(--accent-ink); text-decoration: underline; }
+.pi-tags { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.pi-tag { padding: 0 8px; border-radius: var(--radius-pill); background: var(--surface); color: var(--muted); font-size: 12px; font-weight: 700; }
+.pi-tag.kind-food { background: var(--warm-soft); color: color-mix(in srgb, var(--warm) 70%, #3a1d0c); }
+.pi-tag.booking { background: #fff1cc; color: #8a5a12; }
+.pi-fields { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; }
+.pi-fields select { min-height: 36px; padding: 0 8px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.pi-cost { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); }
+.pi-cost input { width: 84px; min-height: 36px; padding: 0 8px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.pi-booking { display: inline-flex; align-items: center; gap: 4px; color: var(--ink-2); }
+.pi-booking input { width: 18px; height: 18px; accent-color: var(--brand); }
+.pi-note { width: 100%; min-height: 36px; padding: 0 10px; border: 1px solid transparent; border-radius: var(--radius-sm); background: var(--surface); font-size: 13.5px; }
+.pi-note:focus, .pi-time:focus, .plan-day-note:focus { outline: none; border-color: var(--brand); }
+.pi-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; max-width: 220px; }
+.pi-actions button { min-height: 34px; padding: 0 10px; }
+.pi-actions select { min-height: 34px; padding: 0 6px; border: 1px solid var(--line); border-radius: var(--radius-pill); background: var(--surface); font-size: 13px; }
+.pi-nav { display: inline-flex; align-items: center; min-height: 34px; padding: 0 12px; border-radius: var(--radius-pill); background: var(--brand); color: #fff; font-size: 13px; font-weight: 800; }
+.pi-nav:hover { color: #fff; background: var(--brand-strong); }
+.plan-day-empty { padding: 14px; border: 1px dashed var(--line); border-radius: var(--radius); color: var(--muted); font-size: 14px; }
+.plan-add-custom { display: flex; gap: 8px; margin-top: 10px; }
+.plan-add-custom input { flex: 1; min-width: 0; min-height: 42px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.plan-day-foot { margin-top: 10px; color: var(--muted); font-size: 12.5px; }
+.plan-add-day { min-height: 52px; border: 2px dashed var(--line); border-radius: var(--radius-lg); background: transparent; color: var(--ink-2); font-weight: 800; }
+.plan-add-day:hover { border-color: var(--brand); color: var(--brand-strong); }
+.plan-card { display: grid; gap: 10px; padding: 16px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--hairline); box-shadow: var(--shadow-sm); }
+.plan-card h3 { font-size: 16.5px; }
+.plan-hint { color: var(--muted); font-size: 13px; }
+.plan-total { display: flex; align-items: baseline; gap: 10px; }
+.plan-total strong { font-size: 30px; font-weight: 800; color: var(--brand-strong); }
+.plan-total span { color: var(--muted); font-size: 13.5px; }
+.plan-assumptions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.plan-budget-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.plan-budget-table th, .plan-budget-table td { padding: 5px 4px; border-bottom: 1px solid var(--hairline); text-align: right; white-space: nowrap; }
+.plan-budget-table th[scope="row"], .plan-budget-table thead th:first-child { text-align: left; }
+.plan-checks ul { display: grid; gap: 6px; padding-left: 18px; color: var(--ink-2); font-size: 13.5px; }
+.plan-share-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.plan-share-actions .btn { min-height: 38px; padding: 0 12px; font-size: 13.5px; }
+.plan-check { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--ink-2); }
+.plan-check input { width: 18px; height: 18px; accent-color: var(--brand); }
+.plan-share-url { display: flex; gap: 6px; }
+.plan-share-url input { flex: 1; min-width: 0; min-height: 40px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface-2); font-size: 12.5px; }
+.plan-shortlist ul { display: grid; gap: 6px; list-style: none; }
+.plan-shortlist li { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 14px; }
+.plan-empty { display: grid; gap: 12px; justify-items: start; padding: clamp(20px, 4vw, 36px); border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--hairline); }
+.plan-empty h2 { font-size: 22px; }
+.plan-empty p { color: var(--muted); max-width: 620px; }
+.plan-empty-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.plan-preview { display: grid; gap: 14px; margin-bottom: 20px; padding: 16px; border-radius: var(--radius-lg); background: var(--brand-soft); border: 1px solid color-mix(in srgb, var(--brand) 30%, var(--line)); }
+.plan-preview-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.plan-preview-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.today-view .plan-day { padding: 18px; }
+.today-item { grid-template-columns: 64px minmax(0, 1fr) auto; align-items: center; }
+.pi-time-label { font-size: 17px; font-weight: 800; color: var(--brand-strong); }
+.today-item .pi-nav { min-height: 44px; padding: 0 16px; font-size: 14px; }
+.pi-meta { color: var(--muted); font-size: 12.5px; }
+.pi-note-text { color: var(--ink-2); font-size: 13.5px; }
+.plan-next-day > summary { cursor: pointer; padding: 10px 0; font-weight: 800; color: var(--ink-2); }
+.plan-today-empty p:first-child { font-weight: 700; }
+
 /* ---------- 6. 目录页抬头 ---------- */
 .catalog-masthead {
   display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px;
@@ -1031,6 +1169,27 @@ html.lightbox-active { overflow: hidden; }
   .source-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
+@media (max-width: 1080px) {
+  .plan-layout { grid-template-columns: minmax(0, 1fr); }
+  .plan-side { position: static; max-height: none; overflow: visible; }
+}
+@media (max-width: 720px) {
+  .plan-bar { top: calc(var(--header-h) + 4px); }
+  .plan-bar select { flex: 1 1 100%; }
+  .plan-status { flex-basis: 100%; text-align: left; margin-left: 0; }
+  .plan-meta { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .plan-meta .plan-field.wide { grid-column: 1 / -1; }
+  .plan-item { grid-template-columns: minmax(0, 1fr); }
+  .pi-time { width: 120px; }
+  .pi-actions { justify-content: flex-start; max-width: none; }
+  .pi-actions button, .pi-actions select, .pi-nav { min-height: 40px; }
+  .plan-day { padding: 12px; }
+  .plan-day-actions button { min-height: 40px; }
+  .today-item { grid-template-columns: 52px minmax(0, 1fr); }
+  .today-item .pi-nav { grid-column: 1 / -1; justify-content: center; }
+  .plan-picker { padding: 16px; margin: auto auto 0; width: 100vw; max-width: 100vw; border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+}
+
 @media (max-width: 380px) {
   .brand-name { display: none; }
   .scenario-grid, .travel-finder-form { grid-template-columns: minmax(0, 1fr); }
@@ -1071,6 +1230,7 @@ html.lightbox-active { overflow: hidden; }
 [data-theme="dark"] .fav-btn, [data-theme="dark"] .trip-btn, [data-theme="dark"] .fav-remove { background: rgba(24, 33, 31, .9); color: var(--ink); }
 [data-theme="dark"] .rt-planner-panel, [data-theme="dark"] .rt-stage, [data-theme="dark"] .rt-step-actions,
 [data-theme="dark"] .rt-result-actions, [data-theme="dark"] .rt-day, [data-theme="dark"] .rt-section, [data-theme="dark"] .rt-metric { background: var(--surface) !important; color: var(--ink); }
+[data-theme="dark"] .pi-tag.booking { background: rgba(246, 207, 122, .14); color: #f6cf7a; }
 [data-theme="dark"] .rt-price-note { background: var(--surface-2) !important; }
 
 /* ---------- 12. 动效偏好 ---------- */
@@ -1094,4 +1254,10 @@ html.lightbox-active { overflow: hidden; }
   .card-more { display: block; }
   .card-more > summary { display: none; }
   .month-grid { grid-auto-flow: row; grid-template-columns: repeat(3, 1fr); overflow: visible; }
+  .plan-bar, .plan-view-toggle, .plan-day-actions, .pi-actions, .plan-add-custom, .plan-add-day, .plan-share, .plan-shortlist, .catalog-masthead, .poi-add, .card-actions { display: none !important; }
+  .plan-layout { display: block; }
+  .plan-side { position: static; max-height: none; overflow: visible; }
+  .plan-item { grid-template-columns: 70px 1fr; break-inside: avoid; }
+  .plan-day { break-inside: avoid-page; box-shadow: none; }
+  .plan-item input, .plan-item select, .plan-day-note { border: 0 !important; background: transparent !important; }
 }

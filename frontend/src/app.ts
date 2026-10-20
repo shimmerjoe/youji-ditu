@@ -42,6 +42,13 @@ function bootstrapRuntime(): void {
   if (!navigator.onLine) show(connectionStatus(false));
   bootstrapSiteSearch();
   bootstrapDestinationNavigation();
+  // 行程相关代码按需加载，只有出现“加入行程”按钮或行程计划页时才下载。
+  if (document.querySelector("[data-plan-add]")) {
+    void import("./plan-picker").then((module) => module.bootstrapPlanPicker());
+  }
+  if (document.getElementById("planApp")) {
+    void import("./planner-page").then((module) => module.bootstrapPlannerPage());
+  }
 }
 
 if (typeof document !== "undefined") {

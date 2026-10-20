@@ -202,7 +202,8 @@ class ProductContractTests(unittest.TestCase):
         self.assertIn("env(safe-area-inset-bottom)", css)
         self.assertRegex(css, r"\.mobile-tabbar \.tab\s*\{[^}]*min-height:\s*44px", re.S)
         self.assertIn('class="mobile-tabbar"', self.qingdao)
-        self.assertIn("data-open-trip", self.qingdao)
+        tabbar = self.qingdao.split('class="mobile-tabbar"', 1)[1].split("</nav>", 1)[0]
+        self.assertIn('href="../plan.html"', tabbar)
         self.assertIn("touch-action: manipulation", css)
 
     def test_mobile_month_calendar_is_a_compact_horizontal_strip(self):
@@ -324,6 +325,31 @@ class ProductContractTests(unittest.TestCase):
         ):
             with self.subTest(marker=marker):
                 self.assertIn(marker, script)
+
+    def test_city_cards_can_add_places_to_a_specific_day_of_a_plan(self):
+        buttons = re.findall(r'<button class="poi-add"[^>]*>', self.qingdao)
+        self.assertGreaterEqual(len(buttons), 8)
+        for attrs in buttons[:3]:
+            self.assertIn("data-plan-add", attrs)
+            self.assertIn('data-city-key="qingdao"', attrs)
+            self.assertRegex(attrs, r'data-href="cities/qingdao\.html#[a-z-]+-item-[0-9a-f]{10}"')
+        anchors = set(re.findall(r'data-href="cities/qingdao\.html#([^"]+)"', self.qingdao))
+        for anchor in anchors:
+            self.assertIn(f'id="{anchor}"', self.qingdao)
+        self.assertNotIn("data-plan-add", self.home)
+
+    def test_trip_planner_page_and_storage_are_wired_into_backup_and_reset(self):
+        planner = (ROOT / "site" / "plan.html").read_text(encoding="utf-8")
+        self.assertIn('id="planApp"', planner)
+        self.assertIn("<noscript>", planner)
+        self.assertIn('aria-current="page">行程计划</a>', planner)
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
+        self.assertRegex(script, r'STORAGE_ARRAY_KEYS[^\n]+"tay_plans"')
+        self.assertRegex(script, r'STORAGE_STRING_KEYS[^\n]+"tay_active_plan"')
+        self.assertRegex(script, r'ucResetAll[\s\S]+"tay_plans"[\s\S]+"tay_plans_backup"')
+        stage = (ROOT / "tools" / "stage_pages.py").read_text(encoding="utf-8")
+        self.assertIn('"plan.html"', stage)
+        self.assertIn("travel-chunk-*.js", stage)
 
     def test_user_center_exposes_local_data_backup_and_restore(self):
         for control_id in ("dataExport", "dataImport", "dataTransferStatus"):

@@ -4234,6 +4234,257 @@ def build_content_audit() -> None:
     report.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+# 全站内容完整度矩阵：衡量每座城市能否回答游客的核心问题，以及有多少是模板句。
+MATRIX_SECTIONS = (
+    ("结论", ("先看结论", "先看总览")),
+    ("怎么玩", ("快速决策索引",)),
+    ("月份", ("全年月份速查",)),
+    ("季节", ("季节限定景观", "适合季节与天数")),
+    ("开放/票价", ("景点营业时间和票价速查",)),
+    ("行前准备", ("行前准备",)),
+    ("住宿", ("住宿建议", "住宿区域")),
+    ("分区", ("地图分区",)),
+    ("景点", ("核心景点",)),
+    ("美食", ("美食总表", "美食推荐")),
+    ("路线", ("路线模板", "行程路线")),
+    ("交通", ("交通细节",)),
+    ("预算", ("预算参考", "时间与预算拆分")),
+    ("避坑", ("避坑和取舍", "避坑提醒")),
+    ("复核清单", ("出发前复核清单", "出发前复核")),
+)
+BOILERPLATE_MIN_CITIES = 15
+
+
+def markdown_value_lines(markdown: str) -> list[str]:
+    values = []
+    for line in markdown.splitlines():
+        match = re.match(r"^\s*-\s+(.+)$", line)
+        if not match:
+            continue
+        label, body = split_label(match.group(1))
+        values.append((body if label else match.group(1)).strip())
+    return values
+
+
+def boilerplate_values(pages: list[Page]) -> set[str]:
+    """出现在很多城市里的同一句话视为模板句（不是该城市的具体信息）。"""
+    seen: dict[str, set[str]] = {}
+    for page in pages:
+        for value in set(markdown_value_lines(read_markdown_cached(page))):
+            if len(value) >= 8:
+                seen.setdefault(value, set()).add(page.key)
+    return {value for value, keys in seen.items() if len(keys) >= BOILERPLATE_MIN_CITIES}
+
+
+def build_content_matrix() -> None:
+    city_pages = [page for page in PAGES if page.key not in HUB_KEYS]
+    templates = boilerplate_values(city_pages)
+    popular = set(HOME_CITY_KEYS)
+    rows = []
+    for page in city_pages:
+        markdown = read_markdown_cached(page)
+        headings = {line[3:].strip() for line in markdown.splitlines() if line.startswith("## ")}
+        covered = [name for name, options in MATRIX_SECTIONS if any(option in headings for option in options)]
+        values = [value for value in markdown_value_lines(markdown) if len(value) >= 8]
+        template_count = sum(value in templates for value in values)
+        hours_lines = re.findall(r"^\s*-\s*(?:营业时间|开放时间|时间限制)[：:]\s*(.+)$", markdown, re.M)
+        specific_hours = sum(1 for value in hours_lines if value.strip() not in templates)
+        price_lines = re.findall(r"^\s*-\s*(?:门票|票价|票价/预约方式)[：:]\s*(.+)$", markdown, re.M)
+        specific_prices = sum(1 for value in price_lines if value.strip() not in templates and re.search(r"\d", value))
+        attractions = len(extract_first_nodes_after(markdown, "## 核心景点", 99))
+        urls = extract_urls(markdown)
+        review = explicit_review_date(page, markdown)
+        cover = photo_is_publishable(PHOTO_CACHE.get(f"cityphoto|{page.key}"), page.key)
+        template_share = round(template_count / len(values), 2) if values else 0.0
+        score = (
+            len(covered) / len(MATRIX_SECTIONS) * 40
+            + (1 - template_share) * 25
+            + min(specific_hours, 4) * 2.5
+            + (10 if review != "未核验" else 0)
+            + (5 if official_source_count(urls) else 0)
+            + (10 if cover else 0)
+        )
+        rows.append({
+            "key": page.key,
+            "city": city_profile(page)["city"],
+            "province": city_profile(page)["province"],
+            "path": rel_to(page.output, ROOT),
+            "popular": page.key in popular,
+            "chars": len(markdown),
+            "sections": covered,
+            "missingSections": [name for name, _ in MATRIX_SECTIONS if name not in covered],
+            "attractions": attractions,
+            "specificHours": specific_hours,
+            "specificPrices": specific_prices,
+            "templateShare": template_share,
+            "sources": len(urls),
+            "officialSources": official_source_count(urls),
+            "reviewDate": review,
+            "licensedCover": cover,
+            "score": round(score, 1),
+        })
+    # 热门城市且分数低的排在最前：需求价值 × 缺口。
+    rows.sort(key=lambda row: (not row["popular"], row["score"], row["key"]))
+    reports = ROOT / "docs" / "reports"
+    reports.mkdir(parents=True, exist_ok=True)
+    (reports / "content-matrix.json").write_text(json.dumps({
+        "generatedBy": "tools/build_travel_html.py",
+        "boilerplateMinCities": BOILERPLATE_MIN_CITIES,
+        "boilerplateSentences": sorted(templates),
+        "cities": rows,
+    }, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
+    coverage = {name: sum(name in row["sections"] for row in rows) for name, _ in MATRIX_SECTIONS}
+    total_values = sum(len([v for v in markdown_value_lines(read_markdown_cached(p)) if len(v) >= 8]) for p in city_pages)
+    total_templates = sum(round(row["templateShare"] * len([v for v in markdown_value_lines(read_markdown_cached(p)) if len(v) >= 8])) for row, p in zip(rows, sorted(city_pages, key=lambda p: [r["key"] for r in rows].index(p.key))))
+    lines = [
+        "# 内容完整度矩阵",
+        "",
+        "> 由 `npm run build` 自动生成，衡量每座城市能否回答游客的核心问题。机器可读版本见 `content-matrix.json`。",
+        f"> 模板句定义：同一句话出现在 ≥{BOILERPLATE_MIN_CITIES} 座城市的条目里，视为通用模板而不是该城市的具体信息。",
+        "",
+        "## 全站概况",
+        "",
+        f"- 城市：{len(rows)}；已标注核验日期：{sum(row['reviewDate'] != '未核验' for row in rows)}；有授权实景封面：{sum(row['licensedCover'] for row in rows)}",
+        f"- 条目总数约 {total_values}，其中模板句约 {total_templates}（{total_templates / max(total_values, 1):.0%}）；全站识别出 {len(templates)} 种模板句",
+        f"- 有具体（非模板）开放时间的城市：{sum(row['specificHours'] > 0 for row in rows)}；有具体票价数字的城市：{sum(row['specificPrices'] > 0 for row in rows)}",
+        "",
+        "| 章节 | 覆盖城市数 |",
+        "| --- | ---: |",
+        *[f"| {name} | {count} |" for name, count in coverage.items()],
+        "",
+        "## 城市矩阵（热门且得分低的优先）",
+        "",
+        "得分 = 章节覆盖 40 + 非模板比例 25 + 具体开放时间 ≤10 + 核验日期 10 + 官方来源 5 + 授权封面 10。",
+        "",
+        "| 城市 | 省份 | 热门 | 得分 | 章节 | 缺少章节 | 景点 | 具体开放时间 | 具体票价 | 模板句占比 | 来源/官方 | 核验日期 | 封面 |",
+        "| --- | --- | :---: | ---: | ---: | --- | ---: | ---: | ---: | ---: | --- | --- | :---: |",
+    ]
+    for row in rows:
+        lines.append(
+            f"| [{row['city']}](../../{row['path']}) | {row['province']} | {'★' if row['popular'] else ''} | {row['score']} | "
+            f"{len(row['sections'])}/{len(MATRIX_SECTIONS)} | {'、'.join(row['missingSections']) or '—'} | {row['attractions']} | "
+            f"{row['specificHours']} | {row['specificPrices']} | {row['templateShare']:.0%} | {row['sources']}/{row['officialSources']} | "
+            f"{row['reviewDate']} | {'✓' if row['licensedCover'] else '—'} |"
+        )
+    lines += ["", "## 最常见的模板句", ""]
+    counts: dict[str, int] = {}
+    for page in city_pages:
+        for value in markdown_value_lines(read_markdown_cached(page)):
+            if value in templates:
+                counts[value] = counts.get(value, 0) + 1
+    for value, count in sorted(counts.items(), key=lambda item: -item[1])[:20]:
+        lines.append(f"- {count} 次：{value}")
+    (reports / "内容完整度矩阵.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def image_dimensions(path: Path) -> tuple[int, int]:
+    try:
+        with Image.open(path) as image:
+            return image.size
+    except Exception:
+        return (0, 0)
+
+
+def build_image_inventory() -> None:
+    """图片清单：每张图片的主体、来源、授权、尺寸、是否发布与审核结论。"""
+    load_photo_cache()
+    load_photo_editorial_decisions()
+    referenced: set[str] = set()
+    for html_path in OUT.rglob("*.html"):
+        for match in re.finditer(r'(?:src|data-src)="(?:\.\./)*(assets/(?:images|photos|item-images)/[^"?#]+)', html_path.read_text(encoding="utf-8")):
+            referenced.add(match.group(1))
+    by_path: dict[str, tuple[str, dict]] = {}
+    for key, entry in PHOTO_CACHE.items():
+        if isinstance(entry, dict) and entry.get("path"):
+            by_path.setdefault(str(entry["path"]), (key, entry))
+    records = []
+    hashes: dict[str, str] = {}
+    for path in sorted(list(IMAGES.glob("*")) + list(PHOTOS.rglob("*")) + list(ITEM_IMAGES.rglob("*"))):
+        if not path.is_file() or path.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
+            continue
+        rel = rel_to(path, OUT)
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        width, height = image_dimensions(path)
+        cache_key, entry = by_path.get(rel, ("", {}))
+        if not entry and path.parent == IMAGES and path.suffix == ".jpg":
+            entry = PHOTO_CACHE.get(f"cityphoto|{path.stem}", {}) or {}
+            cache_key = f"cityphoto|{path.stem}"
+        if path.parent == IMAGES:
+            subject, kind = path.stem, "城市封面" if path.suffix == ".jpg" else "程序生成插画"
+        elif "_sources" in path.parts:
+            subject, kind = "来源网页截取", "来源网页媒体"
+        elif path.name.startswith("scenery-"):
+            subject, kind = path.parent.name, "封面衍生裁切"
+        elif path.name.startswith("cityphoto-src"):
+            subject, kind = path.parent.name, "封面原图"
+        else:
+            subject, kind = str(entry.get("title", "")).removeprefix("File:") or path.stem, "条目配图"
+        city_key = cache_key.split("|", 1)[1] if cache_key.startswith("cityphoto|") else path.parent.name if path.parent != IMAGES else path.stem
+        licensed = photo_has_republication_rights(entry) if entry else False
+        rejection = photo_editorial_rejection(city_key, entry) if cache_key.startswith("cityphoto|") else None
+        if kind == "程序生成插画":
+            verdict = "未展示：程序生成插画，不冒充实景"
+        elif kind == "来源网页媒体":
+            verdict = "不得发布：来源网页图片没有记录转载授权"
+        elif rejection:
+            verdict = f"移出展示：{rejection.get('reason', '内容审核未通过')}"
+        elif not licensed and kind in {"城市封面", "条目配图", "封面原图"}:
+            verdict = "不得发布：缺少可追溯授权"
+        elif rel in referenced:
+            verdict = "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+        else:
+            verdict = "未展示：页面未引用"
+        duplicate_of = hashes.get(digest, "")
+        hashes.setdefault(digest, rel)
+        records.append({
+            "path": rel, "kind": kind, "subject": subject, "city": city_key,
+            "source": entry.get("source", "") if entry else "", "author": entry.get("artist", "") if entry else "",
+            "license": entry.get("license", "") if entry else "", "width": width, "height": height,
+            "bytes": path.stat().st_size, "sha256": digest[:16], "duplicateOf": duplicate_of,
+            "displayed": rel in referenced, "verdict": verdict,
+        })
+    reports = ROOT / "docs" / "reports"
+    (reports / "image-inventory.json").write_text(json.dumps({"generatedBy": "tools/build_travel_html.py", "images": records}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    summary: dict[str, int] = {}
+    for record in records:
+        summary[record["verdict"].split("：")[0]] = summary.get(record["verdict"].split("：")[0], 0) + 1
+    kinds: dict[str, int] = {}
+    for record in records:
+        kinds[record["kind"]] = kinds.get(record["kind"], 0) + 1
+    displayed = [record for record in records if record["displayed"]]
+    lines = [
+        "# 图片清单",
+        "",
+        "> 由 `npm run build` 自动生成。逐张列出主体、来源、作者、许可、尺寸、是否展示和审核结论；完整字段见 `image-inventory.json`。",
+        "> “授权可追溯”只说明来源与许可字段齐全；主体是否切题、有无错配仍需人工复核，本清单不把自动匹配当作人工审核。",
+        "",
+        "## 汇总",
+        "",
+        f"- 图片文件：{len(records)}；页面实际展示：{len(displayed)}；重复文件：{sum(bool(r['duplicateOf']) for r in records)}",
+        *[f"- {kind}：{count}" for kind, count in sorted(kinds.items(), key=lambda item: -item[1])],
+        "",
+        "| 结论 | 数量 |",
+        "| --- | ---: |",
+        *[f"| {verdict} | {count} |" for verdict, count in sorted(summary.items(), key=lambda item: -item[1])],
+        "",
+        "## 页面展示中的图片",
+        "",
+        "| 图片 | 类型 | 主体 | 作者 | 许可 | 尺寸 | 来源 |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for record in displayed:
+        source = f"[来源]({record['source']})" if record["source"] else "—"
+        lines.append(f"| `{record['path']}` | {record['kind']} | {record['subject']} | {record['author'] or '—'} | {record['license'] or '—'} | {record['width']}×{record['height']} | {source} |")
+    lines += ["", "## 未展示或不得发布", "", "| 图片 | 类型 | 结论 |", "| --- | --- | --- |"]
+    for record in records:
+        if not record["displayed"] and record["kind"] != "封面衍生裁切":
+            lines.append(f"| `{record['path']}` | {record['kind']} | {record['verdict']} |")
+    lines.append("")
+    lines.append(f"另有 {kinds.get('封面衍生裁切', 0)} 张“封面衍生裁切”（`scenery-01.jpg`）是封面的缩略副本，页面不再展示。")
+    (reports / "图片清单.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def build_source_playbook() -> None:
     lines = [
         "# 资料来源与更新规则",
@@ -4722,6 +4973,8 @@ def build() -> None:
     build_catalog_pages()
     build_seo_files()
     build_content_audit()
+    build_content_matrix()
+    build_image_inventory()
     build_source_playbook()
     sync_source_folders()
 

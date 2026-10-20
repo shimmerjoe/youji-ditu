@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import shutil
 from pathlib import Path
 
@@ -42,7 +43,10 @@ ASSET_FILES = (
     "roadtrip-app.js",
 )
 
-ASSET_DIRECTORIES = ("images", "item-images", "photos")
+# 图片按引用发布：只复制页面和脚本实际用到的图片。site/assets/photos 里还有封面原图、
+# 衍生裁切和来源网页截取（没有转载授权）等非发布素材，不能整目录复制到公开站点。
+IMAGE_REFERENCE = re.compile(r"assets/((?:images|photos|item-images)/[^\"'?#)\s]+\.(?:jpe?g|png|webp|gif))", re.I)
+UNPUBLISHABLE_MARKERS = ("/_sources/", "cityphoto-src")
 
 
 def copy_required(source: Path, destination: Path) -> None:
@@ -53,6 +57,30 @@ def copy_required(source: Path, destination: Path) -> None:
         shutil.copytree(source, destination)
     else:
         shutil.copy2(source, destination)
+
+
+def referenced_images() -> set[str]:
+    """Collect image paths (relative to assets/) used by staged pages and scripts."""
+    references: set[str] = set()
+    for path in [*DIST.rglob("*.html"), *(DIST / "assets").glob("*.js")]:
+        references.update(IMAGE_REFERENCE.findall(path.read_text(encoding="utf-8", errors="ignore")))
+    return references
+
+
+def stage_referenced_images() -> int:
+    copied = 0
+    for reference in sorted(referenced_images()):
+        if any(marker in f"/{reference}" for marker in UNPUBLISHABLE_MARKERS):
+            raise RuntimeError(f"Unlicensed source media is referenced by a public page: {reference}")
+        source = SITE / "assets" / reference
+        # roadtrip-data.js 为每座城市给出封面路径；没有授权封面的城市本来就没有该文件。
+        if not source.is_file():
+            continue
+        destination = DIST / "assets" / reference
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+        copied += 1
+    return copied
 
 
 def stage() -> None:
@@ -72,8 +100,7 @@ def stage() -> None:
     # Vite 按需加载的分块（行程计划等），文件名带内容哈希。
     for chunk in sorted((SITE / "assets").glob("travel-chunk-*.js")):
         copy_required(chunk, DIST / "assets" / chunk.name)
-    for name in ASSET_DIRECTORIES:
-        copy_required(SITE / "assets" / name, DIST / "assets" / name)
+    image_count = stage_referenced_images()
 
     forbidden = tuple(DIST.rglob("roadtrip-config.js"))
     if forbidden:
@@ -81,7 +108,7 @@ def stage() -> None:
     html_count = len(tuple(DIST.rglob("*.html")))
     if html_count < 200:
         raise RuntimeError(f"Publish artifact is incomplete: only {html_count} HTML files")
-    print(f"Staged {html_count} HTML files in {DIST}")
+    print(f"Staged {html_count} HTML files and {image_count} referenced images in {DIST}")
 
 
 if __name__ == "__main__":

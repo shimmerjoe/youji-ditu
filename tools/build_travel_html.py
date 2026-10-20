@@ -1731,6 +1731,9 @@ def plan_add_button(page: Page, name: str, section_id: str | None, anchor_id: st
     if page.key in HUB_KEYS or section_id not in PLAN_SECTION_IDS:
         return ""
     name = re.sub(r"\s+", " ", name).strip()
+    # “春/夏/秋/冬”这类季节标题不是可以排进某一天的地点。
+    if re.fullmatch(r"[春夏秋冬](?:季|天)?|全年|四季", name):
+        return ""
     if len(name) < 2 or len(name) > 40 or name in FACT_LABELS or name in {"使用说明", "农贸市场", "伴手礼"}:
         return ""
     href = rel_to(page.output, OUT) + (f"#{anchor_id}" if anchor_id else "")
@@ -2423,7 +2426,9 @@ def page_location(page: Page) -> tuple[str, str]:
 def clean_summary(text: str, limit: int = 70) -> str:
     text = re.sub(r"https?://\S+", "", text)
     text = re.sub(r"`([^`]+)`", r"\1", text)
-    text = re.sub(r"[*_#>-]+", "", text)
+    text = re.sub(r"[*_#>]+", "", text)
+    # 只去掉列表/分隔用的连字符，保留“3-5 月”这类数字区间。
+    text = re.sub(r"(?:^|\s)-+(?=\s|$)", " ", text)
     text = re.sub(r"\s+", " ", text).strip(" ：:，,。；;")
     return text[:limit]
 
@@ -2983,6 +2988,8 @@ def poi_action_links_html(page: Page, title: str, section_id: str | None, depth:
     title = re.sub(r"\s+", " ", title).strip()
     if len(title) < 2 or len(title) > 48 or title in {"使用说明", "核心景区", "推荐地点"}:
         return ""
+    if re.fullmatch(r"[春夏秋冬](?:季|天)?|全年|四季", title):
+        return ""
     profile = city_profile(page)
     city = profile["city"]
     query = f"{city} {title}" if city and city not in title else title
@@ -3411,55 +3418,6 @@ def ensure_body_gallery(page: Page) -> None:
         image = image.convert("RGB")
         output = ImageOps.fit(image, (960, 540), method=Image.Resampling.LANCZOS)
         output.save(output_path, "JPEG", quality=76, optimize=True, progressive=True)
-
-
-def reinforcement_appendix(page: Page, markdown: str) -> str:
-    """Add an execution-oriented city brief when the source guide is still short."""
-    if page.key in HUB_KEYS or len(markdown) >= 4000:
-        return ""
-    profile = city_profile(page)
-    city = profile["city"]
-    highlights = profile["highlights"][:4] or ["核心景点", "城市街区"]
-    foods = profile["foods"][:4] or ["本地早餐", "夜市小吃"]
-    routes = profile["routes"][:3] or ["经典片区线", "雨天备选线"]
-    sights = "、".join(highlights)
-    food_list = "、".join(foods)
-    route_list = "、".join(routes)
-    return f"""
-
-## 行程执行补强
-
-### 到达后先做什么
-- 抵达 {city} 后先确认当日天气、景区入园时间和返程末班；把 {sights} 按地理方向拆开，不以地图直线距离代替实际通行时间。
-- 第一天只安排一个核心片区：入住、寄存行李、熟悉周边吃喝与停车/换乘点后再进景区。这样即使遇到排队、降雨或临时限流，也能保住当天的主要体验。
-- 需要跨区的行程，出发前在官方入口与地图中分别核对一次。导航显示的时间不包含排队、观光车、索道、找车位和步行回程，应额外预留缓冲。
-
-### 分区与动线
-- 核心游览：优先把 {highlights[0]} 作为半天或一天的主任务；其余 {"、".join(highlights[1:])} 只在同方向、体力和开放时间允许时加入。
-- 城市休整：午餐、雨天与傍晚留给市区街区、展馆或商圈；不要为了打卡在中午往返远郊。需要夜游时，先确认最后一班公共交通、停车场关闭时间和打车供给。
-- 远郊选择：若只住一晚，宁可减少一个景点，也不要把远郊和市区夜游排进同一日。自驾以返回住宿地前仍留有充足精力为底线，山路、雨雾和节假日要再收紧计划。
-
-### 餐饮与补给
-- 这座城市可优先从 {food_list} 中选一到两样作为正餐，再用同片区的小吃补充；同一天不要跨城寻找网红店。
-- 早餐适合安排在住宿周边或菜市场一带，午餐以靠近主景区为先，晚餐再回到夜间活动片区。热门店排队超过预留时间时，直接选择相邻街区的同类店，行程体验通常更稳定。
-- 购买伴手礼时先看生产日期、常温保存和携带限制；自驾可放在返程前采购，公共交通出行则优先轻量、耐压的包装。
-
-### 路线落地模板
-- 半天：{highlights[0]} + 同片区散步/展馆 + {foods[0]}。适合早到、转场或天气不稳定的日子。
-- 一天：上午 {highlights[0]}，午后在 {highlights[min(1, len(highlights) - 1)]} 或市区人文点二选一，傍晚安排 {foods[min(1, len(foods) - 1)]}。每个节点之间留出交通与休息时间。
-- 两天：第一天完成城市核心与夜间街区，第二天只选择一条远郊或自然线；可从现有攻略中的 {route_list} 里选与住宿方向一致的一条。
-- 雨天：优先博物馆、室内展馆、商场和老街，把需要视野、步道或水上项目的景点挪到天气恢复后；门票改签与景区公告以官方页面为准。
-
-### 预算、停车与安全边界
-- 预算按住宿、交通/油费、门票、餐饮和机动金五项拆分。门票、停车、观光车、索道、演出和游船常为独立项目，提交行程前逐项核验，避免把“景区门票”理解为全部费用。
-- 自驾抵达景区前保存停车场位置、收费规则和出口方向；节假日不要依赖最后一个停车场。纯电或插混车辆应在进入远郊前完成补能，并保留一处备选充电点。
-- 夜间、山地、海边、峡谷与涉水项目要服从天气预警和现场管制。遇到大风、雷雨、能见度低或道路封闭时，立即切换到市区备选，不追赶原计划。
-
-### 出发前最后核验
-- 核对 {sights} 的开放日期、预约入口、实名要求、临时闭园和分时段入园规则。
-- 核对住宿到第一站的实际通行时间、停车/换乘、返程末班，以及第二天是否需要提前退房或寄存行李。
-- 核对天气预警、道路施工、节假日客流和活动公告；易变项目以城市页末尾来源链接及官方当天公告为准。
-"""
 
 
 def guide_gallery_html(page: Page) -> str:
@@ -4786,7 +4744,9 @@ def guide_page_html(page: Page, markdown: str) -> str:
     # 底部来源抽屉用完整 markdown（含「来源参考」里的链接）
     build_source_media_index(page, markdown)
     # 正文渲染时剥离来源类章节，避免与底部「资料来源」重复
-    content_md = strip_sections(markdown, SOURCE_SECTION_HEADINGS) + reinforcement_appendix(page, markdown)
+    # 篇幅短的城市不再自动拼接通用的“行程执行补强”：那是把城市名填进同一套话术，
+    # 短板如实留在“内容与图片体检”的待补清单里。
+    content_md = strip_sections(markdown, SOURCE_SECTION_HEADINGS)
     anchor_index = collect_anchor_index(content_md)
     body, toc = render_markdown(content_md, page, anchor_index)
     hero = overview_hero_html(page, title) if is_hub else city_hero_html(page, title)

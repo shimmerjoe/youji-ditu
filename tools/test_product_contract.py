@@ -212,7 +212,11 @@ class ProductContractTests(unittest.TestCase):
             css,
             r"@media\s*\(max-width:\s*720px\)[\s\S]*?\.month-grid\s*\{[^}]*overflow-x:\s*auto[^}]*scroll-snap-type:\s*x mandatory",
         )
-        self.assertEqual(12, self.qingdao.count('class="month-card"'))
+        # 北京有按当地气候写的月份表；青岛原来是按月轮换景点的模板，已改成如实说明。
+        beijing = (ROOT / "site" / "cities" / "beijing.html").read_text(encoding="utf-8")
+        self.assertEqual(12, beijing.count('class="month-card"'))
+        self.assertEqual(0, self.qingdao.count('class="month-card"'))
+        self.assertIn("这座城市还没有逐月核实过的资料", self.qingdao)
 
     def test_user_center_uses_keyboard_operable_aria_tabs(self):
         self.assertIn('role="tablist"', self.user)

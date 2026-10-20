@@ -26,6 +26,11 @@ class ContentReinforcementTests(unittest.TestCase):
                 with Image.open(photos[0]) as image:
                     self.assertEqual((960, 540), image.size)
 
+    def test_short_guides_are_not_padded_with_a_generic_appendix(self):
+        for page in (ROOT / "site" / "cities").glob("*.html"):
+            with self.subTest(page=page.name):
+                self.assertNotIn("行程执行补强", page.read_text(encoding="utf-8"))
+
     def test_generated_audit_does_not_hide_reinforcement_backlog(self):
         audit = (ROOT / "docs" / "reports" / "内容与图片体检.md").read_text(encoding="utf-8")
         self.assertRegex(audit, r"需要优先补充：\d+")

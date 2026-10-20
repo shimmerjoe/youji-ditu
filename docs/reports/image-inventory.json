@@ -15710,8 +15710,8 @@
    "bytes": 134668,
    "sha256": "a1a0b24998fdbd90",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
+   "displayed": false,
+   "verdict": "未展示：页面未引用"
   },
   {
    "path": "assets/photos/xian/place-cca39b1824b4d7cf6ac49ef29dc91009.jpg",

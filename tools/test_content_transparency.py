@@ -51,6 +51,12 @@ class CityTemplateRegressionTests(unittest.TestCase):
         template = "半天看城市核心或夜市，1 天打一条经典线，2-3 天再加远郊/周边"
         self.assertEqual([name for name, text in self.sources.items() if template in text], [])
 
+    def test_summaries_keep_numeric_ranges(self):
+        import sys
+        sys.path.insert(0, str(ROOT / "tools"))
+        import build_travel_html as builder
+        self.assertEqual("3-5 月、9-11 月", builder.clean_summary("- 3-5 月、9-11 月"))
+
     def test_theme_filters_still_discriminate(self):
         themes = re.findall(r'data-theme="([^"]*)"', self.destinations)
         family = sum("亲子" in value.split() for value in themes)

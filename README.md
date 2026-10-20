@@ -67,7 +67,7 @@ youji-ditu/
 │  └─ manifest.webmanifest、sw.js、sitemap.xml、robots.txt
 ├─ scripts/windows/        Windows 一键预览、重建、补图、推送脚本
 ├─ docs/                   指南、体检报告、截图与历史记录
-├─ backup/                 本地迁移快照的清单与比对说明（压缩包在 Release）
+├─ backup/                 本地迁移快照的逐文件清单与比对说明
 ├─ app-capacitor/          可选的 Android 封装模板
 └─ .github/workflows/      GitHub Pages 构建与部署
 ```

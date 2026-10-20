@@ -7,9 +7,9 @@
 | 文件 | 位置 | 说明 |
 | --- | --- | --- |
 | `original-manifest.json` | 本文件夹 | 快照中全部 4,382 个文件的路径、大小和 SHA-256，共 1,121,247,068 字节 |
-| `Travel_ayuan-before-organization.zip` | [Release `local-migration-2026-10-20`](https://github.com/shimmerjoe/youji-ditu/releases/tag/local-migration-2026-10-20) | 完整压缩包，1,010,302,288 字节，SHA-256 `df652b38ae296791a23ad7b8d5d6ac7ea6825fd4bbcacfef3847a3cca150b57c` |
+| `Travel_ayuan-before-organization.zip` | 原 Release `local-migration-2026-10-20`（已决定删除） | 完整压缩包，1,010,302,288 字节，SHA-256 `df652b38ae296791a23ad7b8d5d6ac7ea6825fd4bbcacfef3847a3cca150b57c` |
 
-压缩包有 1.01 GB，超过了 GitHub 仓库单个文件 100 MB 的上限，不能直接放进这个文件夹，所以暂时保留在 Release 中。清单和压缩包里对应文件的哈希值可以逐个对照。
+压缩包有 1.01 GB，超过 GitHub 仓库单个文件 100 MB 的上限，无法放进这个文件夹。2026-10-20，仓库所有者决定只保留本文件夹里的清单和说明，并删除这个 Release。Release 删除后压缩包将无法再下载，下文列出的“仓库中没有”的内容也会随之永久丢失。标签 `local-migration-2026-10-20` 仍然指向整理前的提交 `9f2007b`。
 
 ## 快照内容构成
 
@@ -42,6 +42,4 @@
 
 - 日常开发：直接克隆仓库，不需要这个备份。
 - 确认某个旧文件：在 `original-manifest.json` 里查它的路径和 SHA-256。
-- 恢复完整旧状态：从 Release 下载压缩包，先核对 SHA-256，再解压到一个新的空目录，不要覆盖当前仓库。
-
-如果以后决定删除 Release，请先确认上面列出的“仓库中没有”的内容都已经不再需要。
+- 查看整理前的源码：`git checkout local-migration-2026-10-20`（即提交 `9f2007b`）。

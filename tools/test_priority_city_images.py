@@ -25,11 +25,11 @@ APPROVED_CREDIT_SLUGS = (
     "xiamen",
     "beihai",
     "changsha",
-    "urumqi",
     "lanzhou",
     "haikou",
 )
-REJECTED_CREDIT_SLUGS = ("benxi", "city-cd061af662")
+# 乌鲁木齐原封面是灰霾天际线，2026-10-20 人工审核撤下。
+REJECTED_CREDIT_SLUGS = ("benxi", "city-cd061af662", "urumqi")
 PLACEHOLDER_LICENSES = {"", "unknown", "wikipedia", "wikimedia commons"}
 
 
@@ -164,7 +164,8 @@ class PriorityCityImageTests(unittest.TestCase):
         self.assertIn("xiamen", decisions)
         for slug, decision in decisions.items():
             with self.subTest(city=slug):
-                entry = self.cache[f"cityphoto|{slug}"]
+                # 条目配图的记录键是 item:<photo-cache 键>，城市封面是城市键。
+                entry = self.cache[slug[5:]] if slug.startswith("item:") else self.cache[f"cityphoto|{slug}"]
                 self.assertEqual("rejected", decision["status"])
                 self.assertIn("commons.wikimedia.org/wiki/File:", decision["source"])
                 self.assertTrue(decision["reason"].strip())
@@ -204,9 +205,9 @@ class PriorityCityImageTests(unittest.TestCase):
         active_rejections = {
             slug
             for slug, decision in decisions.items()
-            if self.cache[f"cityphoto|{slug}"].get("source") == decision["source"]
+            if not slug.startswith("item:") and self.cache[f"cityphoto|{slug}"].get("source") == decision["source"]
         }
-        replacements = set(decisions) - active_rejections
+        replacements = {slug for slug in decisions if not slug.startswith("item:")} - active_rejections
         for slug in active_rejections:
             with self.subTest(city=slug):
                 self.assertIn(slug, no_image_keys)
@@ -219,10 +220,25 @@ class PriorityCityImageTests(unittest.TestCase):
         audit = (ROOT / "docs" / "reports" / "内容与图片体检.md").read_text(encoding="utf-8")
         self.assertIn("图片内容审核拒绝清单", audit)
         for slug, decision in decisions.items():
-            if self.cache[f"cityphoto|{slug}"].get("source") != decision["source"]:
+            if slug.startswith("item:") or self.cache[f"cityphoto|{slug}"].get("source") != decision["source"]:
                 continue
             with self.subTest(city=slug):
                 self.assertIn(decision["reason"], audit)
+
+    def test_rejected_item_photos_are_not_shown_on_any_page(self):
+        decisions = json.loads(EDITORIAL_PATH.read_text(encoding="utf-8"))["decisions"]
+        rejected_paths = {
+            self.cache[slug[5:]]["path"] for slug, decision in decisions.items()
+            if slug.startswith("item:") and self.cache[slug[5:]].get("source") == decision["source"]
+        }
+        self.assertGreater(len(rejected_paths), 0)
+        pages = "".join(path.read_text(encoding="utf-8") for path in (ROOT / "site" / "cities").glob("*.html"))
+        for path in rejected_paths:
+            with self.subTest(path=path):
+                self.assertNotIn(path, pages)
+
+    def test_book_scans_are_never_accepted_as_place_photos(self):
+        self.assertIn("image/vnd.djvu", builder.NON_PHOTO_MIMES)
 
     def test_approved_city_cover_credits_expose_creator_license_and_source(self):
         pages = {page.key: page for page in builder.PAGES}

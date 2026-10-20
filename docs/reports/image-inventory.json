@@ -2735,7 +2735,7 @@
    "sha256": "23ccf5257e1189c8",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/altay.jpg",
@@ -2783,7 +2783,7 @@
    "sha256": "dafc323a1deb8944",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/anyang.jpg",
@@ -2879,7 +2879,7 @@
    "sha256": "3c9c3f5e6a54f658",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/beijing.jpg",
@@ -2895,7 +2895,7 @@
    "sha256": "4cc1e5e215cb0df4",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/benxi.jpg",
@@ -2943,7 +2943,7 @@
    "sha256": "9bc2eb5d2bec4ce2",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/changchun.jpg",
@@ -2975,7 +2975,7 @@
    "sha256": "445144e450625a8f",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/changzhou.jpg",
@@ -2991,7 +2991,7 @@
    "sha256": "57eda691b17cdbac",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/chaozhou.jpg",
@@ -3007,7 +3007,7 @@
    "sha256": "5b6be8965ba9011b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/chengde.jpg",
@@ -3023,7 +3023,7 @@
    "sha256": "5a9a4d54636224f8",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/chengdu.jpg",
@@ -3039,7 +3039,7 @@
    "sha256": "42b2d1eb6ab67d9b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/chenzhou.jpg",
@@ -3055,7 +3055,7 @@
    "sha256": "480dedc3a8494d21",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/chifeng.jpg",
@@ -3103,7 +3103,7 @@
    "sha256": "8a2c0372b3af376c",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/chongzuo.jpg",
@@ -3115,11 +3115,11 @@
    "license": "CC BY-SA 3.0",
    "width": 1280,
    "height": 720,
-   "bytes": 210884,
-   "sha256": "9da39684b0c04cc6",
+   "bytes": 36861,
+   "sha256": "673c4122efcc2a87",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：夜间霓虹酒店和桥，看不出崇左的旅行目的地特征。"
   },
   {
    "path": "assets/images/chuxiong.jpg",
@@ -3135,7 +3135,7 @@
    "sha256": "62cae3b00bafa9ea",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/chuzhou.jpg",
@@ -3151,7 +3151,7 @@
    "sha256": "eb77707722ab087d",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-01c5f8d4bd.jpg",
@@ -3167,7 +3167,7 @@
    "sha256": "5cde84d5af861aa2",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-063ad2b3a1.jpg",
@@ -3179,11 +3179,11 @@
    "license": "Public domain",
    "width": 1280,
    "height": 720,
-   "bytes": 85207,
-   "sha256": "5438d2069a307470",
+   "bytes": 35246,
+   "sha256": "badf509ae7748ac9",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：灰霾中的城市天际线，缺少清远的目的地辨识度。"
   },
   {
    "path": "assets/images/city-1024953e98.jpg",
@@ -3231,7 +3231,7 @@
    "sha256": "d2e6016a1ca1f28b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-26d8854046.jpg",
@@ -3247,7 +3247,7 @@
    "sha256": "9790cc314e900c2b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-46fb46ca60.jpg",
@@ -3263,7 +3263,7 @@
    "sha256": "05db0927383cc356",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-70a162c4c8.jpg",
@@ -3279,7 +3279,7 @@
    "sha256": "916f1323a3646656",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-74cb733382.jpg",
@@ -3295,7 +3295,7 @@
    "sha256": "e98de5cd890dd550",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-75ea8ef32e.jpg",
@@ -3311,7 +3311,7 @@
    "sha256": "c0df8e4ba00a2762",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-89fbc8de32.jpg",
@@ -3327,7 +3327,7 @@
    "sha256": "b0f4f18062731a55",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-8caea524f7.jpg",
@@ -3391,7 +3391,7 @@
    "sha256": "b5901780a90e10b9",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-a85ccb681c.jpg",
@@ -3403,11 +3403,11 @@
    "license": "CC BY-SA 4.0",
    "width": 1280,
    "height": 720,
-   "bytes": 198621,
-   "sha256": "fb089cb8a182b064",
+   "bytes": 32122,
+   "sha256": "8c9d81fc0e4592f4",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：城市雕塑与楼群，无法确认是浙江台州还是江苏泰州，也缺少目的地特征。"
   },
   {
    "path": "assets/images/city-aca7238373.jpg",
@@ -3423,7 +3423,7 @@
    "sha256": "29ede458a12e74bb",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-b3b41f77aa.jpg",
@@ -3455,7 +3455,7 @@
    "sha256": "0f42df901d2f698b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-bb8f71d8bb.jpg",
@@ -3471,7 +3471,7 @@
    "sha256": "197b7904a7845171",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-bba2efc317.jpg",
@@ -3487,7 +3487,7 @@
    "sha256": "50a7a360be4af382",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-c815eff127.jpg",
@@ -3535,7 +3535,7 @@
    "sha256": "322f94a6668c010a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-e37a468e5c.jpg",
@@ -3583,7 +3583,7 @@
    "sha256": "6920d8d2ecd1fcf6",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-fe917b462d.jpg",
@@ -3599,7 +3599,7 @@
    "sha256": "034322594b2f5b03",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/city-fefbb1572a.jpg",
@@ -3631,7 +3631,7 @@
    "sha256": "92e66a0a3b83b341",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/dalian.jpg",
@@ -3647,7 +3647,7 @@
    "sha256": "e8843fe6c816ea63",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/dandong.jpg",
@@ -3663,7 +3663,7 @@
    "sha256": "057391fdadb9a143",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/datong.jpg",
@@ -3679,7 +3679,7 @@
    "sha256": "950691b64cb4cf54",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/dehong.jpg",
@@ -3695,7 +3695,7 @@
    "sha256": "ff674e6dd5d1f8fc",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/deyang.jpg",
@@ -3723,11 +3723,11 @@
    "license": "CC BY-SA 4.0",
    "width": 1280,
    "height": 720,
-   "bytes": 340085,
-   "sha256": "6d67d59bd9a7ac24",
+   "bytes": 26879,
+   "sha256": "d0148a645390738d",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：墙角与树木的局部构图，看不出可园和东莞的特征。"
   },
   {
    "path": "assets/images/dunhuang.jpg",
@@ -3743,7 +3743,7 @@
    "sha256": "58281bbfbff39b13",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/enshi.jpg",
@@ -3759,7 +3759,7 @@
    "sha256": "3f545903960af8e0",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/fangchenggang.jpg",
@@ -3775,7 +3775,7 @@
    "sha256": "14c325ab9900316f",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/foshan.jpg",
@@ -3787,11 +3787,11 @@
    "license": "CC BY 2.0",
    "width": 1280,
    "height": 720,
-   "bytes": 286967,
-   "sha256": "77a10fb679de2c4f",
+   "bytes": 37364,
+   "sha256": "c981c14877bb3bde",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：带施工塔吊的普通楼群，缺少佛山的目的地特征。"
   },
   {
    "path": "assets/images/fuzhou.jpg",
@@ -3867,11 +3867,11 @@
    "license": "CC0",
    "width": 1280,
    "height": 720,
-   "bytes": 287693,
-   "sha256": "00980c17b5cf388d",
+   "bytes": 38000,
+   "sha256": "b0dade6c8cef8a4a",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：在建楼群为主的城区远景，缺少广元的目的地特征。"
   },
   {
    "path": "assets/images/guangzhou.jpg",
@@ -3887,7 +3887,7 @@
    "sha256": "54fe768beffdc2b8",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/guilin.jpg",
@@ -3903,7 +3903,7 @@
    "sha256": "bafda7bda7bdebe8",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/guiyang.jpg",
@@ -3915,11 +3915,11 @@
    "license": "CC BY-SA 3.0",
    "width": 1280,
    "height": 720,
-   "bytes": 138458,
-   "sha256": "5801e6299015c5a1",
+   "bytes": 39052,
+   "sha256": "49bb97b455488096",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：夜间灰霾城区，画面看不清。"
   },
   {
    "path": "assets/images/haikou.jpg",
@@ -3935,7 +3935,7 @@
    "sha256": "62d8c17f843e49f7",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/haixi.jpg",
@@ -3951,7 +3951,7 @@
    "sha256": "dfce75ebb449843f",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/hami.jpg",
@@ -3983,7 +3983,7 @@
    "sha256": "9e6a5c58731fa1cb",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/hangzhou.jpg",
@@ -3999,7 +3999,7 @@
    "sha256": "7f24244e07778baf",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/hanzhong.jpg",
@@ -4015,7 +4015,7 @@
    "sha256": "ed19d86ccbd5c346",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/harbin.jpg",
@@ -4031,7 +4031,7 @@
    "sha256": "9782e8b295bf0535",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/hefei.jpg",
@@ -4047,7 +4047,7 @@
    "sha256": "c9f70217e5c32e69",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/hengyang.jpg",
@@ -4063,7 +4063,7 @@
    "sha256": "59bc15974822656f",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/hezhou.jpg",
@@ -4075,11 +4075,11 @@
    "license": "CC BY 2.0",
    "width": 1280,
    "height": 720,
-   "bytes": 183186,
-   "sha256": "b75ec7d5bec83d0b",
+   "bytes": 36378,
+   "sha256": "5b799afe4e446165",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：普通街边菜市场，不能代表贺州的旅行体验。"
   },
   {
    "path": "assets/images/hohhot.jpg",
@@ -4111,7 +4111,7 @@
    "sha256": "69d709c82c0615c8",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/honghe.jpg",
@@ -4127,7 +4127,7 @@
    "sha256": "ef2f474d9adb25ba",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/huangshan.jpg",
@@ -4143,7 +4143,7 @@
    "sha256": "0c2336b254445b29",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/huizhou.jpg",
@@ -4171,11 +4171,11 @@
    "license": "CC BY-SA 3.0",
    "width": 1280,
    "height": 720,
-   "bytes": 157674,
-   "sha256": "c164217e4101b320",
+   "bytes": 26017,
+   "sha256": "e5d6264c1b8d138b",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：装饰性门楼和楼房，不能代表呼伦贝尔草原。"
   },
   {
    "path": "assets/images/huzhou.jpg",
@@ -4187,11 +4187,11 @@
    "license": "CC BY-SA 4.0",
    "width": 1280,
    "height": 720,
-   "bytes": 175179,
-   "sha256": "b3556844b6d23272",
+   "bytes": 34621,
+   "sha256": "1c3a63d4145eb48b",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：商业酒店建筑，作为城市封面有品牌导流之嫌。"
   },
   {
    "path": "assets/images/ili.jpg",
@@ -4287,7 +4287,7 @@
    "sha256": "a75022dd647a09df",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/jilin-city.jpg",
@@ -4303,7 +4303,7 @@
    "sha256": "20c9dce32dd0a663",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/jinan.jpg",
@@ -4335,7 +4335,7 @@
    "sha256": "5f967e0a81d70662",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/jingzhou.jpg",
@@ -4351,7 +4351,7 @@
    "sha256": "a9137fad7f21f302",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/jinhua.jpg",
@@ -4367,7 +4367,7 @@
    "sha256": "c526f1e470340a17",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/jining.jpg",
@@ -4431,7 +4431,7 @@
    "sha256": "4e855d8b63cbb7f1",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/kashgar.jpg",
@@ -4447,7 +4447,7 @@
    "sha256": "042c1ecca887a110",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/kunming.jpg",
@@ -4463,7 +4463,7 @@
    "sha256": "151ac334e9d58344",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/lanzhou.jpg",
@@ -4479,7 +4479,7 @@
    "sha256": "5fa122998bc9e86a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/leshan.jpg",
@@ -4495,7 +4495,7 @@
    "sha256": "b97b8865cfef9ac7",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/lhasa.jpg",
@@ -4511,7 +4511,7 @@
    "sha256": "2716d8d46d92a473",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/liangshan.jpg",
@@ -4559,7 +4559,7 @@
    "sha256": "8a748c7dfe99300c",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/lincang.jpg",
@@ -4591,7 +4591,7 @@
    "sha256": "a5c947393ddf7782",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/linyi.jpg",
@@ -4607,7 +4607,7 @@
    "sha256": "dcfad38fb1818ed2",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/liupanshui.jpg",
@@ -4639,7 +4639,7 @@
    "sha256": "3991c63ceeb91734",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/longnan.jpg",
@@ -4671,7 +4671,7 @@
    "sha256": "9db82f55f6c4e8ac",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/luoyang.jpg",
@@ -4687,7 +4687,7 @@
    "sha256": "d21588af9b87b83c",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/luzhou.jpg",
@@ -4699,11 +4699,11 @@
    "license": "CC BY-SA 3.0",
    "width": 1280,
    "height": 720,
-   "bytes": 83913,
-   "sha256": "e0f04c0d71905b15",
+   "bytes": 29583,
+   "sha256": "4366a2329754b49d",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：灰雾中的公路桥，缺少泸州的目的地特征。"
   },
   {
    "path": "assets/images/macao.jpg",
@@ -4719,7 +4719,7 @@
    "sha256": "92dd4fcbcf173137",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/meishan.jpg",
@@ -4735,7 +4735,7 @@
    "sha256": "a88634a06d6baa6c",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/meizhou.jpg",
@@ -4747,11 +4747,11 @@
    "license": "CC BY 2.0",
    "width": 1280,
    "height": 720,
-   "bytes": 159850,
-   "sha256": "073baf71a44ba670",
+   "bytes": 29387,
+   "sha256": "c4eabdd6ec985bc2",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：城市广场和政务楼，不能代表梅州的旅行体验。"
   },
   {
    "path": "assets/images/mianyang.jpg",
@@ -4815,7 +4815,7 @@
    "sha256": "adf922f6762ed09e",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/nanjing.jpg",
@@ -4831,7 +4831,7 @@
    "sha256": "f23e63bec7ff0b74",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/nanning.jpg",
@@ -4847,7 +4847,7 @@
    "sha256": "0d354803c12d8c25",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/nanping.jpg",
@@ -4859,11 +4859,11 @@
    "license": "CC BY 3.0",
    "width": 1280,
    "height": 720,
-   "bytes": 202208,
-   "sha256": "1991c8870c582cc1",
+   "bytes": 27620,
+   "sha256": "cdd91d97298ef28d",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：城区远景，看不出南平（武夷山）的山水特征。"
   },
   {
    "path": "assets/images/nanyang.jpg",
@@ -4927,7 +4927,7 @@
    "sha256": "df2cb483652c51ef",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/ordos.jpg",
@@ -4959,7 +4959,7 @@
    "sha256": "d6b591b4b262de12",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/puer.jpg",
@@ -4987,11 +4987,11 @@
    "license": "CC BY-SA 4.0",
    "width": 1280,
    "height": 720,
-   "bytes": 176073,
-   "sha256": "5a7743d29a518abd",
+   "bytes": 28694,
+   "sha256": "c06b8128a7cbe314",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：灰霾城区远景，缺少莆田的目的地特征。"
   },
   {
    "path": "assets/images/qiandongnan.jpg",
@@ -5003,11 +5003,11 @@
    "license": "CC BY 2.0",
    "width": 1280,
    "height": 720,
-   "bytes": 336908,
-   "sha256": "b54773fc277a712e",
+   "bytes": 40344,
+   "sha256": "df78ba8fc500804f",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：以可辨认的个人肖像为主体，未知是否获得本人同意，不宜作封面。"
   },
   {
    "path": "assets/images/qiannan.jpg",
@@ -5039,7 +5039,7 @@
    "sha256": "8b42b4df0e7f356f",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/qinhuangdao.jpg",
@@ -5051,11 +5051,11 @@
    "license": "CC BY-SA 3.0 de",
    "width": 1280,
    "height": 720,
-   "bytes": 271410,
-   "sha256": "ebc98b93e6c58c0a",
+   "bytes": 34237,
+   "sha256": "14dd47855b9d413e",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：飞机舷窗航拍的海岸，看不出秦皇岛。"
   },
   {
    "path": "assets/images/qiqihar.jpg",
@@ -5087,7 +5087,7 @@
    "sha256": "c7ad64e40d441ea9",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/qujing.jpg",
@@ -5099,11 +5099,11 @@
    "license": "CC BY 3.0",
    "width": 1280,
    "height": 720,
-   "bytes": 142122,
-   "sha256": "3d47dd357ba071fd",
+   "bytes": 32444,
+   "sha256": "5615978f1b939329",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：只有树林和天空，看不出曲靖。"
   },
   {
    "path": "assets/images/record.jpg",
@@ -5151,7 +5151,7 @@
    "sha256": "492fd946946bcc75",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/sanya.jpg",
@@ -5167,7 +5167,7 @@
    "sha256": "9d4d6672b6b67f3a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/shanghai.jpg",
@@ -5183,7 +5183,7 @@
    "sha256": "f36ca4ec73206220",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/shangrao.jpg",
@@ -5215,7 +5215,7 @@
    "sha256": "b3c37527191b46f6",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/shantou.jpg",
@@ -5247,7 +5247,7 @@
    "sha256": "4cca5a1b58397ddd",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/shaoxing.jpg",
@@ -5263,7 +5263,7 @@
    "sha256": "87a7c1acf732f8e1",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/shennongjia.jpg",
@@ -5279,7 +5279,7 @@
    "sha256": "ac133f54d9087d31",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/shenyang.jpg",
@@ -5291,11 +5291,11 @@
    "license": "CC BY-SA 3.0",
    "width": 1280,
    "height": 720,
-   "bytes": 134196,
-   "sha256": "8eaa87cef2ca20bb",
+   "bytes": 33490,
+   "sha256": "578740de60da32d4",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：园区小品建筑，不能代表沈阳。"
   },
   {
    "path": "assets/images/shenzhen.jpg",
@@ -5311,7 +5311,7 @@
    "sha256": "94b7c66d7ebef0d0",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/shijiazhuang.jpg",
@@ -5323,11 +5323,11 @@
    "license": "CC BY-SA 3.0",
    "width": 1280,
    "height": 720,
-   "bytes": 218312,
-   "sha256": "877d3fdf01d0622c",
+   "bytes": 36111,
+   "sha256": "4b4fb5253bd33724",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：普通楼宇和商业招牌，缺少石家庄的目的地特征。"
   },
   {
    "path": "assets/images/shiyan.jpg",
@@ -5343,7 +5343,7 @@
    "sha256": "1f5f148f49a012c0",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/suzhou.jpg",
@@ -5359,7 +5359,7 @@
    "sha256": "d8971ec568edcf53",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/taian.jpg",
@@ -5375,7 +5375,7 @@
    "sha256": "0bf09fd8127fe57b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/taiyuan.jpg",
@@ -5387,11 +5387,11 @@
    "license": "CC BY-SA 4.0",
    "width": 1280,
    "height": 720,
-   "bytes": 122690,
-   "sha256": "b09799900fe8dc28",
+   "bytes": 34070,
+   "sha256": "213fc58ef56d7f8a",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：灰霾夜景，画面不清楚。"
   },
   {
    "path": "assets/images/tangshan.jpg",
@@ -5407,7 +5407,7 @@
    "sha256": "2e744b4e8a69528e",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/tengchong.jpg",
@@ -5439,7 +5439,7 @@
    "sha256": "70f3321ef33d1fdf",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/tianshui.jpg",
@@ -5451,11 +5451,11 @@
    "license": "CC BY-SA 2.0",
    "width": 1280,
    "height": 720,
-   "bytes": 327023,
-   "sha256": "6dfad26778e956d1",
+   "bytes": 35571,
+   "sha256": "b1ab50eaab74ea68",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：街口牌坊和大量摩托车，画面杂乱。"
   },
   {
    "path": "assets/images/tongren.jpg",
@@ -5471,7 +5471,7 @@
    "sha256": "da3b0e3eef1c2799",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/turpan.jpg",
@@ -5487,7 +5487,7 @@
    "sha256": "5172664d45781d4c",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/urumqi.jpg",
@@ -5499,11 +5499,11 @@
    "license": "CC BY 3.0 pl",
    "width": 1280,
    "height": 720,
-   "bytes": 140612,
-   "sha256": "5a7d0ceaf8828dc2",
+   "bytes": 32379,
+   "sha256": "ec4c362b985f28c9",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：灰霾天际线，不能代表乌鲁木齐。"
   },
   {
    "path": "assets/images/w640/aba.jpg",
@@ -5519,7 +5519,7 @@
    "sha256": "893a194016555659",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/anshun.jpg",
@@ -5535,7 +5535,7 @@
    "sha256": "13bc3bef375273f1",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/beihai.jpg",
@@ -5551,7 +5551,7 @@
    "sha256": "9b5dbf91fa9d91d5",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/beijing.jpg",
@@ -5567,7 +5567,7 @@
    "sha256": "419fea88caca7154",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/bozhou.jpg",
@@ -5583,7 +5583,7 @@
    "sha256": "213ebe93126ee64a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/changsha.jpg",
@@ -5599,7 +5599,7 @@
    "sha256": "8ff5c8efdb20b4fa",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/changzhou.jpg",
@@ -5615,7 +5615,7 @@
    "sha256": "9894e662db48d19f",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/chaozhou.jpg",
@@ -5631,7 +5631,7 @@
    "sha256": "63e00f15beb6022b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/chengde.jpg",
@@ -5647,7 +5647,7 @@
    "sha256": "52b228653a381831",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/chengdu.jpg",
@@ -5663,7 +5663,7 @@
    "sha256": "c5c9c50ac19fc53e",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/chenzhou.jpg",
@@ -5679,7 +5679,7 @@
    "sha256": "6b4b3858454f2eae",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/chongqing.jpg",
@@ -5695,23 +5695,7 @@
    "sha256": "88d3676dcdc868c5",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/chongzuo.jpg",
-   "kind": "封面小图",
-   "subject": "chongzuo",
-   "city": "chongzuo",
-   "source": "https://commons.wikimedia.org/wiki/File:Pingxiang,_Chongzuo,_Guangxi,_China_-_panoramio.jpg",
-   "author": "huxuejiang",
-   "license": "CC BY-SA 3.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 39061,
-   "sha256": "82eef9350e83e696",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/chuxiong.jpg",
@@ -5727,7 +5711,7 @@
    "sha256": "6a9fe393799cf70d",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/chuzhou.jpg",
@@ -5743,7 +5727,7 @@
    "sha256": "5f1638a0fd4261bb",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-01c5f8d4bd.jpg",
@@ -5759,23 +5743,7 @@
    "sha256": "bcc4dd830c323063",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/city-063ad2b3a1.jpg",
-   "kind": "封面小图",
-   "subject": "city-063ad2b3a1",
-   "city": "city-063ad2b3a1",
-   "source": "https://commons.wikimedia.org/wiki/File:Qingyuan_Xiaoshi_Skyline.JPG",
-   "author": "Alex Liu (Feelmore at Chinese Wikipedia)",
-   "license": "Public domain",
-   "width": 640,
-   "height": 360,
-   "bytes": 20121,
-   "sha256": "33ff2fcfe6516b54",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-24d7bb1283.jpg",
@@ -5791,7 +5759,7 @@
    "sha256": "fca1255212fe45e8",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-26d8854046.jpg",
@@ -5807,7 +5775,7 @@
    "sha256": "b3335dc31de65b3b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-46fb46ca60.jpg",
@@ -5823,7 +5791,7 @@
    "sha256": "6a42da45d49c76e3",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-70a162c4c8.jpg",
@@ -5839,7 +5807,7 @@
    "sha256": "b1eca44eaa5d08e5",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-74cb733382.jpg",
@@ -5855,7 +5823,7 @@
    "sha256": "824928f05bd2c3f3",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-75ea8ef32e.jpg",
@@ -5871,7 +5839,7 @@
    "sha256": "9a7376f475fea595",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-89fbc8de32.jpg",
@@ -5887,7 +5855,7 @@
    "sha256": "094d038c3bc99184",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-9845bf4f54.jpg",
@@ -5903,23 +5871,7 @@
    "sha256": "94accdcb03ea32fe",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/city-a85ccb681c.jpg",
-   "kind": "封面小图",
-   "subject": "city-a85ccb681c",
-   "city": "city-a85ccb681c",
-   "source": "https://commons.wikimedia.org/wiki/File:Taizhou_Sculpture.jpg",
-   "author": "Rowingbohe",
-   "license": "CC BY-SA 4.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 46269,
-   "sha256": "f3ccb3413d96ffb0",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-aca7238373.jpg",
@@ -5935,7 +5887,7 @@
    "sha256": "7a1a4b6d9f761d26",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-b4ea58c862.jpg",
@@ -5951,7 +5903,7 @@
    "sha256": "43041c534994f934",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-bb8f71d8bb.jpg",
@@ -5967,7 +5919,7 @@
    "sha256": "cb134576385e06ac",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-bba2efc317.jpg",
@@ -5983,7 +5935,7 @@
    "sha256": "41824e19d53a0d4d",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-ce8f4e324f.jpg",
@@ -5999,7 +5951,7 @@
    "sha256": "738f72562869dd50",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-f620e8bf11.jpg",
@@ -6015,7 +5967,7 @@
    "sha256": "4ececc885fa698ab",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/city-fe917b462d.jpg",
@@ -6031,7 +5983,7 @@
    "sha256": "257ff21b8bee6c94",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/dali.jpg",
@@ -6047,7 +5999,7 @@
    "sha256": "ff7162ba86a454e9",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/dalian.jpg",
@@ -6063,7 +6015,7 @@
    "sha256": "b9344460e6377cc5",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/dandong.jpg",
@@ -6079,7 +6031,7 @@
    "sha256": "a572f33f08118609",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/datong.jpg",
@@ -6095,7 +6047,7 @@
    "sha256": "027db234d1db3475",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/dehong.jpg",
@@ -6111,23 +6063,7 @@
    "sha256": "dcc823b50324f096",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/dongguan.jpg",
-   "kind": "封面小图",
-   "subject": "dongguan",
-   "city": "dongguan",
-   "source": "https://commons.wikimedia.org/wiki/File:KE_YUAN,_DONGGUAN,_CHINA_(13).jpg",
-   "author": "Dinkun Chen",
-   "license": "CC BY-SA 4.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 75856,
-   "sha256": "f592ea77218cf5d4",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/dunhuang.jpg",
@@ -6143,7 +6079,7 @@
    "sha256": "8d97332540fca209",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/enshi.jpg",
@@ -6159,7 +6095,7 @@
    "sha256": "fde0c8e708ca6061",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/fangchenggang.jpg",
@@ -6175,39 +6111,7 @@
    "sha256": "5ec32fefcc402bc8",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/foshan.jpg",
-   "kind": "封面小图",
-   "subject": "foshan",
-   "city": "foshan",
-   "source": "https://commons.wikimedia.org/wiki/File:39459-Foshan.jpg",
-   "author": "xiquinhosilva from Cacau",
-   "license": "CC BY 2.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 60407,
-   "sha256": "a7603fcf9ebe6382",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/guangyuan.jpg",
-   "kind": "封面小图",
-   "subject": "guangyuan",
-   "city": "guangyuan",
-   "source": "https://commons.wikimedia.org/wiki/File:Guangyuan_skyline.jpg",
-   "author": "Brian Dell",
-   "license": "CC0",
-   "width": 640,
-   "height": 360,
-   "bytes": 62348,
-   "sha256": "920fe5bc5420a6e3",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/guangzhou.jpg",
@@ -6223,7 +6127,7 @@
    "sha256": "f4615ce8f5ac27b2",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/guilin.jpg",
@@ -6239,23 +6143,7 @@
    "sha256": "7b24d11e5eacc0fe",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/guiyang.jpg",
-   "kind": "封面小图",
-   "subject": "guiyang",
-   "city": "guiyang",
-   "source": "https://commons.wikimedia.org/wiki/File:Nanming,_Guiyang,_Guizhou,_China_-_panoramio.jpg",
-   "author": "landagent",
-   "license": "CC BY-SA 3.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 34658,
-   "sha256": "8eff92cdd517afd7",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/haikou.jpg",
@@ -6271,7 +6159,7 @@
    "sha256": "ae89d59d03f13118",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/haixi.jpg",
@@ -6287,7 +6175,7 @@
    "sha256": "7e3498a0a4de301d",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/handan.jpg",
@@ -6303,7 +6191,7 @@
    "sha256": "6c61a48da00ccdfe",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/hangzhou.jpg",
@@ -6319,7 +6207,7 @@
    "sha256": "561ae1472520e16e",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/hanzhong.jpg",
@@ -6335,7 +6223,7 @@
    "sha256": "e545644c4be6458a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/harbin.jpg",
@@ -6351,7 +6239,7 @@
    "sha256": "4f51d207d46e8945",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/hefei.jpg",
@@ -6367,7 +6255,7 @@
    "sha256": "46f428b330ceacf0",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/hengyang.jpg",
@@ -6383,23 +6271,7 @@
    "sha256": "c585dcf4dd22fbb4",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/hezhou.jpg",
-   "kind": "封面小图",
-   "subject": "hezhou",
-   "city": "hezhou",
-   "source": "https://commons.wikimedia.org/wiki/File:Hezhou_Market_(39376034244).jpg",
-   "author": "Rutger van der Maar",
-   "license": "CC BY 2.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 50269,
-   "sha256": "52867fef028465d7",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/hong-kong.jpg",
@@ -6415,7 +6287,7 @@
    "sha256": "a01f75f227607bea",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/honghe.jpg",
@@ -6431,7 +6303,7 @@
    "sha256": "665754f7f129e954",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/huangshan.jpg",
@@ -6447,39 +6319,7 @@
    "sha256": "8f23cd83b06fa089",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/hulunbuir.jpg",
-   "kind": "封面小图",
-   "subject": "hulunbuir",
-   "city": "hulunbuir",
-   "source": "https://commons.wikimedia.org/wiki/File:Hulunbuir.jpg",
-   "author": "Fanghong",
-   "license": "CC BY-SA 3.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 42854,
-   "sha256": "a0e3288d0b69cf9e",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/huzhou.jpg",
-   "kind": "封面小图",
-   "subject": "huzhou",
-   "city": "huzhou",
-   "source": "https://commons.wikimedia.org/wiki/File:Sheraton_Huzhou_Hot_Spring_Resort_4.jpg",
-   "author": "钉钉",
-   "license": "CC BY-SA 4.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 32307,
-   "sha256": "1b3828a1ceeb3bc8",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/jiayuguan.jpg",
@@ -6495,7 +6335,7 @@
    "sha256": "4f2fef242a8d60c0",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/jilin-city.jpg",
@@ -6511,7 +6351,7 @@
    "sha256": "4c89ed054c48a6cd",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/jingdezhen.jpg",
@@ -6527,7 +6367,7 @@
    "sha256": "52c90af3c5535d31",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/jingzhou.jpg",
@@ -6543,7 +6383,7 @@
    "sha256": "cecbe9420dbe5b1a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/jinhua.jpg",
@@ -6559,7 +6399,7 @@
    "sha256": "74fbab85e2bfec5b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/kaifeng.jpg",
@@ -6575,7 +6415,7 @@
    "sha256": "188b5007fa7f4ab3",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/kashgar.jpg",
@@ -6591,7 +6431,7 @@
    "sha256": "034b5bbaf458d2d6",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/kunming.jpg",
@@ -6607,7 +6447,7 @@
    "sha256": "da6f598ce2c4d0da",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/lanzhou.jpg",
@@ -6623,7 +6463,7 @@
    "sha256": "ce22e57a53f17cb3",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/leshan.jpg",
@@ -6639,7 +6479,7 @@
    "sha256": "421612c535ac71b8",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/lhasa.jpg",
@@ -6655,7 +6495,7 @@
    "sha256": "6bdf86dbfbc3d436",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/lijiang.jpg",
@@ -6671,7 +6511,7 @@
    "sha256": "4fdac0bcea53937b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/linfen.jpg",
@@ -6687,7 +6527,7 @@
    "sha256": "533c39ca59b8f4c1",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/linyi.jpg",
@@ -6703,7 +6543,7 @@
    "sha256": "2ff72fe48090e11d",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/liuzhou.jpg",
@@ -6719,7 +6559,7 @@
    "sha256": "af66ecafb86635db",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/longyan.jpg",
@@ -6735,7 +6575,7 @@
    "sha256": "39f7e88bf0229f03",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/luoyang.jpg",
@@ -6751,23 +6591,7 @@
    "sha256": "673e935882fe0e22",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/luzhou.jpg",
-   "kind": "封面小图",
-   "subject": "luzhou",
-   "city": "luzhou",
-   "source": "https://commons.wikimedia.org/wiki/File:Luzhou_Yangtze_River_Bridge.JPG",
-   "author": "Glabb",
-   "license": "CC BY-SA 3.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 17788,
-   "sha256": "1203123ca2fe9cd6",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/macao.jpg",
@@ -6783,7 +6607,7 @@
    "sha256": "f3997f1d7a52ce6b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/meishan.jpg",
@@ -6799,23 +6623,7 @@
    "sha256": "1ad9c3d9515c3824",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/meizhou.jpg",
-   "kind": "封面小图",
-   "subject": "meizhou",
-   "city": "meizhou",
-   "source": "https://commons.wikimedia.org/wiki/File:Meizhou_New_Century_Square.jpg",
-   "author": "Anthony Hartman from Meizhou, China",
-   "license": "CC BY 2.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 37637,
-   "sha256": "c9246a22555eede3",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/nanchang.jpg",
@@ -6831,7 +6639,7 @@
    "sha256": "cc988439bb2382a1",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/nanjing.jpg",
@@ -6847,7 +6655,7 @@
    "sha256": "85b3cbb52576d367",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/nanning.jpg",
@@ -6863,23 +6671,7 @@
    "sha256": "48f6019351351731",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/nanping.jpg",
-   "kind": "封面小图",
-   "subject": "nanping",
-   "city": "nanping",
-   "source": "https://commons.wikimedia.org/wiki/File:%E7%99%BD%E8%8A%B1%E5%B2%A9%E4%B8%8A%E7%9C%8B%E6%AD%A6%E5%A4%B7%E5%B1%B1%E5%B8%82_-_Wuyishan_City_Viewed_from_Baihua_Rock_-_2015.11_-_panoramio.jpg",
-   "author": "rheins",
-   "license": "CC BY 3.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 52240,
-   "sha256": "5f5ed1151fcb50ef",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/nyingchi.jpg",
@@ -6895,7 +6687,7 @@
    "sha256": "b3e61d0ed608af90",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/panjin.jpg",
@@ -6911,39 +6703,7 @@
    "sha256": "82438305c20273ec",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/putian.jpg",
-   "kind": "封面小图",
-   "subject": "putian",
-   "city": "putian",
-   "source": "https://commons.wikimedia.org/wiki/File:Sanshan,_Xitianwei,_Putian_(20170124121511).jpg",
-   "author": "N509FZ",
-   "license": "CC BY-SA 4.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 40468,
-   "sha256": "84afafd9e31a5ffd",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/qiandongnan.jpg",
-   "kind": "封面小图",
-   "subject": "qiandongnan",
-   "city": "qiandongnan",
-   "source": "https://commons.wikimedia.org/wiki/File:Miao_women_in_Langde_village_(2006).jpg",
-   "author": "Tianjin24",
-   "license": "CC BY 2.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 82893,
-   "sha256": "a23510cb26c0fbc8",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/qingdao.jpg",
@@ -6959,23 +6719,7 @@
    "sha256": "bc05d130e71069c7",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/qinhuangdao.jpg",
-   "kind": "封面小图",
-   "subject": "qinhuangdao",
-   "city": "qinhuangdao",
-   "source": "https://commons.wikimedia.org/wiki/File:Qinhuangdao_%E7%A7%A6%E7%9A%87%E5%B2%9B.jpg",
-   "author": "Arne Müseler",
-   "license": "CC BY-SA 3.0 de",
-   "width": 640,
-   "height": 360,
-   "bytes": 55571,
-   "sha256": "4504be0390d38a3e",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/quanzhou.jpg",
@@ -6991,23 +6735,7 @@
    "sha256": "5e8cc3ff201a5b9c",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/qujing.jpg",
-   "kind": "封面小图",
-   "subject": "qujing",
-   "city": "qujing",
-   "source": "https://commons.wikimedia.org/wiki/File:Huize,_Qujing,_Yunnan,_China_-_panoramio.jpg",
-   "author": "dgykx",
-   "license": "CC BY 3.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 26545,
-   "sha256": "af29f9b5f210f97b",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/sanming.jpg",
@@ -7023,7 +6751,7 @@
    "sha256": "97c67cd3d207c9d1",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/sanya.jpg",
@@ -7039,7 +6767,7 @@
    "sha256": "a34925d64d4651cf",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/shanghai.jpg",
@@ -7055,7 +6783,7 @@
    "sha256": "13441d0a0b494266",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/shangrila.jpg",
@@ -7071,7 +6799,7 @@
    "sha256": "f12c8f1cb5ec0d3b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/shaoguan.jpg",
@@ -7087,7 +6815,7 @@
    "sha256": "66b1015ff1127489",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/shaoxing.jpg",
@@ -7103,7 +6831,7 @@
    "sha256": "c7f23287f3899222",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/shennongjia.jpg",
@@ -7119,23 +6847,7 @@
    "sha256": "134c483fd25c5e56",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/shenyang.jpg",
-   "kind": "封面小图",
-   "subject": "shenyang",
-   "city": "shenyang",
-   "source": "https://commons.wikimedia.org/wiki/File:Shenyang-shiboyuan2.jpg",
-   "author": "Emmanuel Grolleau",
-   "license": "CC BY-SA 3.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 47503,
-   "sha256": "4f298c2b3aa62f4c",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/shenzhen.jpg",
@@ -7151,23 +6863,7 @@
    "sha256": "8af621043b66a10d",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/shijiazhuang.jpg",
-   "kind": "封面小图",
-   "subject": "shijiazhuang",
-   "city": "shijiazhuang",
-   "source": "https://commons.wikimedia.org/wiki/File:Yuhua,_Shijiazhuang,_Hebei,_China_-_panoramio_(12).jpg",
-   "author": "ping lin",
-   "license": "CC BY-SA 3.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 45291,
-   "sha256": "9f7a69733c9c85be",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/shiyan.jpg",
@@ -7183,7 +6879,7 @@
    "sha256": "70eace4bdbde2b7a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/suzhou.jpg",
@@ -7199,7 +6895,7 @@
    "sha256": "887e5edb66d83ba7",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/taian.jpg",
@@ -7215,23 +6911,7 @@
    "sha256": "0fbc3d960004fe14",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/taiyuan.jpg",
-   "kind": "封面小图",
-   "subject": "taiyuan",
-   "city": "taiyuan",
-   "source": "https://commons.wikimedia.org/wiki/File:Skyline_of_Taiyuan,_Oct_1_2023.png",
-   "author": "A Chinese ID",
-   "license": "CC BY-SA 4.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 32576,
-   "sha256": "fb5b179262802f09",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/tangshan.jpg",
@@ -7247,7 +6927,7 @@
    "sha256": "3814cf8aacf3f5a3",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/tianjin.jpg",
@@ -7263,23 +6943,7 @@
    "sha256": "87f625b1aa89b4ea",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/tianshui.jpg",
-   "kind": "封面小图",
-   "subject": "tianshui",
-   "city": "tianshui",
-   "source": "https://commons.wikimedia.org/wiki/File:Tianshui_street.jpg",
-   "author": "shizhao from beijing, china",
-   "license": "CC BY-SA 2.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 75852,
-   "sha256": "0e47d3067ffce777",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/tongren.jpg",
@@ -7295,7 +6959,7 @@
    "sha256": "e0c25905ff2bfa21",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/turpan.jpg",
@@ -7311,23 +6975,7 @@
    "sha256": "3891557dd30b1311",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/urumqi.jpg",
-   "kind": "封面小图",
-   "subject": "urumqi",
-   "city": "urumqi",
-   "source": "https://commons.wikimedia.org/wiki/File:Urumqi_skyline_(3).jpg",
-   "author": "Radosław Botev",
-   "license": "CC BY 3.0 pl",
-   "width": 640,
-   "height": 360,
-   "bytes": 32578,
-   "sha256": "049ead3b6178771f",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/wanning.jpg",
@@ -7343,7 +6991,7 @@
    "sha256": "0888b8f5ff723dde",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/weifang.jpg",
@@ -7359,7 +7007,7 @@
    "sha256": "7ca735098c5edd40",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/weihai.jpg",
@@ -7375,7 +7023,7 @@
    "sha256": "f619ca76ea285b72",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/wenchang.jpg",
@@ -7391,39 +7039,7 @@
    "sha256": "d6de43feb277ea06",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/wenzhou.jpg",
-   "kind": "封面小图",
-   "subject": "wenzhou",
-   "city": "wenzhou",
-   "source": "https://commons.wikimedia.org/wiki/File:%E9%9B%81%E8%8D%A1%E5%B1%B1%E5%B1%B1%E5%BA%84_Yandangshan_Mountain_Villa_-_panoramio.jpg",
-   "author": "wanghongliu",
-   "license": "CC BY-SA 3.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 38667,
-   "sha256": "1c64b24446c020de",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/wuhan.jpg",
-   "kind": "封面小图",
-   "subject": "wuhan",
-   "city": "wuhan",
-   "source": "https://commons.wikimedia.org/wiki/File:Wuhan_Botanical_Garden.jpg",
-   "author": "Sun Jiao (Interaccoonale)",
-   "license": "CC BY-SA 4.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 55651,
-   "sha256": "8a3ab37e1ca91b55",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/wuhu.jpg",
@@ -7439,23 +7055,7 @@
    "sha256": "3541669c137d2067",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/wuwei.jpg",
-   "kind": "封面小图",
-   "subject": "wuwei",
-   "city": "wuwei",
-   "source": "https://commons.wikimedia.org/wiki/File:20060423063512.jpg",
-   "author": "Yaohua2000",
-   "license": "CC BY-SA 3.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 33005,
-   "sha256": "bc3bfe81dc6e29e6",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/wuzhou.jpg",
@@ -7471,7 +7071,7 @@
    "sha256": "bb24d38a677f925c",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/xiamen.jpg",
@@ -7487,7 +7087,7 @@
    "sha256": "55d38862af42d5df",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/xian.jpg",
@@ -7503,7 +7103,7 @@
    "sha256": "daeb72abe005daf1",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/xiangxi.jpg",
@@ -7519,23 +7119,7 @@
    "sha256": "a1d48eb3dd8e8d2d",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/xiangyang.jpg",
-   "kind": "封面小图",
-   "subject": "xiangyang",
-   "city": "xiangyang",
-   "source": "https://commons.wikimedia.org/wiki/File:Xiangyang_skyline_02.jpg",
-   "author": "Fxqf",
-   "license": "CC BY-SA 4.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 33021,
-   "sha256": "a298b67c0e86a54c",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/xishuangbanna.jpg",
@@ -7551,39 +7135,7 @@
    "sha256": "8663dd56ae06f85d",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/xuancheng.jpg",
-   "kind": "封面小图",
-   "subject": "xuancheng",
-   "city": "xuancheng",
-   "source": "https://commons.wikimedia.org/wiki/File:Xuancheng_City_Skyline_(2).JPG",
-   "author": "Zhousiyuan",
-   "license": "CC BY 2.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 59225,
-   "sha256": "051f31fd1c9f4f05",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/xuchang.jpg",
-   "kind": "封面小图",
-   "subject": "xuchang",
-   "city": "xuchang",
-   "source": "https://commons.wikimedia.org/wiki/File:Aerial_View_of_Xuchang.jpg",
-   "author": "Windmemories",
-   "license": "CC BY-SA 4.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 68246,
-   "sha256": "29b78b95b2703557",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/yaan.jpg",
@@ -7599,7 +7151,7 @@
    "sha256": "619329c653a119c3",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/yanan.jpg",
@@ -7615,7 +7167,7 @@
    "sha256": "b75b29fd13e1e30f",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/yangzhou.jpg",
@@ -7631,23 +7183,7 @@
    "sha256": "6aa8c467f15c9477",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/yantai.jpg",
-   "kind": "封面小图",
-   "subject": "yantai",
-   "city": "yantai",
-   "source": "https://commons.wikimedia.org/wiki/File:Yantai_City_Seaside_Scenery.jpg",
-   "author": "Zhuo1221",
-   "license": "CC BY-SA 4.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 20112,
-   "sha256": "d418cba976c3882d",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/yibin.jpg",
@@ -7663,7 +7199,7 @@
    "sha256": "d031b1985cfcce0a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/yichang.jpg",
@@ -7679,39 +7215,7 @@
    "sha256": "7a956f2261ee8d8b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/yichun.jpg",
-   "kind": "封面小图",
-   "subject": "yichun",
-   "city": "yichun",
-   "source": "https://commons.wikimedia.org/wiki/File:YiChun.jpg",
-   "author": "PanShiBo",
-   "license": "CC BY-SA 3.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 59264,
-   "sha256": "ccdfd5d4964f41f2",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/yueyang.jpg",
-   "kind": "封面小图",
-   "subject": "yueyang",
-   "city": "yueyang",
-   "source": "https://commons.wikimedia.org/wiki/File:Yueyang_01.jpg",
-   "author": "Steve Webel from Yueyang (??), Hunan (??), China (??)",
-   "license": "CC BY 2.0",
-   "width": 640,
-   "height": 360,
-   "bytes": 36755,
-   "sha256": "00250f66ce7a1830",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/yulin.jpg",
@@ -7727,7 +7231,7 @@
    "sha256": "8dd64cbfb0c2959a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/yuncheng.jpg",
@@ -7743,7 +7247,7 @@
    "sha256": "f221840695437177",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/yuxi.jpg",
@@ -7759,7 +7263,7 @@
    "sha256": "b657f03ba34d0985",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/zhangjiajie.jpg",
@@ -7775,23 +7279,7 @@
    "sha256": "3ca5d93c51b2dcec",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
-  },
-  {
-   "path": "assets/images/w640/zhangjiakou.jpg",
-   "kind": "封面小图",
-   "subject": "zhangjiakou",
-   "city": "zhangjiakou",
-   "source": "https://commons.wikimedia.org/wiki/File:The_Great_Wall_near_Zhangjiakou,_Hebei_Province,_China,_1874_WDL2127.png",
-   "author": "Adolf Nikolay Boyarsky",
-   "license": "Public domain",
-   "width": 640,
-   "height": 360,
-   "bytes": 42647,
-   "sha256": "e856922e17bc51c4",
-   "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/zhangye.jpg",
@@ -7807,7 +7295,7 @@
    "sha256": "664a3cbd8887c846",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/zhanjiang.jpg",
@@ -7823,7 +7311,7 @@
    "sha256": "b17ebbd51cbc786a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/zhaoqing.jpg",
@@ -7839,7 +7327,7 @@
    "sha256": "bde969dd8e0551fd",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/zhengzhou.jpg",
@@ -7855,7 +7343,7 @@
    "sha256": "d409890890661b6a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/zhoushan.jpg",
@@ -7871,7 +7359,7 @@
    "sha256": "7fe5a8f7d3e75195",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/zhuhai.jpg",
@@ -7887,7 +7375,7 @@
    "sha256": "53da73177178b359",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/zigong.jpg",
@@ -7903,7 +7391,7 @@
    "sha256": "a8237e27b6ad26dd",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/w640/zunyi.jpg",
@@ -7919,7 +7407,7 @@
    "sha256": "b850e69ffd15cab7",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/wanning.jpg",
@@ -7935,7 +7423,7 @@
    "sha256": "f06dd14744ba81d2",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/weifang.jpg",
@@ -7951,7 +7439,7 @@
    "sha256": "637bb318095597fc",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/weihai.jpg",
@@ -7967,7 +7455,7 @@
    "sha256": "da2d86c05985d3f2",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/wenchang.jpg",
@@ -7983,7 +7471,7 @@
    "sha256": "d3515d6d75e7a809",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/wenzhou.jpg",
@@ -7995,11 +7483,11 @@
    "license": "CC BY-SA 3.0",
    "width": 1280,
    "height": 720,
-   "bytes": 160553,
-   "sha256": "f7f33aa40c7981f9",
+   "bytes": 31408,
+   "sha256": "7424d823ffdcb6b0",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：酒店门前停车场，不能代表雁荡山或温州。"
   },
   {
    "path": "assets/images/wuhan.jpg",
@@ -8011,11 +7499,11 @@
    "license": "CC BY-SA 4.0",
    "width": 1280,
    "height": 720,
-   "bytes": 245644,
-   "sha256": "70cad08cb511b1ee",
+   "bytes": 32592,
+   "sha256": "d5ce8d03513b5828",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：科研院所办公楼，不能代表武汉的旅行体验。"
   },
   {
    "path": "assets/images/wuhu.jpg",
@@ -8031,7 +7519,7 @@
    "sha256": "5747359c93a6c874",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/wuwei.jpg",
@@ -8043,11 +7531,11 @@
    "license": "CC BY-SA 3.0",
    "width": 1280,
    "height": 720,
-   "bytes": 158204,
-   "sha256": "a68aad25cfa1db7a",
+   "bytes": 29208,
+   "sha256": "26a38fe3b2339ee2",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：灰霾广场和楼房，画面质量差。"
   },
   {
    "path": "assets/images/wuxi.jpg",
@@ -8079,7 +7567,7 @@
    "sha256": "0c1b27f6b4951cfa",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/xiamen.jpg",
@@ -8095,7 +7583,7 @@
    "sha256": "06d0e1e096bb5a61",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/xian.jpg",
@@ -8111,7 +7599,7 @@
    "sha256": "41c6b08d6a48d12d",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/xiangxi.jpg",
@@ -8127,7 +7615,7 @@
    "sha256": "7acad7a941776cf3",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/xiangyang.jpg",
@@ -8139,11 +7627,11 @@
    "license": "CC BY-SA 4.0",
    "width": 1280,
    "height": 720,
-   "bytes": 156916,
-   "sha256": "b9718befbb35ef94",
+   "bytes": 38341,
+   "sha256": "b0014dd0b488b727",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：阴天普通楼群倒影，缺少襄阳古城特征。"
   },
   {
    "path": "assets/images/xingyi.jpg",
@@ -8223,7 +7711,7 @@
    "sha256": "fd1825c335b96c6f",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/xuancheng.jpg",
@@ -8235,11 +7723,11 @@
    "license": "CC BY 2.0",
    "width": 1280,
    "height": 720,
-   "bytes": 247033,
-   "sha256": "be44b121fe2c7ae0",
+   "bytes": 30706,
+   "sha256": "ac95bf8efbfcf2dc",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：普通城区楼群，缺少宣城的目的地特征。"
   },
   {
    "path": "assets/images/xuchang.jpg",
@@ -8251,11 +7739,11 @@
    "license": "CC BY-SA 4.0",
    "width": 1280,
    "height": 720,
-   "bytes": 302320,
-   "sha256": "4662375dfbefaa56",
+   "bytes": 31856,
+   "sha256": "0ee771c3ee2055de",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：飞机上俯拍的城区，看不出许昌。"
   },
   {
    "path": "assets/images/xuzhou.jpg",
@@ -8287,7 +7775,7 @@
    "sha256": "d0698e77dca9afe4",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/yanan.jpg",
@@ -8303,7 +7791,7 @@
    "sha256": "5ca5e7477c043718",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/yanbian.jpg",
@@ -8335,7 +7823,7 @@
    "sha256": "dd27243dc1eaa776",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/yantai.jpg",
@@ -8347,11 +7835,11 @@
    "license": "CC BY-SA 4.0",
    "width": 1280,
    "height": 720,
-   "bytes": 68439,
-   "sha256": "e77b699e8b69fa79",
+   "bytes": 29689,
+   "sha256": "5b62a9c94111bfef",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：只有云和海平线，看不出烟台。"
   },
   {
    "path": "assets/images/yibin.jpg",
@@ -8367,7 +7855,7 @@
    "sha256": "b2c8bc96b49c7b07",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/yichang.jpg",
@@ -8383,7 +7871,7 @@
    "sha256": "65a43073c02ff3b6",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/yichun.jpg",
@@ -8395,11 +7883,11 @@
    "license": "CC BY-SA 3.0",
    "width": 1280,
    "height": 720,
-   "bytes": 249788,
-   "sha256": "ddf1ee12006dc3f9",
+   "bytes": 32868,
+   "sha256": "a79d3778fdd44c24",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：普通街道和行人车辆，不能代表宜春。"
   },
   {
    "path": "assets/images/yinchuan.jpg",
@@ -8427,11 +7915,11 @@
    "license": "CC BY 2.0",
    "width": 1280,
    "height": 720,
-   "bytes": 142740,
-   "sha256": "fd8503f95724dcab",
+   "bytes": 27395,
+   "sha256": "3543f7db12cd2b9d",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：普通夜景楼群，缺少岳阳楼、洞庭湖等目的地特征。"
   },
   {
    "path": "assets/images/yulin.jpg",
@@ -8447,7 +7935,7 @@
    "sha256": "d9b104e033e562d1",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/yuncheng.jpg",
@@ -8463,7 +7951,7 @@
    "sha256": "e262928184848d86",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/yuxi.jpg",
@@ -8479,7 +7967,7 @@
    "sha256": "511171ec63ddf1e4",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/zhangjiajie.jpg",
@@ -8495,7 +7983,7 @@
    "sha256": "73911b8de0677d2b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/zhangjiakou.jpg",
@@ -8507,11 +7995,11 @@
    "license": "Public domain",
    "width": 1280,
    "height": 720,
-   "bytes": 171096,
-   "sha256": "f1d1f9f22a4791f2",
+   "bytes": 29442,
+   "sha256": "89d9f2e9043a42a3",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：1874 年的历史照片，不能代表今天的张家口。"
   },
   {
    "path": "assets/images/zhangye.jpg",
@@ -8527,7 +8015,7 @@
    "sha256": "933488e861ba140c",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/zhangzhou.jpg",
@@ -8559,7 +8047,7 @@
    "sha256": "301c62dba9779c73",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/zhaoqing.jpg",
@@ -8575,7 +8063,7 @@
    "sha256": "da424e5f969cd3ae",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/zhengzhou.jpg",
@@ -8591,7 +8079,7 @@
    "sha256": "eccdf1ba897e1b15",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/zhenjiang.jpg",
@@ -8639,7 +8127,7 @@
    "sha256": "8fee729336cd64ec",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/zhuhai.jpg",
@@ -8655,7 +8143,7 @@
    "sha256": "7385f8325030e11b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/zibo.jpg",
@@ -8687,7 +8175,7 @@
    "sha256": "3400d208103f18d1",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/images/zunyi.jpg",
@@ -8703,7 +8191,7 @@
    "sha256": "a5f322dd940ae8cf",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/aba/cityphoto-src.jpg",
@@ -8735,7 +8223,7 @@
    "sha256": "064365499cfe5fab",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/aba/place-ac4266c8223e4d9161671238029ae2c3.jpg",
@@ -8751,7 +8239,7 @@
    "sha256": "dcba0dd29183719b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/aba/scenery-01.jpg",
@@ -9486,8 +8974,8 @@
    "bytes": 17815,
    "sha256": "53239f5692cf2184",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/chengdu/place-65987ac783e622a91f359a107f5454e6.jpg",
@@ -9503,7 +8991,7 @@
    "sha256": "3c9d9a1dcae0b6b1",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/chengdu/place-7bf9af9d33febd1e7277aca0e72cbade.jpg",
@@ -9519,7 +9007,7 @@
    "sha256": "810ef8cc23fce1a3",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/chengdu/place-7d0931616ffae77da2c84e72095cad2d.jpg",
@@ -9534,8 +9022,8 @@
    "bytes": 22720,
    "sha256": "31f628d2112e1170",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/chengdu/place-876e6a2fdd3683ccda14a01b21464cc1.jpg",
@@ -9550,8 +9038,8 @@
    "bytes": 158937,
    "sha256": "a2b64c21a4be3b2a",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：画面与条目“四川成都 宽窄巷子”不符（实际文件：Didishenshan3.jpg）。"
   },
   {
    "path": "assets/photos/chengdu/place-dd98120d5144d9e07379a2729f0e7148.jpg",
@@ -9566,8 +9054,8 @@
    "bytes": 21493,
    "sha256": "51db1e6b27ac70ad",
    "duplicateOf": "assets/photos/chengdu/food-d66d54429bc7c6769a6322f7766c727f.jpg",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/chengdu/place-fe7189290c77662457d67ab1fa8ad509.jpg",
@@ -9582,8 +9070,8 @@
    "bytes": 138089,
    "sha256": "33712baf66391ca8",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：画面与条目“建川博物馆聚落”不符（实际文件：Jianchuan Museum Curator Confession 20161123.jpg）。"
   },
   {
    "path": "assets/photos/chengdu/scenery-01.jpg",
@@ -9807,7 +9295,7 @@
    "sha256": "3b1153988a344ed2",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/chongqing/place-51a585a9be1b87698a1db76a0c799ab4.jpg",
@@ -9871,7 +9359,7 @@
    "sha256": "0b0599cc1e746123",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/chongqing/place-dc4895e9c799b3945360ce15d42100c8.jpg",
@@ -9886,8 +9374,8 @@
    "bytes": 12434,
    "sha256": "32279acf0911a6c6",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/chongqing/scenery-01.jpg",
@@ -9931,8 +9419,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 81814,
-   "sha256": "bf3e650caa074071",
+   "bytes": 20490,
+   "sha256": "5cf795cce0ca8f59",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -10091,8 +9579,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 38091,
-   "sha256": "c108c5f369a51d65",
+   "bytes": 19634,
+   "sha256": "53b8ba987cf7b6fd",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -10507,8 +9995,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 96672,
-   "sha256": "3e94465016543baf",
+   "bytes": 17752,
+   "sha256": "be578b071fdcf2c8",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -10990,8 +10478,8 @@
    "bytes": 95164,
    "sha256": "96cd1482cc4f96a2",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/dali/place-4229c2f8bffca8ff8b8b6e2582a5297a.jpg",
@@ -11054,8 +10542,8 @@
    "bytes": 192711,
    "sha256": "ab848b40fa5023b9",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：画面与条目“廊桥”不符（实际文件：Jackson's Sawmill Covered Bridge Three Quarters View 3264px.jpg）。"
   },
   {
    "path": "assets/photos/dali/place-8ca6dbdfcbfc8f84618ef71523a08f3a.jpg",
@@ -11071,7 +10559,7 @@
    "sha256": "a899d66276fca6c9",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/dali/place-954d27aa1b63791f70fd0108c77055fa.jpg",
@@ -11087,7 +10575,7 @@
    "sha256": "42a8af2ed09cd9a6",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/dali/place-b2903862691d43e86f08b44ae5c12da2.jpg",
@@ -11119,7 +10607,7 @@
    "sha256": "91b3783530afe733",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/dali/place-bc360e947438be7c504c2edbdbb8b53e.jpg",
@@ -11151,7 +10639,7 @@
    "sha256": "7d9f39e5fcf46089",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/dali/place-dd500c8b8800e5f8eabb4e7f53268eed.jpg",
@@ -11166,8 +10654,8 @@
    "bytes": 163576,
    "sha256": "d9e14a384d128343",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/dali/place-fc4a5793e4e40a6ee1a395ce0e5b6d50.jpg",
@@ -11182,8 +10670,8 @@
    "bytes": 19268,
    "sha256": "83e09e74eb0bf1b3",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/dali/scenery-01.jpg",
@@ -11359,7 +10847,7 @@
    "sha256": "1964e830080f11c9",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/deyang/scenery-01.jpg",
@@ -11403,8 +10891,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 164002,
-   "sha256": "cf79237438be95b2",
+   "bytes": 14333,
+   "sha256": "aa0b4aec8d01f696",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -11547,8 +11035,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 133963,
-   "sha256": "1786be10eae24375",
+   "bytes": 20636,
+   "sha256": "5fb13011dd41db80",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -11691,8 +11179,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 136935,
-   "sha256": "5d723a836a273bb4",
+   "bytes": 20829,
+   "sha256": "3e5c64a632a8702a",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -11822,8 +11310,8 @@
    "bytes": 106595,
    "sha256": "c59cbee66ff06e38",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：画面与条目“红飘带”不符（实际文件：大红飘带 - panoramio.jpg）。"
   },
   {
    "path": "assets/photos/guiyang/place-45c92846cd8d6720b6233d1cbf7b9e3b.jpg",
@@ -11838,8 +11326,8 @@
    "bytes": 117221,
    "sha256": "f7475e8994ec2328",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：画面与条目“贵州贵阳 贵州省博物馆”不符（实际文件：贵州省地质博物馆.jpg）。"
   },
   {
    "path": "assets/photos/guiyang/place-6ee2a3b7e493e43f048a13fcd791dd79.jpg",
@@ -11854,8 +11342,8 @@
    "bytes": 33738,
    "sha256": "81198c22775a03fa",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/guiyang/place-865b2968743d208465c5b8fea52ba45e.jpg",
@@ -11887,7 +11375,7 @@
    "sha256": "3290487b393c0639",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/guiyang/place-b61646cd56852f1c0dd5aa4e63b021d2.jpg",
@@ -11902,8 +11390,8 @@
    "bytes": 7412,
    "sha256": "50227bd10d77f413",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/guiyang/place-cd2be14c198dccebc997d42b86e92331.jpg",
@@ -11918,8 +11406,8 @@
    "bytes": 165083,
    "sha256": "19ce794cdfc41dc8",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/guiyang/place-cd43046ddc77e78ff4a3c060bcb024ed.png",
@@ -11934,8 +11422,8 @@
    "bytes": 300295,
    "sha256": "0558ce140df3351d",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：画面与条目“桃源河 中国”不符（实际文件：Taoyuan District montage.png）。"
   },
   {
    "path": "assets/photos/guiyang/place-cfb5d8429a9ab254d425c6e8d0bcd0d6.jpg",
@@ -11950,8 +11438,8 @@
    "bytes": 304831,
    "sha256": "4dc845119cfa4e50",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/guiyang/place-ed6e6f7a3d0f1504cf6d68f400703dc8.jpg",
@@ -11967,7 +11455,7 @@
    "sha256": "f7475e8994ec2328",
    "duplicateOf": "assets/photos/guiyang/place-45c92846cd8d6720b6233d1cbf7b9e3b.jpg",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/guiyang/place-f73a5a88fab6ac98249e6e1ccb1a50ac.jpg",
@@ -11982,8 +11470,8 @@
    "bytes": 132540,
    "sha256": "223d5c93a15095db",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：画面与条目“观山湖公园”不符（实际文件：杭州 萧山 湘湖观鱼 - panoramio.jpg）。"
   },
   {
    "path": "assets/photos/guiyang/scenery-01.jpg",
@@ -11995,8 +11483,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 67589,
-   "sha256": "bac7d64211815559",
+   "bytes": 21774,
+   "sha256": "247a4c61d5a6c5cb",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -12299,8 +11787,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 96497,
-   "sha256": "679747b0a563f607",
+   "bytes": 20153,
+   "sha256": "4c1cc189d8c2623a",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -12491,8 +11979,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 80828,
-   "sha256": "b2436eb68e37d524",
+   "bytes": 13851,
+   "sha256": "3eee9feeb3e4d873",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -12523,8 +12011,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 73769,
-   "sha256": "0c343184c9a50d21",
+   "bytes": 17947,
+   "sha256": "5cf8f9f9eeb49d7c",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -13215,7 +12703,7 @@
    "sha256": "18d3180e8cc59d24",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/kunming/scenery-01.jpg",
@@ -13294,8 +12782,8 @@
    "bytes": 134762,
    "sha256": "32372cb1dfc30e54",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：画面与条目“峨眉山博物馆”不符（实际文件：杭州工艺美术博物馆, 2021-11-13 10.jpg）。"
   },
   {
    "path": "assets/photos/leshan/scenery-01.jpg",
@@ -13454,8 +12942,8 @@
    "bytes": 130527,
    "sha256": "d26be105b9fea13f",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/lijiang/place-1b5dc9ee130bc9395e886150d91fcdd5.jpg",
@@ -13470,8 +12958,8 @@
    "bytes": 23175,
    "sha256": "c62bd9e642dcc07d",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/lijiang/place-30d168d10e58e20c238642349a312fdb.jpg",
@@ -13502,8 +12990,8 @@
    "bytes": 48031,
    "sha256": "b34e5601655ddce6",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/lijiang/place-446f1855770e6fb4bbffabd107d881ed.jpg",
@@ -13518,8 +13006,8 @@
    "bytes": 35821,
    "sha256": "95f35dd3083e6e93",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/lijiang/place-b355508c99ddf7e149ecb27d255dc084.jpg",
@@ -13551,7 +13039,7 @@
    "sha256": "073a3f338ba410e1",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/lijiang/place-f63695b44cb4529c35f407e05c60a5a5.jpg",
@@ -13566,8 +13054,8 @@
    "bytes": 28797,
    "sha256": "200f266ab9ae4771",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/lijiang/place-fa96a53d6ef897080a292919505986c8.jpg",
@@ -13582,8 +13070,8 @@
    "bytes": 62180,
    "sha256": "eddb67239d031d49",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/lijiang/scenery-01.jpg",
@@ -13899,8 +13387,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 36744,
-   "sha256": "21925ca86dac8145",
+   "bytes": 16153,
+   "sha256": "a418971cd7f99342",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -13995,8 +13483,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 75648,
-   "sha256": "7b229ccc49c40ae6",
+   "bytes": 15685,
+   "sha256": "96deec55a1aab076",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -14030,8 +13518,8 @@
    "bytes": 209760,
    "sha256": "1b14140dee10a10e",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/mianyang/place-82a8889b56b0f8e68b33ebf5f68f384e.jpg",
@@ -14047,7 +13535,7 @@
    "sha256": "5e54b21a6997efed",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/mianyang/scenery-01.jpg",
@@ -14283,8 +13771,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 105807,
-   "sha256": "207c867165dfb692",
+   "bytes": 14670,
+   "sha256": "080c95ad7a18ef38",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -14539,8 +14027,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 83627,
-   "sha256": "04b2cf4ba1485858",
+   "bytes": 15331,
+   "sha256": "64631eb35a1046bd",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -14575,7 +14063,7 @@
    "sha256": "f1e53ee3fa6f031b",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/qiandongnan/place-a5efd060cf2c3860ef258bc47267b9af.jpg",
@@ -14591,7 +14079,7 @@
    "sha256": "0ae41149249c8149",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/qiandongnan/scenery-01.jpg",
@@ -14603,8 +14091,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 168987,
-   "sha256": "e6f7c435669b68aa",
+   "bytes": 23022,
+   "sha256": "183c4ed86731cbe7",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -14715,8 +14203,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 125454,
-   "sha256": "48743d6dd1723fab",
+   "bytes": 18035,
+   "sha256": "3694241a3c10047e",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -14827,8 +14315,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 60194,
-   "sha256": "41208550c4f9494b",
+   "bytes": 17312,
+   "sha256": "ad372b8ed5b3f039",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -15323,8 +14811,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 79624,
-   "sha256": "00e37979fc3d1f81",
+   "bytes": 17561,
+   "sha256": "5a7198c939111f4e",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -15387,8 +14875,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 98535,
-   "sha256": "3822e76481bb0460",
+   "bytes": 20408,
+   "sha256": "e1ae628f4d0f714d",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -15515,8 +15003,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 63006,
-   "sha256": "eac35a0940b8769a",
+   "bytes": 18171,
+   "sha256": "ed65e2433aa0dc24",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -15582,8 +15070,8 @@
    "bytes": 84315,
    "sha256": "6682c591e65c60e6",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/tengchong/scenery-01.jpg",
@@ -15659,8 +15147,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 160898,
-   "sha256": "6ce2909a05f0bc56",
+   "bytes": 19950,
+   "sha256": "46d84ec86661acb3",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -15695,7 +15183,7 @@
    "sha256": "9851db3df077ab94",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/tongren/place-5d19f6612154cb35ccda7a751018c22b.jpg",
@@ -15726,8 +15214,8 @@
    "bytes": 85631,
    "sha256": "d93df95640c479ba",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：画面与条目“冬季雪景”不符（实际文件：平湖雪景.jpg）。"
   },
   {
    "path": "assets/photos/tongren/place-9fd51887a4dc5e60ed3749bcc35fc22c.jpg",
@@ -15743,7 +15231,7 @@
    "sha256": "d9e3a2c9143c890a",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/tongren/scenery-01.jpg",
@@ -15819,8 +15307,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 67652,
-   "sha256": "456fe21a1f374005",
+   "bytes": 17452,
+   "sha256": "68e4b625c33cef91",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -15995,8 +15483,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 78452,
-   "sha256": "8ef1831a926a8429",
+   "bytes": 16841,
+   "sha256": "8f7573edbed2cdae",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -16027,8 +15515,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 118615,
-   "sha256": "81d1239e92226ed8",
+   "bytes": 16672,
+   "sha256": "712010adc54d58e1",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -16091,8 +15579,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 69807,
-   "sha256": "f496e7556273b824",
+   "bytes": 15734,
+   "sha256": "e7acb778dac4422b",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -16223,7 +15711,7 @@
    "sha256": "a1a0b24998fdbd90",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/xian/place-cca39b1824b4d7cf6ac49ef29dc91009.jpg",
@@ -16238,8 +15726,8 @@
    "bytes": 238261,
    "sha256": "7b07c230723ae28c",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/xian/scenery-01.jpg",
@@ -16315,8 +15803,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 71301,
-   "sha256": "86294b9c4761a6f0",
+   "bytes": 21368,
+   "sha256": "43807fba32f99b70",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -16431,7 +15919,7 @@
    "sha256": "4067a0a90dbc3bab",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/xingyi/place-3a8bbc3f9c160e9d1e4e3103e9f7a960.jpg",
@@ -16446,8 +15934,8 @@
    "bytes": 37672,
    "sha256": "4091e601a66f7451",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/xingyi/place-3d4cd10ff4029bdc78239032626ebf32.jpg",
@@ -16462,8 +15950,8 @@
    "bytes": 19468,
    "sha256": "6907b0d2a10976d7",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/xingyi/place-68b60faaf11276cc1bd8137ee6cebc0e.jpg",
@@ -16478,8 +15966,8 @@
    "bytes": 71234,
    "sha256": "b56ee27216b3ed47",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/xingyi/place-7fff7025df4395229a05d57d8db9d9c0.jpg",
@@ -16494,8 +15982,8 @@
    "bytes": 189748,
    "sha256": "b73a156a5e831959",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：画面与条目“刘氏庄园”不符（实际文件：Liu's manor 20161123.jpg）。"
   },
   {
    "path": "assets/photos/xingyi/place-b4e126018d1475ac6d9cfac28affea54.jpg",
@@ -16510,8 +15998,8 @@
    "bytes": 20786,
    "sha256": "9858c30da4a09869",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/xingyi/scenery-01.jpg",
@@ -16683,8 +16171,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 126014,
-   "sha256": "52479371d228cccd",
+   "bytes": 16544,
+   "sha256": "f5b90cf751f91c82",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -16715,8 +16203,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 148778,
-   "sha256": "04a31c99a3752a96",
+   "bytes": 16993,
+   "sha256": "953e3bb136af389b",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -16799,7 +16287,7 @@
    "sha256": "9d34f765cc52e1b2",
    "duplicateOf": "",
    "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "verdict": "展示中：授权可追溯；画面已于 2026-10-20 人工对照标注地点复核"
   },
   {
    "path": "assets/photos/yaan/place-fcec20ec41b0e3512595966fe786e15e.jpg",
@@ -16955,8 +16443,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 35202,
-   "sha256": "7c898b55d8957aff",
+   "bytes": 16038,
+   "sha256": "52acdc0601d469d6",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -17051,8 +16539,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 122134,
-   "sha256": "81d4bf3ad887b7a9",
+   "bytes": 17326,
+   "sha256": "a25bb75cfd877c04",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -17115,8 +16603,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 70025,
-   "sha256": "97c91a2ba83cffb4",
+   "bytes": 14873,
+   "sha256": "7c5800ad50749c52",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -17307,8 +16795,8 @@
    "license": "",
    "width": 960,
    "height": 540,
-   "bytes": 86326,
-   "sha256": "d7bcb71ad8ec24ed",
+   "bytes": 15620,
+   "sha256": "b68cfd91b7627355",
    "duplicateOf": "",
    "displayed": false,
    "verdict": "未展示：页面未引用"
@@ -17518,8 +17006,8 @@
    "bytes": 58393,
    "sha256": "cd5cf974284fab7d",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/zhengzhou/place-3a3942074ede8b591e15c52c558ed6b2.jpg",
@@ -17534,8 +17022,8 @@
    "bytes": 82714,
    "sha256": "ddc2a7558e4e6999",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/zhengzhou/place-7c91ef33e4f88b5bb0832c5084246f23.jpg",
@@ -17550,8 +17038,8 @@
    "bytes": 172159,
    "sha256": "dae575ae6bdc0f25",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：古籍或期刊扫描页，不是该条目的照片。"
   },
   {
    "path": "assets/photos/zhengzhou/place-8ad0e4ab0bcd1c440d59208f9cbb8d39.jpg",
@@ -17598,8 +17086,8 @@
    "bytes": 66063,
    "sha256": "4aad8f6f9f06b866",
    "duplicateOf": "",
-   "displayed": true,
-   "verdict": "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+   "displayed": false,
+   "verdict": "移出展示：画面与条目“人民公园”不符（实际文件：Volksgarten 6652-Pano groß 80.jpg）。"
   },
   {
    "path": "assets/photos/zhengzhou/place-c9012fd97cbfbbc0a95ee546627f7dc7.jpg",

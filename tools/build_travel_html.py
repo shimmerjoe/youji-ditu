@@ -50,6 +50,7 @@ FETCH_CITY_KEYS = {
 PHOTO_CACHE: dict[str, dict] = {}
 PHOTO_CACHE_LOADED = False
 PHOTO_EDITORIAL_DECISIONS: dict[str, dict] = {}
+PHOTO_REVIEWED_SOURCES: dict[str, set[str]] = {}
 PHOTO_EDITORIAL_LOADED = False
 SOURCE_MEDIA_CACHE: dict[str, dict] = {}
 SOURCE_MEDIA_CACHE_LOADED = False
@@ -806,7 +807,7 @@ def save_photo_cache() -> None:
 
 def load_photo_editorial_decisions() -> None:
     """Load product-fit decisions separately from factual rights metadata."""
-    global PHOTO_EDITORIAL_LOADED, PHOTO_EDITORIAL_DECISIONS
+    global PHOTO_EDITORIAL_LOADED, PHOTO_EDITORIAL_DECISIONS, PHOTO_REVIEWED_SOURCES
     if PHOTO_EDITORIAL_LOADED:
         return
     PHOTO_EDITORIAL_DECISIONS = {}
@@ -818,6 +819,9 @@ def load_photo_editorial_decisions() -> None:
         if payload.get("schemaVersion") != 1 or not isinstance(payload.get("decisions"), dict):
             raise RuntimeError(f"Unsupported photo editorial schema: {PHOTO_EDITORIAL_FILE}")
         PHOTO_EDITORIAL_DECISIONS = payload["decisions"]
+        PHOTO_REVIEWED_SOURCES = {
+            str(day): set(sources) for day, sources in (payload.get("reviewedSources") or {}).items()
+        }
     PHOTO_EDITORIAL_LOADED = True
 
 
@@ -846,6 +850,7 @@ def request_json(url: str) -> dict | None:
         return None
 
 
+NON_PHOTO_MIMES = {"image/svg+xml", "image/vnd.djvu", "image/x-djvu", "image/tiff"}
 PLACEHOLDER_PHOTO_LICENSES = {"", "unknown", "wikipedia", "wikimedia commons"}
 
 
@@ -875,6 +880,18 @@ def photo_editorial_rejection(city_key: str, entry: dict | None) -> dict | None:
     if str(decision.get("source", "")).strip() != str(entry.get("source", "")).strip():
         return None
     return decision
+
+
+def photo_content_review_date(entry: dict | None) -> str:
+    """人工逐张核对过画面的来源，记在审核文件的 reviewedSources 里（按日期分组）。"""
+    if not entry:
+        return ""
+    load_photo_editorial_decisions()
+    source = str(entry.get("source", "")).strip()
+    for reviewed_on, sources in sorted(PHOTO_REVIEWED_SOURCES.items(), reverse=True):
+        if source in sources:
+            return reviewed_on
+    return ""
 
 
 def photo_is_publishable(entry: dict | None, city_key: str | None = None) -> bool:
@@ -1205,6 +1222,9 @@ def commons_photo_for(page: Page, title: str, kind: str) -> tuple[Path | None, d
     key = hashlib.md5(f"{page.key}|{kind}|{title}".encode("utf-8")).hexdigest()
     cached = PHOTO_CACHE.get(key)
     if cached:
+        # 人工逐张核对过画面与条目不符的，按“item:缓存键”记录拒绝，来源不变就一直不用。
+        if photo_editorial_rejection(f"item:{key}", cached):
+            return None, None
         if photo_has_republication_rights(cached):
             path = OUT / cached["path"]
             if path.exists():
@@ -1233,7 +1253,10 @@ def commons_photo_for(page: Page, title: str, kind: str) -> tuple[Path | None, d
             info = (candidate.get("imageinfo") or [{}])[0]
             mime = info.get("mime", "")
             image_url = info.get("thumburl") or info.get("url")
-            if not image_url or not mime.startswith("image/") or mime == "image/svg+xml":
+            if not image_url or not mime.startswith("image/") or mime in NON_PHOTO_MIMES:
+                continue
+            # 古籍、期刊扫描（djvu/pdf/tiff）常被关键词搜到，但不是景点照片。
+            if str(candidate.get("title", "")).lower().endswith((".djvu", ".pdf", ".tif", ".tiff")):
                 continue
             suffix = Path(urlparse(image_url).path).suffix.lower()
             if suffix not in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
@@ -1349,7 +1372,7 @@ def city_photo_for(page: Page) -> tuple[Path, dict] | tuple[None, None]:
             info = (candidate.get("imageinfo") or [{}])[0]
             mime = info.get("mime", "")
             image_url = info.get("thumburl") or info.get("url")
-            if not image_url or image_url in seen_urls or not mime.startswith("image/") or mime == "image/svg+xml":
+            if not image_url or image_url in seen_urls or not mime.startswith("image/") or mime in NON_PHOTO_MIMES:
                 continue
             tw = info.get("thumbwidth") or info.get("width") or 0
             th = info.get("thumbheight") or info.get("height") or 0
@@ -4497,7 +4520,10 @@ def build_image_inventory() -> None:
             subject, kind = str(entry.get("title", "")).removeprefix("File:") or path.stem, "条目配图"
         city_key = cache_key.split("|", 1)[1] if cache_key.startswith("cityphoto|") else path.parent.name if path.parent != IMAGES else path.stem
         licensed = photo_has_republication_rights(entry) if entry else False
-        rejection = photo_editorial_rejection(city_key, entry) if cache_key.startswith("cityphoto|") else None
+        if cache_key.startswith("cityphoto|"):
+            rejection = photo_editorial_rejection(city_key, entry)
+        else:
+            rejection = photo_editorial_rejection(f"item:{cache_key}", entry) if entry else None
         if kind == "程序生成插画":
             verdict = "未展示：程序生成插画，不冒充实景"
         elif kind == "来源网页媒体":
@@ -4507,7 +4533,11 @@ def build_image_inventory() -> None:
         elif not licensed and kind in {"城市封面", "条目配图", "封面原图", "封面小图"}:
             verdict = "不得发布：缺少可追溯授权"
         elif rel in referenced:
-            verdict = "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+            reviewed_on = photo_content_review_date(entry)
+            verdict = (
+                f"展示中：授权可追溯；画面已于 {reviewed_on} 人工对照标注地点复核"
+                if reviewed_on else "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+            )
         else:
             verdict = "未展示：页面未引用"
         duplicate_of = hashes.get(digest, "")

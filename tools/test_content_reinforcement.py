@@ -9,12 +9,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class ContentReinforcementTests(unittest.TestCase):
-    def test_every_city_has_one_nonduplicated_local_body_image(self):
+    def test_city_pages_do_not_repeat_the_cover_as_a_body_gallery(self):
+        # The full-bleed hero already shows the licensed cover; a cropped copy of
+        # the same photo further down the page is not an independent asset.
         for page in (ROOT / "site" / "cities").glob("*.html"):
             with self.subTest(page=page.name):
                 html = page.read_text(encoding="utf-8")
                 images = re.findall(r'src="\.\./assets/photos/[^\"]+/scenery-[^\"]+"', html)
-                self.assertEqual(1, len(images))
+                self.assertEqual(0, len(images))
 
     def test_generated_body_gallery_uses_a_mobile_ready_derivative(self):
         for slug in ("jinhua", "chuzhou"):

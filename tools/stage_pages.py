@@ -11,6 +11,7 @@ DIST = (ROOT / "dist").resolve()
 ROOT_FILES = (
     ".nojekyll",
     "index.html",
+    "overview.html",
     "destinations.html",
     "themes.html",
     "city-guides.html",

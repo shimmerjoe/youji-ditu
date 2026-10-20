@@ -30,10 +30,11 @@ class ContentTransparencyTests(unittest.TestCase):
         self.assertIn("动态信息出行前复核", self.pending_city)
 
     def test_review_status_uses_existing_design_tokens(self):
-        self.assertNotIn("var(--warning)", self.css)
-        self.assertNotIn("var(--nature)", self.css)
-        self.assertIn("var(--sun)", self.css)
-        self.assertIn("var(--leaf)", self.css)
+        defined = set(re.findall(r"(--[a-z0-9-]+)\s*:", self.css))
+        used = set(re.findall(r"var\((--[a-z0-9-]+)", self.css))
+        self.assertEqual(set(), used - defined, "stylesheet references undefined custom properties")
+        self.assertIn(".co-review.pending", self.css)
+        self.assertIn(".city-review-status.reviewed", self.css)
 
 
 if __name__ == "__main__":

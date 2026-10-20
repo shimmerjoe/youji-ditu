@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>云南临沧旅游攻略</title>
   <meta name="description" content="佤山秘境、翁丁古寨、茶山和边地风味">
   <meta name="theme-color" content="#6f4f3a">
@@ -16,22 +16,24 @@
   <meta property="og:image" content="https://shimmerjoe.github.io/youji-ditu/assets/images/lincang.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../assets/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="../assets/icon-180.png">
-  <link rel="stylesheet" href="../assets/travel.css?v=8f0dbe106e">
-  <link rel="stylesheet" href="../assets/travel-app.css?v=8f0dbe106e">
+  <link rel="stylesheet" href="../assets/travel.css?v=5a9b9b3572">
+  <link rel="stylesheet" href="../assets/travel-app.css?v=5a9b9b3572">
+
   <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
   <script>try{var s=JSON.parse(localStorage.getItem("tay_settings")||"{}"),r=document.documentElement;if(s.vibrancy)r.setAttribute("data-vibrancy",s.vibrancy);if(s.font)r.setAttribute("data-font",s.font);if(s.motion)r.setAttribute("data-motion",s.motion);var t=s.theme||"auto";if(t==="auto")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";r.setAttribute("data-theme",t);}catch(e){}</script>
 </head>
-<body id="top" data-site-root=".." data-search-index="../assets/search-index.js?v=8f0dbe106e" style="--accent:#6f4f3a; --hero-image:url('../assets/images/lincang.jpg')">
+<body id="top" data-page="city" data-site-root=".." data-search-index="../assets/search-index.js?v=5a9b9b3572" style="--accent:#6f4f3a">
   <a class="skip-link" href="#mainContent">跳到主要内容</a>
   <header class="site-header">
     <div class="header-bar">
-      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topNav" aria-label="城市导航菜单">☰</button>
-      <a class="header-home" href="../index.html"><span class="brand-mark" aria-hidden="true">🧭</span><span class="brand-name">游记<b>地图</b></span></a>
+      <a class="header-home" href="../index.html" aria-label="游记地图首页"><span class="brand-mark" aria-hidden="true">游</span><span class="brand-name">游记<b>地图</b></span></a>
       <nav class="header-links" aria-label="功能导航"><a class="header-link" href="../index.html">首页</a><a class="header-link" href="../destinations.html">目的地</a><a class="header-link" href="../themes.html">主题玩法</a><a class="header-link" href="../city-guides.html">城市攻略</a><a class="header-link" href="../roadtrip.html">自驾路书</a><a class="header-link" href="../tools.html">实用工具</a></nav>
       <div class="global-search">
         <label class="global-search-box">
-          <span>全站搜索</span>
+          <span class="sr-only">全站搜索</span>
+          <svg class="icon search-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           <input id="siteSearch" type="search" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="siteSearchResults" placeholder="搜索城市、景点、美食、季节">
         </label>
         <div class="site-search-results" id="siteSearchResults" hidden>
@@ -39,52 +41,133 @@
           <div class="site-search-options" id="siteSearchOptions" role="listbox" aria-label="城市与攻略搜索建议"></div>
         </div>
       </div>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topNav" aria-label="打开城市导航菜单"><svg class="icon nav-open-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="icon nav-close-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="nav-toggle-text">选城市</span></button>
+      <button class="trip-dock-toggle" id="tripDockToggle" type="button" aria-controls="tripDock" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>行程</span><strong id="tripDockCount" aria-label="行程中的城市数">0</strong></button>
       <a class="header-user" href="../user.html" aria-label="用户中心">
         <span class="user-avatar" id="headerAvatar" aria-hidden="true">👤</span>
-        <span class="header-user-name" id="headerUserName">用户中心</span>
+        <span class="header-user-name" id="headerUserName">我的</span>
       </a>
     </div>
     <nav class="top-nav" id="topNav" aria-label="城市导航">
-      <div class="province-nav-list" aria-label="按省份选择城市"><details class="destination-nav province-nav" data-nav-group="直辖市" data-nav-kind="municipality"><summary><span>直辖市</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="直辖市城市菜单"><div class="province-menu-head"><div><strong>直辖市</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="直辖市城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="安徽" data-nav-kind="province"><summary><span>安徽</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="安徽城市菜单"><div class="province-menu-head"><div><strong>安徽</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%AE%89%E5%BE%BD">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="安徽城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="福建" data-nav-kind="province"><summary><span>福建</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="福建城市菜单"><div class="province-menu-head"><div><strong>福建</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E7%A6%8F%E5%BB%BA">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="福建城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="甘肃" data-nav-kind="province"><summary><span>甘肃</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="甘肃城市菜单"><div class="province-menu-head"><div><strong>甘肃</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E7%94%98%E8%82%83">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="甘肃城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="广东" data-nav-kind="province"><summary><span>广东</span><small>15 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="广东城市菜单"><div class="province-menu-head"><div><strong>广东</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B9%BF%E4%B8%9C">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="广东城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="广西" data-nav-kind="province"><summary><span>广西</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="广西城市菜单"><div class="province-menu-head"><div><strong>广西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B9%BF%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="广西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="贵州" data-nav-kind="province"><summary><span>贵州</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="贵州城市菜单"><div class="province-menu-head"><div><strong>贵州</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%B4%B5%E5%B7%9E">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="贵州城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="海南" data-nav-kind="province"><summary><span>海南</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="海南城市菜单"><div class="province-menu-head"><div><strong>海南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B5%B7%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="海南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="河北" data-nav-kind="province"><summary><span>河北</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="河北城市菜单"><div class="province-menu-head"><div><strong>河北</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B2%B3%E5%8C%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="河北城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="黑龙江" data-nav-kind="province"><summary><span>黑龙江</span><small>5 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="黑龙江城市菜单"><div class="province-menu-head"><div><strong>黑龙江</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%BB%91%E9%BE%99%E6%B1%9F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="黑龙江城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="河南" data-nav-kind="province"><summary><span>河南</span><small>12 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="河南城市菜单"><div class="province-menu-head"><div><strong>河南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B2%B3%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="河南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="湖北" data-nav-kind="province"><summary><span>湖北</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="湖北城市菜单"><div class="province-menu-head"><div><strong>湖北</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B9%96%E5%8C%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="湖北城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="湖南" data-nav-kind="province"><summary><span>湖南</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="湖南城市菜单"><div class="province-menu-head"><div><strong>湖南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B9%96%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="湖南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="江苏" data-nav-kind="province"><summary><span>江苏</span><small>10 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="江苏城市菜单"><div class="province-menu-head"><div><strong>江苏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B1%9F%E8%8B%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="江苏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="江西" data-nav-kind="province"><summary><span>江西</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="江西城市菜单"><div class="province-menu-head"><div><strong>江西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B1%9F%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="江西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="吉林" data-nav-kind="province"><summary><span>吉林</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="吉林城市菜单"><div class="province-menu-head"><div><strong>吉林</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%90%89%E6%9E%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="吉林城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="辽宁" data-nav-kind="province"><summary><span>辽宁</span><small>5 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="辽宁城市菜单"><div class="province-menu-head"><div><strong>辽宁</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%BE%BD%E5%AE%81">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="辽宁城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="内蒙古" data-nav-kind="province"><summary><span>内蒙古</span><small>6 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="内蒙古城市菜单"><div class="province-menu-head"><div><strong>内蒙古</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%86%85%E8%92%99%E5%8F%A4">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="内蒙古城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="宁夏" data-nav-kind="province"><summary><span>宁夏</span><small>2 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="宁夏城市菜单"><div class="province-menu-head"><div><strong>宁夏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%AE%81%E5%A4%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="宁夏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="青海" data-nav-kind="province"><summary><span>青海</span><small>3 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="青海城市菜单"><div class="province-menu-head"><div><strong>青海</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%9D%92%E6%B5%B7">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="青海城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="陕西" data-nav-kind="province"><summary><span>陕西</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="陕西城市菜单"><div class="province-menu-head"><div><strong>陕西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%99%95%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="陕西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="山东" data-nav-kind="province"><summary><span>山东</span><small>12 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="山东城市菜单"><div class="province-menu-head"><div><strong>山东</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B1%B1%E4%B8%9C">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="山东城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="山西" data-nav-kind="province"><summary><span>山西</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="山西城市菜单"><div class="province-menu-head"><div><strong>山西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B1%B1%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="山西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="四川" data-nav-kind="province"><summary><span>四川</span><small>14 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="四川城市菜单"><div class="province-menu-head"><div><strong>四川</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%9B%9B%E5%B7%9D">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="四川城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="新疆" data-nav-kind="province"><summary><span>新疆</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="新疆城市菜单"><div class="province-menu-head"><div><strong>新疆</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%96%B0%E7%96%86">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="新疆城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="西藏" data-nav-kind="province"><summary><span>西藏</span><small>3 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="西藏城市菜单"><div class="province-menu-head"><div><strong>西藏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%A5%BF%E8%97%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="西藏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav active" data-nav-group="云南" data-nav-kind="province"><summary><span>云南</span><small>15 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="云南城市菜单"><div class="province-menu-head"><div><strong>云南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E4%BA%91%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="云南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="浙江" data-nav-kind="province"><summary><span>浙江</span><small>11 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="浙江城市菜单"><div class="province-menu-head"><div><strong>浙江</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B5%99%E6%B1%9F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="浙江城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="港澳" data-nav-kind="special"><summary><span>港澳</span><small>2 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="港澳城市菜单"><div class="province-menu-head"><div><strong>港澳</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?region=%E6%B8%AF%E6%BE%B3">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="港澳城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details></div>
-      <div class="mobile-primary-nav" aria-label="移动端功能导航"><a class="header-link" href="../index.html">首页</a><a class="header-link" href="../destinations.html">目的地</a><a class="header-link" href="../themes.html">主题玩法</a><a class="header-link" href="../city-guides.html">城市攻略</a><a class="header-link" href="../roadtrip.html">自驾路书</a><a class="header-link" href="../tools.html">实用工具</a><a class="header-link" href="../user.html">用户中心</a></div>
+      <div class="top-nav-inner">
+        <div class="mobile-primary-nav" aria-label="移动端功能导航"><a class="header-link" href="../index.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/></svg><span>首页</span></a><a class="header-link" href="../destinations.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg><span>目的地</span></a><a class="header-link" href="../themes.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg><span>主题玩法</span></a><a class="header-link" href="../city-guides.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></svg><span>城市攻略</span></a><a class="header-link" href="../roadtrip.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="13.5" r="1"/><circle cx="16.5" cy="13.5" r="1"/></svg><span>自驾路书</span></a><a class="header-link" href="../tools.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 6.5a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3z"/><path d="M14.5 6.5 17 4l3 3-2.5 2.5"/></svg><span>实用工具</span></a><a class="header-link" href="../user.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>用户中心</span></a></div>
+        <div class="top-nav-head">
+          <div><strong>按省份选城市</strong><span>点开省份查看城市；想按季节、天数筛选可去目的地页。</span></div>
+          <a class="top-nav-all" href="../destinations.html">全部目的地 <svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="province-nav-list" aria-label="按省份选择城市"><details class="destination-nav province-nav" data-nav-group="直辖市" data-nav-kind="municipality"><summary><span>直辖市</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="直辖市城市菜单"><div class="province-menu-head"><div><strong>直辖市</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="直辖市城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="安徽" data-nav-kind="province"><summary><span>安徽</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="安徽城市菜单"><div class="province-menu-head"><div><strong>安徽</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%AE%89%E5%BE%BD">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="安徽城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="福建" data-nav-kind="province"><summary><span>福建</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="福建城市菜单"><div class="province-menu-head"><div><strong>福建</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E7%A6%8F%E5%BB%BA">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="福建城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="甘肃" data-nav-kind="province"><summary><span>甘肃</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="甘肃城市菜单"><div class="province-menu-head"><div><strong>甘肃</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E7%94%98%E8%82%83">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="甘肃城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="广东" data-nav-kind="province"><summary><span>广东</span><small>15 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="广东城市菜单"><div class="province-menu-head"><div><strong>广东</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B9%BF%E4%B8%9C">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="广东城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="广西" data-nav-kind="province"><summary><span>广西</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="广西城市菜单"><div class="province-menu-head"><div><strong>广西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B9%BF%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="广西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="贵州" data-nav-kind="province"><summary><span>贵州</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="贵州城市菜单"><div class="province-menu-head"><div><strong>贵州</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%B4%B5%E5%B7%9E">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="贵州城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="海南" data-nav-kind="province"><summary><span>海南</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="海南城市菜单"><div class="province-menu-head"><div><strong>海南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B5%B7%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="海南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="河北" data-nav-kind="province"><summary><span>河北</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="河北城市菜单"><div class="province-menu-head"><div><strong>河北</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B2%B3%E5%8C%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="河北城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="黑龙江" data-nav-kind="province"><summary><span>黑龙江</span><small>5 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="黑龙江城市菜单"><div class="province-menu-head"><div><strong>黑龙江</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%BB%91%E9%BE%99%E6%B1%9F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="黑龙江城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="河南" data-nav-kind="province"><summary><span>河南</span><small>12 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="河南城市菜单"><div class="province-menu-head"><div><strong>河南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B2%B3%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="河南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="湖北" data-nav-kind="province"><summary><span>湖北</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="湖北城市菜单"><div class="province-menu-head"><div><strong>湖北</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B9%96%E5%8C%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="湖北城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="湖南" data-nav-kind="province"><summary><span>湖南</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="湖南城市菜单"><div class="province-menu-head"><div><strong>湖南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B9%96%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="湖南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="江苏" data-nav-kind="province"><summary><span>江苏</span><small>10 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="江苏城市菜单"><div class="province-menu-head"><div><strong>江苏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B1%9F%E8%8B%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="江苏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="江西" data-nav-kind="province"><summary><span>江西</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="江西城市菜单"><div class="province-menu-head"><div><strong>江西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B1%9F%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="江西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="吉林" data-nav-kind="province"><summary><span>吉林</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="吉林城市菜单"><div class="province-menu-head"><div><strong>吉林</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%90%89%E6%9E%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="吉林城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="辽宁" data-nav-kind="province"><summary><span>辽宁</span><small>5 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="辽宁城市菜单"><div class="province-menu-head"><div><strong>辽宁</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%BE%BD%E5%AE%81">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="辽宁城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="内蒙古" data-nav-kind="province"><summary><span>内蒙古</span><small>6 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="内蒙古城市菜单"><div class="province-menu-head"><div><strong>内蒙古</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%86%85%E8%92%99%E5%8F%A4">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="内蒙古城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="宁夏" data-nav-kind="province"><summary><span>宁夏</span><small>2 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="宁夏城市菜单"><div class="province-menu-head"><div><strong>宁夏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%AE%81%E5%A4%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="宁夏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="青海" data-nav-kind="province"><summary><span>青海</span><small>3 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="青海城市菜单"><div class="province-menu-head"><div><strong>青海</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%9D%92%E6%B5%B7">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="青海城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="陕西" data-nav-kind="province"><summary><span>陕西</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="陕西城市菜单"><div class="province-menu-head"><div><strong>陕西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%99%95%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="陕西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="山东" data-nav-kind="province"><summary><span>山东</span><small>12 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="山东城市菜单"><div class="province-menu-head"><div><strong>山东</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B1%B1%E4%B8%9C">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="山东城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="山西" data-nav-kind="province"><summary><span>山西</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="山西城市菜单"><div class="province-menu-head"><div><strong>山西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B1%B1%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="山西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="四川" data-nav-kind="province"><summary><span>四川</span><small>14 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="四川城市菜单"><div class="province-menu-head"><div><strong>四川</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%9B%9B%E5%B7%9D">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="四川城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="新疆" data-nav-kind="province"><summary><span>新疆</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="新疆城市菜单"><div class="province-menu-head"><div><strong>新疆</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%96%B0%E7%96%86">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="新疆城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="西藏" data-nav-kind="province"><summary><span>西藏</span><small>3 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="西藏城市菜单"><div class="province-menu-head"><div><strong>西藏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%A5%BF%E8%97%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="西藏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav active" data-nav-group="云南" data-nav-kind="province"><summary><span>云南</span><small>15 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="云南城市菜单"><div class="province-menu-head"><div><strong>云南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E4%BA%91%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="云南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="浙江" data-nav-kind="province"><summary><span>浙江</span><small>11 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="浙江城市菜单"><div class="province-menu-head"><div><strong>浙江</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B5%99%E6%B1%9F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="浙江城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="港澳" data-nav-kind="special"><summary><span>港澳</span><small>2 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="港澳城市菜单"><div class="province-menu-head"><div><strong>港澳</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?region=%E6%B8%AF%E6%BE%B3">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="港澳城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details></div>
+      </div>
     </nav>
   </header>
   <main id="mainContent" tabindex="-1">
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow">Travel Guide</p>
-        <h1>云南临沧旅游攻略</h1>
-        <p class="subtitle">佤山秘境、翁丁古寨、茶山和边地风味</p>
-        <ul class="hero-points">
-          <li><a class="hero-point-link" href="#quick-item-0381babaa8"><span>半天</span><small>翁丁古寨 或 临沧市区夜市</small></a></li>
-<li><a class="hero-point-link" href="#quick-item-546178c4b8"><span>1 天</span><small>翁丁古寨 + 沧源崖画 + 夜间吃喝</small></a></li>
-<li><a class="hero-point-link" href="#quick-item-b20ea0f255"><span>2 天</span><small>经典景区 + 博物馆/古镇 + 远郊自然</small></a></li>
-<li><a class="hero-point-link" href="#quick-item-cef46bc674"><span>雨天</span><small>临沧市博物馆、沧源崖画展点、茶文化展馆、商圈、老街、非遗体验和当地餐厅</small></a></li>
-        </ul>
-      </div>
-      <div class="hero-stage">
-
-
-        <div class="hero-quickfind"><span class="qf-title">快速查找</span><div class="qf-grid"><a class="quickfind-card" href="#attractions"><span class="qf-emoji" aria-hidden="true">📍</span><span class="qf-text"><strong>景点</strong><small>核心景点 / 季节景观</small></span></a><a class="quickfind-card" href="#food"><span class="qf-emoji" aria-hidden="true">🍜</span><span class="qf-text"><strong>吃喝</strong><small>美食 / 店铺 / 市场</small></span></a><a class="quickfind-card" href="#routes"><span class="qf-emoji" aria-hidden="true">🗺️</span><span class="qf-text"><strong>路线</strong><small>半天 / 一日 / 远郊</small></span></a><a class="quickfind-card" href="#warnings"><span class="qf-emoji" aria-hidden="true">⚠️</span><span class="qf-text"><strong>避坑</strong><small>取舍 / 复核清单</small></span></a></div></div>
-      </div>
-    </section>
-
-    <section class="city-overview reveal" aria-label="城市速览"><div class="co-facts"><div class="co-cell"><span class="co-k">所在</span><span class="co-v">云南</span></div><div class="co-cell"><span class="co-k">适宜季节</span><span class="co-v">11 月至次年 4 月</span></div><div class="co-cell co-review pending" data-review-status="pending"><span class="co-k">资料状态</span><span class="co-v">资料待复核</span><span class="co-review-note">动态信息出行前复核</span></div></div><div class="co-block"><span class="co-bk">📍 必看景点</span><div class="co-chips"><em>翁丁古寨</em><em>沧源崖画</em><em>鲁史古镇</em><em>茶山和昔归/冰岛方向</em><em>半天</em></div></div><div class="co-block"><span class="co-bk">🍜 必吃美食</span><div class="co-chips"><em class="food">特色菜</em><em class="food">小吃主食</em><em class="food">饮品甜品</em><em class="food">夜市</em><em class="food">农贸市场</em></div></div><div class="co-actions"><button class="co-fav" type="button" data-key="lincang" data-name="云南临沧旅游攻略" data-href="cities/lincang.html" data-sub="佤山秘境、翁丁古寨、茶山和边地风味">☆ 收藏</button><button class="co-trip" type="button" data-key="lincang" data-name="云南临沧旅游攻略" data-href="cities/lincang.html" data-sub="佤山秘境、翁丁古寨、茶山和边地风味">＋ 加入行程</button><button class="co-share" type="button" data-share-title="云南临沧旅游攻略" aria-label="分享云南临沧旅游攻略" title="分享当前城市攻略">↗ 分享</button></div></section>
-
-
-
-
-    <section class="tool-bar">
-      <label class="search-box">
-        <span>搜索</span>
-        <input id="guideSearch" type="search" placeholder="输入景点、店铺、路线或月份">
-      </label>
-      <button id="expandAll" type="button">清空搜索</button>
-      <button id="printPage" type="button">打印/另存 PDF</button>
-    </section>
-    <div class="layout">
-      <aside class="sidebar">
-        <div class="sidebar-panel">
+    <section class="city-hero no-photo"><div class="city-hero-media"><div class="hero-fallback" aria-hidden="true"><span>临沧</span></div></div><div class="city-hero-inner"><nav class="breadcrumb" aria-label="当前位置"><a href="../index.html">首页</a><span aria-hidden="true">/</span><a href="../destinations.html?province=%E4%BA%91%E5%8D%97">云南</a><span aria-hidden="true">/</span><span aria-current="page">临沧</span></nav><p class="eyebrow">西南 · 云南</p><h1>云南临沧旅游攻略</h1><p class="subtitle">佤山秘境、翁丁古寨、茶山和边地风味</p><div class="co-actions"><button class="co-fav" type="button" data-key="lincang" data-name="云南临沧旅游攻略" data-href="cities/lincang.html" data-sub="佤山秘境、翁丁古寨、茶山和边地风味">☆ 收藏</button><button class="co-trip" type="button" data-key="lincang" data-name="云南临沧旅游攻略" data-href="cities/lincang.html" data-sub="佤山秘境、翁丁古寨、茶山和边地风味">＋ 加入行程</button><button class="co-share" type="button" data-share-title="云南临沧旅游攻略" aria-label="分享云南临沧旅游攻略" title="分享当前城市攻略">↗ 分享</button></div></div></section>
+    <nav class="section-tabs" aria-label="攻略章节"><div class="section-tabs-track toc"><a href="#overview" title="先看结论">结论</a><a href="#quick" title="快速决策索引">怎么玩</a><a href="#months" title="全年月份速查">月份</a><a href="#seasonal" title="季节限定景观">季节</a><a href="#hours-prices" title="景点营业时间和票价速查">票价</a><a href="#prep" title="行前准备">准备</a><a href="#stay" title="住宿建议">住宿</a><a href="#areas" title="地图分区">分区</a><a href="#attractions" title="核心景点">景点</a><a href="#streets" title="街区/夜市/市场">街区</a><a href="#food" title="美食总表">美食</a><a href="#shops" title="餐厅和店铺">店铺</a><a href="#museums" title="博物馆和展馆">博物馆</a><a href="#nature" title="自然/远郊/周边">周边</a><a href="#routes" title="路线模板">路线</a><a href="#transport" title="交通细节">交通</a><a href="#warnings" title="避坑和取舍">避坑</a><a href="#checklist" title="出发前复核清单">清单</a></div></nav>
+    <div class="guide-layout">
+      <article class="content" id="guideContent">
+        <section class="city-overview" aria-label="城市速览"><div class="co-facts"><div class="co-cell"><span class="co-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span class="co-k">所在</span><span class="co-v">云南</span></div><div class="co-cell"><span class="co-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="co-k">适宜季节</span><span class="co-v">11 月至次年 4 月</span></div><div class="co-cell"><span class="co-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="co-k">建议天数</span><span class="co-v">2-3 天</span></div><div class="co-cell co-review pending" data-review-status="pending"><span class="co-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></span><span class="co-k">资料状态</span><span class="co-v">资料待复核</span></div></div><div class="co-blocks"><div class="co-block"><span class="co-bk"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>必看景点</span><div class="chip-row"><a class="chip" href="#nature-item-37b165814c">翁丁古寨</a><a class="chip" href="#nature-item-aee5ea0206">沧源崖画</a><a class="chip" href="#nature-item-f01a7fdf2a">鲁史古镇</a><a class="chip" href="#attractions-item-7b9da23b66">茶山和昔归/冰岛方向</a></div></div><div class="co-block"><span class="co-bk"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M9 4c-1 1.5 1 2.5 0 4M13 4c-1 1.5 1 2.5 0 4"/><path d="M8 19h8"/></svg>必吃美食</span><div class="chip-row"><a class="chip chip-food" href="#overview-item-487ca49e62">佤王宴</a><a class="chip chip-food" href="#overview-item-487ca49e62">鸡肉烂饭</a><a class="chip chip-food" href="#overview-item-487ca49e62">稀豆粉</a><a class="chip chip-food" href="#overview-item-487ca49e62">酸扒菜</a><a class="chip chip-food" href="#overview-item-487ca49e62">临沧茶</a></div></div></div><p class="co-review-note">动态信息出行前复核：门票、开放时间与预约规则会变化，请以官方渠道为准。</p></section>
+        <section id="overview" class="guide-section level-2 layout-facts">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><span class="section-name">先看结论</span><span class="section-count">5</span></h2>
+<div class="section-body">
+<div class="fact-grid"><div class="fact-tile" id="overview-item-32fc844930"><span class="fact-k">城市定位</span><p class="fact-v">佤山秘境、<a class="auto-link" href="#nature-item-37b165814c">翁丁古寨</a>、茶山和边地风味</p></div><div class="fact-tile" id="overview-item-3036406e54"><span class="fact-k">第一梯队</span><p class="fact-v"><a class="auto-link" href="#nature-item-37b165814c">翁丁古寨</a>、<a class="auto-link" href="#nature-item-aee5ea0206">沧源崖画</a>、<a class="auto-link" href="#nature-item-f01a7fdf2a">鲁史古镇</a>、<a class="auto-link" href="#attractions-item-7b9da23b66">茶山和昔归/冰岛方向</a></p></div><div class="fact-tile" id="overview-item-320e3ac778"><span class="fact-k">适合安排</span><p class="fact-v"><a class="auto-link" href="#quick-item-0381babaa8">半天</a>看城市核心或<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a>，<a class="auto-link" href="#quick-item-546178c4b8">1 天</a>打一条经典线，2-3 天再加远郊/周边</p></div><div class="fact-tile" id="overview-item-f4b33dc8c2"><span class="fact-k">高频玩法</span><p class="fact-v">结合小红书、B站、抖音常见<a class="auto-link" href="#routes">路线</a>，优先选择地标景区、<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a>街区、当地早餐和<a class="auto-link" href="#seasonal">季节限定景观</a></p></div><div class="fact-tile" id="overview-item-487ca49e62"><span class="fact-k">必吃优先级</span><p class="fact-v">佤王宴、鸡肉烂饭、稀豆粉、酸扒菜、临沧茶、烤肉和米酒</p></div></div>
+</div></section>
+<section id="quick" class="guide-section level-2 layout-scenarios">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><span class="section-name">快速决策索引</span><span class="section-count">6</span></h2>
+<div class="section-body">
+<div class="scenario-grid"><div class="scenario-tile" id="quick-item-0381babaa8"><span class="tile-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><strong>半天</strong><p><a class="auto-link" href="#nature-item-37b165814c">翁丁古寨</a> 或 <a class="auto-link" href="#streets-item-9e2fbb9798">临沧市区夜市</a></p></div></div><div class="scenario-tile" id="quick-item-546178c4b8"><span class="tile-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><div><strong>1 天</strong><p><a class="auto-link" href="#nature-item-37b165814c">翁丁古寨</a> + <a class="auto-link" href="#nature-item-aee5ea0206">沧源崖画</a> + 夜间<a class="auto-link" href="#food">吃喝</a></p></div></div><div class="scenario-tile" id="quick-item-b20ea0f255"><span class="tile-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><div><strong>2 天</strong><p>经典景区 + 博物馆/古镇 + 远郊自然</p></div></div><div class="scenario-tile" id="quick-item-cef46bc674"><span class="tile-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v6a2 2 0 0 1-4 0"/></svg></span><div><strong>雨天</strong><p><a class="auto-link" href="#museums-item-d2d6fc4119">临沧市博物馆</a>、<a class="auto-link" href="#museums-item-a8f36ba2fc">沧源崖画展点</a>、<a class="auto-link" href="#museums-item-3b9a032d2b">茶文化展馆</a>、商圈、老街、非遗体验和当地餐厅</p></div></div><div class="scenario-tile" id="quick-item-8b514b5ea6"><span class="tile-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="6" r="2.5"/><path d="M8 21v-5l-2-3 3-3h6l3 3-2 3v5"/></svg></span><div><strong>亲子</strong><p><a class="auto-link" href="#quick-item-b20ea0f255">博物馆</a>、低强度景区和<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a>小吃</p></div></div><div class="scenario-tile" id="quick-item-bfed35c63a"><span class="tile-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span><div><strong>摄影</strong><p>清晨/傍晚去核心景区，夜间去 <a class="auto-link" href="#streets-item-9e2fbb9798">临沧市区夜市</a></p></div></div></div>
+</div></section>
+<section id="months" class="guide-section level-2 layout-months">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="section-name">全年月份速查</span><span class="section-count">12</span></h2>
+<div class="section-body">
+<div class="month-grid" data-month-grid><article class="month-card" data-month="1" id="months-item-b568c3e135"><h3><b>1</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-aee5ea0206">沧源崖画</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></dd></div><div class="kv"><dt>注意什么</dt><dd>早晚冷或淡季班次</dd></div></dl></article><article class="month-card" data-month="2" id="months-item-dcbff45353"><h3><b>2</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-aee5ea0206">沧源崖画</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></dd></div><div class="kv"><dt>注意什么</dt><dd>春节<a class="auto-link" href="#stay">住宿</a>和票务</dd></div></dl></article><article class="month-card" data-month="3" id="months-item-a131aba706"><h3><b>3</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-37b165814c">翁丁古寨</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></dd></div><div class="kv"><dt>注意什么</dt><dd><a class="auto-link" href="#warnings-item-c845dd114a">花期</a>和阴雨</dd></div></dl></article><article class="month-card" data-month="4" id="months-item-e1dd5a1c66"><h3><b>4</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-37b165814c">翁丁古寨</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></dd></div><div class="kv"><dt>注意什么</dt><dd>清明/五一<a class="auto-link" href="#prep-item-fbb21a95f8">预约</a></dd></div></dl></article><article class="month-card" data-month="5" id="months-item-c50c6dbba7"><h3><b>5</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-37b165814c">翁丁古寨</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></dd></div><div class="kv"><dt>注意什么</dt><dd><a class="auto-link" href="#prep-item-ef5213c2ed">防晒</a>和小长假</dd></div></dl></article><article class="month-card" data-month="6" id="months-item-702dc17eef"><h3><b>6</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-aee5ea0206">沧源崖画</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></dd></div><div class="kv"><dt>注意什么</dt><dd>雨季安全</dd></div></dl></article><article class="month-card" data-month="7" id="months-item-426bf1df2c"><h3><b>7</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-aee5ea0206">沧源崖画</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></dd></div><div class="kv"><dt>注意什么</dt><dd>暑期排队</dd></div></dl></article><article class="month-card" data-month="8" id="months-item-644d954be2"><h3><b>8</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-37b165814c">翁丁古寨</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></dd></div><div class="kv"><dt>注意什么</dt><dd>雷雨和<a class="auto-link" href="#prep-item-376faac3bf">交通</a></dd></div></dl></article><article class="month-card" data-month="9" id="months-item-2d65864601"><h3><b>9</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-37b165814c">翁丁古寨</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></dd></div><div class="kv"><dt>注意什么</dt><dd>国庆前订房</dd></div></dl></article><article class="month-card" data-month="10" id="months-item-00de0c3be2"><h3><b>10</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-37b165814c">翁丁古寨</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></dd></div><div class="kv"><dt>注意什么</dt><dd>国庆错峰</dd></div></dl></article><article class="month-card" data-month="11" id="months-item-4b0153724b"><h3><b>11</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-aee5ea0206">沧源崖画</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></dd></div><div class="kv"><dt>注意什么</dt><dd>昼夜温差</dd></div></dl></article><article class="month-card" data-month="12" id="months-item-526667e9f9"><h3><b>12</b><span>月</span></h3><dl class="kv-list"><div class="kv"><dt>适合去</dt><dd><a class="auto-link" href="#nature-item-aee5ea0206">沧源崖画</a></dd></div><div class="kv"><dt>吃什么</dt><dd><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></dd></div><div class="kv"><dt>注意什么</dt><dd>湿冷或高海拔降温</dd></div></dl></article></div>
+</div></section>
+<section id="seasonal" class="guide-section level-2 layout-cards">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="section-name">季节限定景观</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<div class="card-grid"><article class="info-card kind-place" id="seasonal-item-2ad6cf5a5f"><div class="card-body"><h3 class="card-title">翁丁古寨</h3><p class="card-lead">拍照、慢游、结合当地<a class="auto-link" href="#food">美食</a>和<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a></p><dl class="kv-list"><div class="kv"><dt>最佳月份</dt><dd><a class="auto-link" href="#months-item-4b0153724b">11 月</a>至次年 <a class="auto-link" href="#months-item-e1dd5a1c66">4 月</a></dd></div><div class="kv"><dt>可看月份</dt><dd>全年可按天气和公告安排，<a class="auto-link" href="#seasonal">季节</a>体验以实时信息为准</dd></div><div class="kv"><dt>推荐地点</dt><dd>佤族建筑、寨门、民俗展示</dd></div><div class="kv"><dt>提醒</dt><dd><a class="auto-link" href="#hours-prices-item-1b1158b4c1">尊重村寨禁忌</a></dd></div></dl><nav class="poi-actions" aria-label="翁丁古寨实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="翁丁古寨：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="翁丁古寨：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="翁丁古寨：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="seasonal-item-6db662a75e"><div class="card-body"><h3 class="card-title">沧源崖画</h3><p class="card-lead">拍照、慢游、结合当地<a class="auto-link" href="#food">美食</a>和<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a></p><dl class="kv-list"><div class="kv"><dt>最佳月份</dt><dd>全年，旱季更稳</dd></div><div class="kv"><dt>可看月份</dt><dd>全年可按天气和公告安排，<a class="auto-link" href="#seasonal">季节</a>体验以实时信息为准</dd></div><div class="kv"><dt>推荐地点</dt><dd>崖画、峡谷、佤山景观</dd></div><div class="kv"><dt>提醒</dt><dd><a class="auto-link" href="#hours-prices-item-b0a40fca0e">道路和天气需复核</a></dd></div></dl><nav class="poi-actions" aria-label="沧源崖画实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="沧源崖画：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="沧源崖画：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="沧源崖画：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="seasonal-item-3dbe8da7e6"><div class="card-body"><h3 class="card-title">鲁史古镇</h3><p class="card-lead">拍照、慢游、结合当地<a class="auto-link" href="#food">美食</a>和<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a></p><dl class="kv-list"><div class="kv"><dt>最佳月份</dt><dd>春秋</dd></div><div class="kv"><dt>可看月份</dt><dd>全年可按天气和公告安排，<a class="auto-link" href="#seasonal">季节</a>体验以实时信息为准</dd></div><div class="kv"><dt>推荐地点</dt><dd>古街、茶马古道、澜沧江<a class="auto-link" href="#overview-item-320e3ac778">周边</a></dd></div><div class="kv"><dt>提醒</dt><dd><a class="auto-link" href="#hours-prices-item-4021eccfd8">交通耗时</a></dd></div></dl><nav class="poi-actions" aria-label="鲁史古镇实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="鲁史古镇：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="鲁史古镇：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="鲁史古镇：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="seasonal-item-c88f1f97fd"><div class="card-body"><h3 class="card-title">茶山和昔归/冰岛方向</h3><p class="card-lead">拍照、慢游、结合当地<a class="auto-link" href="#food">美食</a>和<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a></p><dl class="kv-list"><div class="kv"><dt>最佳月份</dt><dd>春茶季和秋季</dd></div><div class="kv"><dt>可看月份</dt><dd>全年可按天气和公告安排，<a class="auto-link" href="#seasonal">季节</a>体验以实时信息为准</dd></div><div class="kv"><dt>推荐地点</dt><dd>古茶园、茶厂、村寨</dd></div><div class="kv"><dt>提醒</dt><dd><a class="auto-link" href="#hours-prices-item-e9049c1604">买茶看渠道和预算</a></dd></div></dl><nav class="poi-actions" aria-label="茶山和昔归/冰岛方向实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="茶山和昔归/冰岛方向：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="茶山和昔归/冰岛方向：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="茶山和昔归/冰岛方向：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article></div>
+</div></section>
+<section id="hours-prices" class="guide-section level-2 layout-cards">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 6.5h18V10a2 2 0 0 0 0 4v3.5H3V14a2 2 0 0 0 0-4z"/><path d="M14.5 6.5v11" stroke-dasharray="2 2.2"/></svg></span><span class="section-name">景点营业时间和票价速查</span><span class="section-count">5</span></h2>
+<div class="section-body">
+<div class="card-grid"><article class="info-card" id="hours-prices-item-d197614a10"><div class="card-body"><h3 class="card-title">使用说明</h3><dl class="kv-list"><div class="kv kv-note"><dd>以下为公开平台和官方/本地可靠来源常见信息，节假日、索道、观光车、游船、夜游和演出票会调整</dd></div><div class="kv kv-note"><dd>出发前以官方景区、当地文旅、本地宝、博物馆官网或购票平台为准</dd></div></dl></div></article><article class="info-card" id="hours-prices-item-1b1158b4c1"><div class="card-body"><h3 class="card-title">翁丁古寨</h3><p class="card-lead">白天开放为主；门票和讲解以景区为准；提醒：尊重村寨禁忌</p></div></article><article class="info-card" id="hours-prices-item-b0a40fca0e"><div class="card-body"><h3 class="card-title">沧源崖画</h3><p class="card-lead">白天开放；门票以现场为准；提醒：道路和天气需复核</p></div></article><article class="info-card" id="hours-prices-item-4021eccfd8"><div class="card-body"><h3 class="card-title">鲁史古镇</h3><p class="card-lead">开放式；免费，以消费为准；提醒：交通耗时</p></div></article><article class="info-card" id="hours-prices-item-e9049c1604"><div class="card-body"><h3 class="card-title">茶山和昔归/冰岛方向</h3><p class="card-lead">开放式或预约；品茶购茶按店铺；提醒：买茶看渠道和预算</p></div></article></div>
+</div></section>
+<section id="prep" class="guide-section level-2 layout-rows">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></span><span class="section-name">行前准备</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="prep-item-fbb21a95f8"><div class="row-text"><strong>预约</strong><span>热门景区、博物馆、索道/游船/夜游和节假日住宿提前预约</span></div></li><li class="row-item" id="prep-item-ef5213c2ed"><div class="row-text"><strong>装备</strong><span>身份证、舒适鞋、防晒、雨具、充电宝；山地/高海拔地区带薄外套</span></div></li><li class="row-item" id="prep-item-376faac3bf"><div class="row-text"><strong>交通</strong><span>远郊景区优先查直通车、包车、自驾停车和返程末班</span></div></li><li class="row-item" id="prep-item-1005034fe7"><div class="row-text"><strong>时间</strong><span>不要把所有远郊压进 1 天，热门景区至少预留半天</span></div></li></ul>
+</div></section>
+<section id="stay" class="guide-section level-2 layout-rows">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 20V6M3 13h18v7M21 20v-4"/><path d="M7 13v-2.5A1.5 1.5 0 0 1 8.5 9H11v4"/><path d="M11 10.5h7a3 3 0 0 1 3 3"/></svg></span><span class="section-name">住宿建议</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="stay-item-8d524f8cd8"><div class="row-text"><strong>城市中心/老城片区</strong><span>适合第一次来，吃喝和交通方便</span></div></li><li class="row-item" id="stay-item-241c23e8d7"><div class="row-text"><strong>景区门口/度假片区</strong><span>适合早入园、看日出或泡温泉，但夜间选择少</span></div></li><li class="row-item" id="stay-item-9f4ac77948"><div class="row-text"><strong>高铁站/机场片区</strong><span>适合中转，不适合慢游</span></div></li><li class="row-item" id="stay-item-8fe05081f0"><div class="row-text"><strong>古镇/村寨片区</strong><span>适合拍早晚光线，行李尽量轻</span></div></li></ul>
+</div></section>
+<section id="areas" class="guide-section level-2 layout-areas">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5z"/><path d="M9 4v13M15 6.5v13"/></svg></span><span class="section-name">地图分区</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<div class="area-grid"><article class="area-card" id="areas-item-1aef32a1c2"><h3><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>核心景区片区</h3><div class="chip-row"><a class="chip" href="#nature-item-37b165814c">翁丁古寨</a><a class="chip" href="#nature-item-aee5ea0206">沧源崖画</a><a class="chip" href="#nature-item-f01a7fdf2a">鲁史古镇</a><a class="chip" href="#attractions-item-7b9da23b66">茶山和昔归/冰岛方向</a></div></article><article class="area-card" id="areas-item-e5d46d8601"><h3><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>吃喝夜游片区</h3><div class="chip-row"><a class="chip" href="#streets-item-9e2fbb9798">临沧市区夜市</a><a class="chip" href="#streets-item-b17c1386cc">沧源县城</a><a class="chip" href="#streets-item-ae8f1fc800">翁丁景区餐饮</a><a class="chip" href="#areas-item-e5d46d8601">凤庆茶街</a></div></article><article class="area-card" id="areas-item-92925a76e9"><h3><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>人文展馆片区</h3><div class="chip-row"><a class="chip" href="#museums-item-d2d6fc4119">临沧市博物馆</a><a class="chip" href="#museums-item-a8f36ba2fc">沧源崖画展点</a><a class="chip" href="#museums-item-3b9a032d2b">茶文化展馆</a></div></article><article class="area-card" id="areas-item-4dce787b35"><h3><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>远郊周边片区</h3><div class="chip-row"><a class="chip" href="#nature-item-37b165814c">翁丁古寨</a><a class="chip" href="#nature-item-aee5ea0206">沧源崖画</a><a class="chip" href="#nature-item-f01a7fdf2a">鲁史古镇</a><a class="chip" href="#nature-item-00f1200dc0">南美拉祜村</a></div></article></div>
+</div></section>
+<section id="attractions" class="guide-section level-2 layout-cards">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span class="section-name">核心景点</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<div class="card-grid"><article class="info-card kind-place" id="attractions-item-62153b445e"><div class="card-body"><h3 class="card-title">翁丁古寨</h3><p class="card-lead">佤族村寨文化代表，重建后以文化体验为主</p><dl class="kv-list"><div class="kv"><dt>最佳时间</dt><dd>11 月至次年 4 月</dd></div><div class="kv"><dt>看点</dt><dd>佤族建筑、寨门、民俗展示</dd></div><div class="kv"><dt>搭配路线</dt><dd>翁丁古寨 + 临沧市区夜市 + 当地美食</dd></div><div class="kv"><dt>是否值得专程去</dt><dd>第一次到临沧建议优先考虑</dd></div></dl><details class="card-more"><summary>展开其余 3 项</summary><dl class="kv-list"><div class="kv"><dt>营业时间</dt><dd>白天开放为主</dd></div><div class="kv"><dt>票价/预约方式</dt><dd>门票和讲解以景区为准</dd></div><div class="kv"><dt>游玩提醒</dt><dd>尊重村寨禁忌</dd></div></dl></details><nav class="poi-actions" aria-label="翁丁古寨实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="翁丁古寨：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="翁丁古寨：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="翁丁古寨：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="attractions-item-c0db38c4e2"><div class="card-body"><h3 class="card-title">沧源崖画</h3><p class="card-lead">古崖画和峡谷自然景观</p><dl class="kv-list"><div class="kv"><dt>最佳时间</dt><dd>全年，旱季更稳</dd></div><div class="kv"><dt>看点</dt><dd>崖画、峡谷、佤山景观</dd></div><div class="kv"><dt>搭配路线</dt><dd>沧源崖画 + 临沧市区夜市 + 当地美食</dd></div><div class="kv"><dt>是否值得专程去</dt><dd>第一次到临沧建议优先考虑</dd></div></dl><details class="card-more"><summary>展开其余 3 项</summary><dl class="kv-list"><div class="kv"><dt>营业时间</dt><dd>白天开放</dd></div><div class="kv"><dt>票价/预约方式</dt><dd>门票以现场为准</dd></div><div class="kv"><dt>游玩提醒</dt><dd>道路和天气需复核</dd></div></dl></details><nav class="poi-actions" aria-label="沧源崖画实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="沧源崖画：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="沧源崖画：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="沧源崖画：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="attractions-item-9bb982e46a"><div class="card-body"><h3 class="card-title">鲁史古镇</h3><p class="card-lead">茶马古道古镇和慢游点</p><dl class="kv-list"><div class="kv"><dt>最佳时间</dt><dd>春秋</dd></div><div class="kv"><dt>看点</dt><dd>古街、茶马古道、澜沧江周边</dd></div><div class="kv"><dt>搭配路线</dt><dd>鲁史古镇 + 临沧市区夜市 + 当地美食</dd></div><div class="kv"><dt>是否值得专程去</dt><dd>第一次到临沧建议优先考虑</dd></div></dl><details class="card-more"><summary>展开其余 3 项</summary><dl class="kv-list"><div class="kv"><dt>营业时间</dt><dd>开放式</dd></div><div class="kv"><dt>票价/预约方式</dt><dd>免费，以消费为准</dd></div><div class="kv"><dt>游玩提醒</dt><dd>交通耗时</dd></div></dl></details><nav class="poi-actions" aria-label="鲁史古镇实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="鲁史古镇：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="鲁史古镇：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="鲁史古镇：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="attractions-item-7b9da23b66"><div class="card-body"><h3 class="card-title">茶山和昔归/冰岛方向</h3><p class="card-lead">临沧茶文化核心</p><dl class="kv-list"><div class="kv"><dt>最佳时间</dt><dd>春茶季和秋季</dd></div><div class="kv"><dt>看点</dt><dd>古茶园、茶厂、村寨</dd></div><div class="kv"><dt>搭配路线</dt><dd>茶山和昔归/冰岛方向 + 临沧市区夜市 + 当地美食</dd></div><div class="kv"><dt>是否值得专程去</dt><dd>第一次到临沧建议优先考虑</dd></div></dl><details class="card-more"><summary>展开其余 3 项</summary><dl class="kv-list"><div class="kv"><dt>营业时间</dt><dd>开放式或预约</dd></div><div class="kv"><dt>票价/预约方式</dt><dd>品茶购茶按店铺</dd></div><div class="kv"><dt>游玩提醒</dt><dd>买茶看渠道和预算</dd></div></dl></details><nav class="poi-actions" aria-label="茶山和昔归/冰岛方向实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="茶山和昔归/冰岛方向：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="茶山和昔归/冰岛方向：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="茶山和昔归/冰岛方向：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article></div>
+</div></section>
+<section id="streets" class="guide-section level-2 layout-auto">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></span><span class="section-name">街区/夜市/市场</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="streets-item-9e2fbb9798"><div class="row-text"><strong>临沧市区夜市</strong><span>适合夜间吃喝和第一晚熟悉城市</span></div></li><li class="row-item" id="streets-item-b17c1386cc"><div class="row-text"><strong>沧源县城</strong><span>适合本地小吃、咖啡、特产和散步</span></div></li><li class="row-item" id="streets-item-ae8f1fc800"><div class="row-text"><strong>翁丁景区餐饮</strong><span>适合顺路补给和拍街区氛围</span></div></li><li class="row-item" id="streets-item-e4dabc80d0"><div class="row-text"><strong>农贸市场</strong><span>上午更有本地生活感，适合水果、小吃和伴手礼</span></div></li></ul>
+</div></section>
+<section id="food" class="guide-section level-2 layout-cards">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M9 4c-1 1.5 1 2.5 0 4M13 4c-1 1.5 1 2.5 0 4"/><path d="M8 19h8"/></svg></span><span class="section-name">美食总表</span><span class="section-count">6</span></h2>
+<div class="section-body">
+<div class="card-grid"><article class="info-card kind-food" id="food-item-acc900b137"><div class="card-body"><p class="card-kicker">特色菜</p><h3 class="card-title">佤王宴</h3><dl class="kv-list"><div class="kv"><dt>代表店铺</dt><dd>临沧市区夜市周边老店/摊位</dd></div><div class="kv"><dt>适合时间</dt><dd>午餐/晚餐/夜间</dd></div><div class="kv"><dt>排队/避坑提醒</dt><dd>先问价格和份量，热门店可按片区替换</dd></div></dl></div></article><article class="info-card kind-food" id="food-item-f98b56449a"><div class="card-body"><p class="card-kicker">小吃主食</p><h3 class="card-title">鸡肉烂饭</h3><dl class="kv-list"><div class="kv"><dt>代表店铺</dt><dd>沧源县城周边老店/摊位</dd></div><div class="kv"><dt>适合时间</dt><dd>早餐/午餐</dd></div><div class="kv"><dt>排队/避坑提醒</dt><dd>先问价格和份量，热门店可按片区替换</dd></div></dl></div></article><article class="info-card kind-food" id="food-item-6dc42e7bb8"><div class="card-body"><p class="card-kicker">饮品甜品</p><h3 class="card-title">稀豆粉</h3><dl class="kv-list"><div class="kv"><dt>代表店铺</dt><dd>翁丁景区餐饮周边老店/摊位</dd></div><div class="kv"><dt>适合时间</dt><dd>午餐/晚餐/夜间</dd></div><div class="kv"><dt>排队/避坑提醒</dt><dd>先问价格和份量，热门店可按片区替换</dd></div></dl></div></article><article class="info-card kind-food" id="food-item-4e5e8634fd"><div class="card-body"><p class="card-kicker">夜市</p><h3 class="card-title">酸扒菜</h3><dl class="kv-list"><div class="kv"><dt>代表店铺</dt><dd>凤庆茶街周边老店/摊位</dd></div><div class="kv"><dt>适合时间</dt><dd>午餐/晚餐/夜间</dd></div><div class="kv"><dt>排队/避坑提醒</dt><dd>先问价格和份量，热门店可按片区替换</dd></div></dl></div></article><article class="info-card kind-food" id="food-item-4e278083e5"><div class="card-body"><p class="card-kicker">农贸市场</p><h3 class="card-title">临沧茶</h3><dl class="kv-list"><div class="kv"><dt>代表店铺</dt><dd>临沧市区夜市周边老店/摊位</dd></div><div class="kv"><dt>适合时间</dt><dd>午餐/晚餐/夜间</dd></div><div class="kv"><dt>排队/避坑提醒</dt><dd>先问价格和份量，热门店可按片区替换</dd></div></dl></div></article><article class="info-card kind-food" id="food-item-e19051281b"><div class="card-body"><p class="card-kicker">伴手礼</p><h3 class="card-title">烤肉和米酒</h3><dl class="kv-list"><div class="kv"><dt>代表店铺</dt><dd>沧源县城周边老店/摊位</dd></div><div class="kv"><dt>适合时间</dt><dd>午餐/晚餐/夜间</dd></div><div class="kv"><dt>排队/避坑提醒</dt><dd>先问价格和份量，热门店可按片区替换</dd></div></dl></div></article></div>
+</div></section>
+<section id="shops" class="guide-section level-2 layout-auto">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M9 4c-1 1.5 1 2.5 0 4M13 4c-1 1.5 1 2.5 0 4"/><path d="M8 19h8"/></svg></span><span class="section-name">餐厅和店铺</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="shops-item-7694be4d72"><div class="row-text"><strong>佤王宴老店</strong><span>优先安排早餐或午餐，热门时段错峰</span></div></li><li class="row-item" id="shops-item-f664969b04"><div class="row-text"><strong>鸡肉烂饭餐馆</strong><span>适合正餐，多人点菜更划算</span></div></li><li class="row-item" id="shops-item-2a5b991c2e"><div class="row-text"><strong>稀豆粉摊/店</strong><span>适合下午茶、小吃或夜宵</span></div></li><li class="row-item" id="shops-item-e5ce468af3"><div class="row-text"><strong>伴手礼店</strong><span>看生产日期、包装和携带方式</span></div></li></ul>
+</div></section>
+<section id="museums" class="guide-section level-2 layout-auto">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9 12 4l9 5"/><path d="M4 9h16M5 9v9M9.5 9v9M14.5 9v9M19 9v9M3 20h18"/></svg></span><span class="section-name">博物馆和展馆</span><span class="section-count">3</span></h2>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="museums-item-d2d6fc4119"><div class="row-text"><strong>临沧市博物馆</strong><span>雨天和亲子优先，开放时间和预约以馆方为准</span><nav class="poi-actions" aria-label="临沧市博物馆实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%E5%B8%82%E5%8D%9A%E7%89%A9%E9%A6%86%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="临沧市博物馆：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%E5%B8%82%E5%8D%9A%E7%89%A9%E9%A6%86&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="临沧市博物馆：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%E5%B8%82%E5%8D%9A%E7%89%A9%E9%A6%86%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="临沧市博物馆：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></li><li class="row-item" id="museums-item-a8f36ba2fc"><div class="row-text"><strong>沧源崖画展点</strong><span>适合补充历史文化背景</span><nav class="poi-actions" aria-label="沧源崖画展点实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%E5%B1%95%E7%82%B9%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="沧源崖画展点：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%E5%B1%95%E7%82%B9&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="沧源崖画展点：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%E5%B1%95%E7%82%B9%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="沧源崖画展点：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></li><li class="row-item" id="museums-item-3b9a032d2b"><div class="row-text"><strong>茶文化展馆</strong><span>适合和周边街区同日安排</span><nav class="poi-actions" aria-label="茶文化展馆实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E6%96%87%E5%8C%96%E5%B1%95%E9%A6%86%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="茶文化展馆：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E6%96%87%E5%8C%96%E5%B1%95%E9%A6%86&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="茶文化展馆：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E6%96%87%E5%8C%96%E5%B1%95%E9%A6%86%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="茶文化展馆：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></li></ul>
+</div></section>
+<section id="nature" class="guide-section level-2 layout-auto">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15"/><path d="M5 19 12 12"/></svg></span><span class="section-name">自然/远郊/周边</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="nature-item-37b165814c"><div class="row-text"><strong>翁丁古寨</strong><span>第一优先远郊或自然补充点</span></div></li><li class="row-item" id="nature-item-aee5ea0206"><div class="row-text"><strong>沧源崖画</strong><span>适合多 1 天时加入</span></div></li><li class="row-item" id="nature-item-f01a7fdf2a"><div class="row-text"><strong>鲁史古镇</strong><span>适合自驾/包车</span></div></li><li class="row-item" id="nature-item-00f1200dc0"><div class="row-text"><strong>南美拉祜村</strong><span>适合季节限定或第二次来</span></div></li></ul>
+</div></section>
+<section id="routes" class="guide-section level-2 layout-routes">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.5"/></svg></span><span class="section-name">路线模板</span><span class="section-count">6</span></h2>
+<div class="section-body">
+<div class="route-list"><article class="route-card" id="routes-item-c7bdba0792"><span class="route-index">01</span><div class="route-body"><h3>半天线</h3><ol class="route-stops"><li><a href="#nature-item-37b165814c">翁丁古寨</a></li><li><a href="#streets-item-9e2fbb9798">临沧市区夜市</a></li><li><a href="#routes-item-c7bdba0792">当地小吃</a></li></ol></div></article><article class="route-card" id="routes-item-fe751c19ab"><span class="route-index">02</span><div class="route-body"><h3>1 天线</h3><ol class="route-stops"><li><a href="#nature-item-37b165814c">翁丁古寨</a></li><li><a href="#nature-item-aee5ea0206">沧源崖画</a></li><li><a href="#quick-item-546178c4b8">夜间吃喝</a></li></ol></div></article><article class="route-card" id="routes-item-ed15dbebf7"><span class="route-index">03</span><div class="route-body"><h3>经典片区线</h3><ol class="route-stops"><li><a href="#nature-item-37b165814c">翁丁古寨</a></li><li><a href="#nature-item-aee5ea0206">沧源崖画</a></li><li><a href="#nature-item-f01a7fdf2a">鲁史古镇</a></li><li><a href="#attractions-item-7b9da23b66">茶山和昔归/冰岛方向</a></li></ol></div></article><article class="route-card" id="routes-item-a1e6883849"><span class="route-index">04</span><div class="route-body"><h3>雨天线</h3><ol class="route-stops"><li><a href="#museums-item-d2d6fc4119">临沧市博物馆</a></li><li><a href="#museums-item-a8f36ba2fc">沧源崖画展点</a></li><li><a href="#museums-item-3b9a032d2b">茶文化展馆</a></li><li>商圈/古镇</li><li><a href="#overview-item-487ca49e62">佤王宴</a></li></ol></div></article><article class="route-card" id="routes-item-5321185312"><span class="route-index">05</span><div class="route-body"><h3>季节限定线</h3><ol class="route-stops"><li><a href="#routes-item-5321185312">按花期</a></li><li><a href="#routes-item-5321185312">丰水期</a></li><li><a href="#routes-item-5321185312">秋色</a></li><li>雪景或节庆选择 翁丁古寨</li></ol></div></article><article class="route-card" id="routes-item-cefe329a57"><span class="route-index">06</span><div class="route-body"><h3>远郊一日游线</h3><ol class="route-stops"><li><a href="#nature-item-37b165814c">翁丁古寨</a></li><li><a href="#nature-item-aee5ea0206">沧源崖画</a></li><li><a href="#nature-item-f01a7fdf2a">鲁史古镇</a></li><li><a href="#nature-item-00f1200dc0">南美拉祜村</a></li></ol></div></article></div>
+</div></section>
+<section id="transport" class="guide-section level-2 layout-rows">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 17l-2 4M15 17l2 4"/><circle cx="9" cy="14" r=".6"/><circle cx="15" cy="14" r=".6"/></svg></span><span class="section-name">交通细节</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="transport-item-00746d398b"><div class="row-text"><strong>外部交通</strong><span>优先高铁/机场到市区，再按景区位置决定住宿</span></div></li><li class="row-item" id="transport-item-ceb6427630"><div class="row-text"><strong>市内交通</strong><span>核心城区打车和公交可解决，远郊建议直通车、包车或自驾</span></div></li><li class="row-item" id="transport-item-288fa46b51"><div class="row-text"><strong>景区交通</strong><span>大型景区常有观光车、索道、游船或分时入园，票务和末班时间比地图距离更重要</span></div></li><li class="row-item" id="transport-item-a9b88fc8b3"><div class="row-text"><strong>返程</strong><span>夜游和远郊线务必提前确认返程车、打车难度和停车位置</span></div></li></ul>
+</div></section>
+<section id="warnings" class="guide-section level-2 layout-tips">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></svg></span><span class="section-name">避坑和取舍</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<ul class="tip-list"><li class="tip-item" id="warnings-item-c1dd87dc22"><span class="tip-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></svg></span><div><strong>只有 1 天</strong><p>只选第一梯队 1-2 个点，不硬塞所有远郊</p></div></li><li class="tip-item" id="warnings-item-fbcdfb5da4"><span class="tip-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></svg></span><div><strong>节假日</strong><p>提前预约门票、住宿和交通，热门街区错峰</p></div></li><li class="tip-item" id="warnings-item-c845dd114a"><span class="tip-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></svg></span><div><strong>动态项目</strong><p>索道、游船、夜游、演出、花期、雪景和丰水期都要出发前复核</p></div></li><li class="tip-item" id="warnings-item-ebe8eed4b7"><span class="tip-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></svg></span><div><strong>餐饮</strong><p>网红店可替代，按片区吃更省时间</p></div></li></ul>
+</div></section>
+<section id="checklist" class="guide-section level-2 layout-checklist">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="m8 9 1.5 1.5L12.5 7.5M8 15l1.5 1.5 3-3M15 9h1.5M15 15h1.5"/></svg></span><span class="section-name">出发前复核清单</span><span class="section-count">5</span></h2>
+<div class="section-body">
+<ul class="check-list" data-checklist="lincang"><li id="checklist-item-cae3fb57e3"><label><input type="checkbox" data-check-index="0"><span class="check-box" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span><span class="check-text">核心景区门票、开放时间、预约入口</span></label></li><li id="checklist-item-3ac06bacac"><label><input type="checkbox" data-check-index="1"><span class="check-box" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span><span class="check-text">博物馆闭馆日和特展预约</span></label></li><li id="checklist-item-169e6cfdc3"><label><input type="checkbox" data-check-index="2"><span class="check-box" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span><span class="check-text">花期、丰水期、雪景、演出和夜游公告</span></label></li><li id="checklist-item-85d9187926"><label><input type="checkbox" data-check-index="3"><span class="check-box" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span><span class="check-text">住宿片区、停车、返程车次和天气</span></label></li><li id="checklist-item-4ac04567f0"><label><input type="checkbox" data-check-index="4"><span class="check-box" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span><span class="check-text">必吃店铺营业时间、是否排队、是否可打包</span></label></li></ul>
+</div></section>
+      </article>
+      <aside class="guide-aside" aria-label="攻略工具与目录">
+        <div class="aside-card tool-bar">
+          <label class="search-box">
+            <span>在本页查找</span>
+            <input id="guideSearch" type="search" placeholder="景点、店铺、路线或月份">
+          </label>
+          <div class="tool-bar-actions">
+            <button id="expandAll" type="button">清空查找</button>
+            <button id="printPage" type="button"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 9V3h10v6"/><rect x="3.5" y="9" width="17" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>打印 / PDF</button>
+          </div>
+        </div>
+        <div class="aside-card sidebar-panel">
           <h2>目录</h2>
           <div class="toc"><a class="toc-level-2" href="#overview">先看结论</a>
 <a class="toc-level-2" href="#quick">快速决策索引</a>
@@ -95,1172 +178,48 @@
 <a class="toc-level-2" href="#stay">住宿建议</a>
 <a class="toc-level-2" href="#areas">地图分区</a>
 <a class="toc-level-2" href="#attractions">核心景点</a>
-<a class="toc-level-2" href="#section">街区/夜市/市场</a>
+<a class="toc-level-2" href="#streets">街区/夜市/市场</a>
 <a class="toc-level-2" href="#food">美食总表</a>
 <a class="toc-level-2" href="#shops">餐厅和店铺</a>
 <a class="toc-level-2" href="#museums">博物馆和展馆</a>
-<a class="toc-level-2" href="#section-2">自然/远郊/周边</a>
+<a class="toc-level-2" href="#nature">自然/远郊/周边</a>
 <a class="toc-level-2" href="#routes">路线模板</a>
 <a class="toc-level-2" href="#transport">交通细节</a>
 <a class="toc-level-2" href="#warnings">避坑和取舍</a>
 <a class="toc-level-2" href="#checklist">出发前复核清单</a></div>
         </div>
-        <div class="sidebar-panel">
+        <div class="aside-card sidebar-panel">
           <h2>相关攻略</h2>
-          <div class="city-grid mini"><a class="city-card" href="chuxiong.html" style="--accent:#8a6a37"><span>云南楚雄旅游攻略</span><small>元谋土林、彝人古镇、恐龙谷和野生菌</small></a>
-<a class="city-card" href="dali.html" style="--accent:#2f6f9f"><span>云南大理旅游攻略</span><small>苍山洱海、古城、喜洲和海边慢游</small></a>
-<a class="city-card" href="dehong.html" style="--accent:#5f6f73"><span>云南德宏旅游攻略</span><small>芒市金塔银塔、瑞丽边城、傣味和热带风情</small></a>
-<a class="city-card" href="honghe.html" style="--accent:#5f6f73"><span>云南红河旅游攻略</span><small>建水、元阳梯田、蒙自米线和滇南古城</small></a>
-<a class="city-card" href="jianshui.html" style="--accent:#9b4e3f"><span>云南建水旅游攻略</span><small>古城小火车、朱家花园、紫陶和烧豆腐</small></a>
-<a class="city-card" href="kunming.html" style="--accent:#4d7b54"><span>云南昆明旅游攻略</span><small>春城花事、滇池、斗南花市和米线</small></a>
-<a class="city-card" href="lijiang.html" style="--accent:#576ca8"><span>云南丽江旅游攻略</span><small>古城、白沙、玉龙雪山和纳西风味</small></a>
-<a class="city-card" href="mile.html" style="--accent:#b45b3a"><span>云南弥勒旅游攻略</span><small>红砖艺术、湖景温泉、葡萄酒庄、彝寨和卤鸡米线</small></a>
-<a class="city-card" href="puer.html" style="--accent:#5f6f35"><span>云南普洱旅游攻略</span><small>茶山咖啡、太阳河森林和景迈山</small></a>
-<a class="city-card" href="qujing.html" style="--accent:#5f6f73"><span>云南曲靖旅游攻略</span><small>罗平油菜花、九龙瀑布、珠江源和宣威火腿</small></a>
+          <div class="city-grid mini"><a class="city-card related-card" href="chuxiong.html" style="--accent:#8a6a37"><img src="../assets/images/chuxiong.jpg" alt="" width="120" height="80" loading="lazy" decoding="async"><span><strong>楚雄</strong><small>元谋土林、彝人古镇、恐龙谷和野生菌</small></span></a>
+<a class="city-card related-card" href="dali.html" style="--accent:#2f6f9f"><img src="../assets/images/dali.jpg" alt="" width="120" height="80" loading="lazy" decoding="async"><span><strong>大理</strong><small>苍山洱海、古城、喜洲和海边慢游</small></span></a>
+<a class="city-card related-card" href="dehong.html" style="--accent:#5f6f73"><img src="../assets/images/dehong.jpg" alt="" width="120" height="80" loading="lazy" decoding="async"><span><strong>德宏</strong><small>芒市金塔银塔、瑞丽边城、傣味和热带风情</small></span></a>
+<a class="city-card related-card" href="honghe.html" style="--accent:#5f6f73"><img src="../assets/images/honghe.jpg" alt="" width="120" height="80" loading="lazy" decoding="async"><span><strong>红河</strong><small>建水、元阳梯田、蒙自米线和滇南古城</small></span></a>
+<a class="city-card related-card" href="jianshui.html" style="--accent:#9b4e3f"><span><strong>建水</strong><small>古城小火车、朱家花园、紫陶和烧豆腐</small></span></a>
+<a class="city-card related-card" href="kunming.html" style="--accent:#4d7b54"><img src="../assets/images/kunming.jpg" alt="" width="120" height="80" loading="lazy" decoding="async"><span><strong>昆明</strong><small>春城花事、滇池、斗南花市和米线</small></span></a>
 <a class="city-catalog-link" href="../city-guides.html">查看全部城市攻略 →</a></div>
         </div>
       </aside>
-      <article class="content" id="guideContent">
-        <section id="overview" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🧭</span>先看结论</h2>
-<ul class="md-list depth-0">
-<li id="overview-item-32fc844930" class="list-card">
-<span class="item-label">城市定位</span><span class="item-body">佤山秘境、<a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a>、茶山和边地风味</span>
-
-
-</li>
-<li id="overview-item-3036406e54" class="list-card">
-<span class="item-label">第一梯队</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a>、<a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a>、<a class="auto-link" href="#attractions-item-9bb982e46a">鲁史古镇</a>、<a class="auto-link" href="#attractions-item-7b9da23b66">茶山和昔归/冰岛方向</a></span>
-
-
-</li>
-<li id="overview-item-320e3ac778" class="list-card">
-<span class="item-label">适合安排</span><span class="item-body"><a class="auto-link" href="#quick-item-0381babaa8">半天</a>看城市核心或<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a>，<a class="auto-link" href="#quick-item-546178c4b8">1 天</a>打一条经典线，2-3 天再加远郊/周边</span>
-
-
-</li>
-<li id="overview-item-f4b33dc8c2" class="list-card fact">
-<span class="item-label">高频玩法</span><span class="item-body">结合小红书、B站、抖音常见<a class="auto-link" href="#routes">路线</a>，优先选择地标景区、<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a>街区、当地早餐和<a class="auto-link" href="#seasonal">季节限定景观</a></span>
-
-
-</li>
-<li id="overview-item-487ca49e62" class="list-card">
-<span class="item-label">必吃优先级</span><span class="item-body">佤王宴、鸡肉烂饭、稀豆粉、酸扒菜、临沧茶、烤肉和米酒</span>
-
-
-</li>
-</ul>
-</section>
-<section id="quick" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🧭</span>快速决策索引</h2>
-<ul class="md-list depth-0">
-<li id="quick-item-0381babaa8" class="list-card">
-<span class="item-label">半天</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a> 或 临沧市区<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a></span>
-
-
-</li>
-<li id="quick-item-546178c4b8" class="list-card">
-<span class="item-label">1 天</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a> + <a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a> + 夜间<a class="auto-link" href="#food">吃喝</a></span>
-
-
-</li>
-<li id="quick-item-b20ea0f255" class="list-card">
-<span class="item-label">2 天</span><span class="item-body">经典景区 + 博物馆/古镇 + 远郊自然</span>
-
-
-</li>
-<li id="quick-item-cef46bc674" class="list-card">
-<span class="item-label">雨天</span><span class="item-body"><a class="auto-link" href="#museums-item-d2d6fc4119">临沧市博物馆</a>、<a class="auto-link" href="#museums-item-a8f36ba2fc">沧源崖画展点</a>、<a class="auto-link" href="#museums-item-3b9a032d2b">茶文化展馆</a>、商圈、老街、非遗体验和当地餐厅</span>
-
-
-</li>
-<li id="quick-item-8b514b5ea6" class="list-card">
-<span class="item-label">亲子</span><span class="item-body"><a class="auto-link" href="#quick-item-b20ea0f255">博物馆</a>、低强度景区和<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a>小吃</span>
-
-
-</li>
-<li id="quick-item-bfed35c63a" class="list-card">
-<span class="item-label">摄影</span><span class="item-body">清晨/傍晚去核心景区，夜间去 <a class="auto-link" href="#quick-item-0381babaa8">临沧市区夜市</a></span>
-
-
-</li>
-</ul>
-</section>
-<section id="months" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">📅</span>全年月份速查</h2>
-<ul class="md-list depth-0">
-<li id="months-item-b568c3e135" class="list-card has-children">
-<span class="item-body">1 月</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body">早晚冷或淡季班次</span>
-
-
-</li>
-</ul>
-</li>
-<li id="months-item-dcbff45353" class="list-card has-children">
-<span class="item-body">2 月</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body">春节<a class="auto-link" href="#stay">住宿</a>和票务</span>
-
-
-</li>
-</ul>
-</li>
-<li id="months-item-a131aba706" class="list-card has-children">
-<span class="item-body">3 月</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body"><a class="auto-link" href="#warnings-item-c845dd114a">花期</a>和阴雨</span>
-
-
-</li>
-</ul>
-</li>
-<li id="months-item-e1dd5a1c66" class="list-card has-children">
-<span class="item-body">4 月</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body">清明/五一<a class="auto-link" href="#prep-item-fbb21a95f8">预约</a></span>
-
-
-</li>
-</ul>
-</li>
-<li id="months-item-c50c6dbba7" class="list-card has-children">
-<span class="item-body">5 月</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body"><a class="auto-link" href="#prep-item-ef5213c2ed">防晒</a>和小长假</span>
-
-
-</li>
-</ul>
-</li>
-<li id="months-item-702dc17eef" class="list-card has-children">
-<span class="item-body">6 月</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body">雨季安全</span>
-
-
-</li>
-</ul>
-</li>
-<li id="months-item-426bf1df2c" class="list-card has-children">
-<span class="item-body">7 月</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body">暑期排队</span>
-
-
-</li>
-</ul>
-</li>
-<li id="months-item-644d954be2" class="list-card has-children">
-<span class="item-body">8 月</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body">雷雨和<a class="auto-link" href="#prep-item-376faac3bf">交通</a></span>
-
-
-</li>
-</ul>
-</li>
-<li id="months-item-2d65864601" class="list-card has-children">
-<span class="item-body">9 月</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body">国庆前订房</span>
-
-
-</li>
-</ul>
-</li>
-<li id="months-item-00de0c3be2" class="list-card has-children">
-<span class="item-body">10 月</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body">国庆错峰</span>
-
-
-</li>
-</ul>
-</li>
-<li id="months-item-4b0153724b" class="list-card has-children">
-<span class="item-body">1<a class="auto-link" href="#months-item-b568c3e135">1 月</a></span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body">昼夜温差</span>
-
-
-</li>
-</ul>
-</li>
-<li id="months-item-526667e9f9" class="list-card has-children">
-<span class="item-body">1<a class="auto-link" href="#months-item-dcbff45353">2 月</a></span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">适合去</span><span class="item-body"><a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">吃什么</span><span class="item-body"><a class="auto-link" href="#overview-item-487ca49e62">鸡肉烂饭</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">注意什么</span><span class="item-body">湿冷或高海拔降温</span>
-
-
-</li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="seasonal" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">📅</span>季节限定景观</h2>
-<ul class="md-list depth-0">
-<li id="seasonal-item-2ad6cf5a5f" class="list-card has-children">
-<span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a></span>
-<nav class="poi-actions" aria-label="翁丁古寨实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="翁丁古寨：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="翁丁古寨：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="翁丁古寨：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">最佳<a class="auto-link" href="#months">月份</a></span><span class="item-body"><a class="auto-link" href="#months-item-4b0153724b">11 月</a>至次年 <a class="auto-link" href="#months-item-e1dd5a1c66">4 月</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">可看<a class="auto-link" href="#months">月份</a></span><span class="item-body">全年可按天气和公告安排，<a class="auto-link" href="#seasonal">季节</a>体验以实时信息为准</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">推荐地点</span><span class="item-body">佤族建筑、寨门、民俗展示</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">玩法</span><span class="item-body">拍照、慢游、结合当地<a class="auto-link" href="#food">美食</a>和<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a></span>
-
-
-</li>
-<li class="list-card fact">
-<span class="item-label">提醒</span><span class="item-body"><a class="auto-link" href="#hours-prices-item-1b1158b4c1">尊重村寨禁忌</a></span>
-
-
-</li>
-</ul>
-</li>
-<li id="seasonal-item-6db662a75e" class="list-card has-children">
-<span class="item-body"><a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a></span>
-<nav class="poi-actions" aria-label="沧源崖画实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="沧源崖画：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="沧源崖画：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="沧源崖画：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">最佳<a class="auto-link" href="#months">月份</a></span><span class="item-body">全年，旱季更稳</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">可看<a class="auto-link" href="#months">月份</a></span><span class="item-body">全年可按天气和公告安排，<a class="auto-link" href="#seasonal">季节</a>体验以实时信息为准</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">推荐地点</span><span class="item-body">崖画、峡谷、佤山景观</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">玩法</span><span class="item-body">拍照、慢游、结合当地<a class="auto-link" href="#food">美食</a>和<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a></span>
-
-
-</li>
-<li class="list-card fact">
-<span class="item-label">提醒</span><span class="item-body"><a class="auto-link" href="#hours-prices-item-b0a40fca0e">道路和天气需复核</a></span>
-
-
-</li>
-</ul>
-</li>
-<li id="seasonal-item-3dbe8da7e6" class="list-card has-children">
-<span class="item-body"><a class="auto-link" href="#attractions-item-9bb982e46a">鲁史古镇</a></span>
-<nav class="poi-actions" aria-label="鲁史古镇实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="鲁史古镇：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="鲁史古镇：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="鲁史古镇：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">最佳<a class="auto-link" href="#months">月份</a></span><span class="item-body">春秋</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">可看<a class="auto-link" href="#months">月份</a></span><span class="item-body">全年可按天气和公告安排，<a class="auto-link" href="#seasonal">季节</a>体验以实时信息为准</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">推荐地点</span><span class="item-body">古街、茶马古道、澜沧江<a class="auto-link" href="#overview-item-320e3ac778">周边</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">玩法</span><span class="item-body">拍照、慢游、结合当地<a class="auto-link" href="#food">美食</a>和<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a></span>
-
-
-</li>
-<li class="list-card fact">
-<span class="item-label">提醒</span><span class="item-body"><a class="auto-link" href="#hours-prices-item-4021eccfd8">交通耗时</a></span>
-
-
-</li>
-</ul>
-</li>
-<li id="seasonal-item-c88f1f97fd" class="list-card has-children">
-<span class="item-body"><a class="auto-link" href="#attractions-item-7b9da23b66">茶山和昔归/冰岛方向</a></span>
-<nav class="poi-actions" aria-label="茶山和昔归/冰岛方向实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="茶山和昔归/冰岛方向：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="茶山和昔归/冰岛方向：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="茶山和昔归/冰岛方向：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">最佳<a class="auto-link" href="#months">月份</a></span><span class="item-body">春茶季和秋季</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">可看<a class="auto-link" href="#months">月份</a></span><span class="item-body">全年可按天气和公告安排，<a class="auto-link" href="#seasonal">季节</a>体验以实时信息为准</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">推荐地点</span><span class="item-body">古茶园、茶厂、村寨</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">玩法</span><span class="item-body">拍照、慢游、结合当地<a class="auto-link" href="#food">美食</a>和<a class="auto-link" href="#food-item-4e5e8634fd">夜市</a></span>
-
-
-</li>
-<li class="list-card fact">
-<span class="item-label">提醒</span><span class="item-body"><a class="auto-link" href="#hours-prices-item-e9049c1604">买茶看渠道和预算</a></span>
-
-
-</li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="hours-prices" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🎫</span>景点营业时间和票价速查</h2>
-<ul class="md-list depth-0">
-<li id="hours-prices-item-d197614a10" class="list-card has-children">
-<span class="item-body">使用说明</span>
-
-<ul class="md-list depth-1">
-<li class="list-card">
-<span class="item-body">以下为公开平台和官方/本地可靠来源常见信息，节假日、索道、观光车、游船、夜游和演出票会调整</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-body">出发前以官方景区、当地文旅、本地宝、博物馆官网或购票平台为准</span>
-
-
-</li>
-</ul>
-</li>
-<li id="hours-prices-item-1b1158b4c1" class="list-card">
-<span class="item-label">翁丁古寨</span><span class="item-body">白天开放为主；门票和讲解以景区为准；提醒：尊重村寨禁忌</span>
-
-
-</li>
-<li id="hours-prices-item-b0a40fca0e" class="list-card">
-<span class="item-label">沧源崖画</span><span class="item-body">白天开放；门票以现场为准；提醒：道路和天气需复核</span>
-
-
-</li>
-<li id="hours-prices-item-4021eccfd8" class="list-card">
-<span class="item-label">鲁史古镇</span><span class="item-body">开放式；免费，以消费为准；提醒：交通耗时</span>
-
-
-</li>
-<li id="hours-prices-item-e9049c1604" class="list-card">
-<span class="item-label">茶山和昔归/冰岛方向</span><span class="item-body">开放式或预约；品茶购茶按店铺；提醒：买茶看渠道和预算</span>
-
-
-</li>
-</ul>
-</section>
-<section id="prep" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🎒</span>行前准备</h2>
-<ul class="md-list depth-0">
-<li id="prep-item-fbb21a95f8" class="list-card">
-<span class="item-label">预约</span><span class="item-body">热门景区、博物馆、索道/游船/夜游和节假日住宿提前预约</span>
-
-
-</li>
-<li id="prep-item-ef5213c2ed" class="list-card">
-<span class="item-label">装备</span><span class="item-body">身份证、舒适鞋、防晒、雨具、充电宝；山地/高海拔地区带薄外套</span>
-
-
-</li>
-<li id="prep-item-376faac3bf" class="list-card">
-<span class="item-label">交通</span><span class="item-body">远郊景区优先查直通车、包车、自驾停车和返程末班</span>
-
-
-</li>
-<li id="prep-item-1005034fe7" class="list-card fact">
-<span class="item-label">时间</span><span class="item-body">不要把所有远郊压进 1 天，热门景区至少预留半天</span>
-
-
-</li>
-</ul>
-</section>
-<section id="stay" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🏨</span>住宿建议</h2>
-<ul class="md-list depth-0">
-<li id="stay-item-8d524f8cd8" class="list-card">
-<span class="item-label">城市中心/老城片区</span><span class="item-body">适合第一次来，吃喝和交通方便</span>
-
-
-</li>
-<li id="stay-item-241c23e8d7" class="list-card">
-<span class="item-label">景区门口/度假片区</span><span class="item-body">适合早入园、看日出或泡温泉，但夜间选择少</span>
-
-
-</li>
-<li id="stay-item-9f4ac77948" class="list-card">
-<span class="item-label">高铁站/机场片区</span><span class="item-body">适合中转，不适合慢游</span>
-
-
-</li>
-<li id="stay-item-8fe05081f0" class="list-card">
-<span class="item-label">古镇/村寨片区</span><span class="item-body">适合拍早晚光线，行李尽量轻</span>
-
-
-</li>
-</ul>
-</section>
-<section id="areas" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🗺️</span>地图分区</h2>
-<ul class="md-list depth-0">
-<li id="areas-item-1aef32a1c2" class="list-card">
-<span class="item-label">核心景区片区</span><span class="item-body">翁丁古寨、沧源崖画、鲁史古镇、茶山和昔归/冰岛方向</span>
-
-
-</li>
-<li id="areas-item-e5d46d8601" class="list-card">
-<span class="item-label">吃喝夜游片区</span><span class="item-body">临沧市区夜市、沧源县城、翁丁景区餐饮、凤庆茶街</span>
-
-
-</li>
-<li id="areas-item-92925a76e9" class="list-card">
-<span class="item-label">人文展馆片区</span><span class="item-body">临沧市博物馆、沧源崖画展点、茶文化展馆</span>
-
-
-</li>
-<li id="areas-item-4dce787b35" class="list-card">
-<span class="item-label">远郊周边片区</span><span class="item-body">翁丁古寨、沧源崖画、鲁史古镇、南美拉祜村</span>
-
-
-</li>
-</ul>
-</section>
-<section id="attractions" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">📍</span>核心景点</h2>
-<ul class="md-list depth-0">
-<li id="attractions-item-62153b445e" class="list-card has-children">
-<span class="item-body">翁丁古寨</span>
-<nav class="poi-actions" aria-label="翁丁古寨实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="翁丁古寨：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="翁丁古寨：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E7%BF%81%E4%B8%81%E5%8F%A4%E5%AF%A8%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="翁丁古寨：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card fact">
-<span class="item-label">介绍</span><span class="item-body">佤族村寨文化代表，重建后以文化体验为主</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">最佳时间</span><span class="item-body">11 月至次年 4 月</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">看点</span><span class="item-body">佤族建筑、寨门、民俗展示</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">搭配路线</span><span class="item-body">翁丁古寨 + 临沧市区夜市 + 当地美食</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">是否值得专程去</span><span class="item-body">第一次到临沧建议优先考虑</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">营业时间</span><span class="item-body">白天开放为主</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">票价/预约方式</span><span class="item-body">门票和讲解以景区为准</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">游玩提醒</span><span class="item-body">尊重村寨禁忌</span>
-
-
-</li>
-</ul>
-</li>
-<li id="attractions-item-c0db38c4e2" class="list-card has-children">
-<span class="item-body">沧源崖画</span>
-<nav class="poi-actions" aria-label="沧源崖画实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="沧源崖画：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="沧源崖画：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="沧源崖画：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card fact">
-<span class="item-label">介绍</span><span class="item-body">古崖画和峡谷自然景观</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">最佳时间</span><span class="item-body">全年，旱季更稳</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">看点</span><span class="item-body">崖画、峡谷、佤山景观</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">搭配路线</span><span class="item-body">沧源崖画 + 临沧市区夜市 + 当地美食</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">是否值得专程去</span><span class="item-body">第一次到临沧建议优先考虑</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">营业时间</span><span class="item-body">白天开放</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">票价/预约方式</span><span class="item-body">门票以现场为准</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">游玩提醒</span><span class="item-body">道路和天气需复核</span>
-
-
-</li>
-</ul>
-</li>
-<li id="attractions-item-9bb982e46a" class="list-card has-children">
-<span class="item-body">鲁史古镇</span>
-<nav class="poi-actions" aria-label="鲁史古镇实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="鲁史古镇：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="鲁史古镇：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E9%B2%81%E5%8F%B2%E5%8F%A4%E9%95%87%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="鲁史古镇：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card fact">
-<span class="item-label">介绍</span><span class="item-body">茶马古道古镇和慢游点</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">最佳时间</span><span class="item-body">春秋</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">看点</span><span class="item-body">古街、茶马古道、澜沧江周边</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">搭配路线</span><span class="item-body">鲁史古镇 + 临沧市区夜市 + 当地美食</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">是否值得专程去</span><span class="item-body">第一次到临沧建议优先考虑</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">营业时间</span><span class="item-body">开放式</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">票价/预约方式</span><span class="item-body">免费，以消费为准</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">游玩提醒</span><span class="item-body">交通耗时</span>
-
-
-</li>
-</ul>
-</li>
-<li id="attractions-item-7b9da23b66" class="list-card has-children">
-<span class="item-body">茶山和昔归/冰岛方向</span>
-<nav class="poi-actions" aria-label="茶山和昔归/冰岛方向实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="茶山和昔归/冰岛方向：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="茶山和昔归/冰岛方向：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E5%B1%B1%E5%92%8C%E6%98%94%E5%BD%92/%E5%86%B0%E5%B2%9B%E6%96%B9%E5%90%91%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="茶山和昔归/冰岛方向：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card fact">
-<span class="item-label">介绍</span><span class="item-body">临沧茶文化核心</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">最佳时间</span><span class="item-body">春茶季和秋季</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">看点</span><span class="item-body">古茶园、茶厂、村寨</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">搭配路线</span><span class="item-body">茶山和昔归/冰岛方向 + 临沧市区夜市 + 当地美食</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">是否值得专程去</span><span class="item-body">第一次到临沧建议优先考虑</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">营业时间</span><span class="item-body">开放式或预约</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">票价/预约方式</span><span class="item-body">品茶购茶按店铺</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">游玩提醒</span><span class="item-body">买茶看渠道和预算</span>
-
-
-</li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="section" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🌃</span>街区/夜市/市场</h2>
-<ul class="md-list depth-0">
-<li id="section-item-8f6f792bfc" class="list-card">
-<span class="item-label">临沧市区夜市</span><span class="item-body">适合夜间吃喝和第一晚熟悉城市</span>
-
-
-</li>
-<li id="section-item-ebcbdd245d" class="list-card">
-<span class="item-label">沧源县城</span><span class="item-body">适合本地小吃、咖啡、特产和散步</span>
-
-
-</li>
-<li id="section-item-d4e94e1ab0" class="list-card">
-<span class="item-label">翁丁景区餐饮</span><span class="item-body">适合顺路补给和拍街区氛围</span>
-
-
-</li>
-<li id="section-item-3e0bae7fb4" class="list-card">
-<span class="item-label">农贸市场</span><span class="item-body">上午更有本地生活感，适合水果、小吃和伴手礼</span>
-
-
-</li>
-</ul>
-</section>
-<section id="food" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🍜</span>美食总表</h2>
-<ul class="md-list depth-0">
-<li id="food-item-acc900b137" class="list-card has-children">
-<span class="item-body">特色菜</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">代表</span><span class="item-body">佤王宴</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">代表店铺</span><span class="item-body">临沧市区夜市周边老店/摊位</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">适合时间</span><span class="item-body">午餐/晚餐/夜间</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">排队/避坑提醒</span><span class="item-body">先问价格和份量，热门店可按片区替换</span>
-
-
-</li>
-</ul>
-</li>
-<li id="food-item-f98b56449a" class="list-card has-children">
-<span class="item-body">小吃主食</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">代表</span><span class="item-body">鸡肉烂饭</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">代表店铺</span><span class="item-body">沧源县城周边老店/摊位</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">适合时间</span><span class="item-body">早餐/午餐</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">排队/避坑提醒</span><span class="item-body">先问价格和份量，热门店可按片区替换</span>
-
-
-</li>
-</ul>
-</li>
-<li id="food-item-6dc42e7bb8" class="list-card has-children">
-<span class="item-body">饮品甜品</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">代表</span><span class="item-body">稀豆粉</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">代表店铺</span><span class="item-body">翁丁景区餐饮周边老店/摊位</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">适合时间</span><span class="item-body">午餐/晚餐/夜间</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">排队/避坑提醒</span><span class="item-body">先问价格和份量，热门店可按片区替换</span>
-
-
-</li>
-</ul>
-</li>
-<li id="food-item-4e5e8634fd" class="list-card has-children">
-<span class="item-body">夜市</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">代表</span><span class="item-body">酸扒菜</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">代表店铺</span><span class="item-body">凤庆茶街周边老店/摊位</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">适合时间</span><span class="item-body">午餐/晚餐/夜间</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">排队/避坑提醒</span><span class="item-body">先问价格和份量，热门店可按片区替换</span>
-
-
-</li>
-</ul>
-</li>
-<li id="food-item-4e278083e5" class="list-card has-children">
-<span class="item-body">农贸市场</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">代表</span><span class="item-body">临沧茶</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">代表店铺</span><span class="item-body">临沧市区夜市周边老店/摊位</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">适合时间</span><span class="item-body">午餐/晚餐/夜间</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">排队/避坑提醒</span><span class="item-body">先问价格和份量，热门店可按片区替换</span>
-
-
-</li>
-</ul>
-</li>
-<li id="food-item-e19051281b" class="list-card has-children">
-<span class="item-body">伴手礼</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">代表</span><span class="item-body">烤肉和米酒</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">代表店铺</span><span class="item-body">沧源县城周边老店/摊位</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">适合时间</span><span class="item-body">午餐/晚餐/夜间</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">排队/避坑提醒</span><span class="item-body">先问价格和份量，热门店可按片区替换</span>
-
-
-</li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="shops" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🍜</span>餐厅和店铺</h2>
-<ul class="md-list depth-0">
-<li id="shops-item-7694be4d72" class="list-card">
-<span class="item-label">佤王宴老店</span><span class="item-body">优先安排早餐或午餐，热门时段错峰</span>
-
-
-</li>
-<li id="shops-item-f664969b04" class="list-card">
-<span class="item-label">鸡肉烂饭餐馆</span><span class="item-body">适合正餐，多人点菜更划算</span>
-
-
-</li>
-<li id="shops-item-2a5b991c2e" class="list-card">
-<span class="item-label">稀豆粉摊/店</span><span class="item-body">适合下午茶、小吃或夜宵</span>
-
-
-</li>
-<li id="shops-item-e5ce468af3" class="list-card">
-<span class="item-label">伴手礼店</span><span class="item-body">看生产日期、包装和携带方式</span>
-
-
-</li>
-</ul>
-</section>
-<section id="museums" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🏛️</span>博物馆和展馆</h2>
-<ul class="md-list depth-0">
-<li id="museums-item-d2d6fc4119" class="list-card">
-<span class="item-label">临沧市博物馆</span><span class="item-body">雨天和亲子优先，开放时间和预约以馆方为准</span>
-<nav class="poi-actions" aria-label="临沧市博物馆实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%E5%B8%82%E5%8D%9A%E7%89%A9%E9%A6%86%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="临沧市博物馆：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%E5%B8%82%E5%8D%9A%E7%89%A9%E9%A6%86&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="临沧市博物馆：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%E5%B8%82%E5%8D%9A%E7%89%A9%E9%A6%86%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="临沧市博物馆：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-
-</li>
-<li id="museums-item-a8f36ba2fc" class="list-card">
-<span class="item-label">沧源崖画展点</span><span class="item-body">适合补充历史文化背景</span>
-<nav class="poi-actions" aria-label="沧源崖画展点实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%E5%B1%95%E7%82%B9%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="沧源崖画展点：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%E5%B1%95%E7%82%B9&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="沧源崖画展点：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E6%B2%A7%E6%BA%90%E5%B4%96%E7%94%BB%E5%B1%95%E7%82%B9%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="沧源崖画展点：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-
-</li>
-<li id="museums-item-3b9a032d2b" class="list-card">
-<span class="item-label">茶文化展馆</span><span class="item-body">适合和周边街区同日安排</span>
-<nav class="poi-actions" aria-label="茶文化展馆实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E6%96%87%E5%8C%96%E5%B1%95%E9%A6%86%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="茶文化展馆：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E6%96%87%E5%8C%96%E5%B1%95%E9%A6%86&amp;city=%E4%B8%B4%E6%B2%A7&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="茶文化展馆：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E4%B8%B4%E6%B2%A7%20%E8%8C%B6%E6%96%87%E5%8C%96%E5%B1%95%E9%A6%86%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="茶文化展馆：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-
-</li>
-</ul>
-</section>
-<section id="section-2" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🌲</span>自然/远郊/周边</h2>
-<ul class="md-list depth-0">
-<li id="section-2-item-505fa8cb26" class="list-card">
-<span class="item-label">翁丁古寨</span><span class="item-body">第一优先远郊或自然补充点</span>
-
-
-</li>
-<li id="section-2-item-8106a6f4e0" class="list-card">
-<span class="item-label">沧源崖画</span><span class="item-body">适合多 1 天时加入</span>
-
-
-</li>
-<li id="section-2-item-4c33cbb2d1" class="list-card">
-<span class="item-label">鲁史古镇</span><span class="item-body">适合自驾/包车</span>
-
-
-</li>
-<li id="section-2-item-6cd62b2c4b" class="list-card">
-<span class="item-label">南美拉祜村</span><span class="item-body">适合季节限定或第二次来</span>
-
-
-</li>
-</ul>
-</section>
-<section id="routes" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🗺️</span>路线模板</h2>
-<ul class="md-list depth-0">
-<li id="routes-item-c7bdba0792" class="list-card">
-<span class="item-label"><a class="auto-link" href="#quick-item-0381babaa8">半天</a>线</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a>、<a class="auto-link" href="#quick-item-0381babaa8">临沧市区夜市</a>、当地小吃</span>
-
-
-</li>
-<li id="routes-item-fe751c19ab" class="list-card">
-<span class="item-label"><a class="auto-link" href="#quick-item-546178c4b8">1 天</a>线</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a>、<a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a>、<a class="auto-link" href="#quick-item-546178c4b8">夜间吃喝</a></span>
-
-
-</li>
-<li id="routes-item-ed15dbebf7" class="list-card">
-<span class="item-label">经典片区线</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a>、<a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a>、<a class="auto-link" href="#attractions-item-9bb982e46a">鲁史古镇</a>、<a class="auto-link" href="#attractions-item-7b9da23b66">茶山和昔归/冰岛方向</a></span>
-
-
-</li>
-<li id="routes-item-a1e6883849" class="list-card">
-<span class="item-label"><a class="auto-link" href="#quick-item-cef46bc674">雨天</a>线</span><span class="item-body"><a class="auto-link" href="#museums-item-d2d6fc4119">临沧市博物馆</a>、<a class="auto-link" href="#museums-item-a8f36ba2fc">沧源崖画展点</a>、<a class="auto-link" href="#museums-item-3b9a032d2b">茶文化展馆</a>、<a class="auto-link" href="#quick-item-cef46bc674">商圈</a>/<a class="auto-link" href="#quick-item-b20ea0f255">古镇</a>、<a class="auto-link" href="#overview-item-487ca49e62">佤王宴</a></span>
-
-
-</li>
-<li id="routes-item-5321185312" class="list-card">
-<span class="item-label"><a class="auto-link" href="#seasonal">季节</a>限定线</span><span class="item-body">按<a class="auto-link" href="#warnings-item-c845dd114a">花期</a>、丰水期、秋色、<a class="auto-link" href="#checklist-item-169e6cfdc3">雪景</a>或节庆选择 <a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a></span>
-
-
-</li>
-<li id="routes-item-cefe329a57" class="list-card">
-<span class="item-label">远郊一日游线</span><span class="item-body"><a class="auto-link" href="#attractions-item-62153b445e">翁丁古寨</a>、<a class="auto-link" href="#attractions-item-c0db38c4e2">沧源崖画</a>、<a class="auto-link" href="#attractions-item-9bb982e46a">鲁史古镇</a>、<a class="auto-link" href="#areas-item-4dce787b35">南美拉祜村</a></span>
-
-
-</li>
-</ul>
-</section>
-<section id="transport" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🚆</span>交通细节</h2>
-<ul class="md-list depth-0">
-<li id="transport-item-00746d398b" class="list-card">
-<span class="item-label">外部交通</span><span class="item-body">优先高铁/机场到市区，再按景区位置决定住宿</span>
-
-
-</li>
-<li id="transport-item-ceb6427630" class="list-card">
-<span class="item-label">市内交通</span><span class="item-body">核心城区打车和公交可解决，远郊建议直通车、包车或自驾</span>
-
-
-</li>
-<li id="transport-item-288fa46b51" class="list-card">
-<span class="item-label">景区交通</span><span class="item-body">大型景区常有观光车、索道、游船或分时入园，票务和末班时间比地图距离更重要</span>
-
-
-</li>
-<li id="transport-item-a9b88fc8b3" class="list-card">
-<span class="item-label">返程</span><span class="item-body">夜游和远郊线务必提前确认返程车、打车难度和停车位置</span>
-
-
-</li>
-</ul>
-</section>
-<section id="warnings" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">⚠️</span>避坑和取舍</h2>
-<ul class="md-list depth-0">
-<li id="warnings-item-c1dd87dc22" class="list-card">
-<span class="item-label">只有 1 天</span><span class="item-body">只选第一梯队 1-2 个点，不硬塞所有远郊</span>
-
-
-</li>
-<li id="warnings-item-fbcdfb5da4" class="list-card">
-<span class="item-label">节假日</span><span class="item-body">提前预约门票、住宿和交通，热门街区错峰</span>
-
-
-</li>
-<li id="warnings-item-c845dd114a" class="list-card">
-<span class="item-label">动态项目</span><span class="item-body">索道、游船、夜游、演出、花期、雪景和丰水期都要出发前复核</span>
-
-
-</li>
-<li id="warnings-item-ebe8eed4b7" class="list-card">
-<span class="item-label">餐饮</span><span class="item-body">网红店可替代，按片区吃更省时间</span>
-
-
-</li>
-</ul>
-</section>
-<section id="checklist" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">⚠️</span>出发前复核清单</h2>
-<ul class="md-list depth-0">
-<li id="checklist-item-cae3fb57e3" class="list-card">
-<span class="item-body">核心景区<a class="auto-link" href="#hours-prices">门票</a>、开放时间、<a class="auto-link" href="#prep-item-fbb21a95f8">预约</a>入口</span>
-
-
-</li>
-<li id="checklist-item-3ac06bacac" class="list-card">
-<span class="item-body"><a class="auto-link" href="#quick-item-b20ea0f255">博物馆</a>闭馆日和特展<a class="auto-link" href="#prep-item-fbb21a95f8">预约</a></span>
-
-
-</li>
-<li id="checklist-item-169e6cfdc3" class="list-card">
-<span class="item-body"><a class="auto-link" href="#warnings-item-c845dd114a">花期</a>、<a class="auto-link" href="#routes-item-5321185312">丰水期</a>、雪景、<a class="auto-link" href="#warnings-item-c845dd114a">演出</a>和<a class="auto-link" href="#warnings-item-c845dd114a">夜游</a>公告</span>
-
-
-</li>
-<li id="checklist-item-85d9187926" class="list-card">
-<span class="item-body"><a class="auto-link" href="#stay">住宿</a>片区、停车、<a class="auto-link" href="#transport-item-a9b88fc8b3">返程</a>车次和天气</span>
-
-
-</li>
-<li id="checklist-item-4ac04567f0" class="list-card">
-<span class="item-body">必吃店铺营业时间、是否排队、是否可打包</span>
-
-
-</li>
-</ul>
-</section>
-      </article>
     </div>
-    <section class="source-media guide-gallery"><div class="source-media-head compact-head"><p class="eyebrow">Visual Notes</p><h2>正文配图</h2><p>图片为本站本地保存的城市封面衍生构图，用于辅助浏览；授权与来源沿用该城市封面信息。</p></div><div class="media-grid"><article class="media-card"><img src="../assets/photos/lincang/scenery-01.jpg" alt="临沧 正文配图" width="960" height="540" loading="lazy"></article></div></section>
+
     <section class="source-media compact" aria-label="实用信息与资料来源"><div class="source-media-head compact-head"><p class="eyebrow">Trip Check</p><h2>实用信息与资料来源</h2><p>资料整理日期：未核验。门票、开放时间、预约和交通可能变化，请在出行前复核官方信息。</p></div><details class="source-drawer" open><summary>展开来源链接（2）</summary><div class="source-grid"><a class="source-link" href="https://www.lincang.gov.cn/" target="_blank" rel="noopener noreferrer"><span>lincang.gov.cn</span><small>www.lincang.gov.cn</small><b aria-hidden="true">↗</b></a><a class="source-link" href="https://search.bilibili.com/all?keyword=%E4%B8%B4%E6%B2%A7%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer"><span>哔哩哔哩检索</span><small>search.bilibili.com</small><b aria-hidden="true">↗</b></a></div></details></section>
   </main>
   <footer class="site-footer">
-    <p>本页为个人离线旅游攻略整理，内容来自公开网络资料的归纳，仅供出行参考；出发前请按官方景区、本地文旅、票务系统复核时间、票价与预约信息。</p>
-    <p>城市与景点照片来自 <a href="https://commons.wikimedia.org/" target="_blank" rel="noreferrer">Wikimedia Commons</a> 等开放图库（遵循各自的 CC 授权）；无照片处使用程序生成的示意插画。</p>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="header-home" href="../index.html"><span class="brand-mark" aria-hidden="true">游</span><span class="brand-name">游记<b>地图</b></span></a>
+        <p>个人整理的全国城市旅游攻略，收录 222 座城市的景点、美食、季节与路线。运行期纯静态，可安装到手机离线阅读。</p>
+      </div>
+      <nav class="footer-links" aria-label="浏览攻略"><strong>浏览</strong><a href="../destinations.html">目的地筛选</a><a href="../themes.html">主题玩法</a><a href="../city-guides.html">城市攻略</a><a href="../overview.html">跨城市总览</a></nav>
+      <nav class="footer-links" aria-label="旅行工具"><strong>工具</strong><a href="../roadtrip.html">自驾路书</a><a href="../tools.html">实用工具</a><a href="../user.html">用户中心</a></nav>
+      <div class="footer-note">
+        <strong>资料说明</strong>
+        <p>内容来自公开资料的归纳，仅供出行参考；门票、开放时间与预约请以官方景区、本地文旅和票务系统为准。</p>
+        <p>城市与景点照片来自 <a href="https://commons.wikimedia.org/" target="_blank" rel="noreferrer">Wikimedia Commons</a> 等开放图库，遵循各自 CC 授权。</p>
+      </div>
+    </div>
+    <p class="footer-copy">游记地图 · 收藏、行程与笔记只保存在你的浏览器</p>
   </footer>
-  <nav class="mobile-quickbar" aria-label="移动端快捷入口"><a href="../index.html">首页</a><a href="#guideSearch">搜索</a><a href="#attractions">景点</a><a href="#food">吃喝</a><a href="#routes">路线</a></nav>
-  <button class="trip-dock-toggle" id="tripDockToggle" type="button" aria-controls="tripDock" aria-expanded="false">
-    <span aria-hidden="true">路线</span><span>行程</span><strong id="tripDockCount" aria-label="行程中的城市数">0</strong>
-  </button>
+  <nav class="mobile-tabbar" aria-label="移动端主导航"><a class="tab" href="../index.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/></svg><span>首页</span></a><a class="tab" href="../destinations.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg><span>目的地</span></a><a class="tab" href="../roadtrip.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="13.5" r="1"/><circle cx="16.5" cy="13.5" r="1"/></svg><span>自驾</span></a><button class="tab" type="button" data-open-trip aria-controls="tripDock"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>行程</span><b class="tab-badge" data-trip-count hidden>0</b></button><a class="tab" href="../user.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>我的</span></a></nav>
   <div class="trip-dock-backdrop" id="tripDockBackdrop" hidden></div>
   <aside class="trip-dock" id="tripDock" role="dialog" aria-modal="true" aria-labelledby="tripDockTitle" tabindex="-1" hidden>
     <header class="trip-dock-head">
@@ -1278,7 +237,8 @@
     </footer>
   </aside>
   <button class="to-top" id="toTop" type="button" aria-label="返回顶部" title="返回顶部">↑</button>
-  <script src="../assets/travel.js?v=8f0dbe106e"></script>
-  <script type="module" src="../assets/travel-app.js?v=8f0dbe106e"></script>
+  <script src="../assets/travel.js?v=5a9b9b3572"></script>
+  <script type="module" src="../assets/travel-app.js?v=5a9b9b3572"></script>
+
 </body>
 </html>

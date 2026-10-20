@@ -1,4 +1,3 @@
-
 (function () {
   const input = document.getElementById("guideSearch");
   const content = document.getElementById("guideContent");
@@ -113,7 +112,13 @@
 
   function keepTocLinkVisible(link) {
     const toc = link && link.closest(".toc");
-    if (!toc || window.matchMedia("(max-width: 920px)").matches) return;
+    if (!toc) return;
+    if (toc.classList.contains("section-tabs-track")) {
+      const left = link.offsetLeft - toc.clientWidth / 2 + link.offsetWidth / 2;
+      toc.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+      return;
+    }
+    if (toc.offsetParent === null) return;
     const top = link.offsetTop;
     const bottom = top + link.offsetHeight;
     const visibleTop = toc.scrollTop;
@@ -135,7 +140,7 @@
     });
     if (!emptyBox) {
       emptyBox = document.createElement("div");
-      emptyBox.className = "search-empty";
+      emptyBox.className = "search-empty guide-empty";
       emptyBox.textContent = "没有匹配结果，换一个景点、店铺、城市或月份试试。";
       content.appendChild(emptyBox);
     }
@@ -154,13 +159,21 @@
   }
 
   if (navToggle && header) {
+    const compactNav = window.matchMedia("(max-width: 920px)");
     function closeMobileNav() {
       header.classList.remove("nav-open");
       navToggle.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("nav-locked");
     }
     navToggle.addEventListener("click", () => {
       const open = header.classList.toggle("nav-open");
       navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      document.body.classList.toggle("nav-locked", open && compactNav.matches);
+    });
+    document.addEventListener("pointerdown", (event) => {
+      if (!header.classList.contains("nav-open")) return;
+      if (event.target instanceof Node && header.contains(event.target)) return;
+      closeMobileNav();
     });
     document.querySelectorAll(".top-nav a").forEach((link) => {
       link.addEventListener("click", () => {
@@ -457,7 +470,7 @@
   const STORAGE_SCHEMA = 2;
   const STORAGE_META_KEY = "tay_storage_meta";
   const STORAGE_ARRAY_KEYS = new Set(["tay_favs", "tay_recent", "tay_search_recent", "tay_trip", "tay_roadtrips", "tay_checklist", "tay_budget"]);
-  const STORAGE_OBJECT_KEYS = new Set(["tay_profile", "tay_settings", "tay_last_roadtrip"]);
+  const STORAGE_OBJECT_KEYS = new Set(["tay_profile", "tay_settings", "tay_last_roadtrip", "tay_city_checks"]);
   const STORAGE_STRING_KEYS = new Set(["tay_notes"]);
   const STORAGE_KNOWN_KEYS = new Set([
     ...STORAGE_ARRAY_KEYS,
@@ -647,6 +660,10 @@
       tripDockCount.textContent = String(trip.length);
       tripDockCount.setAttribute("aria-label", "行程中有 " + trip.length + " 座城市");
     }
+    document.querySelectorAll("[data-trip-count]").forEach((badge) => {
+      badge.textContent = String(trip.length);
+      badge.hidden = trip.length === 0;
+    });
     if (tripDockEmpty) tripDockEmpty.hidden = trip.length > 0;
     if (tripDockClear) tripDockClear.disabled = trip.length === 0;
     syncTripControls();
@@ -681,6 +698,9 @@
 
   if (tripDockToggle && tripDock) {
     tripDockToggle.addEventListener("click", () => tripDock.hidden ? openTripDock() : closeTripDock());
+    document.querySelectorAll("[data-open-trip]").forEach((button) => {
+      button.addEventListener("click", () => tripDock.hidden ? openTripDock() : closeTripDock());
+    });
     if (tripDockClose) tripDockClose.addEventListener("click", closeTripDock);
     if (tripDockBackdrop) tripDockBackdrop.addEventListener("click", closeTripDock);
     if (tripDockClear) tripDockClear.addEventListener("click", () => {
@@ -1012,7 +1032,7 @@
     const reset = document.getElementById("ucResetAll");
     if (reset) reset.addEventListener("click", () => {
       if (confirm("确定清除本地保存的昵称、收藏、行程、路书、旅行工具和设置吗？")) {
-        ["tay_profile", "tay_settings", "tay_favs", "tay_recent", "tay_search_recent", "tay_trip", "tay_roadtrips", "tay_last_roadtrip", "tay_checklist", "tay_budget", "tay_notes"].forEach((k) => LS.del(k));
+        ["tay_profile", "tay_settings", "tay_favs", "tay_recent", "tay_search_recent", "tay_trip", "tay_roadtrips", "tay_last_roadtrip", "tay_checklist", "tay_budget", "tay_notes", "tay_city_checks"].forEach((k) => LS.del(k));
         location.reload();
       }
     });
@@ -1381,36 +1401,58 @@
     });
   })();
 
-  // 长章节折叠 + 顶层条目计数（渐进增强：无 JS 时正文完整展示）
-  document.querySelectorAll(".guide-section").forEach((sec) => {
-    const head = sec.querySelector("h2, h3");
-    if (!head) return;
-    const topItems = sec.querySelectorAll(".md-list.depth-0 > li").length;
-    if (topItems >= 4 && !head.querySelector(".section-count")) {
-      const badge = document.createElement("span");
-      badge.className = "section-count";
-      badge.textContent = topItems + " 条";
-      head.appendChild(badge);
-    }
-    const body = document.createElement("div");
-    body.className = "section-body";
-    let n = head.nextSibling;
-    while (n) { const next = n.nextSibling; body.appendChild(n); n = next; }
-    sec.appendChild(body);
-    requestAnimationFrame(() => {
-      if (body.scrollHeight > 660) {
-        sec.classList.add("clampable");
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "section-toggle";
-        btn.textContent = "展开全部 ▾";
-        btn.addEventListener("click", () => {
-          const open = sec.classList.toggle("expanded");
-          btn.textContent = open ? "收起 ▴" : "展开全部 ▾";
-          if (!open) sec.scrollIntoView({ behavior: "smooth", block: "start" });
-        });
-        sec.appendChild(btn);
+  // 月份速查：高亮当前月份，并在手机横滑列表中把它滚到可见位置。
+  (function highlightCurrentMonth() {
+    const month = new Date().getMonth() + 1;
+    document.querySelectorAll("[data-month-grid]").forEach((grid) => {
+      const card = grid.querySelector('.month-card[data-month="' + month + '"]');
+      if (!card) return;
+      card.classList.add("is-current");
+      card.setAttribute("aria-current", "date");
+      if (grid.scrollWidth > grid.clientWidth + 4) grid.scrollLeft = Math.max(0, card.offsetLeft - grid.offsetLeft - 16);
+    });
+  })();
+
+  // 出发前复核清单：勾选状态按城市保存在本机。
+  (function bindCityChecklists() {
+    document.querySelectorAll(".check-list[data-checklist]").forEach((list) => {
+      const key = list.dataset.checklist;
+      const boxes = Array.from(list.querySelectorAll('input[type="checkbox"][data-check-index]'));
+      if (!key || !boxes.length) return;
+      const progress = document.createElement("p");
+      progress.className = "check-progress";
+      progress.setAttribute("aria-live", "polite");
+      list.after(progress);
+      function sync() {
+        const done = boxes.filter((box) => box.checked).length;
+        progress.textContent = "已完成 " + done + " / " + boxes.length + "（只保存在本机）";
       }
+      const saved = LS.get("tay_city_checks", {});
+      const checked = new Set(Array.isArray(saved[key]) ? saved[key] : []);
+      boxes.forEach((box) => {
+        box.checked = checked.has(Number(box.dataset.checkIndex));
+        box.addEventListener("change", () => {
+          const state = LS.get("tay_city_checks", {});
+          state[key] = boxes.filter((item) => item.checked).map((item) => Number(item.dataset.checkIndex));
+          if (!state[key].length) delete state[key];
+          LS.set("tay_city_checks", state);
+          sync();
+        });
+      });
+      sync();
+    });
+  })();
+
+  // 打印时展开卡片里折叠的详情。
+  window.addEventListener("beforeprint", () => {
+    document.querySelectorAll("details.card-more").forEach((details) => {
+      if (!details.open) { details.dataset.printOpened = "true"; details.open = true; }
+    });
+  });
+  window.addEventListener("afterprint", () => {
+    document.querySelectorAll('details.card-more[data-print-opened="true"]').forEach((details) => {
+      details.open = false;
+      delete details.dataset.printOpened;
     });
   });
 

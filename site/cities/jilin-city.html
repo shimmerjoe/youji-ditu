@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>吉林吉林市旅游攻略</title>
   <meta name="description" content="松花江雾凇、冰雪度假、北山古迹和湖光山色">
   <meta name="theme-color" content="#397785">
@@ -16,22 +16,24 @@
   <meta property="og:image" content="https://shimmerjoe.github.io/youji-ditu/assets/images/jilin-city.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" href="../assets/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="../assets/icon-180.png">
-  <link rel="stylesheet" href="../assets/travel.css?v=8f0dbe106e">
-  <link rel="stylesheet" href="../assets/travel-app.css?v=8f0dbe106e">
+  <link rel="stylesheet" href="../assets/travel.css?v=5a9b9b3572">
+  <link rel="stylesheet" href="../assets/travel-app.css?v=5a9b9b3572">
+
   <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
   <script>try{var s=JSON.parse(localStorage.getItem("tay_settings")||"{}"),r=document.documentElement;if(s.vibrancy)r.setAttribute("data-vibrancy",s.vibrancy);if(s.font)r.setAttribute("data-font",s.font);if(s.motion)r.setAttribute("data-motion",s.motion);var t=s.theme||"auto";if(t==="auto")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";r.setAttribute("data-theme",t);}catch(e){}</script>
 </head>
-<body id="top" data-site-root=".." data-search-index="../assets/search-index.js?v=8f0dbe106e" style="--accent:#397785; --hero-image:url('../assets/images/jilin-city.jpg')">
+<body id="top" data-page="city" data-site-root=".." data-search-index="../assets/search-index.js?v=5a9b9b3572" style="--accent:#397785">
   <a class="skip-link" href="#mainContent">跳到主要内容</a>
   <header class="site-header">
     <div class="header-bar">
-      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topNav" aria-label="城市导航菜单">☰</button>
-      <a class="header-home" href="../index.html"><span class="brand-mark" aria-hidden="true">🧭</span><span class="brand-name">游记<b>地图</b></span></a>
+      <a class="header-home" href="../index.html" aria-label="游记地图首页"><span class="brand-mark" aria-hidden="true">游</span><span class="brand-name">游记<b>地图</b></span></a>
       <nav class="header-links" aria-label="功能导航"><a class="header-link" href="../index.html">首页</a><a class="header-link" href="../destinations.html">目的地</a><a class="header-link" href="../themes.html">主题玩法</a><a class="header-link" href="../city-guides.html">城市攻略</a><a class="header-link" href="../roadtrip.html">自驾路书</a><a class="header-link" href="../tools.html">实用工具</a></nav>
       <div class="global-search">
         <label class="global-search-box">
-          <span>全站搜索</span>
+          <span class="sr-only">全站搜索</span>
+          <svg class="icon search-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           <input id="siteSearch" type="search" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="siteSearchResults" placeholder="搜索城市、景点、美食、季节">
         </label>
         <div class="site-search-results" id="siteSearchResults" hidden>
@@ -39,52 +41,133 @@
           <div class="site-search-options" id="siteSearchOptions" role="listbox" aria-label="城市与攻略搜索建议"></div>
         </div>
       </div>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topNav" aria-label="打开城市导航菜单"><svg class="icon nav-open-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="icon nav-close-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg><span class="nav-toggle-text">选城市</span></button>
+      <button class="trip-dock-toggle" id="tripDockToggle" type="button" aria-controls="tripDock" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>行程</span><strong id="tripDockCount" aria-label="行程中的城市数">0</strong></button>
       <a class="header-user" href="../user.html" aria-label="用户中心">
         <span class="user-avatar" id="headerAvatar" aria-hidden="true">👤</span>
-        <span class="header-user-name" id="headerUserName">用户中心</span>
+        <span class="header-user-name" id="headerUserName">我的</span>
       </a>
     </div>
     <nav class="top-nav" id="topNav" aria-label="城市导航">
-      <div class="province-nav-list" aria-label="按省份选择城市"><details class="destination-nav province-nav" data-nav-group="直辖市" data-nav-kind="municipality"><summary><span>直辖市</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="直辖市城市菜单"><div class="province-menu-head"><div><strong>直辖市</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="直辖市城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="安徽" data-nav-kind="province"><summary><span>安徽</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="安徽城市菜单"><div class="province-menu-head"><div><strong>安徽</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%AE%89%E5%BE%BD">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="安徽城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="福建" data-nav-kind="province"><summary><span>福建</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="福建城市菜单"><div class="province-menu-head"><div><strong>福建</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E7%A6%8F%E5%BB%BA">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="福建城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="甘肃" data-nav-kind="province"><summary><span>甘肃</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="甘肃城市菜单"><div class="province-menu-head"><div><strong>甘肃</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E7%94%98%E8%82%83">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="甘肃城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="广东" data-nav-kind="province"><summary><span>广东</span><small>15 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="广东城市菜单"><div class="province-menu-head"><div><strong>广东</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B9%BF%E4%B8%9C">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="广东城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="广西" data-nav-kind="province"><summary><span>广西</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="广西城市菜单"><div class="province-menu-head"><div><strong>广西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B9%BF%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="广西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="贵州" data-nav-kind="province"><summary><span>贵州</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="贵州城市菜单"><div class="province-menu-head"><div><strong>贵州</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%B4%B5%E5%B7%9E">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="贵州城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="海南" data-nav-kind="province"><summary><span>海南</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="海南城市菜单"><div class="province-menu-head"><div><strong>海南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B5%B7%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="海南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="河北" data-nav-kind="province"><summary><span>河北</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="河北城市菜单"><div class="province-menu-head"><div><strong>河北</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B2%B3%E5%8C%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="河北城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="黑龙江" data-nav-kind="province"><summary><span>黑龙江</span><small>5 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="黑龙江城市菜单"><div class="province-menu-head"><div><strong>黑龙江</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%BB%91%E9%BE%99%E6%B1%9F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="黑龙江城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="河南" data-nav-kind="province"><summary><span>河南</span><small>12 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="河南城市菜单"><div class="province-menu-head"><div><strong>河南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B2%B3%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="河南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="湖北" data-nav-kind="province"><summary><span>湖北</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="湖北城市菜单"><div class="province-menu-head"><div><strong>湖北</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B9%96%E5%8C%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="湖北城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="湖南" data-nav-kind="province"><summary><span>湖南</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="湖南城市菜单"><div class="province-menu-head"><div><strong>湖南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B9%96%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="湖南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="江苏" data-nav-kind="province"><summary><span>江苏</span><small>10 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="江苏城市菜单"><div class="province-menu-head"><div><strong>江苏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B1%9F%E8%8B%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="江苏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="江西" data-nav-kind="province"><summary><span>江西</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="江西城市菜单"><div class="province-menu-head"><div><strong>江西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B1%9F%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="江西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav active" data-nav-group="吉林" data-nav-kind="province"><summary><span>吉林</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="吉林城市菜单"><div class="province-menu-head"><div><strong>吉林</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%90%89%E6%9E%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="吉林城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="辽宁" data-nav-kind="province"><summary><span>辽宁</span><small>5 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="辽宁城市菜单"><div class="province-menu-head"><div><strong>辽宁</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%BE%BD%E5%AE%81">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="辽宁城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="内蒙古" data-nav-kind="province"><summary><span>内蒙古</span><small>6 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="内蒙古城市菜单"><div class="province-menu-head"><div><strong>内蒙古</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%86%85%E8%92%99%E5%8F%A4">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="内蒙古城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="宁夏" data-nav-kind="province"><summary><span>宁夏</span><small>2 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="宁夏城市菜单"><div class="province-menu-head"><div><strong>宁夏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%AE%81%E5%A4%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="宁夏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="青海" data-nav-kind="province"><summary><span>青海</span><small>3 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="青海城市菜单"><div class="province-menu-head"><div><strong>青海</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%9D%92%E6%B5%B7">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="青海城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="陕西" data-nav-kind="province"><summary><span>陕西</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="陕西城市菜单"><div class="province-menu-head"><div><strong>陕西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%99%95%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="陕西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="山东" data-nav-kind="province"><summary><span>山东</span><small>12 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="山东城市菜单"><div class="province-menu-head"><div><strong>山东</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B1%B1%E4%B8%9C">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="山东城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="山西" data-nav-kind="province"><summary><span>山西</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="山西城市菜单"><div class="province-menu-head"><div><strong>山西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B1%B1%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="山西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="四川" data-nav-kind="province"><summary><span>四川</span><small>14 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="四川城市菜单"><div class="province-menu-head"><div><strong>四川</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%9B%9B%E5%B7%9D">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="四川城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="新疆" data-nav-kind="province"><summary><span>新疆</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="新疆城市菜单"><div class="province-menu-head"><div><strong>新疆</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%96%B0%E7%96%86">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="新疆城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="西藏" data-nav-kind="province"><summary><span>西藏</span><small>3 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="西藏城市菜单"><div class="province-menu-head"><div><strong>西藏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%A5%BF%E8%97%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="西藏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="云南" data-nav-kind="province"><summary><span>云南</span><small>15 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="云南城市菜单"><div class="province-menu-head"><div><strong>云南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E4%BA%91%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="云南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="浙江" data-nav-kind="province"><summary><span>浙江</span><small>11 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="浙江城市菜单"><div class="province-menu-head"><div><strong>浙江</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B5%99%E6%B1%9F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="浙江城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="港澳" data-nav-kind="special"><summary><span>港澳</span><small>2 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="港澳城市菜单"><div class="province-menu-head"><div><strong>港澳</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?region=%E6%B8%AF%E6%BE%B3">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="港澳城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details></div>
-      <div class="mobile-primary-nav" aria-label="移动端功能导航"><a class="header-link" href="../index.html">首页</a><a class="header-link" href="../destinations.html">目的地</a><a class="header-link" href="../themes.html">主题玩法</a><a class="header-link" href="../city-guides.html">城市攻略</a><a class="header-link" href="../roadtrip.html">自驾路书</a><a class="header-link" href="../tools.html">实用工具</a><a class="header-link" href="../user.html">用户中心</a></div>
+      <div class="top-nav-inner">
+        <div class="mobile-primary-nav" aria-label="移动端功能导航"><a class="header-link" href="../index.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/></svg><span>首页</span></a><a class="header-link" href="../destinations.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg><span>目的地</span></a><a class="header-link" href="../themes.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg><span>主题玩法</span></a><a class="header-link" href="../city-guides.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></svg><span>城市攻略</span></a><a class="header-link" href="../roadtrip.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="13.5" r="1"/><circle cx="16.5" cy="13.5" r="1"/></svg><span>自驾路书</span></a><a class="header-link" href="../tools.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 6.5a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3z"/><path d="M14.5 6.5 17 4l3 3-2.5 2.5"/></svg><span>实用工具</span></a><a class="header-link" href="../user.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>用户中心</span></a></div>
+        <div class="top-nav-head">
+          <div><strong>按省份选城市</strong><span>点开省份查看城市；想按季节、天数筛选可去目的地页。</span></div>
+          <a class="top-nav-all" href="../destinations.html">全部目的地 <svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="province-nav-list" aria-label="按省份选择城市"><details class="destination-nav province-nav" data-nav-group="直辖市" data-nav-kind="municipality"><summary><span>直辖市</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="直辖市城市菜单"><div class="province-menu-head"><div><strong>直辖市</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="直辖市城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="安徽" data-nav-kind="province"><summary><span>安徽</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="安徽城市菜单"><div class="province-menu-head"><div><strong>安徽</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%AE%89%E5%BE%BD">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="安徽城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="福建" data-nav-kind="province"><summary><span>福建</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="福建城市菜单"><div class="province-menu-head"><div><strong>福建</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E7%A6%8F%E5%BB%BA">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="福建城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="甘肃" data-nav-kind="province"><summary><span>甘肃</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="甘肃城市菜单"><div class="province-menu-head"><div><strong>甘肃</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E7%94%98%E8%82%83">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="甘肃城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="广东" data-nav-kind="province"><summary><span>广东</span><small>15 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="广东城市菜单"><div class="province-menu-head"><div><strong>广东</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B9%BF%E4%B8%9C">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="广东城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="广西" data-nav-kind="province"><summary><span>广西</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="广西城市菜单"><div class="province-menu-head"><div><strong>广西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B9%BF%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="广西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="贵州" data-nav-kind="province"><summary><span>贵州</span><small>9 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="贵州城市菜单"><div class="province-menu-head"><div><strong>贵州</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%B4%B5%E5%B7%9E">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="贵州城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="海南" data-nav-kind="province"><summary><span>海南</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="海南城市菜单"><div class="province-menu-head"><div><strong>海南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B5%B7%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="海南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="河北" data-nav-kind="province"><summary><span>河北</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="河北城市菜单"><div class="province-menu-head"><div><strong>河北</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B2%B3%E5%8C%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="河北城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="黑龙江" data-nav-kind="province"><summary><span>黑龙江</span><small>5 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="黑龙江城市菜单"><div class="province-menu-head"><div><strong>黑龙江</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%BB%91%E9%BE%99%E6%B1%9F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="黑龙江城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="河南" data-nav-kind="province"><summary><span>河南</span><small>12 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="河南城市菜单"><div class="province-menu-head"><div><strong>河南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B2%B3%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="河南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="湖北" data-nav-kind="province"><summary><span>湖北</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="湖北城市菜单"><div class="province-menu-head"><div><strong>湖北</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B9%96%E5%8C%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="湖北城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="湖南" data-nav-kind="province"><summary><span>湖南</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="湖南城市菜单"><div class="province-menu-head"><div><strong>湖南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B9%96%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="湖南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="江苏" data-nav-kind="province"><summary><span>江苏</span><small>10 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="江苏城市菜单"><div class="province-menu-head"><div><strong>江苏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B1%9F%E8%8B%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="江苏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="江西" data-nav-kind="province"><summary><span>江西</span><small>8 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="江西城市菜单"><div class="province-menu-head"><div><strong>江西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B1%9F%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="江西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav active" data-nav-group="吉林" data-nav-kind="province"><summary><span>吉林</span><small>4 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="吉林城市菜单"><div class="province-menu-head"><div><strong>吉林</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%90%89%E6%9E%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="吉林城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="辽宁" data-nav-kind="province"><summary><span>辽宁</span><small>5 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="辽宁城市菜单"><div class="province-menu-head"><div><strong>辽宁</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%BE%BD%E5%AE%81">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="辽宁城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="内蒙古" data-nav-kind="province"><summary><span>内蒙古</span><small>6 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="内蒙古城市菜单"><div class="province-menu-head"><div><strong>内蒙古</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%86%85%E8%92%99%E5%8F%A4">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="内蒙古城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="宁夏" data-nav-kind="province"><summary><span>宁夏</span><small>2 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="宁夏城市菜单"><div class="province-menu-head"><div><strong>宁夏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%AE%81%E5%A4%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="宁夏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="青海" data-nav-kind="province"><summary><span>青海</span><small>3 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="青海城市菜单"><div class="province-menu-head"><div><strong>青海</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%9D%92%E6%B5%B7">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="青海城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="陕西" data-nav-kind="province"><summary><span>陕西</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="陕西城市菜单"><div class="province-menu-head"><div><strong>陕西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E9%99%95%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="陕西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="山东" data-nav-kind="province"><summary><span>山东</span><small>12 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="山东城市菜单"><div class="province-menu-head"><div><strong>山东</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B1%B1%E4%B8%9C">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="山东城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="山西" data-nav-kind="province"><summary><span>山西</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="山西城市菜单"><div class="province-menu-head"><div><strong>山西</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%B1%B1%E8%A5%BF">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="山西城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="四川" data-nav-kind="province"><summary><span>四川</span><small>14 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="四川城市菜单"><div class="province-menu-head"><div><strong>四川</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E5%9B%9B%E5%B7%9D">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="四川城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="新疆" data-nav-kind="province"><summary><span>新疆</span><small>7 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="新疆城市菜单"><div class="province-menu-head"><div><strong>新疆</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%96%B0%E7%96%86">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="新疆城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="西藏" data-nav-kind="province"><summary><span>西藏</span><small>3 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="西藏城市菜单"><div class="province-menu-head"><div><strong>西藏</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E8%A5%BF%E8%97%8F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="西藏城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="云南" data-nav-kind="province"><summary><span>云南</span><small>15 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="云南城市菜单"><div class="province-menu-head"><div><strong>云南</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E4%BA%91%E5%8D%97">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="云南城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="浙江" data-nav-kind="province"><summary><span>浙江</span><small>11 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="浙江城市菜单"><div class="province-menu-head"><div><strong>浙江</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?province=%E6%B5%99%E6%B1%9F">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="浙江城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details><details class="destination-nav province-nav" data-nav-group="港澳" data-nav-kind="special"><summary><span>港澳</span><small>2 城</small><i aria-hidden="true"></i></summary><div class="destination-panel province-menu" aria-label="港澳城市菜单"><div class="province-menu-head"><div><strong>港澳</strong><span>选城市，或先按季节、天数与主题筛选</span></div><a class="province-directory-link" href="../destinations.html?region=%E6%B8%AF%E6%BE%B3">条件筛选 →</a></div><div class="province-city-list" data-destination-menu aria-label="港澳城市列表" aria-live="polite" aria-busy="false"><p class="province-menu-status">展开后载入城市列表</p></div></div></details></div>
+      </div>
     </nav>
   </header>
   <main id="mainContent" tabindex="-1">
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow">Travel Guide</p>
-        <h1>吉林吉林市旅游攻略</h1>
-        <p class="subtitle">松花江雾凇、冰雪度假、北山古迹和湖光山色</p>
-        <ul class="hero-points">
-          <li><a class="hero-point-link" href="#quick-item-ebfccd8570"><span>半天</span><small>松花江畔 → 吉林大桥 → 世纪广场或北山公园</small></a></li>
-<li><a class="hero-point-link" href="#quick-item-73e3aba41b"><span>1 天暖季</span><small>北山公园 + 城区历史街区 + 松花江夜景</small></a></li>
-<li><a class="hero-point-link" href="#quick-item-7a1187c7c3"><span>2 天暖季</span><small>城区 1 天 + 松花湖 1 天</small></a></li>
-<li><a class="hero-point-link" href="#quick-item-f4d45784fc"><span>2 至 3 天冬季</span><small>雾凇观赏 1 天 + 滑雪 1 至 2 天</small></a></li>
-        </ul>
-      </div>
-      <div class="hero-stage">
-        <div class="hero-carousel" id="heroCarousel" data-count="1"><div class="hero-slides"><div class="hero-slide active" aria-hidden="false"><img src="../assets/images/jilin-city.jpg" alt="吉林吉林市" width="1280" height="720" loading="eager" decoding="async"><div class="slide-cap"><strong>吉林吉林市</strong><span>松花江雾凇、冰雪度假、北山古迹和湖光山色</span></div></div></div></div>
-        <p class="hero-photo-credit"><span class="hero-photo-credit-kicker">实景封面</span><span class="hero-photo-credit-meta">摄影：H2v5o68z · CC0 1.0</span><a href="https://commons.wikimedia.org/wiki/File:Songhua_River_in_Jilin_City_1.jpg" target="_blank" rel="noopener noreferrer" aria-label="查看吉林吉林市封面照片原始来源（新窗口打开）">原始来源 <span aria-hidden="true">↗</span></a></p>
-        <div class="hero-quickfind"><span class="qf-title">快速查找</span><div class="qf-grid"><a class="quickfind-card" href="#attractions"><span class="qf-emoji" aria-hidden="true">📍</span><span class="qf-text"><strong>景点</strong><small>核心景点 / 季节景观</small></span></a><a class="quickfind-card" href="#food"><span class="qf-emoji" aria-hidden="true">🍜</span><span class="qf-text"><strong>吃喝</strong><small>美食 / 店铺 / 市场</small></span></a><a class="quickfind-card" href="#routes"><span class="qf-emoji" aria-hidden="true">🗺️</span><span class="qf-text"><strong>路线</strong><small>半天 / 一日 / 远郊</small></span></a><a class="quickfind-card" href="#warnings"><span class="qf-emoji" aria-hidden="true">⚠️</span><span class="qf-text"><strong>避坑</strong><small>取舍 / 复核清单</small></span></a></div></div>
-      </div>
-    </section>
-
-    <section class="city-overview reveal" aria-label="城市速览"><div class="co-facts"><div class="co-cell"><span class="co-k">所在</span><span class="co-v">吉林</span></div><div class="co-cell"><span class="co-k">适宜季节</span><span class="co-v">全年可查，按天气取舍</span></div><div class="co-cell co-review reviewed" data-review-status="reviewed"><span class="co-k">资料状态</span><span class="co-v">核验日期 2026-07-15</span><span class="co-review-note">动态信息出行前复核</span></div></div><div class="co-block"><span class="co-bk">📍 必看景点</span><div class="co-chips"><em>松花江城区段</em><em>雾凇观赏带</em><em>北山公园</em><em>松花湖</em><em>北大湖滑雪度假区</em></div></div><div class="co-block"><span class="co-bk">🍜 必吃美食</span><div class="co-chips"><em>见下方正文</em></div></div><div class="co-actions"><button class="co-fav" type="button" data-key="jilin-city" data-name="吉林吉林市旅游攻略" data-href="cities/jilin-city.html" data-sub="松花江雾凇、冰雪度假、北山古迹和湖光山色">☆ 收藏</button><button class="co-trip" type="button" data-key="jilin-city" data-name="吉林吉林市旅游攻略" data-href="cities/jilin-city.html" data-sub="松花江雾凇、冰雪度假、北山古迹和湖光山色">＋ 加入行程</button><button class="co-share" type="button" data-share-title="吉林吉林市旅游攻略" aria-label="分享吉林吉林市旅游攻略" title="分享当前城市攻略">↗ 分享</button></div></section>
-
-
-
-
-    <section class="tool-bar">
-      <label class="search-box">
-        <span>搜索</span>
-        <input id="guideSearch" type="search" placeholder="输入景点、店铺、路线或月份">
-      </label>
-      <button id="expandAll" type="button">清空搜索</button>
-      <button id="printPage" type="button">打印/另存 PDF</button>
-    </section>
-    <div class="layout">
-      <aside class="sidebar">
-        <div class="sidebar-panel">
+    <section class="city-hero has-photo"><div class="city-hero-media"><div class="hero-carousel" id="heroCarousel" data-count="1"><div class="hero-slides"><div class="hero-slide active" aria-hidden="false"><img src="../assets/images/jilin-city.jpg" alt="吉林吉林市" width="1280" height="720" loading="eager" decoding="async"></div></div></div></div><div class="city-hero-inner"><nav class="breadcrumb" aria-label="当前位置"><a href="../index.html">首页</a><span aria-hidden="true">/</span><a href="../destinations.html?province=%E5%90%89%E6%9E%97">吉林</a><span aria-hidden="true">/</span><span aria-current="page">吉林市</span></nav><p class="eyebrow">东北 · 吉林</p><h1>吉林吉林市旅游攻略</h1><p class="subtitle">松花江雾凇、冰雪度假、北山古迹和湖光山色</p><div class="co-actions"><button class="co-fav" type="button" data-key="jilin-city" data-name="吉林吉林市旅游攻略" data-href="cities/jilin-city.html" data-sub="松花江雾凇、冰雪度假、北山古迹和湖光山色">☆ 收藏</button><button class="co-trip" type="button" data-key="jilin-city" data-name="吉林吉林市旅游攻略" data-href="cities/jilin-city.html" data-sub="松花江雾凇、冰雪度假、北山古迹和湖光山色">＋ 加入行程</button><button class="co-share" type="button" data-share-title="吉林吉林市旅游攻略" aria-label="分享吉林吉林市旅游攻略" title="分享当前城市攻略">↗ 分享</button></div></div><p class="hero-photo-credit"><span class="hero-photo-credit-kicker">实景封面</span><span class="hero-photo-credit-meta">摄影：H2v5o68z · CC0 1.0</span><a href="https://commons.wikimedia.org/wiki/File:Songhua_River_in_Jilin_City_1.jpg" target="_blank" rel="noopener noreferrer" aria-label="查看吉林吉林市封面照片原始来源（新窗口打开）">原始来源 <span aria-hidden="true">↗</span></a></p></section>
+    <nav class="section-tabs" aria-label="攻略章节"><div class="section-tabs-track toc"><a href="#overview" title="先看结论">结论</a><a href="#quick" title="快速决策索引">怎么玩</a><a href="#seasonal" title="适合季节与天数">季节</a><a href="#attractions" title="核心景点">景点</a><a href="#routes" title="行程路线">路线</a><a href="#transport" title="交通细节">交通</a><a href="#food" title="美食推荐">美食</a><a href="#stay" title="住宿区域">住宿</a><a href="#budget" title="预算参考">预算参考</a><a href="#warnings" title="避坑提醒">避坑</a><a href="#checklist" title="出发前复核">清单</a><a href="#section" title="行程执行补强">行程执行补强</a></div></nav>
+    <div class="guide-layout">
+      <article class="content" id="guideContent">
+        <section class="city-overview" aria-label="城市速览"><div class="co-facts"><div class="co-cell"><span class="co-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span class="co-k">所在</span><span class="co-v">吉林</span></div><div class="co-cell"><span class="co-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="co-k">适宜季节</span><span class="co-v">全年可查，按天气取舍</span></div><div class="co-cell"><span class="co-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="co-k">建议天数</span><span class="co-v">2-3 天</span></div><div class="co-cell co-review reviewed" data-review-status="reviewed"><span class="co-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></span><span class="co-k">资料状态</span><span class="co-v">核验日期 2026-07-15</span></div></div><div class="co-blocks"><div class="co-block"><span class="co-bk"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>必看景点</span><div class="chip-row"><a class="chip" href="#attractions-item-dd3ce016ed">松花江城区段</a><a class="chip" href="#attractions-item-5c9b8ed90c">雾凇观赏带</a><a class="chip" href="#attractions-item-0c3d6e4895">北山公园</a><a class="chip" href="#attractions-item-4500f50ec2">松花湖</a><a class="chip" href="#attractions-item-7b72ceafac">北大湖滑雪度假区</a></div></div><div class="co-block"><span class="co-bk"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M9 4c-1 1.5 1 2.5 0 4M13 4c-1 1.5 1 2.5 0 4"/><path d="M8 19h8"/></svg>必吃美食</span><div class="chip-row"><span class="chip">见下方正文</span></div></div></div><p class="co-review-note">动态信息出行前复核：门票、开放时间与预约规则会变化，请以官方渠道为准。</p></section>
+        <p class="section-note">松花江雾凇、冰雪度假、北山古迹和湖光山色</p>
+<section id="overview" class="guide-section level-2 layout-facts">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><span class="section-name">先看结论</span><span class="section-count">5</span></h2>
+<div class="section-body">
+<div class="fact-grid"><div class="fact-tile" id="overview-item-824427635a"><span class="fact-k">第一梯队</span><p class="fact-v"><a class="auto-link" href="#attractions-item-dd3ce016ed">松花江城区段</a>、<a class="auto-link" href="#attractions-item-5c9b8ed90c">雾凇观赏带</a>、<a class="auto-link" href="#attractions-item-0c3d6e4895">北山公园</a>、<a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a></p></div><div class="fact-tile" id="overview-item-5b9d55492b"><span class="fact-k">冬季重点</span><p class="fact-v">雾凇岛或<a class="auto-link" href="#seasonal-item-19866e9de6">城区</a>雾凇 + 北大湖/万科<a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a><a class="auto-link" href="#overview-item-3b3b1adb99">滑雪</a>二选一</p></div><div class="fact-tile" id="overview-item-508cedcfa4"><span class="fact-k">暖季重点</span><p class="fact-v">松花江滨水、<a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a>、北山和城市博物馆</p></div><div class="fact-tile" id="overview-item-3b3b1adb99"><span class="fact-k">城市特征</span><p class="fact-v">冬季体验高度依赖天气；滑雪、雾凇和<a class="auto-link" href="#seasonal-item-19866e9de6">城区</a>游不能只按距离排程</p></div><div class="fact-tile" id="overview-item-145529fd6f"><span class="fact-k">动态信息核验日期</span><p class="fact-v">2026-07-15；雾凇预报、<a class="auto-link" href="#transport-item-8dfa83219f">雪场</a>运营、道路和门票以官方当日信息为准</p></div></div>
+</div></section>
+<section id="quick" class="guide-section level-2 layout-scenarios">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><span class="section-name">快速决策索引</span><span class="section-count">5</span></h2>
+<div class="section-body">
+<div class="scenario-grid"><div class="scenario-tile" id="quick-item-ebfccd8570"><span class="tile-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><strong>半天</strong><p>松花江畔 → 吉林大桥 → 世纪广场或<a class="auto-link" href="#attractions-item-0c3d6e4895">北山公园</a></p></div></div><div class="scenario-tile" id="quick-item-73e3aba41b"><span class="tile-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><div><strong>1 天暖季</strong><p><a class="auto-link" href="#attractions-item-0c3d6e4895">北山公园</a> + <a class="auto-link" href="#seasonal-item-19866e9de6">城区</a>历史街区 + 松花江夜景</p></div></div><div class="scenario-tile" id="quick-item-7a1187c7c3"><span class="tile-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><div><strong>2 天暖季</strong><p><a class="auto-link" href="#seasonal-item-19866e9de6">城区</a> 1 天 + <a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a> 1 天</p></div></div><div class="scenario-tile" id="quick-item-f4d45784fc"><span class="tile-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><div><strong>2 至 3 天冬季</strong><p>雾凇观赏 1 天 + <a class="auto-link" href="#overview-item-3b3b1adb99">滑雪</a> 1 至 2 天</p></div></div><div class="scenario-tile" id="quick-item-89b491b6df"><span class="tile-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v6a2 2 0 0 1-4 0"/></svg></span><div><strong>雨雪天</strong><p><a class="auto-link" href="#section-2-item-f1eea66ee0">吉林市</a>博物馆、满族博物馆等室内场馆，先<a class="auto-link" href="#section-7-item-0f8c6619b2">核对</a>开放状态</p></div></div></div>
+</div></section>
+<section id="seasonal" class="guide-section level-2 layout-cards">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="section-name">适合季节与天数</span><span class="section-count">5</span></h2>
+<div class="section-body">
+<div class="card-grid"><article class="info-card kind-place" id="seasonal-item-dd0ed46a0b"><div class="card-body"><h3 class="card-title">12 月下旬至 2 月</h3><p class="card-lead"><a class="auto-link" href="#seasonal-item-dd0ed46a0b">雾凇与滑雪核心季</a>，<a class="auto-link" href="#seasonal-item-dd0ed46a0b">但雾凇并非每天出现</a></p><nav class="poi-actions" aria-label="12 月下旬至 2 月实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%2012%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%202%20%E6%9C%88%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="12 月下旬至 2 月：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%2012%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%202%20%E6%9C%88&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="12 月下旬至 2 月：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%2012%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%202%20%E6%9C%88%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="12 月下旬至 2 月：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="seasonal-item-1ba9c98c35"><div class="card-body"><h3 class="card-title">6 月至 8 月</h3><p class="card-lead"><a class="auto-link" href="#seasonal-item-1ba9c98c35">适合滨江</a>、<a class="auto-link" href="#seasonal-item-1ba9c98c35">松花湖和避暑</a>，<a class="auto-link" href="#seasonal-item-1ba9c98c35">仍要准备短时降雨用品</a></p><nav class="poi-actions" aria-label="6 月至 8 月实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%206%20%E6%9C%88%E8%87%B3%208%20%E6%9C%88%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="6 月至 8 月：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%206%20%E6%9C%88%E8%87%B3%208%20%E6%9C%88&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="6 月至 8 月：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%206%20%E6%9C%88%E8%87%B3%208%20%E6%9C%88%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="6 月至 8 月：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="seasonal-item-b1aae2cec6"><div class="card-body"><h3 class="card-title">9 月下旬至 10 月</h3><p class="card-lead"><a class="auto-link" href="#seasonal-item-b1aae2cec6">秋色与山湖景观较集中</a>，<a class="auto-link" href="#seasonal-item-b1aae2cec6">昼夜温差明显</a></p><nav class="poi-actions" aria-label="9 月下旬至 10 月实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%209%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%2010%20%E6%9C%88%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="9 月下旬至 10 月：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%209%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%2010%20%E6%9C%88&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="9 月下旬至 10 月：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%209%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%2010%20%E6%9C%88%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="9 月下旬至 10 月：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="seasonal-item-19866e9de6"><div class="card-body"><h3 class="card-title">推荐天数</h3><p class="card-lead"><a class="auto-link" href="#seasonal-item-19866e9de6">城区</a> 1 至 2 天；<a class="auto-link" href="#seasonal-item-19866e9de6">加入滑雪或松花湖后安排</a> 3 至 4 天</p><nav class="poi-actions" aria-label="推荐天数实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%8E%A8%E8%8D%90%E5%A4%A9%E6%95%B0%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="推荐天数：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%8E%A8%E8%8D%90%E5%A4%A9%E6%95%B0&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="推荐天数：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%8E%A8%E8%8D%90%E5%A4%A9%E6%95%B0%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="推荐天数：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="seasonal-item-433ec526fd"><div class="card-body"><h3 class="card-title">冬季节奏</h3><p class="card-lead"><a class="auto-link" href="#seasonal-item-433ec526fd">雾凇安排在清晨</a>，<a class="auto-link" href="#seasonal-item-433ec526fd">下午改为城市室内或温泉</a>，<a class="auto-link" href="#seasonal-item-433ec526fd">避免连续长时间户外</a></p><nav class="poi-actions" aria-label="冬季节奏实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%86%AC%E5%AD%A3%E8%8A%82%E5%A5%8F%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="冬季节奏：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%86%AC%E5%AD%A3%E8%8A%82%E5%A5%8F&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="冬季节奏：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%86%AC%E5%AD%A3%E8%8A%82%E5%A5%8F%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="冬季节奏：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article></div>
+</div></section>
+<section id="attractions" class="guide-section level-2 layout-cards">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span class="section-name">核心景点</span><span class="section-count">6</span></h2>
+<div class="section-body">
+<div class="card-grid"><article class="info-card kind-place" id="attractions-item-dd3ce016ed"><div class="card-body"><h3 class="card-title">松花江城区段</h3><p class="card-lead">滨江步道、桥梁、城市天际线和冬季雾凇</p><dl class="kv-list"><div class="kv"><dt>建议停留</dt><dd>2 至 3 小时</dd></div><div class="kv"><dt>提醒</dt><dd>冰面和岸边结冰区域不要擅自进入，以现场警戒为准</dd></div></dl><nav class="poi-actions" aria-label="松花江城区段实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B1%9F%E5%9F%8E%E5%8C%BA%E6%AE%B5%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="松花江城区段：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B1%9F%E5%9F%8E%E5%8C%BA%E6%AE%B5&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="松花江城区段：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B1%9F%E5%9F%8E%E5%8C%BA%E6%AE%B5%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="松花江城区段：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="attractions-item-5c9b8ed90c"><div class="card-body"><h3 class="card-title">雾凇观赏带</h3><dl class="kv-list"><div class="kv"><dt>选择</dt><dd>城区江岸交通最稳妥，韩屯/曾通等郊外点位更依赖天气与道路</dd></div><div class="kv"><dt>时间</dt><dd>日出前后到上午，风、温度和水汽都会影响形成与消散</dd></div><div class="kv"><dt>原则</dt><dd>把雾凇作为概率事件，保留北山、博物馆或滑雪备选</dd></div></dl><nav class="poi-actions" aria-label="雾凇观赏带实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E9%9B%BE%E5%87%87%E8%A7%82%E8%B5%8F%E5%B8%A6%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="雾凇观赏带：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E9%9B%BE%E5%87%87%E8%A7%82%E8%B5%8F%E5%B8%A6&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="雾凇观赏带：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E9%9B%BE%E5%87%87%E8%A7%82%E8%B5%8F%E5%B8%A6%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="雾凇观赏带：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="attractions-item-0c3d6e4895"><div class="card-body"><h3 class="card-title">北山公园</h3><p class="card-lead">山林、古建筑、城市视野和本地日常活动</p><dl class="kv-list"><div class="kv"><dt>建议停留</dt><dd>2 至 3 小时</dd></div><div class="kv"><dt>提醒</dt><dd>冬季台阶结冰，选择防滑鞋并减少夜间登山</dd></div></dl><nav class="poi-actions" aria-label="北山公园实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%B1%B1%E5%85%AC%E5%9B%AD%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="北山公园：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%B1%B1%E5%85%AC%E5%9B%AD&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="北山公园：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%B1%B1%E5%85%AC%E5%9B%AD%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="北山公园：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="attractions-item-4500f50ec2"><div class="card-body"><h3 class="card-title">松花湖</h3><p class="card-lead">湖湾、山色和季节性游船/户外活动</p><dl class="kv-list"><div class="kv"><dt>建议停留</dt><dd>半天至 1 天</dd></div><div class="kv"><dt>提醒</dt><dd>不同码头、景区和度假区并非同一入口，导航前确认目的地</dd></div></dl><nav class="poi-actions" aria-label="松花湖实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B9%96%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="松花湖：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B9%96&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="松花湖：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B9%96%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="松花湖：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="attractions-item-7b72ceafac"><div class="card-body"><h3 class="card-title">北大湖滑雪度假区</h3><dl class="kv-list"><div class="kv"><dt>建议停留</dt><dd>1 至 2 天</dd></div><div class="kv"><dt>适合</dt><dd>有完整滑雪需求、愿意住度假区或早出晚归的游客</dd></div><div class="kv"><dt>核验</dt><dd>雪道、缆车、租赁和课程价格按官方当日页面为准</dd></div></dl><nav class="poi-actions" aria-label="北大湖滑雪度假区实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%A4%A7%E6%B9%96%E6%BB%91%E9%9B%AA%E5%BA%A6%E5%81%87%E5%8C%BA%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="北大湖滑雪度假区：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%A4%A7%E6%B9%96%E6%BB%91%E9%9B%AA%E5%BA%A6%E5%81%87%E5%8C%BA&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="北大湖滑雪度假区：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%A4%A7%E6%B9%96%E6%BB%91%E9%9B%AA%E5%BA%A6%E5%81%87%E5%8C%BA%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="北大湖滑雪度假区：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article><article class="info-card kind-place" id="attractions-item-1267376136"><div class="card-body"><h3 class="card-title">万科松花湖度假区</h3><dl class="kv-list"><div class="kv"><dt>建议停留</dt><dd>1 至 2 天</dd></div><div class="kv"><dt>特点</dt><dd>度假配套集中，从市区前往仍需预留交通时间</dd></div><div class="kv"><dt>提醒</dt><dd>雪季周末提前安排交通和装备，不现场临时拼凑全部项目</dd></div></dl><nav class="poi-actions" aria-label="万科松花湖度假区实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E4%B8%87%E7%A7%91%E6%9D%BE%E8%8A%B1%E6%B9%96%E5%BA%A6%E5%81%87%E5%8C%BA%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="万科松花湖度假区：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E4%B8%87%E7%A7%91%E6%9D%BE%E8%8A%B1%E6%B9%96%E5%BA%A6%E5%81%87%E5%8C%BA&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="万科松花湖度假区：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E4%B8%87%E7%A7%91%E6%9D%BE%E8%8A%B1%E6%B9%96%E5%BA%A6%E5%81%87%E5%8C%BA%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="万科松花湖度假区：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav></div></article></div>
+</div></section>
+<section id="routes" class="guide-section level-2 layout-routes">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.5"/></svg></span><span class="section-name">行程路线</span><span class="section-count">3</span></h2>
+<div class="section-body">
+<div class="route-list"><article class="route-card" id="routes-item-0576f46dce"><span class="route-index">01</span><div class="route-body"><h3>1 日城区线</h3><ol class="route-days"><li><strong>上午</strong><span><a class="auto-link" href="#attractions-item-0c3d6e4895">北山公园</a></span></li><li><strong>下午</strong><span><a class="auto-link" href="#quick-item-89b491b6df">吉林市博物馆</a>或历史街区</span></li><li><strong>晚上</strong><span><a class="auto-link" href="#overview-item-508cedcfa4">松花江滨水</a>步道，按天气缩短户外时间</span></li></ol></div></article><article class="route-card" id="routes-item-af1aa91c1b"><span class="route-index">02</span><div class="route-body"><h3>2 日暖季线</h3><ol class="route-days"><li><strong>第 1 天</strong><span><a class="auto-link" href="#seasonal-item-19866e9de6">城区</a>与北山</span></li><li><strong>第 2 天</strong><span><a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a>，选择一个明确入口深游</span></li></ol></div></article><article class="route-card" id="routes-item-0b05381951"><span class="route-index">03</span><div class="route-body"><h3>3 日冬季线</h3><ol class="route-days"><li><strong>第 1 天</strong><span>清晨<a class="auto-link" href="#quick-item-f4d45784fc">雾凇观赏</a> → 午后博物馆/休息</span></li><li><strong>第 2 天</strong><span><a class="auto-link" href="#overview-item-5b9d55492b">北大湖</a>或万科<a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a><a class="auto-link" href="#overview-item-3b3b1adb99">滑雪</a></span></li><li><strong>第 3 天</strong><span>根据天气补雾凇、继续<a class="auto-link" href="#overview-item-3b3b1adb99">滑雪</a>或返回<a class="auto-link" href="#seasonal-item-19866e9de6">城区</a>慢游</span></li></ol></div></article></div>
+</div></section>
+<section id="transport" class="guide-section level-2 layout-rows">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 17l-2 4M15 17l2 4"/><circle cx="9" cy="14" r=".6"/><circle cx="15" cy="14" r=".6"/></svg></span><span class="section-name">交通细节</span><span class="section-count">5</span></h2>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="transport-item-366c6467fd"><div class="row-text"><strong>到达</strong><span>吉林站位于城区，长春龙嘉机场可通过铁路或公路换乘，按实际班次预留衔接</span></div></li><li class="row-item" id="transport-item-3c17a25343"><div class="row-text"><strong>城区</strong><span>公交、网约车和步行组合即可覆盖滨江与北山</span></div></li><li class="row-item" id="transport-item-6165f3b115"><div class="row-text"><strong>雾凇点位</strong><span>郊外点位清晨公共交通有限，包车前确认车辆资质、价格和返程安排</span></div></li><li class="row-item" id="transport-item-8dfa83219f"><div class="row-text"><strong>雪场</strong><span>官方直通车、度假区接驳和自驾政策会随雪季调整，提前核实</span></div></li><li class="row-item" id="transport-item-828ccab26c"><div class="row-text"><strong>自驾</strong><span>冬季必须评估冰雪道路经验、轮胎和天气，不把普通夏季车程直接套用</span></div></li></ul>
+</div></section>
+<section id="food" class="guide-section level-2 layout-cards">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M9 4c-1 1.5 1 2.5 0 4M13 4c-1 1.5 1 2.5 0 4"/><path d="M8 19h8"/></svg></span><span class="section-name">美食推荐</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<div class="card-grid"><article class="info-card kind-food" id="food-item-26b1873af0"><div class="card-body"><h3 class="card-title">乌拉满族火锅</h3><p class="card-lead">适合冬季多人用餐，提前确认份量</p></div></article><article class="info-card kind-food" id="food-item-809fcc75f0"><div class="card-body"><h3 class="card-title">锅包肉、白肉血肠与东北炖菜</h3><p class="card-lead">选择本地常客多的餐馆，不只追逐网红榜单</p></div></article><article class="info-card kind-food" id="food-item-52083f35f0"><div class="card-body"><h3 class="card-title">松花湖鱼</h3><p class="card-lead">核对明码标价、鱼种和加工方式</p></div></article><article class="info-card kind-food" id="food-item-d3b269f1fb"><div class="card-body"><h3 class="card-title">烧烤与煎粉</h3><p class="card-lead">适合作为城区夜间补充，低温天气减少长时间室外排队</p></div></article></div>
+</div></section>
+<section id="stay" class="guide-section level-2 layout-rows">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 20V6M3 13h18v7M21 20v-4"/><path d="M7 13v-2.5A1.5 1.5 0 0 1 8.5 9H11v4"/><path d="M11 10.5h7a3 3 0 0 1 3 3"/></svg></span><span class="section-name">住宿区域</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="stay-item-7d42da3bf9"><div class="row-text"><strong>吉林站/东市场周边</strong><span>交通和餐饮便利，适合城区与早班出发</span></div></li><li class="row-item" id="stay-item-748f20c74a"><div class="row-text"><strong>松花江沿岸</strong><span>景观和散步方便，冬季核对房间供暖与到站交通</span></div></li><li class="row-item" id="stay-item-c989bafdc6"><div class="row-text"><strong>雪场度假区</strong><span>适合连续滑雪，房价和餐饮成本高于城区</span></div></li><li class="row-item" id="stay-item-3ab665e5cc"><div class="row-text"><strong>松花湖周边</strong><span>适合暖季休闲，淡季配套和班次可能减少</span></div></li></ul>
+</div></section>
+<section id="budget" class="guide-section level-2 layout-rows">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 6.5h18V10a2 2 0 0 0 0 4v3.5H3V14a2 2 0 0 0 0-4z"/><path d="M14.5 6.5v11" stroke-dasharray="2 2.2"/></svg></span><span class="section-name">预算参考</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="budget-item-4f148ec095"><div class="row-text"><strong>城区经济型</strong><span>每人每天约 300 至 600 元，不含滑雪</span></div></li><li class="row-item" id="budget-item-02bf380f92"><div class="row-text"><strong>城区舒适型</strong><span>每人每天约 600 至 1000 元</span></div></li><li class="row-item" id="budget-item-869d74a0b5"><div class="row-text"><strong>滑雪日</strong><span>装备、雪票、课程、交通和住宿差异很大，单独建立预算，不采用固定总价</span></div></li><li class="row-item" id="budget-item-99e4f1bbb7"><div class="row-text"><strong>主要变量</strong><span>雪季周末住宿、教练、装备等级、包车和天气导致的行程调整</span></div></li></ul>
+</div></section>
+<section id="warnings" class="guide-section level-2 layout-tips">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></svg></span><span class="section-name">避坑提醒</span><span class="section-count">5</span></h2>
+<div class="section-body">
+<ul class="tip-list"><li class="tip-item" id="warnings-item-d0d966b676"><span class="tip-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></svg></span><div><p>雾凇不是固定演出，任何“保证看到”的承诺都应谨慎判断</p></div></li><li class="tip-item" id="warnings-item-9c4367da62"><span class="tip-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></svg></span><div><p>吉林市与吉林省名称容易混淆，购买车票和导航时确认目的地为吉林市</p></div></li><li class="tip-item" id="warnings-item-7b242c35e0"><span class="tip-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></svg></span><div><p>雪场、松花湖景区和城区松花江不是同一地点，别把多个入口混为一谈</p></div></li><li class="tip-item" id="warnings-item-04daf10e55"><span class="tip-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></svg></span><div><p>冬季手机耗电快，携带保温措施和移动电源，镜头从室外进室内注意结露</p></div></li><li class="tip-item" id="warnings-item-f21ecf0f1d"><span class="tip-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/></svg></span><div><p>不在未开放冰面、江道或雪道外区域活动</p></div></li></ul>
+</div></section>
+<section id="checklist" class="guide-section level-2 layout-checklist">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="m8 9 1.5 1.5L12.5 7.5M8 15l1.5 1.5 3-3M15 9h1.5M15 15h1.5"/></svg></span><span class="section-name">出发前复核</span><span class="section-count">4</span></h2>
+<div class="section-body">
+<ul class="check-list" data-checklist="jilin-city"><li id="checklist-item-df51fe5f37"><label><input type="checkbox" data-check-index="0"><span class="check-box" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span><span class="check-text">吉林市政府与文旅部门发布的冰雪、雾凇和节庆信息</span></label></li><li id="checklist-item-77d190b5a1"><label><input type="checkbox" data-check-index="1"><span class="check-box" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span><span class="check-text">吉林气象部门天气与道路预警</span></label></li><li id="checklist-item-db3757229d"><label><input type="checkbox" data-check-index="2"><span class="check-box" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span><span class="check-text">北大湖、万科松花湖官方雪道和接驳公告</span></label></li><li id="checklist-item-82e207b6aa"><label><input type="checkbox" data-check-index="3"><span class="check-box" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span><span class="check-text">吉林站及机场换乘班次</span></label></li></ul>
+</div></section>
+<section id="section" class="guide-section level-2 layout-auto">
+<h2 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.5"/></svg></span><span class="section-name">行程执行补强</span></h2>
+<div class="section-body">
+</div></section>
+<section id="section-2" class="guide-section level-3 layout-auto">
+<h3 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg></span><span class="section-name">到达后先做什么</span><span class="section-count">3</span></h3>
+<div class="section-body">
+<ul class="plain-list"><li id="section-2-item-f1eea66ee0">抵达 吉林市 后先确认当日天气、景区入园时间和返程末班；把 松花江城区段、雾凇观赏带、北山公园、松花湖 按地理方向拆开，不以地图直线距离代替实际通行时间。</li><li id="section-2-item-8f7c4efb32">第一天只安排一个核心片区：入住、寄存行李、熟悉周边吃喝与停车/换乘点后再进景区。这样即使遇到排队、降雨或临时限流，也能保住当天的主要体验。</li><li id="section-2-item-16bea96e8c">需要跨区的行程，出发前在官方入口与地图中分别核对一次。导航显示的时间不包含排队、观光车、索道、找车位和步行回程，应额外预留缓冲。</li></ul>
+</div></section>
+<section id="section-3" class="guide-section level-3 layout-auto">
+<h3 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5z"/><path d="M9 4v13M15 6.5v13"/></svg></span><span class="section-name">分区与动线</span><span class="section-count">3</span></h3>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="section-3-item-db843d58b4"><div class="row-text"><strong>核心游览</strong><span>优先把 松花江城区段 作为半天或一天的主任务；其余 雾凇观赏带、北山公园、松花湖 只在同方向、体力和开放时间允许时加入。</span></div></li><li class="row-item" id="section-3-item-cab14f2262"><div class="row-text"><strong>城市休整</strong><span>午餐、雨天与傍晚留给市区街区、展馆或商圈；不要为了打卡在中午往返远郊。需要夜游时，先确认最后一班公共交通、停车场关闭时间和打车供给。</span></div></li><li class="row-item" id="section-3-item-ecfdd67462"><div class="row-text"><strong>远郊选择</strong><span>若只住一晚，宁可减少一个景点，也不要把远郊和市区夜游排进同一日。自驾以返回住宿地前仍留有充足精力为底线，山路、雨雾和节假日要再收紧计划。</span></div></li></ul>
+</div></section>
+<section id="section-4" class="guide-section level-3 layout-auto">
+<h3 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg></span><span class="section-name">餐饮与补给</span><span class="section-count">3</span></h3>
+<div class="section-body">
+<ul class="plain-list"><li id="section-4-item-9b67dde45f">这座城市可优先从 本地早餐、夜市小吃 中选一到两样作为正餐，再用同片区的小吃补充；同一天不要跨城寻找网红店。</li><li id="section-4-item-e6bdf50a54">早餐适合安排在住宿周边或菜市场一带，午餐以靠近主景区为先，晚餐再回到夜间活动片区。热门店排队超过预留时间时，直接选择相邻街区的同类店，行程体验通常更稳定。</li><li id="section-4-item-6596b0f842">购买伴手礼时先看生产日期、常温保存和携带限制；自驾可放在返程前采购，公共交通出行则优先轻量、耐压的包装。</li></ul>
+</div></section>
+<section id="section-5" class="guide-section level-3 layout-auto">
+<h3 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.5"/></svg></span><span class="section-name">路线落地模板</span><span class="section-count">4</span></h3>
+<div class="section-body">
+<ul class="row-list"><li class="row-item" id="section-5-item-48dab3f81e"><div class="row-text"><strong>半天</strong><span>松花江城区段 + 同片区散步/展馆 + 本地早餐。适合早到、转场或天气不稳定的日子。</span></div></li><li class="row-item" id="section-5-item-b0a86b9b59"><div class="row-text"><strong>一天</strong><span>上午 松花江城区段，午后在 雾凇观赏带 或市区人文点二选一，傍晚安排 夜市小吃。每个节点之间留出交通与休息时间。</span></div></li><li class="row-item" id="section-5-item-8a8cde4698"><div class="row-text"><strong>两天</strong><span>第一天完成城市核心与夜间街区，第二天只选择一条远郊或自然线；可从现有攻略中的 经典片区线、雨天备选线 里选与住宿方向一致的一条。</span></div></li><li class="row-item" id="section-5-item-942f375f9f"><div class="row-text"><strong>雨天</strong><span>优先博物馆、室内展馆、商场和老街，把需要视野、步道或水上项目的景点挪到天气恢复后；门票改签与景区公告以官方页面为准。</span></div></li></ul>
+</div></section>
+<section id="section-6" class="guide-section level-3 layout-auto">
+<h3 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 6.5h18V10a2 2 0 0 0 0 4v3.5H3V14a2 2 0 0 0 0-4z"/><path d="M14.5 6.5v11" stroke-dasharray="2 2.2"/></svg></span><span class="section-name">预算、停车与安全边界</span><span class="section-count">3</span></h3>
+<div class="section-body">
+<ul class="plain-list"><li id="section-6-item-a76ecdeb28">预算按住宿、交通/油费、门票、餐饮和机动金五项拆分。门票、停车、观光车、索道、演出和游船常为独立项目，提交行程前逐项核验，避免把“景区门票”理解为全部费用。</li><li id="section-6-item-0e38a558bb">自驾抵达景区前保存停车场位置、收费规则和出口方向；节假日不要依赖最后一个停车场。纯电或插混车辆应在进入远郊前完成补能，并保留一处备选充电点。</li><li id="section-6-item-50d733ca2a">夜间、山地、海边、峡谷与涉水项目要服从天气预警和现场管制。遇到大风、雷雨、能见度低或道路封闭时，立即切换到市区备选，不追赶原计划。</li></ul>
+</div></section>
+<section id="section-7" class="guide-section level-3 layout-auto">
+<h3 class="section-title"><span class="sec-ico"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="m8 9 1.5 1.5L12.5 7.5M8 15l1.5 1.5 3-3M15 9h1.5M15 15h1.5"/></svg></span><span class="section-name">出发前最后核验</span><span class="section-count">3</span></h3>
+<div class="section-body">
+<ul class="plain-list"><li id="section-7-item-0f8c6619b2">核对 松花江城区段、雾凇观赏带、北山公园、松花湖 的开放日期、预约入口、实名要求、临时闭园和分时段入园规则。</li><li id="section-7-item-42b5966efa">核对住宿到第一站的实际通行时间、停车/换乘、返程末班，以及第二天是否需要提前退房或寄存行李。</li><li id="section-7-item-57f773d229">核对天气预警、道路施工、节假日客流和活动公告；易变项目以城市页末尾来源链接及官方当天公告为准。</li></ul>
+</div></section>
+      </article>
+      <aside class="guide-aside" aria-label="攻略工具与目录">
+        <div class="aside-card tool-bar">
+          <label class="search-box">
+            <span>在本页查找</span>
+            <input id="guideSearch" type="search" placeholder="景点、店铺、路线或月份">
+          </label>
+          <div class="tool-bar-actions">
+            <button id="expandAll" type="button">清空查找</button>
+            <button id="printPage" type="button"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 9V3h10v6"/><rect x="3.5" y="9" width="17" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>打印 / PDF</button>
+          </div>
+        </div>
+        <div class="aside-card sidebar-panel">
           <h2>目录</h2>
           <div class="toc"><a class="toc-level-2" href="#overview">先看结论</a>
 <a class="toc-level-2" href="#quick">快速决策索引</a>
@@ -105,608 +188,38 @@
 <a class="toc-level-3" href="#section-6">预算、停车与安全边界</a>
 <a class="toc-level-3" href="#section-7">出发前最后核验</a></div>
         </div>
-        <div class="sidebar-panel">
+        <div class="aside-card sidebar-panel">
           <h2>相关攻略</h2>
-          <div class="city-grid mini"><a class="city-card" href="city-f620e8bf11.html" style="--accent:#5f6f73"><span>吉林长白山旅游攻略</span><small>综合景点、吃喝、季节玩法和路线模板</small></a>
-<a class="city-card" href="changchun.html" style="--accent:#5f6f73"><span>吉林长春旅游攻略</span><small>伪满皇宫、净月潭、电影文化和东北菜</small></a>
-<a class="city-card" href="yanbian.html" style="--accent:#5f6f73"><span>吉林延边旅游攻略</span><small>延吉美食、长白山门户、朝鲜族风情和咖啡街</small></a>
-<a class="city-card" href="city-1024953e98.html" style="--accent:#5f6f73"><span>黑龙江漠河旅游攻略</span><small>综合景点、吃喝、季节玩法和路线模板</small></a>
-<a class="city-card" href="benxi.html" style="--accent:#5f6f73"><span>辽宁本溪旅游攻略</span><small>本溪水洞、关门山红叶、地质奇观和东北菜</small></a>
-<a class="city-card" href="city-fefbb1572a.html" style="--accent:#5f6f73"><span>黑龙江伊春旅游攻略</span><small>小兴安岭森林、汤旺河石林、五营红松和林区风味</small></a>
-<a class="city-card" href="dalian.html" style="--accent:#5f6f73"><span>辽宁大连旅游攻略</span><small>滨海路、星海广场、海鲜、旅顺和浪漫海岸</small></a>
-<a class="city-card" href="dandong.html" style="--accent:#5f6f73"><span>辽宁丹东旅游攻略</span><small>鸭绿江、凤凰山、边境风情和海鲜烧烤</small></a>
-<a class="city-card" href="harbin.html" style="--accent:#5f6f73"><span>黑龙江哈尔滨旅游攻略</span><small>冰雪大世界、中央大街、索菲亚教堂和俄式西餐</small></a>
-<a class="city-card" href="mudanjiang.html" style="--accent:#5f6f73"><span>黑龙江牡丹江旅游攻略</span><small>镜泊湖、雪乡、火山地貌和东北风味</small></a>
+          <div class="city-grid mini"><a class="city-card related-card" href="city-f620e8bf11.html" style="--accent:#5f6f73"><img src="../assets/images/city-f620e8bf11.jpg" alt="" width="120" height="80" loading="lazy" decoding="async"><span><strong>长白山</strong><small>综合景点、吃喝、季节玩法和路线模板</small></span></a>
+<a class="city-card related-card" href="changchun.html" style="--accent:#5f6f73"><span><strong>长春</strong><small>伪满皇宫、净月潭、电影文化和东北菜</small></span></a>
+<a class="city-card related-card" href="yanbian.html" style="--accent:#5f6f73"><span><strong>延边</strong><small>延吉美食、长白山门户、朝鲜族风情和咖啡街</small></span></a>
+<a class="city-card related-card" href="city-1024953e98.html" style="--accent:#5f6f73"><span><strong>漠河</strong><small>综合景点、吃喝、季节玩法和路线模板</small></span></a>
+<a class="city-card related-card" href="benxi.html" style="--accent:#5f6f73"><span><strong>本溪</strong><small>本溪水洞、关门山红叶、地质奇观和东北菜</small></span></a>
+<a class="city-card related-card" href="city-fefbb1572a.html" style="--accent:#5f6f73"><span><strong>伊春</strong><small>小兴安岭森林、汤旺河石林、五营红松和林区风味</small></span></a>
 <a class="city-catalog-link" href="../city-guides.html">查看全部城市攻略 →</a></div>
         </div>
       </aside>
-      <article class="content" id="guideContent">
-        <p>松花江雾凇、冰雪度假、北山古迹和湖光山色</p>
-<section id="overview" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🧭</span>先看结论</h2>
-<ul class="md-list depth-0">
-<li id="overview-item-824427635a" class="list-card">
-<span class="item-label">第一梯队</span><span class="item-body"><a class="auto-link" href="#attractions-item-dd3ce016ed">松花江城区段</a>、<a class="auto-link" href="#attractions-item-5c9b8ed90c">雾凇观赏带</a>、<a class="auto-link" href="#attractions-item-0c3d6e4895">北山公园</a>、<a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a></span>
-
-
-</li>
-<li id="overview-item-5b9d55492b" class="list-card">
-<span class="item-label">冬季重点</span><span class="item-body">雾凇岛或<a class="auto-link" href="#seasonal-item-19866e9de6">城区</a>雾凇 + 北大湖/万科<a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a><a class="auto-link" href="#overview-item-3b3b1adb99">滑雪</a>二选一</span>
-
-
-</li>
-<li id="overview-item-508cedcfa4" class="list-card">
-<span class="item-label">暖季重点</span><span class="item-body">松花江滨水、<a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a>、北山和城市博物馆</span>
-
-
-</li>
-<li id="overview-item-3b3b1adb99" class="list-card">
-<span class="item-label">城市特征</span><span class="item-body">冬季体验高度依赖天气；滑雪、雾凇和<a class="auto-link" href="#seasonal-item-19866e9de6">城区</a>游不能只按距离排程</span>
-
-
-</li>
-<li id="overview-item-145529fd6f" class="list-card">
-<span class="item-label">动态信息核验日期</span><span class="item-body">2026-07-15；雾凇预报、<a class="auto-link" href="#transport-item-8dfa83219f">雪场</a>运营、道路和门票以官方当日信息为准</span>
-
-
-</li>
-</ul>
-</section>
-<section id="quick" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🧭</span>快速决策索引</h2>
-<ul class="md-list depth-0">
-<li id="quick-item-ebfccd8570" class="list-card">
-<span class="item-label">半天</span><span class="item-body">松花江畔 → 吉林大桥 → 世纪广场或<a class="auto-link" href="#attractions-item-0c3d6e4895">北山公园</a></span>
-
-
-</li>
-<li id="quick-item-73e3aba41b" class="list-card">
-<span class="item-label">1 天暖季</span><span class="item-body"><a class="auto-link" href="#attractions-item-0c3d6e4895">北山公园</a> + <a class="auto-link" href="#seasonal-item-19866e9de6">城区</a>历史街区 + 松花江夜景</span>
-
-
-</li>
-<li id="quick-item-7a1187c7c3" class="list-card">
-<span class="item-label">2 <a class="auto-link" href="#quick-item-73e3aba41b">天暖季</a></span><span class="item-body"><a class="auto-link" href="#seasonal-item-19866e9de6">城区</a> 1 天 + <a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a> 1 天</span>
-
-
-</li>
-<li id="quick-item-f4d45784fc" class="list-card">
-<span class="item-label">2 至 3 天冬季</span><span class="item-body">雾凇观赏 1 天 + <a class="auto-link" href="#overview-item-3b3b1adb99">滑雪</a> 1 至 2 天</span>
-
-
-</li>
-<li id="quick-item-89b491b6df" class="list-card">
-<span class="item-label">雨雪天</span><span class="item-body"><a class="auto-link" href="#section-2-item-f1eea66ee0">吉林市</a>博物馆、满族博物馆等室内场馆，先<a class="auto-link" href="#section-7-item-0f8c6619b2">核对</a>开放状态</span>
-
-
-</li>
-</ul>
-</section>
-<section id="seasonal" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">📅</span>适合季节与天数</h2>
-<ul class="md-list depth-0">
-<li id="seasonal-item-dd0ed46a0b" class="list-card">
-<span class="item-label">12 <a class="auto-link" href="#seasonal-item-b1aae2cec6">月下旬至</a> 2 月</span><span class="item-body">雾凇与<a class="auto-link" href="#overview-item-3b3b1adb99">滑雪</a>核心季，但雾凇并非每天出现</span>
-<nav class="poi-actions" aria-label="12 月下旬至 2 月实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%2012%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%202%20%E6%9C%88%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="12 月下旬至 2 月：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%2012%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%202%20%E6%9C%88&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="12 月下旬至 2 月：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%2012%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%202%20%E6%9C%88%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="12 月下旬至 2 月：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-
-</li>
-<li id="seasonal-item-1ba9c98c35" class="list-card">
-<span class="item-label">6 月至 8 月</span><span class="item-body">适合滨江、<a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a>和避暑，仍要准备短时降雨用品</span>
-<nav class="poi-actions" aria-label="6 月至 8 月实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%206%20%E6%9C%88%E8%87%B3%208%20%E6%9C%88%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="6 月至 8 月：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%206%20%E6%9C%88%E8%87%B3%208%20%E6%9C%88&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="6 月至 8 月：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%206%20%E6%9C%88%E8%87%B3%208%20%E6%9C%88%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="6 月至 8 月：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-
-</li>
-<li id="seasonal-item-b1aae2cec6" class="list-card">
-<span class="item-label">9 月下旬至 10 月</span><span class="item-body">秋色与山湖景观较集中，昼夜温差明显</span>
-<nav class="poi-actions" aria-label="9 月下旬至 10 月实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%209%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%2010%20%E6%9C%88%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="9 月下旬至 10 月：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%209%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%2010%20%E6%9C%88&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="9 月下旬至 10 月：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%209%20%E6%9C%88%E4%B8%8B%E6%97%AC%E8%87%B3%2010%20%E6%9C%88%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="9 月下旬至 10 月：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-
-</li>
-<li id="seasonal-item-19866e9de6" class="list-card">
-<span class="item-label">推荐天数</span><span class="item-body">城区 1 至 2 天；加入<a class="auto-link" href="#overview-item-3b3b1adb99">滑雪</a>或<a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a>后安排 3 至 4 天</span>
-<nav class="poi-actions" aria-label="推荐天数实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%8E%A8%E8%8D%90%E5%A4%A9%E6%95%B0%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="推荐天数：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%8E%A8%E8%8D%90%E5%A4%A9%E6%95%B0&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="推荐天数：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%8E%A8%E8%8D%90%E5%A4%A9%E6%95%B0%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="推荐天数：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-
-</li>
-<li id="seasonal-item-433ec526fd" class="list-card">
-<span class="item-label">冬<a class="auto-link" href="#seasonal">季节</a>奏</span><span class="item-body">雾凇安排在清晨，下午改为城市室内或温泉，避免连续长时间户外</span>
-<nav class="poi-actions" aria-label="冬季节奏实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%86%AC%E5%AD%A3%E8%8A%82%E5%A5%8F%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="冬季节奏：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%86%AC%E5%AD%A3%E8%8A%82%E5%A5%8F&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="冬季节奏：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%86%AC%E5%AD%A3%E8%8A%82%E5%A5%8F%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="冬季节奏：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-
-</li>
-</ul>
-</section>
-<section id="attractions" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">📍</span>核心景点</h2>
-<ul class="md-list depth-0">
-<li id="attractions-item-dd3ce016ed" class="list-card has-children">
-<span class="item-body">松花江城区段</span>
-<nav class="poi-actions" aria-label="松花江城区段实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B1%9F%E5%9F%8E%E5%8C%BA%E6%AE%B5%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="松花江城区段：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B1%9F%E5%9F%8E%E5%8C%BA%E6%AE%B5&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="松花江城区段：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B1%9F%E5%9F%8E%E5%8C%BA%E6%AE%B5%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="松花江城区段：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">建议停留</span><span class="item-body">2 至 3 小时</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">看点</span><span class="item-body">滨江步道、桥梁、城市天际线和冬季雾凇</span>
-
-
-</li>
-<li class="list-card fact">
-<span class="item-label">提醒</span><span class="item-body">冰面和岸边结冰区域不要擅自进入，以现场警戒为准</span>
-
-
-</li>
-</ul>
-</li>
-<li id="attractions-item-5c9b8ed90c" class="list-card has-children">
-<span class="item-body">雾凇观赏带</span>
-<nav class="poi-actions" aria-label="雾凇观赏带实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E9%9B%BE%E5%87%87%E8%A7%82%E8%B5%8F%E5%B8%A6%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="雾凇观赏带：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E9%9B%BE%E5%87%87%E8%A7%82%E8%B5%8F%E5%B8%A6&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="雾凇观赏带：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E9%9B%BE%E5%87%87%E8%A7%82%E8%B5%8F%E5%B8%A6%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="雾凇观赏带：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">选择</span><span class="item-body">城区江岸交通最稳妥，韩屯/曾通等郊外点位更依赖天气与道路</span>
-
-
-</li>
-<li class="list-card fact">
-<span class="item-label">时间</span><span class="item-body">日出前后到上午，风、温度和水汽都会影响形成与消散</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">原则</span><span class="item-body">把雾凇作为概率事件，保留北山、博物馆或滑雪备选</span>
-
-
-</li>
-</ul>
-</li>
-<li id="attractions-item-0c3d6e4895" class="list-card has-children">
-<span class="item-body">北山公园</span>
-<nav class="poi-actions" aria-label="北山公园实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%B1%B1%E5%85%AC%E5%9B%AD%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="北山公园：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%B1%B1%E5%85%AC%E5%9B%AD&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="北山公园：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%B1%B1%E5%85%AC%E5%9B%AD%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="北山公园：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">建议停留</span><span class="item-body">2 至 3 小时</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">看点</span><span class="item-body">山林、古建筑、城市视野和本地日常活动</span>
-
-
-</li>
-<li class="list-card fact">
-<span class="item-label">提醒</span><span class="item-body">冬季台阶结冰，选择防滑鞋并减少夜间登山</span>
-
-
-</li>
-</ul>
-</li>
-<li id="attractions-item-4500f50ec2" class="list-card has-children">
-<span class="item-body">松花湖</span>
-<nav class="poi-actions" aria-label="松花湖实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B9%96%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="松花湖：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B9%96&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="松花湖：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E6%9D%BE%E8%8A%B1%E6%B9%96%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="松花湖：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">建议停留</span><span class="item-body">半天至 1 天</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">看点</span><span class="item-body">湖湾、山色和季节性游船/户外活动</span>
-
-
-</li>
-<li class="list-card fact">
-<span class="item-label">提醒</span><span class="item-body">不同码头、景区和度假区并非同一入口，导航前确认目的地</span>
-
-
-</li>
-</ul>
-</li>
-<li id="attractions-item-7b72ceafac" class="list-card has-children">
-<span class="item-body">北大湖滑雪度假区</span>
-<nav class="poi-actions" aria-label="北大湖滑雪度假区实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%A4%A7%E6%B9%96%E6%BB%91%E9%9B%AA%E5%BA%A6%E5%81%87%E5%8C%BA%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="北大湖滑雪度假区：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%A4%A7%E6%B9%96%E6%BB%91%E9%9B%AA%E5%BA%A6%E5%81%87%E5%8C%BA&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="北大湖滑雪度假区：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E5%8C%97%E5%A4%A7%E6%B9%96%E6%BB%91%E9%9B%AA%E5%BA%A6%E5%81%87%E5%8C%BA%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="北大湖滑雪度假区：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">建议停留</span><span class="item-body">1 至 2 天</span>
-
-
-</li>
-<li class="list-card fact">
-<span class="item-label">适合</span><span class="item-body">有完整滑雪需求、愿意住度假区或早出晚归的游客</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">核验</span><span class="item-body">雪道、缆车、租赁和课程价格按官方当日页面为准</span>
-
-
-</li>
-</ul>
-</li>
-<li id="attractions-item-1267376136" class="list-card has-children">
-<span class="item-body">万科松花湖度假区</span>
-<nav class="poi-actions" aria-label="万科松花湖度假区实用链接"><a class="poi-action poi-action-search" href="https://www.baidu.com/s?wd=%E5%90%89%E6%9E%97%E5%B8%82%20%E4%B8%87%E7%A7%91%E6%9D%BE%E8%8A%B1%E6%B9%96%E5%BA%A6%E5%81%87%E5%8C%BA%20%E6%96%87%E6%97%85%20%E5%AE%98%E6%96%B9%20%E5%BC%80%E6%94%BE%E6%97%B6%E9%97%B4%20%E9%A2%84%E7%BA%A6%20%E7%A5%A8%E4%BB%B7" target="_blank" rel="noopener noreferrer" title="查询官方开放、预约与票价信息" aria-label="万科松花湖度假区：查询官方开放、预约与票价信息"><i aria-hidden="true"></i>查官网<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-map" href="https://uri.amap.com/search?keyword=%E5%90%89%E6%9E%97%E5%B8%82%20%E4%B8%87%E7%A7%91%E6%9D%BE%E8%8A%B1%E6%B9%96%E5%BA%A6%E5%81%87%E5%8C%BA&amp;city=%E5%90%89%E6%9E%97%E5%B8%82&amp;src=travel_ayuan&amp;coordinate=gaode&amp;callnative=0" target="_blank" rel="noopener noreferrer" title="在高德地图查看位置与路线" aria-label="万科松花湖度假区：在高德地图查看位置与路线"><i aria-hidden="true"></i>地图<b aria-hidden="true">↗</b></a><a class="poi-action poi-action-book" href="https://you.ctrip.com/searchsite/?query=%E5%90%89%E6%9E%97%E5%B8%82%20%E4%B8%87%E7%A7%91%E6%9D%BE%E8%8A%B1%E6%B9%96%E5%BA%A6%E5%81%87%E5%8C%BA%20%E6%97%85%E6%B8%B8%E6%94%BB%E7%95%A5" target="_blank" rel="noopener noreferrer" title="查看补充攻略并交叉核验" aria-label="万科松花湖度假区：查看补充攻略并交叉核验"><i aria-hidden="true"></i>攻略<b aria-hidden="true">↗</b></a></nav>
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">建议停留</span><span class="item-body">1 至 2 天</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">特点</span><span class="item-body">度假配套集中，从市区前往仍需预留交通时间</span>
-
-
-</li>
-<li class="list-card fact">
-<span class="item-label">提醒</span><span class="item-body">雪季周末提前安排交通和装备，不现场临时拼凑全部项目</span>
-
-
-</li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="routes" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🗺️</span>行程路线</h2>
-<ul class="md-list depth-0">
-<li id="routes-item-0576f46dce" class="list-card has-children">
-<span class="item-body">1 日<a class="auto-link" href="#seasonal-item-19866e9de6">城区</a>线</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label"><a class="auto-link" href="#section-5-item-b0a86b9b59">上午</a></span><span class="item-body"><a class="auto-link" href="#attractions-item-0c3d6e4895">北山公园</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">下午</span><span class="item-body"><a class="auto-link" href="#quick-item-89b491b6df">吉林市博物馆</a>或历史街区</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">晚上</span><span class="item-body"><a class="auto-link" href="#overview-item-508cedcfa4">松花江滨水</a>步道，按天气缩短户外时间</span>
-
-
-</li>
-</ul>
-</li>
-<li id="routes-item-af1aa91c1b" class="list-card has-children">
-<span class="item-body">2 日暖季线</span>
-
-<ul class="md-list depth-1">
-<li class="list-card">
-<span class="item-label">第 1 天</span><span class="item-body"><a class="auto-link" href="#seasonal-item-19866e9de6">城区</a>与北山</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">第 2 天</span><span class="item-body"><a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a>，选择一个明确入口深游</span>
-
-
-</li>
-</ul>
-</li>
-<li id="routes-item-0b05381951" class="list-card has-children">
-<span class="item-body">3 日冬季线</span>
-
-<ul class="md-list depth-1 leaf-list">
-<li class="list-card">
-<span class="item-label">第 1 天</span><span class="item-body">清晨<a class="auto-link" href="#quick-item-f4d45784fc">雾凇观赏</a> → 午后博物馆/休息</span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">第 2 天</span><span class="item-body"><a class="auto-link" href="#overview-item-5b9d55492b">北大湖</a>或万科<a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a><a class="auto-link" href="#overview-item-3b3b1adb99">滑雪</a></span>
-
-
-</li>
-<li class="list-card">
-<span class="item-label">第 3 天</span><span class="item-body">根据天气补雾凇、继续<a class="auto-link" href="#overview-item-3b3b1adb99">滑雪</a>或返回<a class="auto-link" href="#seasonal-item-19866e9de6">城区</a>慢游</span>
-
-
-</li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="transport" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🚆</span>交通细节</h2>
-<ul class="md-list depth-0">
-<li id="transport-item-366c6467fd" class="list-card">
-<span class="item-label">到达</span><span class="item-body">吉林站位于城区，长春龙嘉机场可通过铁路或公路换乘，按实际班次预留衔接</span>
-
-
-</li>
-<li id="transport-item-3c17a25343" class="list-card">
-<span class="item-label">城区</span><span class="item-body">公交、网约车和步行组合即可覆盖滨江与北山</span>
-
-
-</li>
-<li id="transport-item-6165f3b115" class="list-card">
-<span class="item-label">雾凇点位</span><span class="item-body">郊外点位清晨公共交通有限，包车前确认车辆资质、价格和返程安排</span>
-
-
-</li>
-<li id="transport-item-8dfa83219f" class="list-card">
-<span class="item-label">雪场</span><span class="item-body">官方直通车、度假区接驳和自驾政策会随雪季调整，提前核实</span>
-
-
-</li>
-<li id="transport-item-828ccab26c" class="list-card">
-<span class="item-label">自驾</span><span class="item-body">冬季必须评估冰雪道路经验、轮胎和天气，不把普通夏季车程直接套用</span>
-
-
-</li>
-</ul>
-</section>
-<section id="food" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🍜</span>美食推荐</h2>
-<ul class="md-list depth-0">
-<li id="food-item-26b1873af0" class="list-card">
-<span class="item-label">乌拉满族火锅</span><span class="item-body">适合冬季多人用餐，提前确认份量</span>
-
-
-</li>
-<li id="food-item-809fcc75f0" class="list-card">
-<span class="item-label">锅包肉、白肉血肠与东北炖菜</span><span class="item-body">选择本地常客多的餐馆，不只追逐网红榜单</span>
-
-
-</li>
-<li id="food-item-52083f35f0" class="list-card">
-<span class="item-label">松花湖鱼</span><span class="item-body">核对明码标价、鱼种和加工方式</span>
-
-
-</li>
-<li id="food-item-d3b269f1fb" class="list-card">
-<span class="item-label">烧烤与煎粉</span><span class="item-body">适合作为城区夜间补充，低温天气减少长时间室外排队</span>
-
-
-</li>
-</ul>
-</section>
-<section id="stay" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🏨</span>住宿区域</h2>
-<ul class="md-list depth-0">
-<li id="stay-item-7d42da3bf9" class="list-card">
-<span class="item-label">吉林站/东市场周边</span><span class="item-body">交通和餐饮便利，适合城区与早班出发</span>
-
-
-</li>
-<li id="stay-item-748f20c74a" class="list-card">
-<span class="item-label">松花江沿岸</span><span class="item-body">景观和散步方便，冬季核对房间供暖与到站交通</span>
-
-
-</li>
-<li id="stay-item-c989bafdc6" class="list-card">
-<span class="item-label">雪场度假区</span><span class="item-body">适合连续滑雪，房价和餐饮成本高于城区</span>
-
-
-</li>
-<li id="stay-item-3ab665e5cc" class="list-card">
-<span class="item-label">松花湖周边</span><span class="item-body">适合暖季休闲，淡季配套和班次可能减少</span>
-
-
-</li>
-</ul>
-</section>
-<section id="budget" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">📌</span>预算参考</h2>
-<ul class="md-list depth-0">
-<li id="budget-item-4f148ec095" class="list-card">
-<span class="item-label">城区经济型</span><span class="item-body">每人每天约 300 至 600 元，不含滑雪</span>
-
-
-</li>
-<li id="budget-item-02bf380f92" class="list-card">
-<span class="item-label">城区舒适型</span><span class="item-body">每人每天约 600 至 1000 元</span>
-
-
-</li>
-<li id="budget-item-869d74a0b5" class="list-card">
-<span class="item-label">滑雪日</span><span class="item-body">装备、雪票、课程、交通和住宿差异很大，单独建立预算，不采用固定总价</span>
-
-
-</li>
-<li id="budget-item-99e4f1bbb7" class="list-card">
-<span class="item-label">主要变量</span><span class="item-body">雪季周末住宿、教练、装备等级、包车和天气导致的行程调整</span>
-
-
-</li>
-</ul>
-</section>
-<section id="warnings" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">⚠️</span>避坑提醒</h2>
-<ul class="md-list depth-0">
-<li id="warnings-item-d0d966b676" class="list-card">
-<span class="item-body">雾凇不是固定演出，任何“保证看到”的承诺都应谨慎判断</span>
-
-
-</li>
-<li id="warnings-item-9c4367da62" class="list-card">
-<span class="item-body">吉林市与吉林省名称容易混淆，购买车票和导航时确认目的地为吉林市</span>
-
-
-</li>
-<li id="warnings-item-7b242c35e0" class="list-card">
-<span class="item-body">雪场、松花湖景区和城区松花江不是同一地点，别把多个入口混为一谈</span>
-
-
-</li>
-<li id="warnings-item-04daf10e55" class="list-card">
-<span class="item-body">冬季手机耗电快，携带保温措施和移动电源，镜头从室外进室内注意结露</span>
-
-
-</li>
-<li id="warnings-item-f21ecf0f1d" class="list-card">
-<span class="item-body">不在未开放冰面、江道或雪道外区域活动</span>
-
-
-</li>
-</ul>
-</section>
-<section id="checklist" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">⚠️</span>出发前复核</h2>
-<ul class="md-list depth-0">
-<li id="checklist-item-df51fe5f37" class="list-card">
-<span class="item-body"><a class="auto-link" href="#section-2-item-f1eea66ee0">吉林市</a>政府与文旅部门发布的冰雪、雾凇和节庆信息</span>
-
-
-</li>
-<li id="checklist-item-77d190b5a1" class="list-card">
-<span class="item-body">吉林气象部门天气与道路预警</span>
-
-
-</li>
-<li id="checklist-item-db3757229d" class="list-card">
-<span class="item-body"><a class="auto-link" href="#overview-item-5b9d55492b">北大湖</a>、万科<a class="auto-link" href="#attractions-item-4500f50ec2">松花湖</a>官方雪道和接驳公告</span>
-
-
-</li>
-<li id="checklist-item-82e207b6aa" class="list-card">
-<span class="item-body"><a class="auto-link" href="#stay-item-7d42da3bf9">吉林站</a>及机场<a class="auto-link" href="#section-7-item-42b5966efa">换乘</a>班次</span>
-
-
-</li>
-</ul>
-</section>
-<section id="section" class="guide-section level-2">
-<h2><span class="sec-ico" aria-hidden="true">🗺️</span>行程执行补强</h2>
-</section>
-<section id="section-2" class="guide-section level-3">
-<h3><span class="sec-ico" aria-hidden="true">📌</span>到达后先做什么</h3>
-<ul class="md-list depth-0">
-<li id="section-2-item-f1eea66ee0" class="list-card">
-<span class="item-body">抵达 吉林市 后先确认当日天气、景区入园时间和返程末班；把 松花江城区段、雾凇观赏带、北山公园、松花湖 按地理方向拆开，不以地图直线距离代替实际通行时间。</span>
-
-
-</li>
-<li id="section-2-item-8f7c4efb32" class="list-card">
-<span class="item-label">第一天只安排一个核心片区</span><span class="item-body">入住、寄存行李、熟悉周边吃喝与停车/换乘点后再进景区。这样即使遇到排队、降雨或临时限流，也能保住当天的主要体验。</span>
-
-
-</li>
-<li id="section-2-item-16bea96e8c" class="list-card">
-<span class="item-body">需要跨区的行程，出发前在官方入口与地图中分别核对一次。导航显示的时间不包含排队、观光车、索道、找车位和步行回程，应额外预留缓冲。</span>
-
-
-</li>
-</ul>
-</section>
-<section id="section-3" class="guide-section level-3">
-<h3><span class="sec-ico" aria-hidden="true">🗺️</span>分区与动线</h3>
-<ul class="md-list depth-0">
-<li id="section-3-item-db843d58b4" class="list-card">
-<span class="item-label">核心游览</span><span class="item-body">优先把 松花江城区段 作为半天或一天的主任务；其余 雾凇观赏带、北山公园、松花湖 只在同方向、体力和开放时间允许时加入。</span>
-
-
-</li>
-<li id="section-3-item-cab14f2262" class="list-card">
-<span class="item-label">城市休整</span><span class="item-body">午餐、雨天与傍晚留给市区街区、展馆或商圈；不要为了打卡在中午往返远郊。需要夜游时，先确认最后一班公共交通、停车场关闭时间和打车供给。</span>
-
-
-</li>
-<li id="section-3-item-ecfdd67462" class="list-card">
-<span class="item-label">远郊选择</span><span class="item-body">若只住一晚，宁可减少一个景点，也不要把远郊和市区夜游排进同一日。自驾以返回住宿地前仍留有充足精力为底线，山路、雨雾和节假日要再收紧计划。</span>
-
-
-</li>
-</ul>
-</section>
-<section id="section-4" class="guide-section level-3">
-<h3><span class="sec-ico" aria-hidden="true">📌</span>餐饮与补给</h3>
-<ul class="md-list depth-0">
-<li id="section-4-item-9b67dde45f" class="list-card">
-<span class="item-body">这座城市可优先从 本地早餐、夜市小吃 中选一到两样作为正餐，再用同片区的小吃补充；同一天不要跨城寻找网红店。</span>
-
-
-</li>
-<li id="section-4-item-e6bdf50a54" class="list-card">
-<span class="item-body">早餐适合安排在住宿周边或菜市场一带，午餐以靠近主景区为先，晚餐再回到夜间活动片区。热门店排队超过预留时间时，直接选择相邻街区的同类店，行程体验通常更稳定。</span>
-
-
-</li>
-<li id="section-4-item-6596b0f842" class="list-card">
-<span class="item-body">购买伴手礼时先看生产日期、常温保存和携带限制；自驾可放在返程前采购，公共交通出行则优先轻量、耐压的包装。</span>
-
-
-</li>
-</ul>
-</section>
-<section id="section-5" class="guide-section level-3">
-<h3><span class="sec-ico" aria-hidden="true">🗺️</span>路线落地模板</h3>
-<ul class="md-list depth-0">
-<li id="section-5-item-48dab3f81e" class="list-card">
-<span class="item-label">半天</span><span class="item-body">松花江城区段 + 同片区散步/展馆 + 本地早餐。适合早到、转场或天气不稳定的日子。</span>
-
-
-</li>
-<li id="section-5-item-b0a86b9b59" class="list-card">
-<span class="item-label">一天</span><span class="item-body">上午 松花江城区段，午后在 雾凇观赏带 或市区人文点二选一，傍晚安排 夜市小吃。每个节点之间留出交通与休息时间。</span>
-
-
-</li>
-<li id="section-5-item-8a8cde4698" class="list-card">
-<span class="item-label">两天</span><span class="item-body">第一天完成城市核心与夜间街区，第二天只选择一条远郊或自然线；可从现有攻略中的 经典片区线、雨天备选线 里选与住宿方向一致的一条。</span>
-
-
-</li>
-<li id="section-5-item-942f375f9f" class="list-card">
-<span class="item-label">雨天</span><span class="item-body">优先博物馆、室内展馆、商场和老街，把需要视野、步道或水上项目的景点挪到天气恢复后；门票改签与景区公告以官方页面为准。</span>
-
-
-</li>
-</ul>
-</section>
-<section id="section-6" class="guide-section level-3">
-<h3><span class="sec-ico" aria-hidden="true">📌</span>预算、停车与安全边界</h3>
-<ul class="md-list depth-0">
-<li id="section-6-item-a76ecdeb28" class="list-card">
-<span class="item-body">预算按住宿、交通/油费、门票、餐饮和机动金五项拆分。门票、停车、观光车、索道、演出和游船常为独立项目，提交行程前逐项核验，避免把“景区门票”理解为全部费用。</span>
-
-
-</li>
-<li id="section-6-item-0e38a558bb" class="list-card">
-<span class="item-body">自驾抵达景区前保存停车场位置、收费规则和出口方向；节假日不要依赖最后一个停车场。纯电或插混车辆应在进入远郊前完成补能，并保留一处备选充电点。</span>
-
-
-</li>
-<li id="section-6-item-50d733ca2a" class="list-card">
-<span class="item-body">夜间、山地、海边、峡谷与涉水项目要服从天气预警和现场管制。遇到大风、雷雨、能见度低或道路封闭时，立即切换到市区备选，不追赶原计划。</span>
-
-
-</li>
-</ul>
-</section>
-<section id="section-7" class="guide-section level-3">
-<h3><span class="sec-ico" aria-hidden="true">📌</span>出发前最后核验</h3>
-<ul class="md-list depth-0">
-<li id="section-7-item-0f8c6619b2" class="list-card">
-<span class="item-body">核对 松花江城区段、雾凇观赏带、北山公园、松花湖 的开放日期、预约入口、实名要求、临时闭园和分时段入园规则。</span>
-
-
-</li>
-<li id="section-7-item-42b5966efa" class="list-card">
-<span class="item-body">核对住宿到第一站的实际通行时间、停车/换乘、返程末班，以及第二天是否需要提前退房或寄存行李。</span>
-
-
-</li>
-<li id="section-7-item-57f773d229" class="list-card">
-<span class="item-body">核对天气预警、道路施工、节假日客流和活动公告；易变项目以城市页末尾来源链接及官方当天公告为准。</span>
-
-
-</li>
-</ul>
-</section>
-      </article>
     </div>
-    <section class="source-media guide-gallery"><div class="source-media-head compact-head"><p class="eyebrow">Visual Notes</p><h2>正文配图</h2><p>图片为本站本地保存的城市封面衍生构图，用于辅助浏览；授权与来源沿用该城市封面信息。</p></div><div class="media-grid"><article class="media-card"><img src="../assets/photos/jilin-city/scenery-01.jpg" alt="吉林市 正文配图" width="960" height="540" loading="lazy"></article></div></section>
+
     <section class="source-media compact" aria-label="实用信息与资料来源"><div class="source-media-head compact-head"><p class="eyebrow">Trip Check</p><h2>实用信息与资料来源</h2><p>资料整理日期：2026-07-15。门票、开放时间、预约和交通可能变化，请在出行前复核官方信息。</p></div><details class="source-drawer" open><summary>展开来源链接（5）</summary><div class="source-grid"><a class="source-link" href="https://www.jlcity.gov.cn/" target="_blank" rel="noopener noreferrer"><span>吉林市政府</span><small>www.jlcity.gov.cn</small><b aria-hidden="true">↗</b></a><a class="source-link" href="https://xxgk.jlcity.gov.cn/gzbm/mzj_1/xbgkml/202310/t20231007_1156981.html" target="_blank" rel="noopener noreferrer"><span>吉林市政府信息公开</span><small>xxgk.jlcity.gov.cn</small><b aria-hidden="true">↗</b></a><a class="source-link" href="https://www.jl.gov.cn/" target="_blank" rel="noopener noreferrer"><span>吉林省政府</span><small>www.jl.gov.cn</small><b aria-hidden="true">↗</b></a><a class="source-link" href="https://wlt.jl.gov.cn/" target="_blank" rel="noopener noreferrer"><span>wlt.jl.gov.cn</span><small>wlt.jl.gov.cn</small><b aria-hidden="true">↗</b></a><a class="source-link" href="https://weather.cma.cn/" target="_blank" rel="noopener noreferrer"><span>weather.cma.cn</span><small>weather.cma.cn</small><b aria-hidden="true">↗</b></a></div></details></section>
   </main>
   <footer class="site-footer">
-    <p>本页为个人离线旅游攻略整理，内容来自公开网络资料的归纳，仅供出行参考；出发前请按官方景区、本地文旅、票务系统复核时间、票价与预约信息。</p>
-    <p>城市与景点照片来自 <a href="https://commons.wikimedia.org/" target="_blank" rel="noreferrer">Wikimedia Commons</a> 等开放图库（遵循各自的 CC 授权）；无照片处使用程序生成的示意插画。</p>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="header-home" href="../index.html"><span class="brand-mark" aria-hidden="true">游</span><span class="brand-name">游记<b>地图</b></span></a>
+        <p>个人整理的全国城市旅游攻略，收录 222 座城市的景点、美食、季节与路线。运行期纯静态，可安装到手机离线阅读。</p>
+      </div>
+      <nav class="footer-links" aria-label="浏览攻略"><strong>浏览</strong><a href="../destinations.html">目的地筛选</a><a href="../themes.html">主题玩法</a><a href="../city-guides.html">城市攻略</a><a href="../overview.html">跨城市总览</a></nav>
+      <nav class="footer-links" aria-label="旅行工具"><strong>工具</strong><a href="../roadtrip.html">自驾路书</a><a href="../tools.html">实用工具</a><a href="../user.html">用户中心</a></nav>
+      <div class="footer-note">
+        <strong>资料说明</strong>
+        <p>内容来自公开资料的归纳，仅供出行参考；门票、开放时间与预约请以官方景区、本地文旅和票务系统为准。</p>
+        <p>城市与景点照片来自 <a href="https://commons.wikimedia.org/" target="_blank" rel="noreferrer">Wikimedia Commons</a> 等开放图库，遵循各自 CC 授权。</p>
+      </div>
+    </div>
+    <p class="footer-copy">游记地图 · 收藏、行程与笔记只保存在你的浏览器</p>
   </footer>
-  <nav class="mobile-quickbar" aria-label="移动端快捷入口"><a href="../index.html">首页</a><a href="#guideSearch">搜索</a><a href="#attractions">景点</a><a href="#food">吃喝</a><a href="#routes">路线</a></nav>
-  <button class="trip-dock-toggle" id="tripDockToggle" type="button" aria-controls="tripDock" aria-expanded="false">
-    <span aria-hidden="true">路线</span><span>行程</span><strong id="tripDockCount" aria-label="行程中的城市数">0</strong>
-  </button>
+  <nav class="mobile-tabbar" aria-label="移动端主导航"><a class="tab" href="../index.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/></svg><span>首页</span></a><a class="tab" href="../destinations.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg><span>目的地</span></a><a class="tab" href="../roadtrip.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="13.5" r="1"/><circle cx="16.5" cy="13.5" r="1"/></svg><span>自驾</span></a><button class="tab" type="button" data-open-trip aria-controls="tripDock"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>行程</span><b class="tab-badge" data-trip-count hidden>0</b></button><a class="tab" href="../user.html"><svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>我的</span></a></nav>
   <div class="trip-dock-backdrop" id="tripDockBackdrop" hidden></div>
   <aside class="trip-dock" id="tripDock" role="dialog" aria-modal="true" aria-labelledby="tripDockTitle" tabindex="-1" hidden>
     <header class="trip-dock-head">
@@ -724,7 +237,8 @@
     </footer>
   </aside>
   <button class="to-top" id="toTop" type="button" aria-label="返回顶部" title="返回顶部">↑</button>
-  <script src="../assets/travel.js?v=8f0dbe106e"></script>
-  <script type="module" src="../assets/travel-app.js?v=8f0dbe106e"></script>
+  <script src="../assets/travel.js?v=5a9b9b3572"></script>
+  <script type="module" src="../assets/travel-app.js?v=5a9b9b3572"></script>
+
 </body>
 </html>

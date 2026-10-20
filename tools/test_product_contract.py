@@ -188,7 +188,8 @@ class ProductContractTests(unittest.TestCase):
 
     def test_mobile_layout_avoids_full_width_sections_plus_side_margins(self):
         css = (ROOT / "site" / "assets" / "travel.css").read_text(encoding="utf-8")
-        self.assertIn("width: calc(100% - 24px)", css)
+        self.assertIn("width: min(var(--container), calc(100% - 2 * var(--gutter)))", css)
+        self.assertRegex(css, r"body\s*\{[^}]*overflow-x:\s*hidden", re.S)
         self.assertRegex(css, r"\.user-tab\s*\{[^}]*white-space:\s*nowrap", re.S)
         self.assertIn("scroll-snap-type: x mandatory", css)
         self.assertNotRegex(
@@ -199,15 +200,18 @@ class ProductContractTests(unittest.TestCase):
     def test_mobile_navigation_respects_safe_areas_and_touch_targets(self):
         css = (ROOT / "site" / "assets" / "travel.css").read_text(encoding="utf-8")
         self.assertIn("env(safe-area-inset-bottom)", css)
-        self.assertRegex(css, r"\.mobile-quickbar a\s*\{[^}]*min-height:\s*44px", re.S)
+        self.assertRegex(css, r"\.mobile-tabbar \.tab\s*\{[^}]*min-height:\s*44px", re.S)
+        self.assertIn('class="mobile-tabbar"', self.qingdao)
+        self.assertIn("data-open-trip", self.qingdao)
         self.assertIn("touch-action: manipulation", css)
 
-    def test_mobile_hero_uses_a_compact_horizontal_decision_strip(self):
+    def test_mobile_month_calendar_is_a_compact_horizontal_strip(self):
         css = (ROOT / "site" / "assets" / "travel.css").read_text(encoding="utf-8")
         self.assertRegex(
             css,
-            r"@media\s*\(max-width:\s*720px\)[\s\S]*?\.hero-points\s*\{[^}]*overflow-x:\s*auto[^}]*scroll-snap-type:\s*x mandatory",
+            r"@media\s*\(max-width:\s*720px\)[\s\S]*?\.month-grid\s*\{[^}]*overflow-x:\s*auto[^}]*scroll-snap-type:\s*x mandatory",
         )
+        self.assertEqual(12, self.qingdao.count('class="month-card"'))
 
     def test_user_center_uses_keyboard_operable_aria_tabs(self):
         self.assertIn('role="tablist"', self.user)

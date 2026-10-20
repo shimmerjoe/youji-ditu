@@ -76,7 +76,7 @@ class CityExpansionTests(unittest.TestCase):
     def test_generated_site_exposes_all_new_destinations(self):
         index = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
         catalog = (ROOT / "site" / "city-guides.html").read_text(encoding="utf-8")
-        self.assertIn('data-count="222">222</span><small>座</small>', index)
+        self.assertIn('<div><dt>城市攻略</dt><dd>222</dd></div>', index)
         self.assertIn('data-nav-group="直辖市"', index)
         for stem, config in self.cities.items():
             with self.subTest(city=stem):
@@ -93,8 +93,9 @@ class CityExpansionTests(unittest.TestCase):
                 self.assertIn('href="#food"', html)
                 self.assertIn('href="#routes"', html)
                 self.assertIn('href="#warnings"', html)
-                quick_find = html.split('<div class="hero-quickfind">', 1)[1].split('</div></div>', 1)[0]
-                self.assertEqual(4, quick_find.count('class="quickfind-card"'))
+                tabs = html.split('<nav class="section-tabs"', 1)[1].split('</nav>', 1)[0]
+                for anchor in ("#attractions", "#food", "#routes", "#warnings"):
+                    self.assertIn(f'href="{anchor}"', tabs)
 
     def test_new_city_cover_photos_are_local_and_licensed(self):
         cache = json.loads((ROOT / "site" / "assets" / "photo-cache.json").read_text(encoding="utf-8"))

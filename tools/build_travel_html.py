@@ -2530,7 +2530,8 @@ def city_filter_metadata(markdown: str, foods: list[str]) -> dict[str, str]:
     }
     season_tags = [name for name, words in season_rules.items() if any(word in compact for word in words)]
     theme_rules = {
-        "亲子": ("亲子", "儿童", "乐园"),
+        # 只认明确面向儿童的场所；“亲子：某某博物馆”这类建议不足以把城市归为亲子目的地。
+        "亲子": ("儿童", "乐园", "动物园", "野生动物", "海洋馆", "海洋公园", "水族馆", "科技馆", "迪士尼"),
         "博物馆": ("博物馆", "美术馆", "展馆"),
         "自然风光": ("自然", "山水", "雪山", "草原", "海滨", "海岛", "湖", "峡谷", "森林"),
         "历史文化": ("历史", "文化", "古城", "古镇", "遗址", "古建筑", "寺"),
@@ -2550,12 +2551,13 @@ def city_filter_metadata(markdown: str, foods: list[str]) -> dict[str, str]:
     transport_tags = [name for name, words in transport_rules.items() if any(word in compact for word in words)]
     arrangement = re.search(r"^-\s*(?:推荐天数|适合安排)[：:]\s*(.+)$", markdown, re.M)
     arrangement_text = arrangement.group(1) if arrangement else ""
-    day_numbers = [int(value) for value in re.findall(r"(\d+)\s*(?:天|—\d+\s*天|-\d+\s*天)", arrangement_text)]
-    day_numbers += [int(value) for value in re.findall(r"[—-]\s*(\d+)\s*天", arrangement_text)]
-    max_days = max(day_numbers, default=3)
-    days_class = "1" if max_days <= 1 else "2-3" if max_days <= 3 else "4+"
-    # 周末短途按推荐天数判断；原来匹配“1天/2天”字样，几乎每座城市都命中。
-    if days_class != "4+" and "周末短途" not in theme_tags:
+    # 按第一个天数归档：它是“建议安排”，后面的数字多是“全部看完约 N 天”这类上限。
+    first_days = re.search(r"(\d+)\s*(?:[—\-～~至]\s*\d+\s*)?天", arrangement_text)
+    primary_days = int(first_days.group(1)) if first_days else 3
+    days_class = "1" if primary_days <= 1 else "2-3" if primary_days <= 3 else "4+"
+    # 周末短途：建议 1—2 天，而且本页景点 4 天内能看完（原来匹配“1天/2天”字样，几乎每座城市都命中）。
+    full_days = re.search(r"全部看完约\s*(\d+)\s*天", arrangement_text)
+    if primary_days <= 2 and (not full_days or int(full_days.group(1)) <= 4) and "周末短途" not in theme_tags:
         theme_tags.append("周末短途")
     return {
         "region": "",
@@ -4600,7 +4602,7 @@ DAYS_LABELS = {"1": "1 天内", "2-3": "2-3 天", "4+": "4 天以上"}
 
 def explicit_days_text(markdown: str) -> str:
     """“推荐天数：3—4 天。……”里的天数部分，原样展示，避免被归档成粗略区间。"""
-    match = re.search(r"^-\s*推荐天数[：:]\s*([0-9０-９一二三四五六七八九十半—\-～~ ]+天)", markdown, re.M)
+    match = re.search(r"^-\s*(?:推荐天数|适合安排)[：:]\s*([0-9０-９一二三四五六七八九十半—\-～~ ]+天起?)", markdown, re.M)
     return match.group(1).strip() if match else ""
 
 

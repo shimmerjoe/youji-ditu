@@ -37,5 +37,28 @@ class ContentTransparencyTests(unittest.TestCase):
         self.assertIn(".city-review-status.reviewed", self.css)
 
 
+class CityTemplateRegressionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.sources = {path.stem: path.read_text(encoding="utf-8") for path in (ROOT / "content" / "城市").glob("*.md")}
+        cls.destinations = (ROOT / "site" / "destinations.html").read_text(encoding="utf-8")
+
+    def test_no_city_claims_social_media_research_that_was_not_done(self):
+        offenders = [name for name, text in self.sources.items() if "结合小红书" in text]
+        self.assertEqual(offenders, [])
+
+    def test_shared_day_plan_template_is_gone(self):
+        template = "半天看城市核心或夜市，1 天打一条经典线，2-3 天再加远郊/周边"
+        self.assertEqual([name for name, text in self.sources.items() if template in text], [])
+
+    def test_theme_filters_still_discriminate(self):
+        themes = re.findall(r'data-theme="([^"]*)"', self.destinations)
+        family = sum("亲子" in value.split() for value in themes)
+        weekend = sum("周末短途" in value.split() for value in themes)
+        self.assertGreater(family, 0)
+        self.assertLess(family, len(themes) // 3)
+        self.assertLess(weekend, len(themes) // 2)
+
+
 if __name__ == "__main__":
     unittest.main()

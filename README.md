@@ -6,10 +6,10 @@
 
 | 用途 | 地址 | 状态 |
 | --- | --- | --- |
-| 公开网站（GitHub Pages） | <https://shimmerjoe.github.io/youji-ditu/> | **还不能访问**：仓库是私有的，Pages 还没开启，见下文 [开启公开地址](#开启公开地址) |
+| 公开网站（GitHub Pages） | <https://shimmerjoe.github.io/youji-ditu/> | **还不能访问**：Pages 还没开启，重构代码也还没合并到 `main`，见下文 [开启公开地址](#开启公开地址) |
 | 城市攻略示例 | <https://shimmerjoe.github.io/youji-ditu/cities/beijing.html> | Pages 开启后可用 |
 | 跨城市总览 | <https://shimmerjoe.github.io/youji-ditu/overview.html> | Pages 开启后可用 |
-| 源码仓库 | <https://github.com/shimmerjoe/youji-ditu> | 私有 |
+| 源码仓库 | <https://github.com/shimmerjoe/youji-ditu> | 公开 |
 | 本机预览 | <http://localhost:8765/> | 运行 `npm run preview` 或双击 `scripts/windows/打开首页.bat` |
 
 > 代码推送到仓库和网站上线是两件事：只有 Pages 开启并且 Actions 部署成功，上面的公开地址才能打开。上线前请先用本机预览检查。
@@ -128,7 +128,7 @@ python -X utf8 tools\import_commons_city_photo.py --city beijing --source "https
 
 仓库已经包含 `.github/workflows/pages.yml`：每次推送到 `main`，GitHub Actions 会自动执行 `npm ci → npm run check → npm run stage`，再把 `dist/` 部署到 Pages。要让公开地址可以访问，需要仓库所有者完成以下步骤：
 
-1. **可见性**：免费账号的私有仓库不能使用 Pages。需要把仓库改为 Public（Settings → General → Danger Zone → Change visibility），或者升级到 GitHub Pro 等支持私有 Pages 的方案。
+1. **可见性**：仓库已是 Public，免费账号可以直接使用 Pages（私有仓库则需要 GitHub Pro 等付费方案）。
 2. **开启 Pages**：在 Settings → Pages → Build and deployment 中，把 Source 选为 **GitHub Actions**。
 3. **触发部署**：把本分支合并到 `main`，或者在 Actions 页手动运行 “Build, verify, and deploy GitHub Pages”。
 4. **About 信息**：在仓库首页右侧 About 的齿轮里，把 Website 填为 `https://shimmerjoe.github.io/youji-ditu/`，并勾选“Use your GitHub Pages website”；Topics 可填 `travel`、`travel-guide`、`china`、`pwa`、`itinerary-planner`、`static-site`。

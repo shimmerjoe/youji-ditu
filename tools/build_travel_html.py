@@ -682,6 +682,9 @@ def split_index_terms(text: str) -> list[str]:
 
 def add_anchor_term(terms: dict[str, str], term: str, href: str, prefer: bool = False) -> None:
     term = term.strip(" -·[]【】「」")
+    # 日期、价格、时间这类纯数字片段不是可以跳转的地点名。
+    if re.fullmatch(r"[\d\s\-—–:：./年月日元号%~～]+", term):
+        return
     if 2 <= len(term) <= 28 and term not in FACT_LABELS:
         if prefer or term not in terms:
             terms[term] = href

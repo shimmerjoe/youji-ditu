@@ -1,0 +1,13 @@
+{
+  "name": "youji-ditu-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "游记地图 · 旅游攻略 Android 封装（Capacitor）",
+  "dependencies": {
+    "@capacitor/android": "^6.1.0",
+    "@capacitor/core": "^6.1.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.0"
+  }
+}

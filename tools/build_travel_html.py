@@ -3883,7 +3883,7 @@ def build_content_audit() -> None:
     ]
     for row in weak[:80]:
         lines.append(
-            f"| [{row['title']}]({row['path']}) | {row['province']} | {row['chars']} | "
+            f"| [{row['title']}](../../{row['path']}) | {row['province']} | {row['chars']} | "
             f"{row['sources']} | {row['official_sources']} | {row['licensed_photos']} | "
             f"{row['review_date']} | {row['issues']} |"
         )
@@ -3914,7 +3914,9 @@ def build_content_audit() -> None:
         "- 未核验表示源文件没有明确日期，不使用文件修改时间代替旅行事实日期。",
         "- 内容短但已有清晰官方来源的城市优先扩充路线、避坑和分区动线。",
     ])
-    (ROOT / "内容与图片体检.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    report = ROOT / "docs" / "reports" / "内容与图片体检.md"
+    report.parent.mkdir(parents=True, exist_ok=True)
+    report.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def build_source_playbook() -> None:
@@ -3950,15 +3952,31 @@ def build_source_playbook() -> None:
         "5. 图片先核对 Commons 文件页的作者与许可证，再检查是否真实对应城市、主体清晰且适合旅游内容。",
         "6. 自动候选用 `TRAVEL_FETCH_CITY_KEYS` 定向抓取；人工选定文件用 `tools\\import_commons_city_photo.py` 导入。",
         "7. 不合格来源写入 `assets\\photo-editorial-decisions.json`；拒绝与具体来源绑定，未来换图后自动失效。",
-        "8. 运行 `重新生成网页.bat`，再运行 `python tools\\validate_travel_site.py` 并检查 `内容与图片体检.md`。",
+        "8. 在项目根目录运行 `npm run check`，并检查 `docs/reports/内容与图片体检.md`；Windows 也可运行 `scripts/windows/重新生成网页.bat`。",
     ]
-    (ROOT / "资料来源与更新规则.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    guide = ROOT / "docs" / "guides" / "资料来源与更新规则.md"
+    guide.parent.mkdir(parents=True, exist_ok=True)
+    guide.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def build_project_readme() -> None:
-    readme = """# 游记地图 · 旅游攻略网页
+    readme = """# 游记地图（Travel A Yuan）
 
 这是一个运行期纯静态、构建期由 Node/Vite/TypeScript 与 Python 共同生成的旅游攻略 PWA。源内容在 `城市\\*.md` 和 `记录.md`；Vite 构建渐进增强层，`tools\\build_travel_html.py` 统一生成页面、索引、PWA 与公共资源，因此无需 Python 后端也能部署到 GitHub Pages。
+
+## 项目入口与目录
+
+- GitHub 仓库：<https://github.com/shimmerjoe/youji-ditu>，仓库根目录就是本项目目录，克隆后直接在此运行命令。
+- GitHub Pages 目标地址：<https://shimmerjoe.github.io/youji-ditu/>。仓库上传与 Pages 上线是两件事，当前能否访问需以 Pages 配置和部署结果为准。
+- 根目录保留网站页面、PWA/SEO 文件、构建配置、README 和核心总览内容源 `记录.md`；`cities/` 是生成的城市页，`城市/` 是 Markdown 源文件。
+- `frontend/`、`tools/`、`assets/`：应用源码、生成与验证工具、网站资源。
+- `scripts/windows/`：Windows 启动、重建、补图和发布脚本；重复的打开入口已合并。
+- `docs/guides/`：便携运行、移动端与 APK、来源更新说明。
+- `docs/reports/`：自动生成的内容与图片体检报告；`docs/history/` 保存需求聊天和历史日志。
+- `docs/screenshots/`：界面预览；`app-capacitor/`：可选 Android 封装模板。
+- `dist/`、`node_modules/`、`artifacts/` 与 Python 缓存是构建或本机产物，不进入源码提交；完整迁移快照另存于仓库 Release。
+
+Windows 可双击 [本地预览脚本](scripts/windows/打开首页.bat)，默认访问 <http://localhost:8765/>。离线缓存、模块脚本和完整搜索应通过 HTTP 检查。
 
 ## 常用命令
 
@@ -3982,7 +4000,7 @@ python -X utf8 tools\\offline_audit.py --self-serve --output D:\\.AI\\codex_tmp\
 - 补充图片：优先放到 `assets\\photos\\城市slug\\`，重新生成后进入页面相册和审计。
 - 图片审核：授权合规与内容适配是两道独立门槛；不合格来源记录在 `assets\\photo-editorial-decisions.json`，不要只删除本地文件。
 - 复核资料：查看城市页“联网核验入口”，再把确认后的链接写进“来源参考”。
-- 查看薄弱项：打开 `内容与图片体检.md`。
+- 查看薄弱项：打开 [内容与图片体检](docs/reports/内容与图片体检.md)。
 
 ### 定向补图
 
@@ -4002,7 +4020,7 @@ python -X utf8 tools\\import_commons_city_photo.py --city beijing --source "http
 python -X utf8 tools\\import_commons_city_photo.py --city beijing --source "https://commons.wikimedia.org/wiki/File:Example.jpg" --apply
 ```
 
-导入器会校验 Commons 文件页、JPEG 尺寸、横向比例、许可证和作者，但不能替代肉眼语义审核；导入后仍须重建站点并检查桌面/手机裁切与 `内容与图片体检.md`。
+导入器会校验 Commons 文件页、JPEG 尺寸、横向比例、许可证和作者，但不能替代肉眼语义审核；导入后仍须重建站点并检查桌面/手机裁切与 `docs/reports/内容与图片体检.md`。
 
 ## 数据、离线与分享
 
@@ -4027,7 +4045,7 @@ python -X utf8 tools\\import_commons_city_photo.py --city beijing --source "http
 2. 用 `git status` 和 `git diff` 审查范围，只暂存本次文件（不要批量暂存所有文件），再创建清晰提交；没有明确授权时不推送。
 3. 仅在明确授权且认证成功时推送到项目远端；等待 GitHub Pages 更新后打开上述公开地址，核对本次内容、脚本版本和移动端导航均已生效。公开地址未核验前，发布状态只能记为“未验证”。
 
-公开站点与 `D:\\2Life\\1Travel\\Travel_ayuan` 的已生成内容应保持同一提交版本。若发布或线上核验失败，保留本地变更并记录失败原因，不要以本地预览替代公开验收。
+公开站点与仓库同一提交的生成内容应保持一致。若发布或线上核验失败，保留可恢复的源码并记录失败原因，不要以本地预览替代公开验收。
 
 ## 自驾路书与地图配置
 

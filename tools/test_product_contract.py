@@ -302,7 +302,7 @@ class ProductContractTests(unittest.TestCase):
         self.assertRegex(roadtrip_data, r'"key":"beijing"[^}]*"updatedAt":"未核验"')
 
     def test_content_audit_exposes_raw_evidence_and_unreviewed_cities(self):
-        audit = (ROOT / "内容与图片体检.md").read_text(encoding="utf-8")
+        audit = (ROOT / "docs" / "reports" / "内容与图片体检.md").read_text(encoding="utf-8")
         self.assertIn("原始字数", audit)
         self.assertIn("核验日期", audit)
         self.assertIn("未核验", audit)

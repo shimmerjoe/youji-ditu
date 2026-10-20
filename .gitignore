@@ -1,16 +1,13 @@
-# 本地辅助资料与发布外壳
-聊天记录整理.md
-便携运行说明.md
-移动端与APK说明.md
-*.bat
+# 本机配置与可重建产物（源码、文档和脚本应入库）
 .claude/
-app-capacitor/
 # 本机密钥配置、浏览器报告与原始大图
 assets/roadtrip-config.js
 /dist/
 artifacts/
-assets/photos/*/cityphoto-src.*
-docs/image-candidates/
+app-capacitor/node_modules/
+app-capacitor/www/
+app-capacitor/android/.gradle/
+app-capacitor/android/**/build/
 # 临时/隐藏
 node_modules/
 __pycache__/

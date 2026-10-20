@@ -1,0 +1,19 @@
+# 手机、PWA 与可选 APK
+
+## 手机浏览
+
+电脑与手机连接同一局域网，运行 `scripts/windows/手机访问.bat`，用 `ipconfig` 查看电脑 IPv4 地址，然后在手机打开 `http://电脑IP:8000/`。根据系统提示配置防火墙访问权限。
+
+局域网普通 HTTP 适合浏览，但通常不属于 Service Worker 所需的安全上下文。PWA 安装与离线能力应在 HTTPS 网站上验收；`localhost` 的例外仅适用于设备自身。
+
+## PWA
+
+网站已有 `manifest.webmanifest` 与 `sw.js`。HTTPS 部署成功、资源可访问且浏览器支持时，可使用浏览器的安装或添加到主屏幕入口。安装选项、离线缓存及更新行为须实测。
+
+## 可选 Android 封装
+
+`app-capacitor/` 保留配置和依赖模板，尚不代表已经生成、签名或验收 APK。需要准备兼容的 JDK、Android SDK 与构建工具。
+
+先在项目根目录运行 `npm run check` 和 `npm run stage`，再将完整 `dist/` 内容复制到 `app-capacitor/www/`，避免漏掉路线、工具及资源。然后在 `app-capacitor/` 安装依赖，通过 Capacitor 初始化与同步 Android 工程，再生成并测试安装包。
+
+安卓 SDK、下载依赖、`www/` 和构建缓存不属于手写源码；模板纳入仓库，完整迁移前的本机文件另见私有 Release 归档。外部封装平台另有上传和账号要求，使用前应核对。

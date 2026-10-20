@@ -1,0 +1,9 @@
+{
+  "appId": "com.ayuan.travel",
+  "appName": "游记地图",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true
+  }
+}

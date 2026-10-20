@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """按现有城市攻略 md 模板，批量生成新城市的攻略 markdown，写入 城市/ 目录。
 运行：python tools/add_new_cities.py
-之后用 重新生成网页.bat 重建（建议先用 TRAVEL_FETCH_COMMONS=1 给新城抓真实照片）。
+之后用 npm run build 或 scripts/windows/重新生成网页.bat 重建（建议先用 TRAVEL_FETCH_COMMONS=1 给新城抓真实照片）。
 """
 from pathlib import Path
 

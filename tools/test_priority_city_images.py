@@ -216,7 +216,7 @@ class PriorityCityImageTests(unittest.TestCase):
 
     def test_editorial_rejections_are_visible_in_the_content_audit(self):
         decisions = json.loads(EDITORIAL_PATH.read_text(encoding="utf-8"))["decisions"]
-        audit = (ROOT / "内容与图片体检.md").read_text(encoding="utf-8")
+        audit = (ROOT / "docs" / "reports" / "内容与图片体检.md").read_text(encoding="utf-8")
         self.assertIn("图片内容审核拒绝清单", audit)
         for slug, decision in decisions.items():
             if self.cache[f"cityphoto|{slug}"].get("source") != decision["source"]:

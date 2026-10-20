@@ -25,7 +25,7 @@ class ContentReinforcementTests(unittest.TestCase):
                     self.assertEqual((960, 540), image.size)
 
     def test_generated_audit_does_not_hide_reinforcement_backlog(self):
-        audit = (ROOT / "内容与图片体检.md").read_text(encoding="utf-8")
+        audit = (ROOT / "docs" / "reports" / "内容与图片体检.md").read_text(encoding="utf-8")
         self.assertRegex(audit, r"需要优先补充：\d+")
         self.assertIn("原始字数", audit)
         self.assertIn("封面衍生图不计为独立素材", audit)

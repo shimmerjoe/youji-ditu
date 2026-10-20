@@ -632,6 +632,11 @@ h3.section-title { font-size: 19px; font-weight: 800; }
 .kv:first-child { border-top: 0; }
 .kv dt { color: var(--muted); font-weight: 600; }
 .kv dd { margin: 0; color: var(--ink-2); min-width: 0; overflow-wrap: anywhere; }
+.info-flag { display: inline-block; margin-right: 6px; padding: 0 7px; border-radius: var(--radius-pill); font-size: 11.5px; font-weight: 800; line-height: 1.7; vertical-align: 1px; }
+.info-flag.pending { background: #fff1cc; color: #8a5a12; }
+.info-flag.generic { background: var(--surface-2); color: var(--muted); }
+.kv.is-generic dd { color: var(--muted); }
+[data-theme="dark"] .info-flag.pending { background: rgba(246, 207, 122, .14); color: #f6cf7a; }
 .kv.kv-note { grid-template-columns: minmax(0, 1fr); }
 .kv-group dt { color: var(--ink); font-weight: 700; }
 .card-more { border-top: 1px dashed var(--line); }

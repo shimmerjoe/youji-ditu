@@ -1630,15 +1630,37 @@ def render_sub_list(nodes: list[dict], anchors: dict[str, str] | None, depth: in
     return f'<ul class="sub-list depth-{depth}">{"".join(items)}</ul>'
 
 
+GENERIC_VALUES_CACHE: set[str] | None = None
+
+
+def generic_values() -> set[str]:
+    """跨很多城市重复的模板句：页面上标成“通用提示”，与城市专属信息区分。"""
+    global GENERIC_VALUES_CACHE
+    if GENERIC_VALUES_CACHE is None:
+        GENERIC_VALUES_CACHE = boilerplate_values([page for page in PAGES if page.key not in HUB_KEYS])
+    return GENERIC_VALUES_CACHE
+
+
+def value_status(body: str) -> tuple[str, str]:
+    """返回 (CSS 类, 前置标签)：待核验 / 通用提示 / 城市专属。"""
+    if body.startswith("待核验"):
+        return " is-pending", '<span class="info-flag pending">待核验</span>'
+    if body in generic_values():
+        return " is-generic", '<span class="info-flag generic">通用提示</span>'
+    return "", ""
+
+
 def render_fact_rows(children: list[dict], anchors: dict[str, str] | None) -> list[str]:
     rows = []
     for child in children:
         label, body = split_label(child["text"])
         nested = render_sub_list(child["children"], anchors)
         if label and body:
+            status_class, flag = value_status(body)
+            shown = body.removeprefix("待核验").lstrip("（(").rstrip("）)") if status_class == " is-pending" else body
             rows.append(
-                f'<div class="kv"><dt>{html.escape(label)}</dt>'
-                f'<dd>{inline_markup(body, anchors)}{nested}</dd></div>'
+                f'<div class="kv{status_class}"><dt>{html.escape(label)}</dt>'
+                f'<dd>{flag}{inline_markup(shown, anchors)}{nested}</dd></div>'
             )
         elif child["children"]:
             rows.append(
@@ -1765,7 +1787,9 @@ def render_month_card(node: dict, section_id: str | None, anchors: dict[str, str
 
 
 def route_stops(text: str) -> list[str]:
-    parts = [part.strip(" 。") for part in re.split(r"\s*(?:、|→|->|\+|＋|，|,)\s*", text) if part.strip(" 。")]
+    # 写了箭头的路线按箭头拆分，括号里的逗号属于说明，不是新的一站。
+    separator = r"\s*(?:→|->)\s*" if re.search(r"→|->", text) else r"\s*(?:、|\+|＋|，|,)\s*"
+    parts = [part.strip(" 。") for part in re.split(separator, text) if part.strip(" 。")]
     if 2 <= len(parts) <= 9 and all(len(part) <= 22 for part in parts):
         return parts
     return []
@@ -2445,6 +2469,10 @@ def city_region(province: str) -> str:
 
 
 def city_season_summary(markdown: str) -> str:
+    # 结论里明确写了“季节：”就用它；季节景观里的“最佳月份”只描述单个景观，不能代表整座城市。
+    explicit = re.search(r"^-\s*(?:季节|最佳季节|适宜季节)[：:]\s*(.+)$", markdown, re.M)
+    if explicit:
+        return clean_summary(re.split(r"[；;]", explicit.group(1))[0], 36)
     seasonal = extract_first_nodes_after(markdown, "## 季节限定景观", 5)
     preferred_labels = {"最佳月份", "适合时间", "可看月份", "推荐时间", "季节"}
     for node in seasonal:
@@ -2486,9 +2514,10 @@ def city_filter_metadata(markdown: str, foods: list[str]) -> dict[str, str]:
         "自驾": ("自驾", "停车", "包车"),
     }
     transport_tags = [name for name, words in transport_rules.items() if any(word in compact for word in words)]
-    arrangement = re.search(r"^-\s*适合安排[：:]\s*(.+)$", markdown, re.M)
+    arrangement = re.search(r"^-\s*(?:推荐天数|适合安排)[：:]\s*(.+)$", markdown, re.M)
     arrangement_text = arrangement.group(1) if arrangement else ""
-    day_numbers = [int(value) for value in re.findall(r"(\d+)\s*天", arrangement_text)]
+    day_numbers = [int(value) for value in re.findall(r"(\d+)\s*(?:天|—\d+\s*天|-\d+\s*天)", arrangement_text)]
+    day_numbers += [int(value) for value in re.findall(r"[—-]\s*(\d+)\s*天", arrangement_text)]
     max_days = max(day_numbers, default=3)
     days_class = "1" if max_days <= 1 else "2-3" if max_days <= 3 else "4+"
     return {
@@ -4528,6 +4557,12 @@ def build_source_playbook() -> None:
 DAYS_LABELS = {"1": "1 天内", "2-3": "2-3 天", "4+": "4 天以上"}
 
 
+def explicit_days_text(markdown: str) -> str:
+    """“推荐天数：3—4 天。……”里的天数部分，原样展示，避免被归档成粗略区间。"""
+    match = re.search(r"^-\s*推荐天数[：:]\s*([0-9０-９一二三四五六七八九十半—\-～~ ]+天)", markdown, re.M)
+    return match.group(1).strip() if match else ""
+
+
 def chip_links(terms: list[str], anchor_index: AnchorIndex, css_class: str = "chip") -> str:
     chips = []
     for term in terms:
@@ -4553,7 +4588,7 @@ def city_overview_html(page: Page, anchor_index: AnchorIndex | None = None) -> s
     cells = [
         ("pin", "所在", prof["province"], ""),
         ("calendar", "适宜季节", prof["season"], ""),
-        ("clock", "建议天数", DAYS_LABELS.get(prof["daysClass"], "2-3 天"), ""),
+        ("clock", "建议天数", explicit_days_text(read_markdown_cached(page)) or DAYS_LABELS.get(prof["daysClass"], "2-3 天"), ""),
         ("info", "资料状态", review_label, f" co-review {review_status}"),
     ]
     facts = "".join(

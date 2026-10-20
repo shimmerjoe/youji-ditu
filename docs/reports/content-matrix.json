@@ -36,14 +36,14 @@
   "大型景区常有观光车、索道、游船或分时入园，票务和末班时间比地图距离更重要",
   "山区景区注意天气与末班车/索道时间",
   "山林彩叶与丰收时令",
-  "常见 08:00-17:30，夜游、索道、游船和淡旺季以官方公告为准",
   "常见 08:00-17:30，宗教场所和节假日以公告为准",
-  "常见周二至周日 09:00-17:00，周一闭馆或节假日调整",
   "年末淡季部分项目缩短运营",
   "开放式/免费，以店铺、停车、游船或项目消费为准",
   "开放式区域，全天或以现场管理为准",
   "开放时间、门票、预约和天气出发前再次复核",
   "当地代表风味，认准老店和本地推荐",
+  "待核验（博物馆多为周一闭馆，具体以馆方公告为准）",
+  "待核验（各景区与淡旺季差异大，出发前查官方公告）",
   "必吃店铺营业时间、是否排队、是否可打包",
   "户外注意防晒，热门项目提前订",
   "户外防晒，热门项目提前订",
@@ -118,7 +118,7 @@
    "province": "甘肃",
    "path": "site/cities/dunhuang.html",
    "popular": true,
-   "chars": 5175,
+   "chars": 5095,
    "sections": [
     "结论",
     "怎么玩",
@@ -154,7 +154,7 @@
    "province": "广东",
    "path": "site/cities/guangzhou.html",
    "popular": true,
-   "chars": 5072,
+   "chars": 5020,
    "sections": [
     "结论",
     "怎么玩",
@@ -190,7 +190,7 @@
    "province": "湖北",
    "path": "site/cities/wuhan.html",
    "popular": true,
-   "chars": 5059,
+   "chars": 5007,
    "sections": [
     "结论",
     "怎么玩",
@@ -226,7 +226,7 @@
    "province": "湖南",
    "path": "site/cities/zhangjiajie.html",
    "popular": true,
-   "chars": 5196,
+   "chars": 5116,
    "sections": [
     "结论",
     "怎么玩",
@@ -257,48 +257,12 @@
    "score": 59.1
   },
   {
-   "key": "beijing",
-   "city": "北京",
-   "province": "直辖市",
-   "path": "site/cities/beijing.html",
-   "popular": true,
-   "chars": 5212,
-   "sections": [
-    "结论",
-    "怎么玩",
-    "月份",
-    "季节",
-    "开放/票价",
-    "行前准备",
-    "住宿",
-    "分区",
-    "景点",
-    "美食",
-    "路线",
-    "交通",
-    "避坑",
-    "复核清单"
-   ],
-   "missingSections": [
-    "预算"
-   ],
-   "attractions": 4,
-   "specificHours": 0,
-   "specificPrices": 0,
-   "templateShare": 0.72,
-   "sources": 4,
-   "officialSources": 1,
-   "reviewDate": "未核验",
-   "licensedCover": true,
-   "score": 59.3
-  },
-  {
    "key": "harbin",
    "city": "哈尔滨",
    "province": "黑龙江",
    "path": "site/cities/harbin.html",
    "popular": true,
-   "chars": 5230,
+   "chars": 5170,
    "sections": [
     "结论",
     "怎么玩",
@@ -334,7 +298,7 @@
    "province": "西藏",
    "path": "site/cities/lhasa.html",
    "popular": true,
-   "chars": 5009,
+   "chars": 4989,
    "sections": [
     "结论",
     "怎么玩",
@@ -370,7 +334,7 @@
    "province": "河南",
    "path": "site/cities/luoyang.html",
    "popular": true,
-   "chars": 5095,
+   "chars": 5063,
    "sections": [
     "结论",
     "怎么玩",
@@ -401,48 +365,12 @@
    "score": 59.3
   },
   {
-   "key": "shanghai",
-   "city": "上海",
-   "province": "直辖市",
-   "path": "site/cities/shanghai.html",
-   "popular": true,
-   "chars": 5142,
-   "sections": [
-    "结论",
-    "怎么玩",
-    "月份",
-    "季节",
-    "开放/票价",
-    "行前准备",
-    "住宿",
-    "分区",
-    "景点",
-    "美食",
-    "路线",
-    "交通",
-    "避坑",
-    "复核清单"
-   ],
-   "missingSections": [
-    "预算"
-   ],
-   "attractions": 4,
-   "specificHours": 0,
-   "specificPrices": 0,
-   "templateShare": 0.71,
-   "sources": 4,
-   "officialSources": 2,
-   "reviewDate": "未核验",
-   "licensedCover": true,
-   "score": 59.6
-  },
-  {
    "key": "urumqi",
    "city": "乌鲁木齐",
    "province": "新疆",
    "path": "site/cities/urumqi.html",
    "popular": true,
-   "chars": 5296,
+   "chars": 5244,
    "sections": [
     "结论",
     "怎么玩",
@@ -471,42 +399,6 @@
    "reviewDate": "未核验",
    "licensedCover": true,
    "score": 60.1
-  },
-  {
-   "key": "xian",
-   "city": "西安",
-   "province": "陕西",
-   "path": "site/cities/xian.html",
-   "popular": true,
-   "chars": 4659,
-   "sections": [
-    "结论",
-    "怎么玩",
-    "月份",
-    "季节",
-    "开放/票价",
-    "行前准备",
-    "住宿",
-    "分区",
-    "景点",
-    "美食",
-    "路线",
-    "交通",
-    "避坑",
-    "复核清单"
-   ],
-   "missingSections": [
-    "预算"
-   ],
-   "attractions": 4,
-   "specificHours": 4,
-   "specificPrices": 1,
-   "templateShare": 0.46,
-   "sources": 4,
-   "officialSources": 0,
-   "reviewDate": "未核验",
-   "licensedCover": true,
-   "score": 70.8
   },
   {
    "key": "nanjing",
@@ -905,6 +797,41 @@
    "score": 77.3
   },
   {
+   "key": "xian",
+   "city": "西安",
+   "province": "陕西",
+   "path": "site/cities/xian.html",
+   "popular": true,
+   "chars": 5678,
+   "sections": [
+    "结论",
+    "怎么玩",
+    "月份",
+    "季节",
+    "开放/票价",
+    "行前准备",
+    "住宿",
+    "分区",
+    "景点",
+    "美食",
+    "路线",
+    "交通",
+    "预算",
+    "避坑",
+    "复核清单"
+   ],
+   "missingSections": [],
+   "attractions": 5,
+   "specificHours": 4,
+   "specificPrices": 2,
+   "templateShare": 0.26,
+   "sources": 4,
+   "officialSources": 0,
+   "reviewDate": "未核验",
+   "licensedCover": true,
+   "score": 78.5
+  },
+  {
    "key": "qingdao",
    "city": "青岛",
    "province": "山东",
@@ -939,6 +866,76 @@
    "reviewDate": "2026-07-15",
    "licensedCover": true,
    "score": 79.1
+  },
+  {
+   "key": "shanghai",
+   "city": "上海",
+   "province": "直辖市",
+   "path": "site/cities/shanghai.html",
+   "popular": true,
+   "chars": 4932,
+   "sections": [
+    "结论",
+    "怎么玩",
+    "月份",
+    "季节",
+    "开放/票价",
+    "行前准备",
+    "住宿",
+    "分区",
+    "景点",
+    "美食",
+    "路线",
+    "交通",
+    "预算",
+    "避坑",
+    "复核清单"
+   ],
+   "missingSections": [],
+   "attractions": 5,
+   "specificHours": 5,
+   "specificPrices": 2,
+   "templateShare": 0.35,
+   "sources": 4,
+   "officialSources": 2,
+   "reviewDate": "未核验",
+   "licensedCover": true,
+   "score": 81.2
+  },
+  {
+   "key": "beijing",
+   "city": "北京",
+   "province": "直辖市",
+   "path": "site/cities/beijing.html",
+   "popular": true,
+   "chars": 6563,
+   "sections": [
+    "结论",
+    "怎么玩",
+    "月份",
+    "季节",
+    "开放/票价",
+    "行前准备",
+    "住宿",
+    "分区",
+    "景点",
+    "美食",
+    "路线",
+    "交通",
+    "预算",
+    "避坑",
+    "复核清单"
+   ],
+   "missingSections": [],
+   "attractions": 5,
+   "specificHours": 5,
+   "specificPrices": 6,
+   "templateShare": 0.31,
+   "sources": 4,
+   "officialSources": 1,
+   "reviewDate": "未核验",
+   "licensedCover": true,
+   "score": 82.2
   },
   {
    "key": "sanya",
@@ -1990,7 +1987,7 @@
    "province": "浙江",
    "path": "site/cities/jiaxing.html",
    "popular": false,
-   "chars": 5018,
+   "chars": 4978,
    "sections": [
     "结论",
     "怎么玩",
@@ -2026,7 +2023,7 @@
    "province": "新疆",
    "path": "site/cities/altay.html",
    "popular": false,
-   "chars": 5161,
+   "chars": 5081,
    "sections": [
     "结论",
     "怎么玩",
@@ -2062,7 +2059,7 @@
    "province": "河南",
    "path": "site/cities/anyang.html",
    "popular": false,
-   "chars": 5149,
+   "chars": 5077,
    "sections": [
     "结论",
     "怎么玩",
@@ -2098,7 +2095,7 @@
    "province": "广西",
    "path": "site/cities/baise.html",
    "popular": false,
-   "chars": 5232,
+   "chars": 5160,
    "sections": [
     "结论",
     "怎么玩",
@@ -2134,7 +2131,7 @@
    "province": "河北",
    "path": "site/cities/baoding.html",
    "popular": false,
-   "chars": 5213,
+   "chars": 5133,
    "sections": [
     "结论",
     "怎么玩",
@@ -2170,7 +2167,7 @@
    "province": "辽宁",
    "path": "site/cities/benxi.html",
    "popular": false,
-   "chars": 5143,
+   "chars": 5063,
    "sections": [
     "结论",
     "怎么玩",
@@ -2206,7 +2203,7 @@
    "province": "内蒙古",
    "path": "site/cities/chifeng.html",
    "popular": false,
-   "chars": 5233,
+   "chars": 5153,
    "sections": [
     "结论",
     "怎么玩",
@@ -2242,7 +2239,7 @@
    "province": "福建",
    "path": "site/cities/fuzhou.html",
    "popular": false,
-   "chars": 5089,
+   "chars": 5017,
    "sections": [
     "结论",
     "怎么玩",
@@ -2278,7 +2275,7 @@
    "province": "甘肃",
    "path": "site/cities/gannan.html",
    "popular": false,
-   "chars": 5086,
+   "chars": 5046,
    "sections": [
     "结论",
     "怎么玩",
@@ -2314,7 +2311,7 @@
    "province": "江西",
    "path": "site/cities/ganzhou.html",
    "popular": false,
-   "chars": 5130,
+   "chars": 5070,
    "sections": [
     "结论",
     "怎么玩",
@@ -2350,7 +2347,7 @@
    "province": "新疆",
    "path": "site/cities/hami.html",
    "popular": false,
-   "chars": 5166,
+   "chars": 5086,
    "sections": [
     "结论",
     "怎么玩",
@@ -2386,7 +2383,7 @@
    "province": "广东",
    "path": "site/cities/huizhou.html",
    "popular": false,
-   "chars": 5085,
+   "chars": 5025,
    "sections": [
     "结论",
     "怎么玩",
@@ -2422,7 +2419,7 @@
    "province": "广东",
    "path": "site/cities/jiangmen.html",
    "popular": false,
-   "chars": 5200,
+   "chars": 5140,
    "sections": [
     "结论",
     "怎么玩",
@@ -2458,7 +2455,7 @@
    "province": "河南",
    "path": "site/cities/jiaozuo.html",
    "popular": false,
-   "chars": 5145,
+   "chars": 5065,
    "sections": [
     "结论",
     "怎么玩",
@@ -2494,7 +2491,7 @@
    "province": "山西",
    "path": "site/cities/jinzhong.html",
    "popular": false,
-   "chars": 5060,
+   "chars": 5040,
    "sections": [
     "结论",
     "怎么玩",
@@ -2530,7 +2527,7 @@
    "province": "江西",
    "path": "site/cities/jiujiang.html",
    "popular": false,
-   "chars": 5060,
+   "chars": 5000,
    "sections": [
     "结论",
     "怎么玩",
@@ -2566,7 +2563,7 @@
    "province": "四川",
    "path": "site/cities/liangshan.html",
    "popular": false,
-   "chars": 5146,
+   "chars": 5086,
    "sections": [
     "结论",
     "怎么玩",
@@ -2602,7 +2599,7 @@
    "province": "江苏",
    "path": "site/cities/lianyungang.html",
    "popular": false,
-   "chars": 5145,
+   "chars": 5065,
    "sections": [
     "结论",
     "怎么玩",
@@ -2638,7 +2635,7 @@
    "province": "甘肃",
    "path": "site/cities/longnan.html",
    "popular": false,
-   "chars": 5162,
+   "chars": 5082,
    "sections": [
     "结论",
     "怎么玩",
@@ -2674,7 +2671,7 @@
    "province": "浙江",
    "path": "site/cities/ningbo.html",
    "popular": false,
-   "chars": 5082,
+   "chars": 5022,
    "sections": [
     "结论",
     "怎么玩",
@@ -2710,7 +2707,7 @@
    "province": "福建",
    "path": "site/cities/ningde.html",
    "popular": false,
-   "chars": 5136,
+   "chars": 5056,
    "sections": [
     "结论",
     "怎么玩",
@@ -2746,7 +2743,7 @@
    "province": "内蒙古",
    "path": "site/cities/ordos.html",
    "popular": false,
-   "chars": 5264,
+   "chars": 5184,
    "sections": [
     "结论",
     "怎么玩",
@@ -2782,7 +2779,7 @@
    "province": "黑龙江",
    "path": "site/cities/qiqihar.html",
    "popular": false,
-   "chars": 5297,
+   "chars": 5225,
    "sections": [
     "结论",
     "怎么玩",
@@ -2818,7 +2815,7 @@
    "province": "江苏",
    "path": "site/cities/wuxi.html",
    "popular": false,
-   "chars": 5048,
+   "chars": 5008,
    "sections": [
     "结论",
     "怎么玩",
@@ -2854,7 +2851,7 @@
    "province": "河南",
    "path": "site/cities/xinyang.html",
    "popular": false,
-   "chars": 5161,
+   "chars": 5089,
    "sections": [
     "结论",
     "怎么玩",
@@ -2890,7 +2887,7 @@
    "province": "江苏",
    "path": "site/cities/xuzhou.html",
    "popular": false,
-   "chars": 5134,
+   "chars": 5062,
    "sections": [
     "结论",
     "怎么玩",
@@ -2926,7 +2923,7 @@
    "province": "福建",
    "path": "site/cities/zhangzhou.html",
    "popular": false,
-   "chars": 5105,
+   "chars": 5045,
    "sections": [
     "结论",
     "怎么玩",
@@ -2962,7 +2959,7 @@
    "province": "江苏",
    "path": "site/cities/zhenjiang.html",
    "popular": false,
-   "chars": 5044,
+   "chars": 4984,
    "sections": [
     "结论",
     "怎么玩",
@@ -2998,7 +2995,7 @@
    "province": "宁夏",
    "path": "site/cities/zhongwei.html",
    "popular": false,
-   "chars": 5138,
+   "chars": 5078,
    "sections": [
     "结论",
     "怎么玩",
@@ -3034,7 +3031,7 @@
    "province": "山东",
    "path": "site/cities/zibo.html",
    "popular": false,
-   "chars": 5222,
+   "chars": 5150,
    "sections": [
     "结论",
     "怎么玩",
@@ -3070,7 +3067,7 @@
    "province": "吉林",
    "path": "site/cities/changchun.html",
    "popular": false,
-   "chars": 5179,
+   "chars": 5115,
    "sections": [
     "结论",
     "怎么玩",
@@ -3106,7 +3103,7 @@
    "province": "安徽",
    "path": "site/cities/chizhou.html",
    "popular": false,
-   "chars": 5166,
+   "chars": 5086,
    "sections": [
     "结论",
     "怎么玩",
@@ -3142,7 +3139,7 @@
    "province": "内蒙古",
    "path": "site/cities/hohhot.html",
    "popular": false,
-   "chars": 5150,
+   "chars": 5106,
    "sections": [
     "结论",
     "怎么玩",
@@ -3178,7 +3175,7 @@
    "province": "新疆",
    "path": "site/cities/ili.html",
    "popular": false,
-   "chars": 5178,
+   "chars": 5098,
    "sections": [
     "结论",
     "怎么玩",
@@ -3214,7 +3211,7 @@
    "province": "山东",
    "path": "site/cities/jinan.html",
    "popular": false,
-   "chars": 5083,
+   "chars": 5011,
    "sections": [
     "结论",
     "怎么玩",
@@ -3250,7 +3247,7 @@
    "province": "山东",
    "path": "site/cities/jining.html",
    "popular": false,
-   "chars": 5166,
+   "chars": 5094,
    "sections": [
     "结论",
     "怎么玩",
@@ -3286,7 +3283,7 @@
    "province": "黑龙江",
    "path": "site/cities/mudanjiang.html",
    "popular": false,
-   "chars": 5258,
+   "chars": 5178,
    "sections": [
     "结论",
     "怎么玩",
@@ -3322,7 +3319,7 @@
    "province": "江西",
    "path": "site/cities/shangrao.html",
    "popular": false,
-   "chars": 5133,
+   "chars": 5053,
    "sections": [
     "结论",
     "怎么玩",
@@ -3358,7 +3355,7 @@
    "province": "青海",
    "path": "site/cities/xining.html",
    "popular": false,
-   "chars": 5124,
+   "chars": 5092,
    "sections": [
     "结论",
     "怎么玩",
@@ -3394,7 +3391,7 @@
    "province": "山西",
    "path": "site/cities/xinzhou.html",
    "popular": false,
-   "chars": 5090,
+   "chars": 5030,
    "sections": [
     "结论",
     "怎么玩",
@@ -3430,7 +3427,7 @@
    "province": "宁夏",
    "path": "site/cities/yinchuan.html",
    "popular": false,
-   "chars": 5194,
+   "chars": 5114,
    "sections": [
     "结论",
     "怎么玩",
@@ -3466,7 +3463,7 @@
    "province": "安徽",
    "path": "site/cities/anqing.html",
    "popular": false,
-   "chars": 5155,
+   "chars": 5115,
    "sections": [
     "结论",
     "怎么玩",
@@ -3502,7 +3499,7 @@
    "province": "陕西",
    "path": "site/cities/baoji.html",
    "popular": false,
-   "chars": 5165,
+   "chars": 5113,
    "sections": [
     "结论",
     "怎么玩",
@@ -3538,7 +3535,7 @@
    "province": "内蒙古",
    "path": "site/cities/baotou.html",
    "popular": false,
-   "chars": 5223,
+   "chars": 5143,
    "sections": [
     "结论",
     "怎么玩",
@@ -3574,7 +3571,7 @@
    "province": "河南",
    "path": "site/cities/nanyang.html",
    "popular": false,
-   "chars": 5264,
+   "chars": 5204,
    "sections": [
     "结论",
     "怎么玩",
@@ -3610,7 +3607,7 @@
    "province": "山东",
    "path": "site/cities/rizhao.html",
    "popular": false,
-   "chars": 5204,
+   "chars": 5144,
    "sections": [
     "结论",
     "怎么玩",
@@ -3646,7 +3643,7 @@
    "province": "广东",
    "path": "site/cities/shantou.html",
    "popular": false,
-   "chars": 5245,
+   "chars": 5165,
    "sections": [
     "结论",
     "怎么玩",
@@ -3682,7 +3679,7 @@
    "province": "吉林",
    "path": "site/cities/yanbian.html",
    "popular": false,
-   "chars": 5324,
+   "chars": 5244,
    "sections": [
     "结论",
     "怎么玩",
@@ -3718,7 +3715,7 @@
    "province": "黑龙江",
    "path": "site/cities/city-fefbb1572a.html",
    "popular": false,
-   "chars": 5358,
+   "chars": 5278,
    "sections": [
     "结论",
     "怎么玩",
@@ -3754,7 +3751,7 @@
    "province": "浙江",
    "path": "site/cities/shaoxing.html",
    "popular": false,
-   "chars": 5060,
+   "chars": 5000,
    "sections": [
     "结论",
     "怎么玩",
@@ -3790,7 +3787,7 @@
    "province": "江苏",
    "path": "site/cities/yangzhou.html",
    "popular": false,
-   "chars": 5025,
+   "chars": 4973,
    "sections": [
     "结论",
     "怎么玩",
@@ -3826,7 +3823,7 @@
    "province": "安徽",
    "path": "site/cities/bozhou.html",
    "popular": false,
-   "chars": 5157,
+   "chars": 5097,
    "sections": [
     "结论",
     "怎么玩",
@@ -3862,7 +3859,7 @@
    "province": "江苏",
    "path": "site/cities/changzhou.html",
    "popular": false,
-   "chars": 5178,
+   "chars": 5098,
    "sections": [
     "结论",
     "怎么玩",
@@ -3898,7 +3895,7 @@
    "province": "湖南",
    "path": "site/cities/chenzhou.html",
    "popular": false,
-   "chars": 5143,
+   "chars": 5063,
    "sections": [
     "结论",
     "怎么玩",
@@ -3934,7 +3931,7 @@
    "province": "广西",
    "path": "site/cities/chongzuo.html",
    "popular": false,
-   "chars": 5209,
+   "chars": 5129,
    "sections": [
     "结论",
     "怎么玩",
@@ -3970,7 +3967,7 @@
    "province": "辽宁",
    "path": "site/cities/dandong.html",
    "popular": false,
-   "chars": 5204,
+   "chars": 5132,
    "sections": [
     "结论",
     "怎么玩",
@@ -4006,7 +4003,7 @@
    "province": "云南",
    "path": "site/cities/dehong.html",
    "popular": false,
-   "chars": 5228,
+   "chars": 5148,
    "sections": [
     "结论",
     "怎么玩",
@@ -4042,7 +4039,7 @@
    "province": "广东",
    "path": "site/cities/dongguan.html",
    "popular": false,
-   "chars": 5165,
+   "chars": 5093,
    "sections": [
     "结论",
     "怎么玩",
@@ -4078,7 +4075,7 @@
    "province": "广西",
    "path": "site/cities/fangchenggang.html",
    "popular": false,
-   "chars": 5203,
+   "chars": 5123,
    "sections": [
     "结论",
     "怎么玩",
@@ -4114,7 +4111,7 @@
    "province": "广东",
    "path": "site/cities/foshan.html",
    "popular": false,
-   "chars": 5145,
+   "chars": 5085,
    "sections": [
     "结论",
     "怎么玩",
@@ -4150,7 +4147,7 @@
    "province": "四川",
    "path": "site/cities/guangyuan.html",
    "popular": false,
-   "chars": 5067,
+   "chars": 5027,
    "sections": [
     "结论",
     "怎么玩",
@@ -4186,7 +4183,7 @@
    "province": "青海",
    "path": "site/cities/haixi.html",
    "popular": false,
-   "chars": 5258,
+   "chars": 5178,
    "sections": [
     "结论",
     "怎么玩",
@@ -4222,7 +4219,7 @@
    "province": "河北",
    "path": "site/cities/handan.html",
    "popular": false,
-   "chars": 5138,
+   "chars": 5098,
    "sections": [
     "结论",
     "怎么玩",
@@ -4258,7 +4255,7 @@
    "province": "安徽",
    "path": "site/cities/hefei.html",
    "popular": false,
-   "chars": 5106,
+   "chars": 5054,
    "sections": [
     "结论",
     "怎么玩",
@@ -4294,7 +4291,7 @@
    "province": "湖南",
    "path": "site/cities/hengyang.html",
    "popular": false,
-   "chars": 5128,
+   "chars": 5088,
    "sections": [
     "结论",
     "怎么玩",
@@ -4330,7 +4327,7 @@
    "province": "广西",
    "path": "site/cities/hezhou.html",
    "popular": false,
-   "chars": 5095,
+   "chars": 5035,
    "sections": [
     "结论",
     "怎么玩",
@@ -4366,7 +4363,7 @@
    "province": "云南",
    "path": "site/cities/honghe.html",
    "popular": false,
-   "chars": 5121,
+   "chars": 5061,
    "sections": [
     "结论",
     "怎么玩",
@@ -4402,7 +4399,7 @@
    "province": "安徽",
    "path": "site/cities/huangshan.html",
    "popular": false,
-   "chars": 5105,
+   "chars": 5045,
    "sections": [
     "结论",
     "怎么玩",
@@ -4438,7 +4435,7 @@
    "province": "浙江",
    "path": "site/cities/huzhou.html",
    "popular": false,
-   "chars": 5133,
+   "chars": 5073,
    "sections": [
     "结论",
     "怎么玩",
@@ -4474,7 +4471,7 @@
    "province": "甘肃",
    "path": "site/cities/jiayuguan.html",
    "popular": false,
-   "chars": 5226,
+   "chars": 5166,
    "sections": [
     "结论",
     "怎么玩",
@@ -4510,7 +4507,7 @@
    "province": "湖北",
    "path": "site/cities/jingzhou.html",
    "popular": false,
-   "chars": 5079,
+   "chars": 5055,
    "sections": [
     "结论",
     "怎么玩",
@@ -4546,7 +4543,7 @@
    "province": "山西",
    "path": "site/cities/linfen.html",
    "popular": false,
-   "chars": 5124,
+   "chars": 5084,
    "sections": [
     "结论",
     "怎么玩",
@@ -4582,7 +4579,7 @@
    "province": "山东",
    "path": "site/cities/linyi.html",
    "popular": false,
-   "chars": 5241,
+   "chars": 5169,
    "sections": [
     "结论",
     "怎么玩",
@@ -4618,7 +4615,7 @@
    "province": "福建",
    "path": "site/cities/longyan.html",
    "popular": false,
-   "chars": 5189,
+   "chars": 5129,
    "sections": [
     "结论",
     "怎么玩",
@@ -4654,7 +4651,7 @@
    "province": "四川",
    "path": "site/cities/luzhou.html",
    "popular": false,
-   "chars": 5148,
+   "chars": 5088,
    "sections": [
     "结论",
     "怎么玩",
@@ -4690,7 +4687,7 @@
    "province": "四川",
    "path": "site/cities/meishan.html",
    "popular": false,
-   "chars": 5077,
+   "chars": 5037,
    "sections": [
     "结论",
     "怎么玩",
@@ -4726,7 +4723,7 @@
    "province": "广东",
    "path": "site/cities/meizhou.html",
    "popular": false,
-   "chars": 5144,
+   "chars": 5092,
    "sections": [
     "结论",
     "怎么玩",
@@ -4762,7 +4759,7 @@
    "province": "广西",
    "path": "site/cities/nanning.html",
    "popular": false,
-   "chars": 5126,
+   "chars": 5074,
    "sections": [
     "结论",
     "怎么玩",
@@ -4798,7 +4795,7 @@
    "province": "福建",
    "path": "site/cities/putian.html",
    "popular": false,
-   "chars": 5171,
+   "chars": 5111,
    "sections": [
     "结论",
     "怎么玩",
@@ -4834,7 +4831,7 @@
    "province": "福建",
    "path": "site/cities/quanzhou.html",
    "popular": false,
-   "chars": 5021,
+   "chars": 4981,
    "sections": [
     "结论",
     "怎么玩",
@@ -4870,7 +4867,7 @@
    "province": "云南",
    "path": "site/cities/qujing.html",
    "popular": false,
-   "chars": 5194,
+   "chars": 5134,
    "sections": [
     "结论",
     "怎么玩",
@@ -4906,7 +4903,7 @@
    "province": "福建",
    "path": "site/cities/sanming.html",
    "popular": false,
-   "chars": 5286,
+   "chars": 5206,
    "sections": [
     "结论",
     "怎么玩",
@@ -4942,7 +4939,7 @@
    "province": "广东",
    "path": "site/cities/shaoguan.html",
    "popular": false,
-   "chars": 5168,
+   "chars": 5108,
    "sections": [
     "结论",
     "怎么玩",
@@ -4978,7 +4975,7 @@
    "province": "湖北",
    "path": "site/cities/shennongjia.html",
    "popular": false,
-   "chars": 5148,
+   "chars": 5068,
    "sections": [
     "结论",
     "怎么玩",
@@ -5014,7 +5011,7 @@
    "province": "河北",
    "path": "site/cities/shijiazhuang.html",
    "popular": false,
-   "chars": 5140,
+   "chars": 5088,
    "sections": [
     "结论",
     "怎么玩",
@@ -5050,7 +5047,7 @@
    "province": "山东",
    "path": "site/cities/taian.html",
    "popular": false,
-   "chars": 5016,
+   "chars": 4976,
    "sections": [
     "结论",
     "怎么玩",
@@ -5086,7 +5083,7 @@
    "province": "甘肃",
    "path": "site/cities/tianshui.html",
    "popular": false,
-   "chars": 5112,
+   "chars": 5072,
    "sections": [
     "结论",
     "怎么玩",
@@ -5122,7 +5119,7 @@
    "province": "浙江",
    "path": "site/cities/wenzhou.html",
    "popular": false,
-   "chars": 5031,
+   "chars": 4971,
    "sections": [
     "结论",
     "怎么玩",
@@ -5158,7 +5155,7 @@
    "province": "安徽",
    "path": "site/cities/wuhu.html",
    "popular": false,
-   "chars": 5212,
+   "chars": 5152,
    "sections": [
     "结论",
     "怎么玩",
@@ -5194,7 +5191,7 @@
    "province": "甘肃",
    "path": "site/cities/wuwei.html",
    "popular": false,
-   "chars": 5168,
+   "chars": 5128,
    "sections": [
     "结论",
     "怎么玩",
@@ -5230,7 +5227,7 @@
    "province": "广西",
    "path": "site/cities/wuzhou.html",
    "popular": false,
-   "chars": 5089,
+   "chars": 5029,
    "sections": [
     "结论",
     "怎么玩",
@@ -5266,7 +5263,7 @@
    "province": "湖南",
    "path": "site/cities/xiangxi.html",
    "popular": false,
-   "chars": 5105,
+   "chars": 5045,
    "sections": [
     "结论",
     "怎么玩",
@@ -5302,7 +5299,7 @@
    "province": "湖北",
    "path": "site/cities/xiangyang.html",
    "popular": false,
-   "chars": 5071,
+   "chars": 5011,
    "sections": [
     "结论",
     "怎么玩",
@@ -5338,7 +5335,7 @@
    "province": "安徽",
    "path": "site/cities/xuancheng.html",
    "popular": false,
-   "chars": 5168,
+   "chars": 5088,
    "sections": [
     "结论",
     "怎么玩",
@@ -5374,7 +5371,7 @@
    "province": "河南",
    "path": "site/cities/xuchang.html",
    "popular": false,
-   "chars": 5090,
+   "chars": 5050,
    "sections": [
     "结论",
     "怎么玩",
@@ -5410,7 +5407,7 @@
    "province": "陕西",
    "path": "site/cities/yanan.html",
    "popular": false,
-   "chars": 5254,
+   "chars": 5182,
    "sections": [
     "结论",
     "怎么玩",
@@ -5446,7 +5443,7 @@
    "province": "江西",
    "path": "site/cities/yichun.html",
    "popular": false,
-   "chars": 5130,
+   "chars": 5050,
    "sections": [
     "结论",
     "怎么玩",
@@ -5482,7 +5479,7 @@
    "province": "湖南",
    "path": "site/cities/yueyang.html",
    "popular": false,
-   "chars": 5128,
+   "chars": 5048,
    "sections": [
     "结论",
     "怎么玩",
@@ -5518,7 +5515,7 @@
    "province": "陕西",
    "path": "site/cities/yulin.html",
    "popular": false,
-   "chars": 5087,
+   "chars": 5027,
    "sections": [
     "结论",
     "怎么玩",
@@ -5554,7 +5551,7 @@
    "province": "山西",
    "path": "site/cities/yuncheng.html",
    "popular": false,
-   "chars": 5151,
+   "chars": 5111,
    "sections": [
     "结论",
     "怎么玩",
@@ -5590,7 +5587,7 @@
    "province": "河北",
    "path": "site/cities/zhangjiakou.html",
    "popular": false,
-   "chars": 5164,
+   "chars": 5124,
    "sections": [
     "结论",
     "怎么玩",
@@ -5626,7 +5623,7 @@
    "province": "广东",
    "path": "site/cities/zhanjiang.html",
    "popular": false,
-   "chars": 5106,
+   "chars": 5046,
    "sections": [
     "结论",
     "怎么玩",
@@ -5662,7 +5659,7 @@
    "province": "广东",
    "path": "site/cities/zhaoqing.html",
    "popular": false,
-   "chars": 5111,
+   "chars": 5051,
    "sections": [
     "结论",
     "怎么玩",
@@ -5698,7 +5695,7 @@
    "province": "浙江",
    "path": "site/cities/zhoushan.html",
    "popular": false,
-   "chars": 5153,
+   "chars": 5073,
    "sections": [
     "结论",
     "怎么玩",
@@ -5734,7 +5731,7 @@
    "province": "广西",
    "path": "site/cities/beihai.html",
    "popular": false,
-   "chars": 5078,
+   "chars": 5038,
    "sections": [
     "结论",
     "怎么玩",
@@ -5770,7 +5767,7 @@
    "province": "广东",
    "path": "site/cities/chaozhou.html",
    "popular": false,
-   "chars": 4999,
+   "chars": 4979,
    "sections": [
     "结论",
     "怎么玩",
@@ -5806,7 +5803,7 @@
    "province": "辽宁",
    "path": "site/cities/dalian.html",
    "popular": false,
-   "chars": 5088,
+   "chars": 5048,
    "sections": [
     "结论",
     "怎么玩",
@@ -5842,7 +5839,7 @@
    "province": "山西",
    "path": "site/cities/datong.html",
    "popular": false,
-   "chars": 5072,
+   "chars": 5052,
    "sections": [
     "结论",
     "怎么玩",
@@ -5878,7 +5875,7 @@
    "province": "湖北",
    "path": "site/cities/enshi.html",
    "popular": false,
-   "chars": 5155,
+   "chars": 5075,
    "sections": [
     "结论",
     "怎么玩",
@@ -5914,7 +5911,7 @@
    "province": "江西",
    "path": "site/cities/jingdezhen.html",
    "popular": false,
-   "chars": 5137,
+   "chars": 5093,
    "sections": [
     "结论",
     "怎么玩",
@@ -5950,7 +5947,7 @@
    "province": "河南",
    "path": "site/cities/kaifeng.html",
    "popular": false,
-   "chars": 5145,
+   "chars": 5085,
    "sections": [
     "结论",
     "怎么玩",
@@ -5986,7 +5983,7 @@
    "province": "新疆",
    "path": "site/cities/kashgar.html",
    "popular": false,
-   "chars": 5129,
+   "chars": 5089,
    "sections": [
     "结论",
     "怎么玩",
@@ -6022,7 +6019,7 @@
    "province": "甘肃",
    "path": "site/cities/lanzhou.html",
    "popular": false,
-   "chars": 5196,
+   "chars": 5124,
    "sections": [
     "结论",
     "怎么玩",
@@ -6058,7 +6055,7 @@
    "province": "广西",
    "path": "site/cities/liuzhou.html",
    "popular": false,
-   "chars": 5164,
+   "chars": 5112,
    "sections": [
     "结论",
     "怎么玩",
@@ -6094,7 +6091,7 @@
    "province": "福建",
    "path": "site/cities/nanping.html",
    "popular": false,
-   "chars": 5167,
+   "chars": 5087,
    "sections": [
     "结论",
     "怎么玩",
@@ -6130,7 +6127,7 @@
    "province": "西藏",
    "path": "site/cities/nyingchi.html",
    "popular": false,
-   "chars": 5218,
+   "chars": 5138,
    "sections": [
     "结论",
     "怎么玩",
@@ -6166,7 +6163,7 @@
    "province": "河北",
    "path": "site/cities/qinhuangdao.html",
    "popular": false,
-   "chars": 5169,
+   "chars": 5129,
    "sections": [
     "结论",
     "怎么玩",
@@ -6202,7 +6199,7 @@
    "province": "广东",
    "path": "site/cities/shenzhen.html",
    "popular": false,
-   "chars": 5145,
+   "chars": 5073,
    "sections": [
     "结论",
     "怎么玩",
@@ -6238,7 +6235,7 @@
    "province": "湖北",
    "path": "site/cities/shiyan.html",
    "popular": false,
-   "chars": 5172,
+   "chars": 5100,
    "sections": [
     "结论",
     "怎么玩",
@@ -6274,7 +6271,7 @@
    "province": "山西",
    "path": "site/cities/taiyuan.html",
    "popular": false,
-   "chars": 5146,
+   "chars": 5102,
    "sections": [
     "结论",
     "怎么玩",
@@ -6310,7 +6307,7 @@
    "province": "直辖市",
    "path": "site/cities/tianjin.html",
    "popular": false,
-   "chars": 5182,
+   "chars": 5130,
    "sections": [
     "结论",
     "怎么玩",
@@ -6346,7 +6343,7 @@
    "province": "新疆",
    "path": "site/cities/turpan.html",
    "popular": false,
-   "chars": 5133,
+   "chars": 5053,
    "sections": [
     "结论",
     "怎么玩",
@@ -6382,7 +6379,7 @@
    "province": "山东",
    "path": "site/cities/weihai.html",
    "popular": false,
-   "chars": 5044,
+   "chars": 5004,
    "sections": [
     "结论",
     "怎么玩",
@@ -6418,7 +6415,7 @@
    "province": "湖北",
    "path": "site/cities/yichang.html",
    "popular": false,
-   "chars": 5271,
+   "chars": 5191,
    "sections": [
     "结论",
     "怎么玩",
@@ -6454,7 +6451,7 @@
    "province": "甘肃",
    "path": "site/cities/zhangye.html",
    "popular": false,
-   "chars": 5124,
+   "chars": 5084,
    "sections": [
     "结论",
     "怎么玩",
@@ -6490,7 +6487,7 @@
    "province": "陕西",
    "path": "site/cities/hanzhong.html",
    "popular": false,
-   "chars": 5195,
+   "chars": 5135,
    "sections": [
     "结论",
     "怎么玩",
@@ -6526,7 +6523,7 @@
    "province": "河北",
    "path": "site/cities/tangshan.html",
    "popular": false,
-   "chars": 5169,
+   "chars": 5089,
    "sections": [
     "结论",
     "怎么玩",
@@ -6562,7 +6559,7 @@
    "province": "山东",
    "path": "site/cities/yantai.html",
    "popular": false,
-   "chars": 5148,
+   "chars": 5076,
    "sections": [
     "结论",
     "怎么玩",
@@ -6598,7 +6595,7 @@
    "province": "河北",
    "path": "site/cities/chengde.html",
    "popular": false,
-   "chars": 5201,
+   "chars": 5141,
    "sections": [
     "结论",
     "怎么玩",
@@ -6634,7 +6631,7 @@
    "province": "内蒙古",
    "path": "site/cities/hulunbuir.html",
    "popular": false,
-   "chars": 5383,
+   "chars": 5303,
    "sections": [
     "结论",
     "怎么玩",
@@ -6670,7 +6667,7 @@
    "province": "海南",
    "path": "site/cities/wenchang.html",
    "popular": false,
-   "chars": 5175,
+   "chars": 5095,
    "sections": [
     "结论",
     "怎么玩",
@@ -6706,7 +6703,7 @@
    "province": "海南",
    "path": "site/cities/haikou.html",
    "popular": false,
-   "chars": 5246,
+   "chars": 5194,
    "sections": [
     "结论",
     "怎么玩",
@@ -6742,7 +6739,7 @@
    "province": "辽宁",
    "path": "site/cities/shenyang.html",
    "popular": false,
-   "chars": 5155,
+   "chars": 5103,
    "sections": [
     "结论",
     "怎么玩",
@@ -6778,7 +6775,7 @@
    "province": "广东",
    "path": "site/cities/zhuhai.html",
    "popular": false,
-   "chars": 5138,
+   "chars": 5078,
    "sections": [
     "结论",
     "怎么玩",
@@ -6814,7 +6811,7 @@
    "province": "山东",
    "path": "site/cities/weifang.html",
    "popular": false,
-   "chars": 5245,
+   "chars": 5193,
    "sections": [
     "结论",
     "怎么玩",
@@ -7714,7 +7711,7 @@
    "province": "江西",
    "path": "site/cities/nanchang.html",
    "popular": false,
-   "chars": 5812,
+   "chars": 5788,
    "sections": [
     "结论",
     "怎么玩",

@@ -43,7 +43,7 @@ export function bootstrapHomeContinue(): void {
     cards.push(h("article", { class: "continue-card continue-recent" },
       h("p", { class: "continue-kicker", text: "最近浏览" }),
       h("ul", { class: "continue-list" }, ...recent.map((visit) => {
-        const image = h("img", { src: siteHref(`assets/images/${visit.key}.jpg`), alt: "", width: 64, height: 48, loading: "lazy", decoding: "async" });
+        const image = h("img", { src: siteHref(`assets/images/w640/${visit.key}.jpg`), alt: "", width: 64, height: 48, loading: "lazy", decoding: "async" });
         image.addEventListener("error", () => image.remove(), { once: true });
         return h("li", {}, h("a", { href: siteHref(visit.href) }, image, h("span", { text: visit.name.replace("旅游攻略", "") })));
       })),

@@ -934,6 +934,10 @@
       const slide = slides[(n + slides.length) % slides.length];
       const image = slide && slide.querySelector("img[data-src]");
       if (!image) return;
+      if (image.dataset.srcset) {
+        image.srcset = image.dataset.srcset;
+        image.removeAttribute("data-srcset");
+      }
       image.src = image.dataset.src;
       image.removeAttribute("data-src");
     }

@@ -30,6 +30,8 @@ ASSETS = OUT / "assets"
 IMAGES = ASSETS / "images"
 ITEM_IMAGES = ASSETS / "item-images"
 PHOTOS = ASSETS / "photos"
+SOURCE_MEDIA_DIR = ROOT / "content" / "media-candidates" / "source-pages"
+COVER_SMALL = IMAGES / "w640"
 PHOTO_CACHE_FILE = ASSETS / "photo-cache.json"
 PHOTO_EDITORIAL_FILE = ASSETS / "photo-editorial-decisions.json"
 SOURCE_MEDIA_CACHE_FILE = ASSETS / "source-media-cache.json"
@@ -1025,7 +1027,8 @@ def source_page_media(url: str) -> dict:
         if suffix not in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
             suffix = ".jpg"
         digest = hashlib.md5(image_url.encode("utf-8")).hexdigest()[:16]
-        image_path = PHOTOS / "_sources" / f"source-{digest}{suffix}"
+        # 来源网页图片没有转载授权，只作为候选线索保存在不发布的 content/ 目录。
+        image_path = SOURCE_MEDIA_DIR / f"source-{digest}{suffix}"
         if download_url(image_url, image_path):
             path_value = rel_to(image_path, OUT)
 
@@ -2182,8 +2185,13 @@ def hero_carousel_html(page: Page, captions: bool = True) -> str:
             f'<div class="slide-cap"><strong>{html.escape(name)}</strong>'
             f'{("<span>" + html.escape(sub) + "</span>") if sub else ""}</div>'
         ) if captions else ""
-        source_attr = f'src="{html.escape(rel)}"' if idx == 0 else f'data-src="{html.escape(rel)}"'
-        inner = f'<img {source_attr} alt="{html.escape(name)}" width="1280" height="720" loading="{loading}" decoding="async">{cap}'
+        srcset = cover_srcset(img.stem, page.output.parent)
+        if idx == 0:
+            source_attr = f'src="{html.escape(rel)}"{srcset}'
+        else:
+            source_attr = f'data-src="{html.escape(rel)}"' + (srcset.replace(" srcset=", " data-srcset=") if srcset else "")
+        sizes = ' sizes="100vw"' if not captions else ' sizes="(max-width: 1080px) 100vw, 50vw"'
+        inner = f'<img {source_attr}{sizes if srcset else ""} alt="{html.escape(name)}" width="1280" height="720" loading="{loading}" decoding="async">{cap}'
         if target is not None:
             href = rel_to(target, page.output.parent)
             hidden = "false" if idx == 0 else "true"
@@ -2323,8 +2331,9 @@ def card_links(current: Page, limit: int = 10) -> str:
         rel = rel_to(page.output, current.output.parent)
         thumb = ""
         if photo_is_publishable(PHOTO_CACHE.get(f"cityphoto|{page.key}"), page.key) and (IMAGES / f"{page.key}.jpg").exists():
+            thumb_path = COVER_SMALL / f"{page.key}.jpg" if (COVER_SMALL / f"{page.key}.jpg").is_file() else IMAGES / f"{page.key}.jpg"
             thumb = (
-                f'<img src="{html.escape(rel_to(IMAGES / f"{page.key}.jpg", current.output.parent))}" alt="" '
+                f'<img src="{html.escape(rel_to(thumb_path, current.output.parent))}" alt="" '
                 'width="120" height="80" loading="lazy" decoding="async">'
             )
         cards.append(
@@ -2681,7 +2690,7 @@ def city_explorer_html(current: Page) -> str:
             cards.append(
                 f'<article class="city-card rich" {common_attrs}>'
                 f'<span class="img-frame">{badge}{fav_btn}{trip_btn}'
-                f'<img src="{html.escape(image)}" alt="{html.escape(profile["title"])}缩略图" width="800" height="480" loading="lazy" decoding="async"{img_title}></span>'
+                f'<img src="{html.escape(rel_to(COVER_SMALL / f"{page.key}.jpg", current.output.parent) if (COVER_SMALL / f"{page.key}.jpg").is_file() else image)}" alt="{html.escape(profile["title"])}缩略图" width="640" height="360" loading="lazy" decoding="async"{img_title}></span>'
                 f'{body_html}</article>'
             )
         else:
@@ -2867,7 +2876,7 @@ def home_featured_html(current: Page) -> str:
         name = prof["title"].replace("旅游攻略", "")
         cards.append(
             f'<a class="featured-card" href="{html.escape(href)}">'
-            f'<img src="{html.escape(img)}" alt="{html.escape(name)}" width="800" height="480" loading="lazy" decoding="async">'
+            f'<img src="{html.escape(rel_to(COVER_SMALL / f"{p.key}.jpg", current.output.parent) if (COVER_SMALL / f"{p.key}.jpg").is_file() else img)}" alt="{html.escape(name)}" width="640" height="360" loading="lazy" decoding="async">'
             f'<span class="featured-grad"></span>'
             f'<span class="featured-name">{html.escape(name)}</span>'
             '</a>'
@@ -4429,7 +4438,7 @@ def build_image_inventory() -> None:
             by_path.setdefault(str(entry["path"]), (key, entry))
     records = []
     hashes: dict[str, str] = {}
-    for path in sorted(list(IMAGES.glob("*")) + list(PHOTOS.rglob("*")) + list(ITEM_IMAGES.rglob("*"))):
+    for path in sorted(list(IMAGES.rglob("*")) + list(PHOTOS.rglob("*")) + list(ITEM_IMAGES.rglob("*")) + list(SOURCE_MEDIA_DIR.rglob("*"))):
         if not path.is_file() or path.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
             continue
         rel = rel_to(path, OUT)
@@ -4439,9 +4448,13 @@ def build_image_inventory() -> None:
         if not entry and path.parent == IMAGES and path.suffix == ".jpg":
             entry = PHOTO_CACHE.get(f"cityphoto|{path.stem}", {}) or {}
             cache_key = f"cityphoto|{path.stem}"
-        if path.parent == IMAGES:
+        if path.parent == COVER_SMALL:
+            subject, kind = path.stem, "封面小图"
+            entry = PHOTO_CACHE.get(f"cityphoto|{path.stem}", {}) or {}
+            cache_key = f"cityphoto|{path.stem}"
+        elif path.parent == IMAGES:
             subject, kind = path.stem, "城市封面" if path.suffix == ".jpg" else "程序生成插画"
-        elif "_sources" in path.parts:
+        elif SOURCE_MEDIA_DIR in path.parents:
             subject, kind = "来源网页截取", "来源网页媒体"
         elif path.name.startswith("scenery-"):
             subject, kind = path.parent.name, "封面衍生裁切"
@@ -4458,7 +4471,7 @@ def build_image_inventory() -> None:
             verdict = "不得发布：来源网页图片没有记录转载授权"
         elif rejection:
             verdict = f"移出展示：{rejection.get('reason', '内容审核未通过')}"
-        elif not licensed and kind in {"城市封面", "条目配图", "封面原图"}:
+        elif not licensed and kind in {"城市封面", "条目配图", "封面原图", "封面小图"}:
             verdict = "不得发布：缺少可追溯授权"
         elif rel in referenced:
             verdict = "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
@@ -4943,6 +4956,47 @@ def build_pwa_assets() -> None:
     (OUT / "sw.js").write_text(sw, encoding="utf-8")
 
 
+def build_cover_variants() -> None:
+    """为授权封面生成 640px 宽的小图，供城市卡片和手机端 srcset 使用。
+
+    只在小图缺失或封面内容变化时重新编码，避免每次构建都改写已提交的文件。
+    """
+    COVER_SMALL.mkdir(parents=True, exist_ok=True)
+    index_path = COVER_SMALL / "index.json"
+    try:
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        index = {}
+    wanted: dict[str, str] = {}
+    for cover in sorted(IMAGES.glob("*.jpg")):
+        digest = hashlib.sha256(cover.read_bytes()).hexdigest()[:16]
+        wanted[cover.stem] = digest
+        target = COVER_SMALL / cover.name
+        if target.is_file() and index.get(cover.stem) == digest:
+            continue
+        with Image.open(cover) as image:
+            image = image.convert("RGB")
+            width, height = image.size
+            if width > 640:
+                image = image.resize((640, round(height * 640 / width)), Image.Resampling.LANCZOS)
+            image.save(target, "JPEG", quality=78, optimize=True, progressive=True)
+    for stale in COVER_SMALL.glob("*.jpg"):
+        if stale.stem not in wanted:
+            stale.unlink()
+    index_path.write_text(json.dumps(wanted, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def cover_srcset(key: str, from_dir: Path) -> str:
+    """封面图的 srcset 属性（小图存在时）。"""
+    small = COVER_SMALL / f"{key}.jpg"
+    large = IMAGES / f"{key}.jpg"
+    if not small.is_file() or not large.is_file():
+        return ""
+    return (
+        f' srcset="{html.escape(rel_to(small, from_dir))} 640w, {html.escape(rel_to(large, from_dir))} 1280w"'
+    )
+
+
 def prepare_image_output() -> None:
     """Clean generated image output without deleting versioned photo derivatives."""
     load_photo_cache()
@@ -4962,7 +5016,7 @@ def prepare_image_output() -> None:
             preserved.add(expected.resolve())
 
     for child in list(IMAGES.iterdir()):
-        if child.resolve() in preserved:
+        if child.resolve() in preserved or child.resolve() == COVER_SMALL.resolve():
             continue
         if child.is_dir():
             shutil.rmtree(child)
@@ -4974,6 +5028,7 @@ def build() -> None:
     global ASSET_BUILD
     ASSETS.mkdir(parents=True, exist_ok=True)
     prepare_image_output()
+    build_cover_variants()
     if ITEM_IMAGES.exists():
         shutil.rmtree(ITEM_IMAGES)
     ITEM_IMAGES.mkdir(parents=True, exist_ok=True)

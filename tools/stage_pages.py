@@ -46,7 +46,7 @@ ASSET_FILES = (
 # 图片按引用发布：只复制页面和脚本实际用到的图片。site/assets/photos 里还有封面原图、
 # 衍生裁切和来源网页截取（没有转载授权）等非发布素材，不能整目录复制到公开站点。
 IMAGE_REFERENCE = re.compile(r"assets/((?:images|photos|item-images)/[^\"'?#)\s]+\.(?:jpe?g|png|webp|gif))", re.I)
-UNPUBLISHABLE_MARKERS = ("/_sources/", "cityphoto-src")
+UNPUBLISHABLE_MARKERS = ("/_sources/", "media-candidates", "cityphoto-src")
 
 
 def copy_required(source: Path, destination: Path) -> None:

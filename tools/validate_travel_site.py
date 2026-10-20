@@ -6,6 +6,7 @@ from urllib.parse import unquote, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SITE = ROOT / "site"
 
 
 class LinkParser(HTMLParser):
@@ -50,7 +51,7 @@ def split_local_link(link: str) -> tuple[str, str]:
 
 
 def main() -> None:
-    html_files = sorted(ROOT.rglob("*.html"))
+    html_files = sorted(SITE.rglob("*.html"))
     ids_by_file: dict[Path, set[str]] = {}
     missing: list[tuple[str, str]] = []
     missing_anchors: list[tuple[str, str]] = []
@@ -62,11 +63,11 @@ def main() -> None:
         parser = parse_html(path)
         ids_by_file[path.resolve()] = parser.ids
         duplicate_ids.extend(
-            (str(path.relative_to(ROOT)), anchor_id)
+            (str(path.relative_to(SITE)), anchor_id)
             for anchor_id in parser.duplicate_ids
         )
         images_missing_alt.extend(
-            (str(path.relative_to(ROOT)), source)
+            (str(path.relative_to(SITE)), source)
             for source in parser.images_missing_alt
         )
         for link in parser.links:
@@ -76,31 +77,31 @@ def main() -> None:
             target, fragment = split_local_link(link)
             if not target:
                 if fragment and fragment not in parser.ids:
-                    missing_anchors.append((str(path.relative_to(ROOT)), link))
+                    missing_anchors.append((str(path.relative_to(SITE)), link))
                 continue
 
             target_path = (path.parent / unquote(target)).resolve()
             try:
-                target_path.relative_to(ROOT.resolve())
+                target_path.relative_to(SITE.resolve())
             except ValueError:
                 continue
 
             if not target_path.exists():
-                missing.append((str(path.relative_to(ROOT)), link))
+                missing.append((str(path.relative_to(SITE)), link))
                 continue
             if target_path.is_file() and target_path.stat().st_size == 0:
-                empty_local_files.add((str(path.relative_to(ROOT)), link))
+                empty_local_files.add((str(path.relative_to(SITE)), link))
 
             if fragment and target_path.suffix.lower() == ".html":
                 if target_path not in ids_by_file:
                     ids_by_file[target_path] = parse_html(target_path).ids
                 if fragment not in ids_by_file[target_path]:
-                    missing_anchors.append((str(path.relative_to(ROOT)), link))
+                    missing_anchors.append((str(path.relative_to(SITE)), link))
 
-    print(f"root={ROOT}")
+    print(f"site={SITE}")
     print(f"htmlFiles={len(html_files)}")
-    print(f"cityHtml={len(list((ROOT / 'cities').glob('*.html')))}")
-    print(f"cityMarkdown={len(list((ROOT / '城市').glob('*.md')))}")
+    print(f"cityHtml={len(list((SITE / 'cities').glob('*.html')))}")
+    print(f"cityMarkdown={len(list((ROOT / 'content' / '城市').glob('*.md')))}")
     print(f"missingLocalLinks={len(missing)}")
     print(f"missingAnchors={len(missing_anchors)}")
     print(f"duplicateIds={len(duplicate_ids)}")

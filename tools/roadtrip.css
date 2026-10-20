@@ -15,7 +15,7 @@
 }
 .rt-planner-panel {
   position: sticky;
-  top: 124px;
+  top: calc(var(--header-h, 64px) + 16px);
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -261,6 +261,11 @@
 .rt-source-note { margin: 0; color: var(--muted); font-size: 13px; }
 .rt-source-links { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
 .rt-source-links a { padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; }
+.rt-results { scroll-margin-top: calc(var(--header-h, 64px) + 12px); }
+.rt-estimate-warning { margin: 0 0 14px; padding: 12px 14px; border: 1px solid #e3c27a; border-left-width: 4px; border-radius: 10px; background: #fff8e8; color: #5b4310; }
+.rt-estimate-warning strong { display: block; margin-bottom: 4px; }
+.rt-estimate-warning p { margin: 0 0 10px; font-size: 13px; line-height: 1.6; }
+.rt-metric.is-rough strong { color: #8a5a00; }
 .rt-price-note { margin-top: 10px; padding: 10px 12px; background: #f4f7f2; color: var(--muted); font-size: 12px; }
 html[data-theme="dark"] .rt-planner-panel,
 html[data-theme="dark"] .rt-results,
@@ -271,6 +276,8 @@ html[data-theme="dark"] .rt-step-actions button,
 html[data-theme="dark"] .rt-day,
 html[data-theme="dark"] .rt-budget div { background: #202a28; }
 html[data-theme="dark"] .rt-map-empty { background: #18211f; }
+html[data-theme="dark"] .rt-estimate-warning { background: #2e2716; border-color: #8a6a2a; color: #f1dfb4; }
+html[data-theme="dark"] .rt-metric.is-rough strong { color: #f0c46a; }
 @media (max-width: 1000px) {
   .rt-workbench { grid-template-columns: 1fr; }
   .rt-planner-panel { position: static; }

@@ -9,9 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 class ProductContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.home = (ROOT / "index.html").read_text(encoding="utf-8")
-        cls.user = (ROOT / "user.html").read_text(encoding="utf-8")
-        cls.qingdao = (ROOT / "cities" / "qingdao.html").read_text(encoding="utf-8")
+        cls.home = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
+        cls.user = (ROOT / "site" / "user.html").read_text(encoding="utf-8")
+        cls.qingdao = (ROOT / "site" / "cities" / "qingdao.html").read_text(encoding="utf-8")
 
     def test_source_files_are_not_excluded_from_version_control(self):
         gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
@@ -20,7 +20,7 @@ class ProductContractTests(unittest.TestCase):
             for line in gitignore.splitlines()
             if line.strip() and not line.lstrip().startswith("#")
         }
-        for source_path in ("tools/", "城市/", "记录.md"):
+        for source_path in ("tools/", "content/", "content/城市/", "content/记录.md"):
             with self.subTest(source_path=source_path):
                 self.assertNotIn(source_path, ignored_lines)
 
@@ -40,10 +40,10 @@ class ProductContractTests(unittest.TestCase):
     def test_home_city_catalog_is_progressively_disclosed(self):
         self.assertIn('id="cityLoadMore"', self.home)
         self.assertIn('id="cityExplorerSummary"', self.home)
-        self.assertIn("CITY_PAGE_SIZE", (ROOT / "assets" / "travel.js").read_text(encoding="utf-8"))
+        self.assertIn("CITY_PAGE_SIZE", (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8"))
 
     def test_home_uses_a_curated_city_subset_while_catalog_remains_complete(self):
-        catalog = (ROOT / "city-guides.html").read_text(encoding="utf-8")
+        catalog = (ROOT / "site" / "city-guides.html").read_text(encoding="utf-8")
         self.assertEqual(self.home.count('<article class="city-card '), 24)
         self.assertEqual(catalog.count('<article class="city-card '), 222)
         self.assertIn('data-catalog-scope="curated"', self.home)
@@ -62,7 +62,7 @@ class ProductContractTests(unittest.TestCase):
             self.assertNotRegex(attrs, r'(?:^|\s)src="')
             self.assertRegex(attrs, r'(?:^|\s)data-src="[^"]+"')
         self.assertIn('class="hero-pause"', self.home)
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         self.assertIn("function hydrateSlide", script)
         self.assertIn('prefers-reduced-motion: reduce', script)
 
@@ -75,8 +75,8 @@ class ProductContractTests(unittest.TestCase):
                 self.assertIn(marker, source)
 
     def test_city_catalog_exposes_review_status_filter_and_url_state(self):
-        catalog = (ROOT / "city-guides.html").read_text(encoding="utf-8")
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        catalog = (ROOT / "site" / "city-guides.html").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         for marker in (
             'id="cityReviewFilter"',
             'data-review="reviewed"',
@@ -90,8 +90,8 @@ class ProductContractTests(unittest.TestCase):
                 self.assertIn(marker, script)
 
     def test_global_scroll_feedback_does_not_run_unthrottled_listeners(self):
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
-        css = (ROOT / "assets" / "travel.css").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
+        css = (ROOT / "site" / "assets" / "travel.css").read_text(encoding="utf-8")
         self.assertNotIn('addEventListener("scroll"', script)
         self.assertNotIn("window.scrollY", script)
         self.assertIn("IntersectionObserver", script)
@@ -99,8 +99,8 @@ class ProductContractTests(unittest.TestCase):
         self.assertIn("transform: scaleX(0)", css)
 
     def test_global_search_is_a_typed_accessible_progressive_enhancement(self):
-        home = (ROOT / "index.html").read_text(encoding="utf-8")
-        legacy_script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        home = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
+        legacy_script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         typed_source = (ROOT / "frontend" / "src" / "site-search.ts").read_text(encoding="utf-8")
         self.assertIn('role="combobox"', home)
         self.assertIn('aria-autocomplete="list"', home)
@@ -116,8 +116,8 @@ class ProductContractTests(unittest.TestCase):
                 self.assertIn(marker, typed_source)
 
     def test_lightbox_has_keyboard_and_focus_lifecycle_without_layout_animation(self):
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
-        css = (ROOT / "assets" / "travel.css").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
+        css = (ROOT / "site" / "assets" / "travel.css").read_text(encoding="utf-8")
         self.assertNotIn("lb.innerHTML", script)
         self.assertIn('setAttribute("role", "dialog")', script)
         self.assertIn('setAttribute("aria-modal", "true")', script)
@@ -127,27 +127,27 @@ class ProductContractTests(unittest.TestCase):
 
     def test_skip_link_is_prerendered_for_no_script_navigation(self):
         for relative_path in ("index.html", "cities/qingdao.html", "user.html"):
-            page = (ROOT / relative_path).read_text(encoding="utf-8")
+            page = (ROOT / "site" / relative_path).read_text(encoding="utf-8")
             self.assertIn('<a class="skip-link" href="#mainContent">跳到主要内容</a>', page)
             self.assertIn('<main id="mainContent" tabindex="-1">', page)
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         self.assertNotIn('skip.textContent = "跳到主要内容"', script)
 
     def test_city_catalog_uses_unique_indices_and_responsive_disclosure(self):
-        catalog = (ROOT / "city-guides.html").read_text(encoding="utf-8")
+        catalog = (ROOT / "site" / "city-guides.html").read_text(encoding="utf-8")
         indices = [int(value) for value in re.findall(r'data-index="(\d+)"', catalog)]
         self.assertEqual(indices, list(range(222)))
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         self.assertIn('matchMedia("(max-width: 640px)").matches ? 12', script)
         self.assertIn('matchMedia("(max-width: 1100px)").matches ? 24', script)
 
     def test_city_catalog_does_not_nest_action_buttons_inside_links(self):
-        catalog = (ROOT / "city-guides.html").read_text(encoding="utf-8")
+        catalog = (ROOT / "site" / "city-guides.html").read_text(encoding="utf-8")
         self.assertEqual(catalog.count('<article class="city-card '), 222)
         self.assertEqual(catalog.count('class="city-card-title"'), 222)
         self.assertNotIn('<a class="city-card rich"', catalog)
         self.assertNotIn('<a class="city-card noimg"', catalog)
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         self.assertIn("card.dataset.href", script)
 
     def test_city_page_does_not_embed_the_full_destination_catalog(self):
@@ -166,13 +166,13 @@ class ProductContractTests(unittest.TestCase):
         self.assertLessEqual(self.qingdao.count('class="destination-city'), 4)
 
     def test_recent_search_history_participates_in_local_backup_and_reset(self):
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         self.assertIn('"tay_search_recent"', script)
         self.assertRegex(script, r'STORAGE_ARRAY_KEYS[^\n]+tay_search_recent')
         self.assertRegex(script, r'ucResetAll[\s\S]+tay_search_recent')
 
     def test_trip_finder_state_is_shareable_and_restored_from_the_url(self):
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         self.assertIn("function readFinderState()", script)
         self.assertIn("function writeFinderState()", script)
         self.assertIn('history.replaceState', script)
@@ -187,8 +187,9 @@ class ProductContractTests(unittest.TestCase):
         self.assertIn('class="mobile-primary-nav"', self.home)
 
     def test_mobile_layout_avoids_full_width_sections_plus_side_margins(self):
-        css = (ROOT / "assets" / "travel.css").read_text(encoding="utf-8")
-        self.assertIn("width: calc(100% - 24px)", css)
+        css = (ROOT / "site" / "assets" / "travel.css").read_text(encoding="utf-8")
+        self.assertIn("width: min(var(--container), calc(100% - 2 * var(--gutter)))", css)
+        self.assertRegex(css, r"body\s*\{[^}]*overflow-x:\s*hidden", re.S)
         self.assertRegex(css, r"\.user-tab\s*\{[^}]*white-space:\s*nowrap", re.S)
         self.assertIn("scroll-snap-type: x mandatory", css)
         self.assertNotRegex(
@@ -197,17 +198,25 @@ class ProductContractTests(unittest.TestCase):
         )
 
     def test_mobile_navigation_respects_safe_areas_and_touch_targets(self):
-        css = (ROOT / "assets" / "travel.css").read_text(encoding="utf-8")
+        css = (ROOT / "site" / "assets" / "travel.css").read_text(encoding="utf-8")
         self.assertIn("env(safe-area-inset-bottom)", css)
-        self.assertRegex(css, r"\.mobile-quickbar a\s*\{[^}]*min-height:\s*44px", re.S)
+        self.assertRegex(css, r"\.mobile-tabbar \.tab\s*\{[^}]*min-height:\s*44px", re.S)
+        self.assertIn('class="mobile-tabbar"', self.qingdao)
+        tabbar = self.qingdao.split('class="mobile-tabbar"', 1)[1].split("</nav>", 1)[0]
+        self.assertIn('href="../plan.html"', tabbar)
         self.assertIn("touch-action: manipulation", css)
 
-    def test_mobile_hero_uses_a_compact_horizontal_decision_strip(self):
-        css = (ROOT / "assets" / "travel.css").read_text(encoding="utf-8")
+    def test_mobile_month_calendar_is_a_compact_horizontal_strip(self):
+        css = (ROOT / "site" / "assets" / "travel.css").read_text(encoding="utf-8")
         self.assertRegex(
             css,
-            r"@media\s*\(max-width:\s*720px\)[\s\S]*?\.hero-points\s*\{[^}]*overflow-x:\s*auto[^}]*scroll-snap-type:\s*x mandatory",
+            r"@media\s*\(max-width:\s*720px\)[\s\S]*?\.month-grid\s*\{[^}]*overflow-x:\s*auto[^}]*scroll-snap-type:\s*x mandatory",
         )
+        # 北京有按当地气候写的月份表；青岛原来是按月轮换景点的模板，已改成如实说明。
+        beijing = (ROOT / "site" / "cities" / "beijing.html").read_text(encoding="utf-8")
+        self.assertEqual(12, beijing.count('class="month-card"'))
+        self.assertEqual(0, self.qingdao.count('class="month-card"'))
+        self.assertIn("这座城市还没有逐月核实过的资料", self.qingdao)
 
     def test_user_center_uses_keyboard_operable_aria_tabs(self):
         self.assertIn('role="tablist"', self.user)
@@ -215,7 +224,7 @@ class ProductContractTests(unittest.TestCase):
         self.assertEqual(self.user.count('role="tabpanel"'), 9)
         self.assertIn('aria-selected="true"', self.user)
         self.assertIn('aria-controls="user-panel-profile"', self.user)
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         for marker in ('"ArrowRight"', '"ArrowLeft"', '"Home"', '"End"', "aria-selected"):
             with self.subTest(marker=marker):
                 self.assertIn(marker, script)
@@ -231,7 +240,7 @@ class ProductContractTests(unittest.TestCase):
             ):
                 with self.subTest(marker=marker):
                     self.assertIn(marker, page)
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         for marker in (
             "function renderTripDock",
             'window.addEventListener("tay:storage-change"',
@@ -243,7 +252,7 @@ class ProductContractTests(unittest.TestCase):
                 self.assertIn(marker, script)
 
     def test_trip_workspace_has_mobile_sheet_and_desktop_rail_layouts(self):
-        css = (ROOT / "assets" / "travel.css").read_text(encoding="utf-8")
+        css = (ROOT / "site" / "assets" / "travel.css").read_text(encoding="utf-8")
         self.assertIn(".trip-dock", css)
         self.assertRegex(css, r"\.trip-dock\s*\{[^}]*position:\s*fixed[^}]*right:\s*0", re.S)
         self.assertRegex(
@@ -273,7 +282,7 @@ class ProductContractTests(unittest.TestCase):
         self.assertRegex(match.group(1), r"春|夏|秋|冬|全年|月")
 
     def test_public_pages_do_not_render_unverified_remote_images(self):
-        pages = [ROOT / "index.html", *sorted((ROOT / "cities").glob("*.html"))]
+        pages = [ROOT / "site" / "index.html", *sorted((ROOT / "site" / "cities").glob("*.html"))]
         remote_images = []
         source_media_images = []
         for page in pages:
@@ -296,10 +305,13 @@ class ProductContractTests(unittest.TestCase):
         )
 
     def test_unreviewed_city_does_not_use_filesystem_mtime_as_travel_fact_date(self):
-        beijing = (ROOT / "cities" / "beijing.html").read_text(encoding="utf-8")
-        roadtrip_data = (ROOT / "assets" / "roadtrip-data.js").read_text(encoding="utf-8")
-        self.assertIn("资料整理日期：未核验", beijing)
-        self.assertRegex(roadtrip_data, r'"key":"beijing"[^}]*"updatedAt":"未核验"')
+        # 南京还没有按官方来源复核，必须显示“未核验”；北京已标注真实核验日期。
+        nanjing = (ROOT / "site" / "cities" / "nanjing.html").read_text(encoding="utf-8")
+        beijing = (ROOT / "site" / "cities" / "beijing.html").read_text(encoding="utf-8")
+        roadtrip_data = (ROOT / "site" / "assets" / "roadtrip-data.js").read_text(encoding="utf-8")
+        self.assertIn("资料整理日期：未核验", nanjing)
+        self.assertRegex(roadtrip_data, r'"key":"nanjing"[^}]*"updatedAt":"未核验"')
+        self.assertIn("资料整理日期：2026-10-20", beijing)
 
     def test_content_audit_exposes_raw_evidence_and_unreviewed_cities(self):
         audit = (ROOT / "docs" / "reports" / "内容与图片体检.md").read_text(encoding="utf-8")
@@ -309,7 +321,7 @@ class ProductContractTests(unittest.TestCase):
         self.assertIn("封面衍生图不计为独立素材", audit)
 
     def test_local_storage_has_version_migration_and_cross_tab_contract(self):
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         for marker in (
             "tay_storage_meta",
             "STORAGE_SCHEMA",
@@ -321,11 +333,58 @@ class ProductContractTests(unittest.TestCase):
             with self.subTest(marker=marker):
                 self.assertIn(marker, script)
 
+    def test_city_cards_can_add_places_to_a_specific_day_of_a_plan(self):
+        buttons = re.findall(r'<button class="poi-add"[^>]*>', self.qingdao)
+        self.assertGreaterEqual(len(buttons), 8)
+        for attrs in buttons[:3]:
+            self.assertIn("data-plan-add", attrs)
+            self.assertIn('data-city-key="qingdao"', attrs)
+            self.assertRegex(attrs, r'data-href="cities/qingdao\.html#[a-z-]+-item-[0-9a-f]{10}"')
+        anchors = set(re.findall(r'data-href="cities/qingdao\.html#([^"]+)"', self.qingdao))
+        for anchor in anchors:
+            self.assertIn(f'id="{anchor}"', self.qingdao)
+        self.assertNotIn("data-plan-add", self.home)
+
+    def test_discovery_shows_active_filters_sorting_and_no_result_help(self):
+        destinations = (ROOT / "site" / "destinations.html").read_text(encoding="utf-8")
+        for marker in ('id="citySort"', 'id="finderChips"', 'id="cityExplorerEmpty"', 'id="cityExplorerSuggest"'):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, destinations)
+        self.assertRegex(destinations, r'data-city="[^"]+"')
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
+        for marker in ("function renderFinderChips", "function clearFilter", 'params.get("sort")', "style.order"):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, script)
+
+    def test_home_offers_to_continue_saved_plans_without_showing_empty_shells(self):
+        self.assertIn('id="homeContinue" aria-labelledby="homeContinueTitle" hidden', self.home)
+        self.assertIn('class="hero-search"', self.home)
+        self.assertIn('action="destinations.html"', self.home)
+
+    def test_trip_planner_page_and_storage_are_wired_into_backup_and_reset(self):
+        planner = (ROOT / "site" / "plan.html").read_text(encoding="utf-8")
+        self.assertIn('id="planApp"', planner)
+        self.assertIn("<noscript>", planner)
+        self.assertIn('aria-current="page">行程计划</a>', planner)
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
+        self.assertRegex(script, r'STORAGE_ARRAY_KEYS[^\n]+"tay_plans"')
+        self.assertRegex(script, r'STORAGE_STRING_KEYS[^\n]+"tay_active_plan"')
+        self.assertRegex(script, r'ucResetAll[\s\S]+"tay_plans"[\s\S]+"tay_plans_backup"')
+        stage = (ROOT / "tools" / "stage_pages.py").read_text(encoding="utf-8")
+        self.assertIn('"plan.html"', stage)
+        self.assertIn("travel-chunk-*.js", stage)
+
+    def test_planner_can_restore_a_backup_from_the_empty_state_and_cache_guides(self):
+        source = (ROOT / "frontend" / "src" / "planner-page.ts").read_text(encoding="utf-8")
+        empty = source[source.index("function renderEmpty"):source.index("function renderShortlist")]
+        self.assertIn('"data-action": "import-json"', empty)
+        self.assertIn("cacheGuidesFor(plan)", source)
+
     def test_user_center_exposes_local_data_backup_and_restore(self):
         for control_id in ("dataExport", "dataImport", "dataTransferStatus"):
             with self.subTest(control_id=control_id):
                 self.assertIn(f'id="{control_id}"', self.user)
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         self.assertIn("dataExport", script)
         self.assertIn("dataImport", script)
         self.assertIn("importData", script)

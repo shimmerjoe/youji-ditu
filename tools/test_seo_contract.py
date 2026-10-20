@@ -9,10 +9,10 @@ PUBLIC_BASE = "https://shimmerjoe.github.io/youji-ditu/"
 class SeoContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.index = (ROOT / "index.html").read_text(encoding="utf-8")
-        cls.city = (ROOT / "cities" / "qingdao.html").read_text(encoding="utf-8")
-        cls.sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8") if (ROOT / "sitemap.xml").exists() else ""
-        cls.robots = (ROOT / "robots.txt").read_text(encoding="utf-8") if (ROOT / "robots.txt").exists() else ""
+        cls.index = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
+        cls.city = (ROOT / "site" / "cities" / "qingdao.html").read_text(encoding="utf-8")
+        cls.sitemap = (ROOT / "site" / "sitemap.xml").read_text(encoding="utf-8") if (ROOT / "site" / "sitemap.xml").exists() else ""
+        cls.robots = (ROOT / "site" / "robots.txt").read_text(encoding="utf-8") if (ROOT / "site" / "robots.txt").exists() else ""
 
     def test_pages_expose_absolute_canonical_and_share_metadata(self):
         self.assertIn(f'<link rel="canonical" href="{PUBLIC_BASE}">', self.index)

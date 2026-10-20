@@ -17,13 +17,21 @@ from urllib.request import Request, urlopen
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 
-ROOT = Path(__file__).resolve().parents[1]
-CITY_DIR = ROOT / "城市"
-OUT = ROOT
+try:
+    from tools.project_paths import CITY_SOURCES, RECORD_SOURCE, ROOT, SITE
+    from tools.site_icons import icon
+except ModuleNotFoundError:  # Direct execution from the tools directory.
+    from project_paths import CITY_SOURCES, RECORD_SOURCE, ROOT, SITE
+    from site_icons import icon
+
+CITY_DIR = CITY_SOURCES
+OUT = SITE
 ASSETS = OUT / "assets"
 IMAGES = ASSETS / "images"
 ITEM_IMAGES = ASSETS / "item-images"
 PHOTOS = ASSETS / "photos"
+SOURCE_MEDIA_DIR = ROOT / "content" / "media-candidates" / "source-pages"
+COVER_SMALL = IMAGES / "w640"
 PHOTO_CACHE_FILE = ASSETS / "photo-cache.json"
 PHOTO_EDITORIAL_FILE = ASSETS / "photo-editorial-decisions.json"
 SOURCE_MEDIA_CACHE_FILE = ASSETS / "source-media-cache.json"
@@ -42,6 +50,7 @@ FETCH_CITY_KEYS = {
 PHOTO_CACHE: dict[str, dict] = {}
 PHOTO_CACHE_LOADED = False
 PHOTO_EDITORIAL_DECISIONS: dict[str, dict] = {}
+PHOTO_REVIEWED_SOURCES: dict[str, set[str]] = {}
 PHOTO_EDITORIAL_LOADED = False
 SOURCE_MEDIA_CACHE: dict[str, dict] = {}
 SOURCE_MEDIA_CACHE_LOADED = False
@@ -133,7 +142,7 @@ class AnchorIndex:
 
 
 PAGES = [
-    Page(ROOT / "记录.md", OUT / "index.html", "record", "综合旅游攻略记录", "跨城市总览、场景索引、季节索引和路线模板", "#2f6f73", "china travel landscape"),
+    Page(RECORD_SOURCE, OUT / "index.html", "record", "综合旅游攻略记录", "跨城市总览、场景索引、季节索引和路线模板", "#2f6f73", "china travel landscape"),
     Page(CITY_DIR / "贵州_贵阳.md", CITIES_OUT / "guiyang.html", "guiyang", "贵州贵阳旅游攻略", "城市山林、老城烟火、酸汤和避暑", "#25736a", "guiyang guizhou china"),
     Page(CITY_DIR / "贵州_兴义.md", CITIES_OUT / "xingyi.html", "xingyi", "贵州兴义旅游攻略", "万峰林、马岭河、布依村寨和羊肉粉", "#5c7a31", "xingyi guizhou karst"),
     Page(CITY_DIR / "贵州_安顺.md", CITIES_OUT / "anshun.html", "anshun", "贵州安顺旅游攻略", "黄果树、龙宫、屯堡和裹卷凉粉", "#7b6a2f", "anshun huangguoshu waterfall guizhou"),
@@ -174,6 +183,11 @@ PAGES = [
     Page(CITY_DIR / "江苏_南京.md", CITIES_OUT / "nanjing.html", "nanjing", "江苏南京旅游攻略", "中山陵、南博、秦淮夜景和鸭血粉丝", "#7f4f43", "nanjing china"),
     Page(CITY_DIR / "广西_桂林.md", CITIES_OUT / "guilin.html", "guilin", "广西桂林旅游攻略", "漓江山水、阳朔骑行、象鼻山和米粉", "#2f7c70", "guilin karst landscape"),
 ]
+
+
+# 首页与跨城市总览都由 记录.md 生成；它们不是城市页，很多城市专属逻辑要跳过。
+OVERVIEW_PAGE = Page(RECORD_SOURCE, OUT / "overview.html", "overview", "跨城市旅游攻略总览", "跨城市总览、时间成本、场景索引、季节索引和路线模板", "#2f6f73", "")
+HUB_KEYS = {"record", "overview"}
 
 
 NAV_GROUPS = [
@@ -483,6 +497,8 @@ def slugify(text: str, used: set[str]) -> str:
         "核心景点": "attractions",
         "行程路线": "routes",
         "街区、夜市和市场": "streets",
+        "街区/夜市/市场": "streets",
+        "自然/远郊/周边": "nature",
         "街区、商圈和夜市": "streets",
         "市场和市井": "markets",
         "美食总表": "food",
@@ -667,6 +683,9 @@ def split_index_terms(text: str) -> list[str]:
 
 def add_anchor_term(terms: dict[str, str], term: str, href: str, prefer: bool = False) -> None:
     term = term.strip(" -·[]【】「」")
+    # 日期、价格、时间这类纯数字片段不是可以跳转的地点名。
+    if re.fullmatch(r"[\d\s\-—–:：./年月日元号%~～]+", term):
+        return
     if 2 <= len(term) <= 28 and term not in FACT_LABELS:
         if prefer or term not in terms:
             terms[term] = href
@@ -788,7 +807,7 @@ def save_photo_cache() -> None:
 
 def load_photo_editorial_decisions() -> None:
     """Load product-fit decisions separately from factual rights metadata."""
-    global PHOTO_EDITORIAL_LOADED, PHOTO_EDITORIAL_DECISIONS
+    global PHOTO_EDITORIAL_LOADED, PHOTO_EDITORIAL_DECISIONS, PHOTO_REVIEWED_SOURCES
     if PHOTO_EDITORIAL_LOADED:
         return
     PHOTO_EDITORIAL_DECISIONS = {}
@@ -800,6 +819,9 @@ def load_photo_editorial_decisions() -> None:
         if payload.get("schemaVersion") != 1 or not isinstance(payload.get("decisions"), dict):
             raise RuntimeError(f"Unsupported photo editorial schema: {PHOTO_EDITORIAL_FILE}")
         PHOTO_EDITORIAL_DECISIONS = payload["decisions"]
+        PHOTO_REVIEWED_SOURCES = {
+            str(day): set(sources) for day, sources in (payload.get("reviewedSources") or {}).items()
+        }
     PHOTO_EDITORIAL_LOADED = True
 
 
@@ -828,6 +850,7 @@ def request_json(url: str) -> dict | None:
         return None
 
 
+NON_PHOTO_MIMES = {"image/svg+xml", "image/vnd.djvu", "image/x-djvu", "image/tiff"}
 PLACEHOLDER_PHOTO_LICENSES = {"", "unknown", "wikipedia", "wikimedia commons"}
 
 
@@ -857,6 +880,18 @@ def photo_editorial_rejection(city_key: str, entry: dict | None) -> dict | None:
     if str(decision.get("source", "")).strip() != str(entry.get("source", "")).strip():
         return None
     return decision
+
+
+def photo_content_review_date(entry: dict | None) -> str:
+    """人工逐张核对过画面的来源，记在审核文件的 reviewedSources 里（按日期分组）。"""
+    if not entry:
+        return ""
+    load_photo_editorial_decisions()
+    source = str(entry.get("source", "")).strip()
+    for reviewed_on, sources in sorted(PHOTO_REVIEWED_SOURCES.items(), reverse=True):
+        if source in sources:
+            return reviewed_on
+    return ""
 
 
 def photo_is_publishable(entry: dict | None, city_key: str | None = None) -> bool:
@@ -1012,7 +1047,8 @@ def source_page_media(url: str) -> dict:
         if suffix not in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
             suffix = ".jpg"
         digest = hashlib.md5(image_url.encode("utf-8")).hexdigest()[:16]
-        image_path = PHOTOS / "_sources" / f"source-{digest}{suffix}"
+        # 来源网页图片没有转载授权，只作为候选线索保存在不发布的 content/ 目录。
+        image_path = SOURCE_MEDIA_DIR / f"source-{digest}{suffix}"
         if download_url(image_url, image_path):
             path_value = rel_to(image_path, OUT)
 
@@ -1186,6 +1222,9 @@ def commons_photo_for(page: Page, title: str, kind: str) -> tuple[Path | None, d
     key = hashlib.md5(f"{page.key}|{kind}|{title}".encode("utf-8")).hexdigest()
     cached = PHOTO_CACHE.get(key)
     if cached:
+        # 人工逐张核对过画面与条目不符的，按“item:缓存键”记录拒绝，来源不变就一直不用。
+        if photo_editorial_rejection(f"item:{key}", cached):
+            return None, None
         if photo_has_republication_rights(cached):
             path = OUT / cached["path"]
             if path.exists():
@@ -1214,7 +1253,10 @@ def commons_photo_for(page: Page, title: str, kind: str) -> tuple[Path | None, d
             info = (candidate.get("imageinfo") or [{}])[0]
             mime = info.get("mime", "")
             image_url = info.get("thumburl") or info.get("url")
-            if not image_url or not mime.startswith("image/") or mime == "image/svg+xml":
+            if not image_url or not mime.startswith("image/") or mime in NON_PHOTO_MIMES:
+                continue
+            # 古籍、期刊扫描（djvu/pdf/tiff）常被关键词搜到，但不是景点照片。
+            if str(candidate.get("title", "")).lower().endswith((".djvu", ".pdf", ".tif", ".tiff")):
                 continue
             suffix = Path(urlparse(image_url).path).suffix.lower()
             if suffix not in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
@@ -1330,7 +1372,7 @@ def city_photo_for(page: Page) -> tuple[Path, dict] | tuple[None, None]:
             info = (candidate.get("imageinfo") or [{}])[0]
             mime = info.get("mime", "")
             image_url = info.get("thumburl") or info.get("url")
-            if not image_url or image_url in seen_urls or not mime.startswith("image/") or mime == "image/svg+xml":
+            if not image_url or image_url in seen_urls or not mime.startswith("image/") or mime in NON_PHOTO_MIMES:
                 continue
             tw = info.get("thumbwidth") or info.get("width") or 0
             th = info.get("thumbheight") or info.get("height") or 0
@@ -1540,104 +1582,450 @@ def item_summary(node: dict, kind: str) -> str:
     return text[:150]
 
 
-LINKIFY_SECTION_IDS = {"overview", "quick", "time-cost", "scenes", "seasons", "source-map", "months", "seasonal", "routes", "daytrip-decisions", "checklist"}
+LINKIFY_SECTION_IDS = {"overview", "quick", "time-cost", "scenes", "seasons", "source-map", "months", "seasonal", "routes", "daytrip-decisions", "checklist", "areas"}
+
+# 每类章节对应一种阅读组件，替代原来“标签 + 文本”逐层缩进的大纲样式。
+SECTION_LAYOUTS = {
+    "overview": "facts",
+    "quick": "scenarios",
+    "months": "months",
+    "routes": "routes",
+    "daytrip-decisions": "routes",
+    "checklist": "checklist",
+    "warnings": "tips",
+    "areas": "areas",
+    "hours-prices": "cards",
+    "seasonal": "cards",
+    "attractions": "cards",
+    "food": "cards",
+    "prep": "rows",
+    "stay": "rows",
+    "transport": "rows",
+    "budget": "rows",
+}
+SCENARIO_ICONS = (
+    (("半天", "半日"), "clock"),
+    (("雨",), "umbrella"),
+    (("亲子", "儿童", "带娃"), "child"),
+    (("摄影", "拍照", "出片"), "camera"),
+    (("夜",), "night"),
+    (("美食", "吃"), "food"),
+    (("自驾", "开车"), "car"),
+    (("1 天", "1天", "一天", "1日"), "sun"),
+    (("天", "日"), "calendar"),
+)
+CARD_LEAD_LABELS = ("介绍", "看点", "玩法", "特色", "定位")
+CARD_VISIBLE_FACTS = 4
 
 
-def render_item_header(page: Page, node: dict, section_id: str | None, depth: int, anchors: dict[str, str] | None, current_id: str | None) -> tuple[str, str | None]:
-    label, body = split_label(node["text"])
-    if label:
-        text_html = f'<span class="item-label">{inline_markup(label, anchors, current_id)}</span><span class="item-body">{inline_markup(body, anchors, current_id)}</span>'
-    else:
-        text_html = f'<span class="item-body">{inline_markup(node["text"], anchors, current_id)}</span>'
-    if not should_show_item_visual(section_id, depth, node):
-        return text_html, None
+def scenario_icon(label: str) -> str:
+    for keys, name in SCENARIO_ICONS:
+        if any(key in label for key in keys):
+            return name
+    return "spark"
+
+
+def section_layout(section_id: str | None, nodes: list[dict]) -> str:
+    layout = SECTION_LAYOUTS.get(section_id or "")
+    if layout:
+        return layout
+    if not nodes:
+        return "bullets"
+    with_children = sum(1 for node in nodes if node["children"])
+    if with_children * 2 >= len(nodes):
+        return "cards"
+    labelled = sum(1 for node in nodes if split_label(node["text"])[0])
+    if labelled * 2 >= len(nodes):
+        return "rows"
+    return "bullets"
+
+
+def id_attr(anchor_id: str | None) -> str:
+    return f' id="{html.escape(anchor_id)}"' if anchor_id else ""
+
+
+def render_sub_list(nodes: list[dict], anchors: dict[str, str] | None, depth: int = 1) -> str:
+    """Render deeper outline levels as a compact list instead of nested pills."""
+    if not nodes:
+        return ""
+    items = []
+    for node in nodes:
+        label, body = split_label(node["text"])
+        if label and body:
+            text_html = f'<strong>{inline_markup(label, anchors)}</strong><span>{inline_markup(body, anchors)}</span>'
+        else:
+            text_html = f'<span>{inline_markup(node["text"], anchors)}</span>'
+        items.append(f'<li>{text_html}{render_sub_list(node["children"], anchors, depth + 1)}</li>')
+    return f'<ul class="sub-list depth-{depth}">{"".join(items)}</ul>'
+
+
+GENERIC_VALUES_CACHE: set[str] | None = None
+
+
+def generic_values() -> set[str]:
+    """跨很多城市重复的模板句：页面上标成“通用提示”，与城市专属信息区分。"""
+    global GENERIC_VALUES_CACHE
+    if GENERIC_VALUES_CACHE is None:
+        GENERIC_VALUES_CACHE = boilerplate_values([page for page in PAGES if page.key not in HUB_KEYS])
+    return GENERIC_VALUES_CACHE
+
+
+def value_status(body: str) -> tuple[str, str]:
+    """返回 (CSS 类, 前置标签)：待核验 / 通用提示 / 城市专属。"""
+    if body.startswith("待核验"):
+        return " is-pending", '<span class="info-flag pending">待核验</span>'
+    if body in generic_values():
+        return " is-generic", '<span class="info-flag generic">通用提示</span>'
+    return "", ""
+
+
+def render_fact_rows(children: list[dict], anchors: dict[str, str] | None) -> list[str]:
+    rows = []
+    for child in children:
+        label, body = split_label(child["text"])
+        nested = render_sub_list(child["children"], anchors)
+        if label and body:
+            status_class, flag = value_status(body)
+            shown = body.removeprefix("待核验").lstrip("（(").rstrip("）)") if status_class == " is-pending" else body
+            rows.append(
+                f'<div class="kv{status_class}"><dt>{html.escape(label)}</dt>'
+                f'<dd>{flag}{inline_markup(shown, anchors)}{nested}</dd></div>'
+            )
+        elif child["children"]:
+            rows.append(
+                f'<div class="kv kv-group"><dt>{inline_markup(child["text"], anchors)}</dt>'
+                f'<dd>{nested}</dd></div>'
+            )
+        else:
+            rows.append(f'<div class="kv kv-note"><dd>{inline_markup(child["text"], anchors)}</dd></div>')
+    return rows
+
+
+def item_visual_html(page: Page, node: dict, section_id: str | None, css_class: str) -> str:
+    if not should_show_item_visual(section_id, 0, node):
+        return ""
     title = item_title(node["text"])
     kind = item_kind(section_id, title, node["text"])
     image_path, image_badge, meta = item_image_asset(page, title, kind)
-    # 没有真实照片 → 纯文字卡（不放插画、不放自动生成的攻略框）
     if not image_path:
-        return text_html, None
+        return ""
     rel = rel_to(image_path, page.output.parent)
-    guide_label = "出名店铺 / 吃法" if kind == "food" else "游玩攻略"
-    guide = item_summary(node, kind)
     source_title = ""
     if image_badge == "来源图" and meta:
         source_title = f' title="{html.escape("来源网页：" + meta.get("url", ""))}"'
     elif image_badge == "开放图库" and meta:
         source_title = f' title="{html.escape("Wikimedia Commons" + (" / " + meta.get("license", "") if meta.get("license") else ""))}"'
-    visual_html = (
-        f'<figure class="item-thumb-wrap photo-real">'
-        f'<img class="item-thumb" src="{html.escape(rel)}" alt="{html.escape(title)}配图" width="800" height="480" loading="lazy"{source_title}>'
-        f'<figcaption>{image_badge}</figcaption>'
+    return (
+        f'<figure class="{css_class}">'
+        f'<img class="item-thumb" src="{html.escape(rel)}" alt="{html.escape(title)}配图" width="800" height="480" loading="lazy" decoding="async"{source_title}>'
+        f'<figcaption>{html.escape(image_badge)}</figcaption>'
         '</figure>'
-        '<div class="item-text">'
-        f'{text_html}'
-        f'<div class="item-guide"><strong>{guide_label}</strong><span>{inline_markup(guide, anchors, current_id)}</span></div>'
-        '</div>'
     )
-    return visual_html, kind
 
 
-def render_nodes(nodes: list[dict], page: Page, section_id: str | None, anchor_index: AnchorIndex, depth: int = 0) -> str:
+PLAN_SECTION_IDS = {"attractions", "seasonal", "museums", "nature", "food", "streets", "shops", "markets", "day-trips"}
+
+
+def plan_add_button(page: Page, name: str, section_id: str | None, anchor_id: str | None, kind: str) -> str:
+    """“加入行程”按钮：数据由 plan-ui.ts 读取，写进按天编排的本机行程。"""
+    if page.key in HUB_KEYS or section_id not in PLAN_SECTION_IDS:
+        return ""
+    name = re.sub(r"\s+", " ", name).strip()
+    # “春/夏/秋/冬”这类季节标题不是可以排进某一天的地点。
+    if re.fullmatch(r"[春夏秋冬](?:季|天)?|全年|四季", name):
+        return ""
+    if len(name) < 2 or len(name) > 40 or name in FACT_LABELS or name in {"使用说明", "农贸市场", "伴手礼"}:
+        return ""
+    href = rel_to(page.output, OUT) + (f"#{anchor_id}" if anchor_id else "")
+    city = city_profile(page)["city"]
+    return (
+        f'<button class="poi-add" type="button" data-plan-add data-name="{html.escape(name)}" '
+        f'data-city="{html.escape(city)}" data-city-key="{html.escape(page.key)}" data-href="{html.escape(href)}" '
+        f'data-kind="{"food" if kind == "food" else "place"}">＋ 加入行程</button>'
+    )
+
+
+def render_card(page: Page, node: dict, section_id: str | None, anchors: dict[str, str] | None) -> str:
+    anchor_id = item_anchor_id(section_id, node)
+    label, body = split_label(node["text"])
+    children = list(node["children"])
+    kicker = ""
+    if label and label not in FACT_LABELS and body:
+        title, lead = label, body
+    else:
+        title, lead = node["text"], ""
+    # 美食类：用“代表”菜作为卡片标题，分类作为眉题，读起来更像菜单。
+    if section_id == "food":
+        for idx, child in enumerate(children):
+            child_label, child_body = split_label(child["text"])
+            if child_label == "代表" and child_body:
+                kicker, title = title, child_body
+                children.pop(idx)
+                break
+    if not lead:
+        for idx, child in enumerate(children):
+            child_label, child_body = split_label(child["text"])
+            if child_label in CARD_LEAD_LABELS and child_body and not child["children"]:
+                lead = child_body
+                children.pop(idx)
+                break
+    rows = render_fact_rows(children, anchors)
+    visible, hidden = rows, []
+    if len(rows) > CARD_VISIBLE_FACTS + 1:
+        visible, hidden = rows[:CARD_VISIBLE_FACTS], rows[CARD_VISIBLE_FACTS:]
+    facts_html = f'<dl class="kv-list">{"".join(visible)}</dl>' if visible else ""
+    if hidden:
+        facts_html += (
+            '<details class="card-more">'
+            f'<summary>展开其余 {len(hidden)} 项</summary>'
+            f'<dl class="kv-list">{"".join(hidden)}</dl></details>'
+        )
+    visual = item_visual_html(page, node, section_id, "card-media")
+    kind = item_kind(section_id, item_title(node["text"]), node["text"]) if section_id in VISUAL_SECTION_IDS else ""
+    classes = ["info-card"]
+    if visual:
+        classes.append("has-media")
+    if kind:
+        classes.append(f"kind-{kind}")
+    plan_kind = "food" if section_id == "food" or kind == "food" else "place"
+    plan_button = plan_add_button(page, title if section_id == "food" else item_title(node["text"]), section_id, anchor_id, plan_kind)
+    actions = poi_action_links_html(page, item_title(node["text"]), section_id, 0)
+    if plan_button:
+        actions = f'<div class="card-actions">{plan_button}{actions}</div>'
+    return (
+        f'<article class="{" ".join(classes)}"{id_attr(anchor_id)}>'
+        f'{visual}'
+        '<div class="card-body">'
+        f'{f"<p class=\"card-kicker\">{html.escape(kicker)}</p>" if kicker else ""}'
+        f'<h3 class="card-title">{inline_markup(title)}</h3>'
+        f'{f"<p class=\"card-lead\">{inline_markup(lead, anchors)}</p>" if lead else ""}'
+        f'{facts_html}'
+        f'{actions}'
+        '</div></article>'
+    )
+
+
+def render_month_card(node: dict, section_id: str | None, anchors: dict[str, str] | None) -> str | None:
+    match = re.match(r"^\s*(\d{1,2})\s*月", node["text"])
+    if not match:
+        return None
+    month = int(match.group(1))
+    rows = render_fact_rows(node["children"], anchors)
+    return (
+        f'<article class="month-card" data-month="{month}"{id_attr(item_anchor_id(section_id, node))}>'
+        f'<h3><b>{month}</b><span>月</span></h3>'
+        f'<dl class="kv-list">{"".join(rows)}</dl></article>'
+    )
+
+
+def route_stops(text: str) -> list[str]:
+    # 写了箭头的路线按箭头拆分，括号里的逗号属于说明，不是新的一站。
+    separator = r"\s*(?:→|->)\s*" if re.search(r"→|->", text) else r"\s*(?:、|\+|＋|，|,)\s*"
+    parts = [part.strip(" 。") for part in re.split(separator, text) if part.strip(" 。")]
+    if 2 <= len(parts) <= 9 and all(len(part) <= 22 for part in parts):
+        return parts
+    return []
+
+
+def render_route(node: dict, index: int, section_id: str | None, anchors: dict[str, str] | None) -> str:
+    label, body = split_label(node["text"])
+    title = label if label and body else node["text"]
+    detail = body if label and body else ""
+    stops = route_stops(detail) if detail else []
+    if stops:
+        stop_items = []
+        for stop in stops:
+            href = (anchors or {}).get(stop)
+            inner = f'<a href="{html.escape(href)}">{html.escape(stop)}</a>' if href else html.escape(stop)
+            stop_items.append(f'<li>{inner}</li>')
+        detail_html = f'<ol class="route-stops">{"".join(stop_items)}</ol>'
+    elif detail:
+        detail_html = f'<p>{inline_markup(detail, anchors)}</p>'
+    else:
+        detail_html = ""
+    children = ""
+    if node["children"]:
+        child_items = []
+        for child in node["children"]:
+            child_label, child_body = split_label(child["text"])
+            if child_label and child_body:
+                child_items.append(f'<li><strong>{html.escape(child_label)}</strong><span>{inline_markup(child_body, anchors)}</span>{render_sub_list(child["children"], anchors)}</li>')
+            else:
+                child_items.append(f'<li><span>{inline_markup(child["text"], anchors)}</span>{render_sub_list(child["children"], anchors)}</li>')
+        children = f'<ol class="route-days">{"".join(child_items)}</ol>'
+    return (
+        f'<article class="route-card"{id_attr(item_anchor_id(section_id, node))}>'
+        f'<span class="route-index">{index:02d}</span>'
+        f'<div class="route-body"><h3>{inline_markup(title)}</h3>{detail_html}{children}</div>'
+        '</article>'
+    )
+
+
+def render_block(nodes: list[dict], page: Page, section_id: str | None, anchor_index: AnchorIndex) -> str:
+    """Render one Markdown list block with the component that suits its section."""
     if not nodes:
         return ""
-    # 深层的纯叶子列表（无子项、条目较多）改为多列卡片网格，打散密集文字
-    is_leaf_list = depth >= 1 and len(nodes) >= 3 and all(not n.get("children") for n in nodes)
-    leaf_cls = " leaf-list" if is_leaf_list else ""
-    out = [f'<ul class="md-list depth-{depth}{leaf_cls}">']
+    anchors = anchor_index.terms if section_id in LINKIFY_SECTION_IDS else None
+    layout = section_layout(section_id, nodes)
+
+    if layout == "facts":
+        tiles = []
+        for node in nodes:
+            label, body = split_label(node["text"])
+            if label and body:
+                head = f'<span class="fact-k">{html.escape(label)}</span><p class="fact-v">{inline_markup(body, anchors, item_anchor_id(section_id, node))}</p>'
+            else:
+                head = f'<p class="fact-v fact-title">{inline_markup(node["text"], anchors)}</p>'
+            tiles.append(
+                f'<div class="fact-tile{" wide" if node["children"] else ""}"{id_attr(item_anchor_id(section_id, node))}>'
+                f'{head}{render_sub_list(node["children"], anchors)}</div>'
+            )
+        return f'<div class="fact-grid">{"".join(tiles)}</div>'
+
+    if layout == "scenarios":
+        tiles = []
+        for node in nodes:
+            label, body = split_label(node["text"])
+            title, detail = (label, body) if label and body else (node["text"], "")
+            tiles.append(
+                f'<div class="scenario-tile"{id_attr(item_anchor_id(section_id, node))}>'
+                f'<span class="tile-ico">{icon(scenario_icon(title))}</span>'
+                f'<div><strong>{html.escape(title)}</strong>'
+                f'{f"<p>{inline_markup(detail, anchors, item_anchor_id(section_id, node))}</p>" if detail else ""}'
+                f'{render_sub_list(node["children"], anchors)}</div></div>'
+            )
+        return f'<div class="scenario-grid">{"".join(tiles)}</div>'
+
+    if layout == "months":
+        cards = []
+        others = []
+        for node in nodes:
+            card = render_month_card(node, section_id, anchors)
+            if card:
+                cards.append(card)
+            else:
+                others.append(node)
+        out = f'<div class="month-grid" data-month-grid>{"".join(cards)}</div>' if cards else ""
+        if others:
+            out += f'<div class="card-grid">{"".join(render_card(page, node, section_id, anchors) for node in others)}</div>'
+        return out
+
+    if layout == "routes":
+        return f'<div class="route-list">{"".join(render_route(node, idx, section_id, anchors) for idx, node in enumerate(nodes, 1))}</div>'
+
+    if layout == "checklist":
+        items = []
+        for idx, node in enumerate(nodes):
+            items.append(
+                f'<li{id_attr(item_anchor_id(section_id, node))}><label>'
+                f'<input type="checkbox" data-check-index="{idx}"><span class="check-box" aria-hidden="true">{icon("check")}</span>'
+                f'<span class="check-text">{inline_markup(node["text"])}</span></label>'
+                f'{render_sub_list(node["children"], anchors)}</li>'
+            )
+        return f'<ul class="check-list" data-checklist="{html.escape(page.key)}">{"".join(items)}</ul>'
+
+    if layout == "tips":
+        items = []
+        for node in nodes:
+            label, body = split_label(node["text"])
+            text_html = (
+                f'<strong>{html.escape(label)}</strong><p>{inline_markup(body, anchors)}</p>'
+                if label and body else f'<p>{inline_markup(node["text"], anchors)}</p>'
+            )
+            items.append(
+                f'<li class="tip-item"{id_attr(item_anchor_id(section_id, node))}>'
+                f'<span class="tip-ico">{icon("alert")}</span><div>{text_html}{render_sub_list(node["children"], anchors)}</div></li>'
+            )
+        return f'<ul class="tip-list">{"".join(items)}</ul>'
+
+    if layout == "areas":
+        cards = []
+        for node in nodes:
+            label, body = split_label(node["text"])
+            title, detail = (label, body) if label and body else (node["text"], "")
+            places = [part.strip() for part in re.split(r"[、，,；;]", detail) if part.strip()] if detail else []
+            chips = []
+            for place in places:
+                href = (anchors or {}).get(place)
+                chips.append(
+                    f'<a class="chip" href="{html.escape(href)}">{html.escape(place)}</a>' if href
+                    else f'<span class="chip">{html.escape(place)}</span>'
+                )
+            cards.append(
+                f'<article class="area-card"{id_attr(item_anchor_id(section_id, node))}>'
+                f'<h3>{icon("pin")}{html.escape(title)}</h3>'
+                f'<div class="chip-row">{"".join(chips)}</div>{render_sub_list(node["children"], anchors)}</article>'
+            )
+        return f'<div class="area-grid">{"".join(cards)}</div>'
+
+    if layout == "cards":
+        cards = [render_card(page, node, section_id, anchors) for node in nodes]
+        return f'<div class="card-grid">{"".join(cards)}</div>'
+
+    if layout == "rows":
+        items = []
+        for node in nodes:
+            label, body = split_label(node["text"])
+            visual = item_visual_html(page, node, section_id, "row-media")
+            text_html = (
+                f'<strong>{inline_markup(label, anchors)}</strong><span>{inline_markup(body, anchors, item_anchor_id(section_id, node))}</span>'
+                if label and body else f'<span>{inline_markup(node["text"], anchors, item_anchor_id(section_id, node))}</span>'
+            )
+            actions = poi_action_links_html(page, item_title(node["text"]), section_id, 0)
+            row_kind = "food" if section_id in FOOD_SECTION_IDS or item_kind(section_id, item_title(node["text"]), node["text"]) == "food" else "place"
+            plan_button = plan_add_button(page, item_title(node["text"]), section_id, item_anchor_id(section_id, node), row_kind)
+            if plan_button:
+                actions = f'<div class="card-actions">{plan_button}{actions}</div>'
+            items.append(
+                f'<li class="row-item{" has-media" if visual else ""}"{id_attr(item_anchor_id(section_id, node))}>'
+                f'{visual}<div class="row-text">{text_html}{render_sub_list(node["children"], anchors)}{actions}</div></li>'
+            )
+        return f'<ul class="row-list">{"".join(items)}</ul>'
+
+    items = []
     for node in nodes:
-        label, body = split_label(node["text"])
-        classes = ["list-card"]
-        current_id = item_anchor_id(section_id, node) if depth == 0 else None
-        link_anchors = anchor_index.terms if section_id in LINKIFY_SECTION_IDS else None
-        text_html, kind = render_item_header(page, node, section_id, depth, link_anchors, current_id)
-        if kind:
-            classes.extend(["visual-card", f"kind-{kind}"])
-        if node.get("children"):
-            classes.append("has-children")
-        if label in FACT_LABELS:
-            classes.append("fact")
-        id_attr = f' id="{html.escape(current_id)}"' if current_id else ""
-        out.append(f'<li{id_attr} class="{" ".join(classes)}">')
-        context_actions = poi_action_links_html(page, item_title(node["text"]), section_id, depth)
-        child_html = render_nodes(node["children"], page, section_id, anchor_index, depth + 1)
-        if kind:
-            out.append(f'<div class="visual-layout">{text_html}</div>')
-            out.append(context_actions)
-            out.append(child_html)
-        else:
-            out.append(text_html)
-            out.append(context_actions)
-            out.append(child_html)
-        out.append("</li>")
-    out.append("</ul>")
-    return "\n".join(out)
+        items.append(
+            f'<li{id_attr(item_anchor_id(section_id, node))}>{inline_markup(node["text"], anchors)}'
+            f'{render_sub_list(node["children"], anchors)}</li>'
+        )
+    return f'<ul class="plain-list">{"".join(items)}</ul>'
 
 
 SECTION_ICON_RULES = [
-    (("结论", "总览", "索引", "决策"), "🧭"),
-    (("月份", "季节", "全年"), "📅"),
-    (("票价", "营业", "时间表"), "🎫"),
-    (("夜市", "市场", "商圈", "街区"), "🌃"),
-    (("博物馆", "展馆", "展览"), "🏛️"),
-    (("美食", "餐厅", "小吃", "吃"), "🍜"),
-    (("住宿", "酒店"), "🏨"),
-    (("交通", "出行", "地铁"), "🚆"),
-    (("温泉",), "♨️"),
-    (("自然", "远郊", "周边", "峡", "湖", "山水"), "🌲"),
-    (("路线", "线路", "行程"), "🗺️"),
-    (("避坑", "取舍", "复核", "提醒", "注意"), "⚠️"),
-    (("行前", "准备", "清单", "攻略"), "🎒"),
-    (("地图", "分区"), "🗺️"),
-    (("景点", "游玩", "核心", "打卡"), "📍"),
+    (("结论", "总览", "决策"), "compass"),
+    (("月份", "季节", "全年"), "calendar"),
+    (("票价", "营业", "时间表"), "ticket"),
+    (("夜市", "市场", "商圈", "街区"), "night"),
+    (("博物馆", "展馆", "展览"), "museum"),
+    (("美食", "餐厅", "小吃", "吃", "口味"), "food"),
+    (("住宿", "酒店"), "hotel"),
+    (("交通", "出行", "地铁"), "train"),
+    (("自然", "远郊", "周边", "峡", "湖", "山水", "花事"), "leaf"),
+    (("路线", "线路", "行程"), "route"),
+    (("避坑", "取舍", "提醒", "注意"), "alert"),
+    (("复核", "清单", "核验"), "checklist"),
+    (("行前", "准备"), "bag"),
+    (("地图", "分区", "索引"), "map"),
+    (("预算", "成本"), "ticket"),
+    (("景点", "游玩", "核心", "打卡"), "pin"),
 ]
 
 
 def section_icon(title: str) -> str:
-    for keys, icon in SECTION_ICON_RULES:
+    for keys, name in SECTION_ICON_RULES:
         if any(k in title for k in keys):
-            return icon
-    return "📌"
+            return icon(name)
+    return icon("layers")
+
+
+def count_section_items(lines: list[str], start: int) -> int:
+    count = 0
+    for line in lines[start:]:
+        if re.match(r"^#{1,3}\s+", line):
+            break
+        if re.match(r"^-\s+", line):
+            count += 1
+    return count
 
 
 def render_markdown(markdown: str, page: Page, anchor_index: AnchorIndex) -> tuple[str, list[tuple[int, str, str]]]:
@@ -1652,7 +2040,7 @@ def render_markdown(markdown: str, page: Page, anchor_index: AnchorIndex) -> tup
     def close_section() -> None:
         nonlocal open_section, current_section_id
         if open_section:
-            html_parts.append("</section>")
+            html_parts.append("</div></section>")
             open_section = False
             current_section_id = None
 
@@ -1669,9 +2057,15 @@ def render_markdown(markdown: str, page: Page, anchor_index: AnchorIndex) -> tup
             sid = slugify(text.strip(), used)
             current_section_id = sid
             toc.append((level, text.strip(), sid))
-            html_parts.append(f'<section id="{sid}" class="guide-section level-{level}">')
-            ico = section_icon(text.strip())
-            html_parts.append(f'<h{level}><span class="sec-ico" aria-hidden="true">{ico}</span>{inline_markup(text.strip())}</h{level}>')
+            count = count_section_items(lines, i + 1)
+            badge = f'<span class="section-count">{count}</span>' if count >= 3 else ""
+            layout = SECTION_LAYOUTS.get(sid, "auto")
+            html_parts.append(f'<section id="{sid}" class="guide-section level-{level} layout-{layout}">')
+            html_parts.append(
+                f'<h{level} class="section-title"><span class="sec-ico">{section_icon(text.strip())}</span>'
+                f'<span class="section-name">{inline_markup(text.strip())}</span>{badge}</h{level}>'
+            )
+            html_parts.append('<div class="section-body">')
             open_section = True
             i += 1
             continue
@@ -1681,12 +2075,12 @@ def render_markdown(markdown: str, page: Page, anchor_index: AnchorIndex) -> tup
             while i < len(lines) and (re.match(r"^\s*-\s+", lines[i]) or not lines[i].strip()):
                 block.append(lines[i])
                 i += 1
-            html_parts.append(render_nodes(parse_list(block), page, current_section_id, anchor_index))
+            html_parts.append(render_block(parse_list(block), page, current_section_id, anchor_index))
             continue
 
         if line.strip():
             anchors = anchor_index.terms if current_section_id in LINKIFY_SECTION_IDS else None
-            html_parts.append(f"<p>{inline_markup(line.strip(), anchors)}</p>")
+            html_parts.append(f'<p class="section-note">{inline_markup(line.strip(), anchors)}</p>')
         i += 1
 
     close_section()
@@ -1755,56 +2149,11 @@ def quick_summary(node: dict) -> str:
     return summary[:96]
 
 
-def quick_cards_html(markdown: str, anchor_index: AnchorIndex) -> str:
-    heading = "## 快速决策索引" if "## 快速决策索引" in markdown else "## 先看总览"
-    section_id = "quick" if heading == "## 快速决策索引" and "quick" in anchor_index.section_ids else "overview"
-    nodes = extract_first_nodes_after(markdown, heading, 4)
-    cards = []
-    for node in nodes:
-        title = item_title(node["text"]) or node["text"]
-        anchor_id = item_anchor_id(section_id, node)
-        href = f"#{anchor_id}" if anchor_id else anchor_index.terms.get(title, f"#{section_id}")
-        cards.append(
-            '<li>'
-            f'<a class="hero-point-link" href="{html.escape(href)}">'
-            f'<span>{inline_markup(title)}</span>'
-            f'<small>{inline_markup(quick_summary(node))}</small>'
-            '</a>'
-            '</li>'
-        )
-    if cards:
-        return "\n".join(cards)
-    fallback = [
-        ("景点", pick_section_href(anchor_index, ["attractions", "seasonal", "nature", "source-map"])),
-        ("吃喝", pick_section_href(anchor_index, ["food", "shops", "markets", "source-map"])),
-        ("路线", pick_section_href(anchor_index, ["routes", "daytrip-decisions"])),
-    ]
-    return "\n".join(
-        f'<li><a class="hero-point-link" href="{href}"><span>{label}</span><small>跳转到对应攻略区块</small></a></li>'
-        for label, href in fallback if href
-    )
-
-
 def pick_section_href(anchor_index: AnchorIndex, candidates: list[str]) -> str | None:
     for sid in candidates:
         if sid in anchor_index.section_ids:
             return f"#{sid}"
     return None
-
-
-def glass_links_html(anchor_index: AnchorIndex) -> str:
-    links = [
-        ("景点", "核心景点/季节景观", ["attractions", "seasonal", "nature", "source-map"]),
-        ("吃喝", "美食/店铺/市场", ["food", "shops", "markets", "streets", "source-map"]),
-        ("路线", "半天/一日/远郊", ["routes", "daytrip-decisions"]),
-        ("避坑", "取舍/复核清单", ["warnings", "checklist"]),
-    ]
-    html_links = []
-    for label, desc, candidates in links:
-        href = pick_section_href(anchor_index, candidates)
-        if href:
-            html_links.append(f'<a href="{href}"><strong>{label}</strong><span>{desc}</span></a>')
-    return "\n".join(html_links)
 
 
 def gallery_image_paths(page: Page) -> list[Path]:
@@ -1822,21 +2171,6 @@ def gallery_image_paths(page: Page) -> list[Path]:
     return paths[:16]
 
 
-def hero_gallery_html(page: Page) -> str:
-    paths = gallery_image_paths(page)
-    if not paths:
-        return ""
-    images = []
-    # 复制一份，配合 translateX(-50%) 动画实现无缝循环滚动。
-    for idx, path in enumerate(paths * 2):
-        rel = rel_to(path, page.output.parent)
-        images.append(
-            f'<img src="{html.escape(rel)}" alt="{html.escape(page.title)}流动图片 {idx % len(paths) + 1}" '
-            'width="1200" height="675" loading="lazy" decoding="async">'
-        )
-    return f'<div class="hero-gallery" aria-hidden="true"><div class="gallery-track">{"".join(images)}</div></div>'
-
-
 def carousel_entries(page: Page) -> list[tuple[Path, str, Path | None, str]]:
     """轮播条目 (图片, 标题, 跳转目标 or None, 副标题)。优先真实照片。"""
     load_photo_cache()
@@ -1851,8 +2185,12 @@ def carousel_entries(page: Page) -> list[tuple[Path, str, Path | None, str]]:
             # 只用有真实照片的城市，不再混入插画
             if img.exists() and photo_is_publishable(meta, p.key):
                 with_photo.append((img, p.title.replace("旅游攻略", ""), p.output, p.subtitle))
-        random.Random("hero-carousel").shuffle(with_photo)
-        entries = with_photo[:14]
+        # 编辑精选城市排在前面，其余按固定种子打散，保证构建可复现。
+        preferred = {key: idx for idx, key in enumerate(FEATURED_KEYS_PREF)}
+        lead = sorted((entry for entry in with_photo if entry[2].stem in preferred), key=lambda entry: preferred[entry[2].stem])
+        rest = [entry for entry in with_photo if entry[2].stem not in preferred]
+        random.Random("hero-carousel").shuffle(rest)
+        entries = (lead + rest)[:14]
     else:
         name = page.title.replace("旅游攻略", "")
         img = IMAGES / f"{page.key}.jpg"
@@ -1862,7 +2200,7 @@ def carousel_entries(page: Page) -> list[tuple[Path, str, Path | None, str]]:
     return entries
 
 
-def hero_carousel_html(page: Page) -> str:
+def hero_carousel_html(page: Page, captions: bool = True) -> str:
     entries = carousel_entries(page)
     if not entries:
         return ""
@@ -1875,9 +2213,14 @@ def hero_carousel_html(page: Page) -> str:
         cap = (
             f'<div class="slide-cap"><strong>{html.escape(name)}</strong>'
             f'{("<span>" + html.escape(sub) + "</span>") if sub else ""}</div>'
-        )
-        source_attr = f'src="{html.escape(rel)}"' if idx == 0 else f'data-src="{html.escape(rel)}"'
-        inner = f'<img {source_attr} alt="{html.escape(name)}" width="1280" height="720" loading="{loading}" decoding="async">{cap}'
+        ) if captions else ""
+        srcset = cover_srcset(img.stem, page.output.parent)
+        if idx == 0:
+            source_attr = f'src="{html.escape(rel)}"{srcset}'
+        else:
+            source_attr = f'data-src="{html.escape(rel)}"' + (srcset.replace(" srcset=", " data-srcset=") if srcset else "")
+        sizes = ' sizes="100vw"' if not captions else ' sizes="(max-width: 1080px) 100vw, 50vw"'
+        inner = f'<img {source_attr}{sizes if srcset else ""} alt="{html.escape(name)}" width="1280" height="720" loading="{loading}" decoding="async">{cap}'
         if target is not None:
             href = rel_to(target, page.output.parent)
             hidden = "false" if idx == 0 else "true"
@@ -1906,7 +2249,7 @@ def hero_carousel_html(page: Page) -> str:
 
 def city_cover_credit_html(page: Page) -> str:
     """Render a compact, source-specific credit for a publishable city cover."""
-    if page.key == "record":
+    if page.key in HUB_KEYS:
         return ""
     load_photo_cache()
     entry = PHOTO_CACHE.get(f"cityphoto|{page.key}")
@@ -1927,30 +2270,9 @@ def city_cover_credit_html(page: Page) -> str:
     )
 
 
-def hero_quickfind_html(anchor_index: AnchorIndex) -> str:
-    links = [
-        ("📍", "景点", "核心景点 / 季节景观", ["attractions", "seasonal", "nature", "source-map"]),
-        ("🍜", "吃喝", "美食 / 店铺 / 市场", ["food", "shops", "markets", "streets", "source-map"]),
-        ("🗺️", "路线", "半天 / 一日 / 远郊", ["routes", "daytrip-decisions"]),
-        ("⚠️", "避坑", "取舍 / 复核清单", ["warnings", "checklist"]),
-    ]
-    cards = []
-    for emoji, label, desc, candidates in links:
-        href = pick_section_href(anchor_index, candidates)
-        if href:
-            cards.append(
-                f'<a class="quickfind-card" href="{href}">'
-                f'<span class="qf-emoji" aria-hidden="true">{emoji}</span>'
-                f'<span class="qf-text"><strong>{label}</strong><small>{desc}</small></span></a>'
-            )
-    if not cards:
-        return ""
-    return f'<div class="hero-quickfind"><span class="qf-title">快速查找</span><div class="qf-grid">{"".join(cards)}</div></div>'
-
-
 def nav_html(current: Page) -> str:
     current_out = current.output
-    current_profile = city_profile(current) if current.key != "record" else None
+    current_profile = city_profile(current) if current.key not in HUB_KEYS else None
     catalog_href = rel_to(OUT / "destinations.html", current_out.parent)
     counts: dict[str, int] = {}
     for page in PAGES:
@@ -2016,7 +2338,7 @@ def card_links(current: Page, limit: int = 10) -> str:
     The full catalog is already available from the header and city-guides page;
     repeating it in every article bloats all 222 generated city documents.
     """
-    current_profile = city_profile(current) if current.key != "record" else None
+    current_profile = city_profile(current) if current.key not in HUB_KEYS else None
 
     def relevance(page: Page) -> tuple[int, str]:
         if current_profile is None:
@@ -2032,12 +2354,20 @@ def card_links(current: Page, limit: int = 10) -> str:
         return (-score, page.key)
 
     candidates = [page for page in PAGES if page.key not in {"record", current.key}]
+    load_photo_cache()
     cards = []
     for page in sorted(candidates, key=relevance)[:limit]:
         rel = rel_to(page.output, current.output.parent)
+        thumb = ""
+        if photo_is_publishable(PHOTO_CACHE.get(f"cityphoto|{page.key}"), page.key) and (IMAGES / f"{page.key}.jpg").exists():
+            thumb_path = COVER_SMALL / f"{page.key}.jpg" if (COVER_SMALL / f"{page.key}.jpg").is_file() else IMAGES / f"{page.key}.jpg"
+            thumb = (
+                f'<img src="{html.escape(rel_to(thumb_path, current.output.parent))}" alt="" '
+                'width="120" height="80" loading="lazy" decoding="async">'
+            )
         cards.append(
-            f'<a class="city-card" href="{rel}" style="--accent:{page.accent}">'
-            f'<span>{html.escape(page.title)}</span><small>{html.escape(page.subtitle)}</small></a>'
+            f'<a class="city-card related-card" href="{rel}" style="--accent:{page.accent}">'
+            f'{thumb}<span><strong>{html.escape(city_profile(page)["city"])}</strong><small>{html.escape(page.subtitle)}</small></span></a>'
         )
     catalog_href = rel_to(OUT / "city-guides.html", current.output.parent)
     cards.append(f'<a class="city-catalog-link" href="{catalog_href}">查看全部城市攻略 →</a>')
@@ -2085,7 +2415,7 @@ def explicit_review_date(page: Page, markdown: str | None = None) -> str:
 
 
 def page_location(page: Page) -> tuple[str, str]:
-    if page.key == "record":
+    if page.key in HUB_KEYS:
         return "总览", "全国"
     province, city = split_city_filename(page.source)
     if province in DIRECT_MUNICIPALITIES and province == city:
@@ -2096,7 +2426,9 @@ def page_location(page: Page) -> tuple[str, str]:
 def clean_summary(text: str, limit: int = 70) -> str:
     text = re.sub(r"https?://\S+", "", text)
     text = re.sub(r"`([^`]+)`", r"\1", text)
-    text = re.sub(r"[*_#>-]+", "", text)
+    text = re.sub(r"[*_#>]+", "", text)
+    # 只去掉列表/分隔用的连字符，保留“3-5 月”这类数字区间。
+    text = re.sub(r"(?:^|\s)-+(?=\s|$)", " ", text)
     text = re.sub(r"\s+", " ", text).strip(" ：:，,。；;")
     return text[:limit]
 
@@ -2113,6 +2445,28 @@ def extract_section_titles(markdown: str, headings: list[str], max_items: int = 
             if len(titles) >= max_items:
                 return titles
     return titles
+
+
+def extract_signature_foods(markdown: str, max_items: int = 5) -> list[str]:
+    """Prefer named dishes (必吃优先级 / 代表) over menu category headings."""
+    foods: list[str] = []
+
+    def add(value: str) -> None:
+        value = clean_summary(value, 16)
+        if 2 <= len(value) <= 16 and value not in foods and value not in FACT_LABELS:
+            foods.append(value)
+
+    match = re.search(r"^-\s*(?:必吃优先级|必吃|代表美食|口味关键词)[：:]\s*(.+)$", markdown, re.M)
+    if match:
+        for part in re.split(r"[、，,；;/]", match.group(1)):
+            add(part)
+    for node in extract_first_nodes_after(markdown, "## 美食总表", 12):
+        for child in node.get("children", []):
+            label, value = split_label(child.get("text", ""))
+            if label == "代表" and value:
+                for part in re.split(r"[、，,；;/]", value):
+                    add(part)
+    return foods[:max_items]
 
 
 def extract_markdown_keywords(markdown: str, max_terms: int = 80) -> list[str]:
@@ -2155,6 +2509,10 @@ def city_region(province: str) -> str:
 
 
 def city_season_summary(markdown: str) -> str:
+    # 结论里明确写了“季节：”就用它；季节景观里的“最佳月份”只描述单个景观，不能代表整座城市。
+    explicit = re.search(r"^-\s*(?:季节|最佳季节|适宜季节)[：:]\s*(.+)$", markdown, re.M)
+    if explicit:
+        return clean_summary(re.split(r"[；;]", explicit.group(1))[0], 36)
     seasonal = extract_first_nodes_after(markdown, "## 季节限定景观", 5)
     preferred_labels = {"最佳月份", "适合时间", "可看月份", "推荐时间", "季节"}
     for node in seasonal:
@@ -2167,8 +2525,34 @@ def city_season_summary(markdown: str) -> str:
     return "全年可查，按天气取舍"
 
 
+_CITY_BOILERPLATE: set[str] | None = None
+
+
+def city_boilerplate() -> set[str]:
+    global _CITY_BOILERPLATE
+    if _CITY_BOILERPLATE is None:
+        _CITY_BOILERPLATE = boilerplate_values([page for page in PAGES if page.key not in HUB_KEYS])
+    return _CITY_BOILERPLATE
+
+
+def without_boilerplate(markdown: str) -> str:
+    """去掉跨城模板句所在的行，只留下这座城市自己的内容。"""
+    templates = city_boilerplate()
+    kept = []
+    for line in markdown.splitlines():
+        match = re.match(r"^\s*-\s+(.+)$", line)
+        if match:
+            label, body = split_label(match.group(1))
+            if (body if label else match.group(1)).strip() in templates:
+                continue
+        kept.append(line)
+    return "\n".join(kept)
+
+
 def city_filter_metadata(markdown: str, foods: list[str]) -> dict[str, str]:
-    compact = re.sub(r"\s+", "", markdown)
+    # 主题和季节标签只看城市专属内容：模板句（如 201 城共用的“亲子：博物馆、低强度景区和夜市小吃”）
+    # 会让“亲子”筛选命中几乎所有城市，失去筛选意义。
+    compact = re.sub(r"\s+", "", without_boilerplate(markdown))
     season_rules = {
         "春": ("春", "花期", "踏青", "樱花", "油菜花"),
         "夏": ("夏", "避暑", "丰水期", "海滨", "草原"),
@@ -2177,14 +2561,14 @@ def city_filter_metadata(markdown: str, foods: list[str]) -> dict[str, str]:
     }
     season_tags = [name for name, words in season_rules.items() if any(word in compact for word in words)]
     theme_rules = {
-        "亲子": ("亲子", "儿童", "乐园"),
+        # 只认明确面向儿童的场所；“亲子：某某博物馆”这类建议不足以把城市归为亲子目的地。
+        "亲子": ("乐园", "动物园", "野生动物", "海洋馆", "海洋公园", "极地海洋", "水族馆", "科技馆", "迪士尼"),
         "博物馆": ("博物馆", "美术馆", "展馆"),
         "自然风光": ("自然", "山水", "雪山", "草原", "海滨", "海岛", "湖", "峡谷", "森林"),
         "历史文化": ("历史", "文化", "古城", "古镇", "遗址", "古建筑", "寺"),
         "美食": ("美食", "小吃", "夜市", "餐厅"),
         "避暑": ("避暑", "清凉", "夏季"),
         "冬季": ("冬季", "雪景", "温泉", "避寒", "冰雪"),
-        "周末短途": ("周末", "半天", "1天", "1 天", "2天", "2 天"),
     }
     theme_tags = [name for name, words in theme_rules.items() if any(word in compact for word in words)]
     if foods and "美食" not in theme_tags:
@@ -2196,11 +2580,16 @@ def city_filter_metadata(markdown: str, foods: list[str]) -> dict[str, str]:
         "自驾": ("自驾", "停车", "包车"),
     }
     transport_tags = [name for name, words in transport_rules.items() if any(word in compact for word in words)]
-    arrangement = re.search(r"^-\s*适合安排[：:]\s*(.+)$", markdown, re.M)
+    arrangement = re.search(r"^-\s*(?:推荐天数|适合安排)[：:]\s*(.+)$", markdown, re.M)
     arrangement_text = arrangement.group(1) if arrangement else ""
-    day_numbers = [int(value) for value in re.findall(r"(\d+)\s*天", arrangement_text)]
-    max_days = max(day_numbers, default=3)
-    days_class = "1" if max_days <= 1 else "2-3" if max_days <= 3 else "4+"
+    # 按第一个天数归档：它是“建议安排”，后面的数字多是“全部看完约 N 天”这类上限。
+    first_days = re.search(r"(\d+)\s*(?:[—\-～~至]\s*\d+\s*)?天", arrangement_text)
+    primary_days = int(first_days.group(1)) if first_days else 3
+    days_class = "1" if primary_days <= 1 else "2-3" if primary_days <= 3 else "4+"
+    # 周末短途：建议 1—2 天，而且本页景点 4 天内能看完（原来匹配“1天/2天”字样，几乎每座城市都命中）。
+    full_days = re.search(r"全部看完约\s*(\d+)\s*天", arrangement_text)
+    if primary_days <= 2 and (not full_days or int(full_days.group(1)) <= 4) and "周末短途" not in theme_tags:
+        theme_tags.append("周末短途")
     return {
         "region": "",
         "seasonTags": " ".join(season_tags) or "全年",
@@ -2218,14 +2607,19 @@ def city_profile(page: Page) -> dict:
     highlights = extract_section_titles(
         markdown,
         ["## 核心景点", "## 季节限定景观", "## 自然、远郊和周边", "## 先看总览", "## 快速决策索引"],
-        5,
+        8,
     )
-    foods = extract_section_titles(markdown, ["## 美食总表", "## 餐厅和店铺", "## 街区、夜市和市场", "## 街区、商圈和夜市"], 5)
+    # 快速决策索引里的“半天 / 1 天 / 雨天”是场景标签，不是景点名。
+    highlights = [
+        title for title in highlights
+        if not re.fullmatch(r"(?:半天|半日|\d+\s*(?:天|日)|雨天|亲子|摄影|夜游|周末)", title)
+    ][:5]
+    foods = extract_signature_foods(markdown, 5) or extract_section_titles(markdown, ["## 美食总表", "## 餐厅和店铺", "## 街区、夜市和市场", "## 街区、商圈和夜市"], 5)
     routes = extract_section_titles(markdown, ["## 路线模板", "## 跨城市路线模板"], 3)
     season = city_season_summary(markdown)
     keywords = extract_markdown_keywords(markdown)
     filters = city_filter_metadata(markdown, foods)
-    filters["region"] = city_region(province)
+    filters["region"] = city_region(city if province == "直辖市" else province)
     profile = {
         "title": extract_title(markdown, page.title),
         "subtitle": page.subtitle,
@@ -2349,14 +2743,15 @@ def city_explorer_html(current: Page) -> str:
             f'data-season="{html.escape(profile["seasonTags"])}" data-days="{html.escape(profile["daysClass"])}" '
             f'data-theme="{html.escape(profile["themeTags"])}" data-transport="{html.escape(profile["transportTags"])}" '
             f'data-review-status="{review_status}" data-review-date="{html.escape(review_date)}" '
-            f'data-search="{html.escape(search_text)}" data-key="{html.escape(page.key)}" data-index="{card_index}"'
+            f'data-search="{html.escape(search_text)}" data-key="{html.escape(page.key)}" data-index="{card_index}" '
+            f'data-city="{html.escape(profile["city"])}"'
         )
         has_photo = photo_is_publishable(photo_meta, page.key)
         if has_photo:
             cards.append(
                 f'<article class="city-card rich" {common_attrs}>'
                 f'<span class="img-frame">{badge}{fav_btn}{trip_btn}'
-                f'<img src="{html.escape(image)}" alt="{html.escape(profile["title"])}缩略图" width="800" height="480" loading="lazy" decoding="async"{img_title}></span>'
+                f'<img src="{html.escape(rel_to(COVER_SMALL / f"{page.key}.jpg", current.output.parent) if (COVER_SMALL / f"{page.key}.jpg").is_file() else image)}" alt="{html.escape(profile["title"])}缩略图" width="640" height="360" loading="lazy" decoding="async"{img_title}></span>'
                 f'{body_html}</article>'
             )
         else:
@@ -2378,10 +2773,19 @@ def city_explorer_html(current: Page) -> str:
         '<div class="city-explorer-row">'
         '<label class="city-explorer-search"><span>筛选城市</span>'
         '<input id="cityExplorerSearch" type="search" placeholder="例如：雪山、夜市、博物馆、春花、避暑"></label>'
+        '<label class="city-sort"><span>排序</span><select id="citySort">'
+        '<option value="">推荐顺序</option><option value="photo">有实景照片优先</option>'
+        '<option value="reviewed">已标注核验日期优先</option><option value="name">按城市名</option></select></label>'
         '<button id="randomCity" type="button" class="random-city">🎲 随机一座</button>'
         '</div>'
+        '<div class="finder-chips" id="finderChips" aria-label="已选条件" hidden></div>'
         '</div>'
         f'<div class="city-grid rich-grid" id="cityExplorer">{"".join(cards)}</div>'
+        '<div class="city-explorer-empty" id="cityExplorerEmpty" hidden>'
+        '<strong>没有完全符合的城市</strong>'
+        '<p>可以先去掉一个条件，或换个关键词：</p>'
+        '<div class="chip-row" id="cityExplorerSuggest"></div>'
+        '</div>'
         '<div class="city-explorer-footer">'
         '<p id="cityExplorerSummary" aria-live="polite"></p>'
         '<button id="cityLoadMore" class="city-load-more" type="button">显示更多城市</button>'
@@ -2393,42 +2797,6 @@ def city_explorer_html(current: Page) -> str:
 
 ATTRACTION_HEADINGS = ["## 核心景点", "## 季节限定景观", "## 自然、远郊和周边", "## 自然和周边"]
 FOOD_HEADINGS = ["## 美食总表", "## 餐厅和店铺", "## 街区、夜市和市场", "## 街区、商圈和夜市"]
-
-
-def home_stats_html() -> str:
-    city_pages = [p for p in PAGES if p.key != "record"]
-    provinces: set[str] = set()
-    spots = 0
-    foods = 0
-    for p in city_pages:
-        provinces.add(city_profile(p)["province"])
-        markdown = read_markdown_cached(p)
-        for heading in ATTRACTION_HEADINGS:
-            spots += len(extract_first_nodes_after(markdown, heading, 999))
-        for heading in FOOD_HEADINGS:
-            foods += len(extract_first_nodes_after(markdown, heading, 999))
-    # 取整到十位，呈现为「约 X+」，避免给人逐条精确统计的错觉
-    spots = spots // 10 * 10
-    foods = foods // 10 * 10
-    stats = [
-        (f"{len(city_pages)}", "座", "收录城市攻略"),
-        (f"{len(provinces)}", "个", "覆盖省份 / 直辖市"),
-        (f"{spots}", "+", "精选景点条目"),
-        (f"{foods}", "+", "特色美食条目"),
-    ]
-    cards = "".join(
-        f'<div class="stat-card reveal"><div class="stat-num"><span class="stat-count" data-count="{num}">{html.escape(num)}</span>'
-        f'<small>{html.escape(unit)}</small></div>'
-        f'<span class="stat-label">{html.escape(label)}</span></div>'
-        for num, unit, label in stats
-    )
-    return (
-        '<section class="home-section reveal" id="home-stats" aria-label="数据速览">'
-        '<div class="home-section-head"><p class="eyebrow">Overview</p>'
-        '<h2>数据速览</h2><p>这份跨城市攻略库目前的覆盖范围，仍在持续扩充。</p></div>'
-        f'<div class="home-stats">{cards}</div>'
-        '</section>'
-    )
 
 
 def home_finder_html(current: Page) -> str:
@@ -2569,7 +2937,7 @@ def home_featured_html(current: Page) -> str:
         name = prof["title"].replace("旅游攻略", "")
         cards.append(
             f'<a class="featured-card" href="{html.escape(href)}">'
-            f'<img src="{html.escape(img)}" alt="{html.escape(name)}" width="800" height="480" loading="lazy" decoding="async">'
+            f'<img src="{html.escape(rel_to(COVER_SMALL / f"{p.key}.jpg", current.output.parent) if (COVER_SMALL / f"{p.key}.jpg").is_file() else img)}" alt="{html.escape(name)}" width="640" height="360" loading="lazy" decoding="async">'
             f'<span class="featured-grad"></span>'
             f'<span class="featured-name">{html.escape(name)}</span>'
             '</a>'
@@ -2579,52 +2947,6 @@ def home_featured_html(current: Page) -> str:
         '<div class="home-section-head"><p class="eyebrow">Editor’s Picks</p>'
         '<h2>编辑精选 · 人气目的地</h2><p>左右滑动，挑一座城市开始你的行程。</p></div>'
         f'<div class="featured-strip">{"".join(cards)}</div>'
-        '</section>'
-    )
-
-
-def home_modules_html(current: Page) -> tuple[str, str]:
-    if current.key != "record":
-        return "", ""
-    top = home_stats_html() + home_featured_html(current) + home_themes_html()
-    return top, home_tools_html()
-
-
-def city_overview_html(page: Page) -> str:
-    """城市页顶部「速览名片」：所在 / 适宜季节 / 必看景点 / 必吃美食 + 收藏、加入行程。"""
-    if page.key == "record":
-        return ""
-    prof = city_profile(page)
-    province, season = prof["province"], prof["season"]
-    review_date = explicit_review_date(page, read_markdown_cached(page))
-    review_status = "reviewed" if review_date != "未核验" else "pending"
-    review_label = f"核验日期 {review_date}" if review_status == "reviewed" else "资料待复核"
-    highlights = [h for h in prof["highlights"] if h][:6]
-    foods = [f for f in prof["foods"] if f][:6]
-    href = rel_to(page.output, OUT)  # 相对站点根，供收藏/行程在用户中心回链
-    data_attrs = (
-        f'data-key="{html.escape(page.key)}" data-name="{html.escape(prof["title"])}" '
-        f'data-href="{html.escape(href)}" data-sub="{html.escape(prof["subtitle"])}"'
-    )
-    hl = "".join(f"<em>{html.escape(h)}</em>" for h in highlights) or "<em>见下方正文</em>"
-    fd = "".join(f'<em class="food">{html.escape(f)}</em>' for f in foods) or "<em>见下方正文</em>"
-    return (
-        '<section class="city-overview reveal" aria-label="城市速览">'
-        '<div class="co-facts">'
-        f'<div class="co-cell"><span class="co-k">所在</span><span class="co-v">{html.escape(province)}</span></div>'
-        f'<div class="co-cell"><span class="co-k">适宜季节</span><span class="co-v">{html.escape(season)}</span></div>'
-        f'<div class="co-cell co-review {review_status}" data-review-status="{review_status}">'
-        f'<span class="co-k">资料状态</span><span class="co-v">{html.escape(review_label)}</span>'
-        '<span class="co-review-note">动态信息出行前复核</span></div>'
-        '</div>'
-        f'<div class="co-block"><span class="co-bk">📍 必看景点</span><div class="co-chips">{hl}</div></div>'
-        f'<div class="co-block"><span class="co-bk">🍜 必吃美食</span><div class="co-chips">{fd}</div></div>'
-        '<div class="co-actions">'
-        f'<button class="co-fav" type="button" {data_attrs}>☆ 收藏</button>'
-        f'<button class="co-trip" type="button" {data_attrs}>＋ 加入行程</button>'
-        f'<button class="co-share" type="button" data-share-title="{html.escape(prof["title"])}" '
-        f'aria-label="分享{html.escape(prof["title"])}" title="分享当前城市攻略">↗ 分享</button>'
-        '</div>'
         '</section>'
     )
 
@@ -2661,10 +2983,12 @@ POI_OFFICIAL_LINKS = {
 
 def poi_action_links_html(page: Page, title: str, section_id: str | None, depth: int) -> str:
     """Place a few useful exits where a traveller is already reading about a place."""
-    if page.key == "record" or depth != 0 or section_id not in {"attractions", "museums", "seasonal"}:
+    if page.key in HUB_KEYS or depth != 0 or section_id not in {"attractions", "museums", "seasonal"}:
         return ""
     title = re.sub(r"\s+", " ", title).strip()
     if len(title) < 2 or len(title) > 48 or title in {"使用说明", "核心景区", "推荐地点"}:
+        return ""
+    if re.fullmatch(r"[春夏秋冬](?:季|天)?|全年|四季", title):
         return ""
     profile = city_profile(page)
     city = profile["city"]
@@ -2691,7 +3015,7 @@ def poi_action_links_html(page: Page, title: str, section_id: str | None, depth:
 
 
 def research_panel_html(page: Page) -> str:
-    if page.key == "record":
+    if page.key in HUB_KEYS:
         return (
             '<section class="research-panel reveal" id="research-sources" aria-label="资料更新规则">'
             '<div class="research-copy"><p class="eyebrow">Research</p>'
@@ -2710,42 +3034,31 @@ def research_panel_html(page: Page) -> str:
     return ""
 
 
-def mobile_quickbar_html(current: Page, anchor_index: AnchorIndex) -> str:
-    home_href = rel_to(OUT / "index.html", current.output.parent)
-    items = [
-        ("首页", home_href),
-        ("搜索", "#guideSearch"),
-        ("景点", pick_section_href(anchor_index, ["attractions", "seasonal", "nature", "source-map"])),
-        ("吃喝", pick_section_href(anchor_index, ["food", "shops", "markets", "streets", "source-map"])),
-        ("路线", pick_section_href(anchor_index, ["routes", "daytrip-decisions"])),
-    ]
-    links = "".join(
-        f'<a href="{html.escape(href)}">{html.escape(label)}</a>'
-        for label, href in items if href
+def trip_toggle_html() -> str:
+    """Header entry for the trip workspace (the mobile tab bar has its own)."""
+    return (
+        '<button class="trip-dock-toggle" id="tripDockToggle" type="button" aria-controls="tripDock" aria-expanded="false">'
+        f'{icon("bag")}<span>行程</span><strong id="tripDockCount" aria-label="行程中的城市数">0</strong></button>'
     )
-    return f'<nav class="mobile-quickbar" aria-label="移动端快捷入口">{links}</nav>'
 
 
 def trip_workspace_html(current: Page) -> str:
     """Render the global, browser-local trip workspace entry and drawer."""
-    user_href = rel_to(OUT / "user.html", current.output.parent) + "#user-panel-trip"
-    return f"""  <button class="trip-dock-toggle" id="tripDockToggle" type="button" aria-controls="tripDock" aria-expanded="false">
-    <span aria-hidden="true">路线</span><span>行程</span><strong id="tripDockCount" aria-label="行程中的城市数">0</strong>
-  </button>
-  <div class="trip-dock-backdrop" id="tripDockBackdrop" hidden></div>
+    user_href = rel_to(OUT / "plan.html", current.output.parent)
+    return f"""  <div class="trip-dock-backdrop" id="tripDockBackdrop" hidden></div>
   <aside class="trip-dock" id="tripDock" role="dialog" aria-modal="true" aria-labelledby="tripDockTitle" tabindex="-1" hidden>
     <header class="trip-dock-head">
       <div><p class="eyebrow">Trip workspace</p><h2 id="tripDockTitle">当前行程</h2></div>
       <button class="trip-dock-close" id="tripDockClose" type="button" aria-label="关闭行程工作台" title="关闭">×</button>
     </header>
     <div class="trip-dock-body">
-      <p class="trip-dock-intro">把城市先放进同一张清单，再去用户中心按天排序和补充计划。数据只保存在这台设备。</p>
+      <p class="trip-dock-intro">这里是想去的城市清单。具体景点请在城市攻略里点“＋ 加入行程”，再到“行程计划”按天安排。数据只保存在这台设备。</p>
       <div class="trip-dock-list" id="tripDockList"></div>
       <div class="trip-dock-empty" id="tripDockEmpty"><strong>行程还是空的</strong><span>在城市卡片或攻略速览中点击“加入行程”。</span></div>
     </div>
     <footer class="trip-dock-footer">
       <button id="tripDockClear" type="button">清空行程</button>
-      <a href="{html.escape(user_href)}">进入行程计划 <span aria-hidden="true">→</span></a>
+      <a href="{html.escape(user_href)}">按天排行程 <span aria-hidden="true">→</span></a>
     </footer>
   </aside>"""
 
@@ -3107,57 +3420,8 @@ def ensure_body_gallery(page: Page) -> None:
         output.save(output_path, "JPEG", quality=76, optimize=True, progressive=True)
 
 
-def reinforcement_appendix(page: Page, markdown: str) -> str:
-    """Add an execution-oriented city brief when the source guide is still short."""
-    if page.key == "record" or len(markdown) >= 4000:
-        return ""
-    profile = city_profile(page)
-    city = profile["city"]
-    highlights = profile["highlights"][:4] or ["核心景点", "城市街区"]
-    foods = profile["foods"][:4] or ["本地早餐", "夜市小吃"]
-    routes = profile["routes"][:3] or ["经典片区线", "雨天备选线"]
-    sights = "、".join(highlights)
-    food_list = "、".join(foods)
-    route_list = "、".join(routes)
-    return f"""
-
-## 行程执行补强
-
-### 到达后先做什么
-- 抵达 {city} 后先确认当日天气、景区入园时间和返程末班；把 {sights} 按地理方向拆开，不以地图直线距离代替实际通行时间。
-- 第一天只安排一个核心片区：入住、寄存行李、熟悉周边吃喝与停车/换乘点后再进景区。这样即使遇到排队、降雨或临时限流，也能保住当天的主要体验。
-- 需要跨区的行程，出发前在官方入口与地图中分别核对一次。导航显示的时间不包含排队、观光车、索道、找车位和步行回程，应额外预留缓冲。
-
-### 分区与动线
-- 核心游览：优先把 {highlights[0]} 作为半天或一天的主任务；其余 {"、".join(highlights[1:])} 只在同方向、体力和开放时间允许时加入。
-- 城市休整：午餐、雨天与傍晚留给市区街区、展馆或商圈；不要为了打卡在中午往返远郊。需要夜游时，先确认最后一班公共交通、停车场关闭时间和打车供给。
-- 远郊选择：若只住一晚，宁可减少一个景点，也不要把远郊和市区夜游排进同一日。自驾以返回住宿地前仍留有充足精力为底线，山路、雨雾和节假日要再收紧计划。
-
-### 餐饮与补给
-- 这座城市可优先从 {food_list} 中选一到两样作为正餐，再用同片区的小吃补充；同一天不要跨城寻找网红店。
-- 早餐适合安排在住宿周边或菜市场一带，午餐以靠近主景区为先，晚餐再回到夜间活动片区。热门店排队超过预留时间时，直接选择相邻街区的同类店，行程体验通常更稳定。
-- 购买伴手礼时先看生产日期、常温保存和携带限制；自驾可放在返程前采购，公共交通出行则优先轻量、耐压的包装。
-
-### 路线落地模板
-- 半天：{highlights[0]} + 同片区散步/展馆 + {foods[0]}。适合早到、转场或天气不稳定的日子。
-- 一天：上午 {highlights[0]}，午后在 {highlights[min(1, len(highlights) - 1)]} 或市区人文点二选一，傍晚安排 {foods[min(1, len(foods) - 1)]}。每个节点之间留出交通与休息时间。
-- 两天：第一天完成城市核心与夜间街区，第二天只选择一条远郊或自然线；可从现有攻略中的 {route_list} 里选与住宿方向一致的一条。
-- 雨天：优先博物馆、室内展馆、商场和老街，把需要视野、步道或水上项目的景点挪到天气恢复后；门票改签与景区公告以官方页面为准。
-
-### 预算、停车与安全边界
-- 预算按住宿、交通/油费、门票、餐饮和机动金五项拆分。门票、停车、观光车、索道、演出和游船常为独立项目，提交行程前逐项核验，避免把“景区门票”理解为全部费用。
-- 自驾抵达景区前保存停车场位置、收费规则和出口方向；节假日不要依赖最后一个停车场。纯电或插混车辆应在进入远郊前完成补能，并保留一处备选充电点。
-- 夜间、山地、海边、峡谷与涉水项目要服从天气预警和现场管制。遇到大风、雷雨、能见度低或道路封闭时，立即切换到市区备选，不追赶原计划。
-
-### 出发前最后核验
-- 核对 {sights} 的开放日期、预约入口、实名要求、临时闭园和分时段入园规则。
-- 核对住宿到第一站的实际通行时间、停车/换乘、返程末班，以及第二天是否需要提前退房或寄存行李。
-- 核对天气预警、道路施工、节假日客流和活动公告；易变项目以城市页末尾来源链接及官方当天公告为准。
-"""
-
-
 def guide_gallery_html(page: Page) -> str:
-    if page.key == "record":
+    if page.key in HUB_KEYS:
         return ""
     photo = PHOTOS / page.key / "scenery-01.jpg"
     if not photo.exists():
@@ -3170,36 +3434,42 @@ def guide_gallery_html(page: Page) -> str:
     return '<section class="source-media guide-gallery"><div class="source-media-head compact-head"><p class="eyebrow">Visual Notes</p><h2>正文配图</h2><p>图片为本站本地保存的城市封面衍生构图，用于辅助浏览；授权与来源沿用该城市封面信息。</p></div><div class="media-grid">' + cards + '</div></section>'
 
 
+PRIMARY_NAV = (
+    ("home", "首页", "index.html", "home"),
+    ("destinations", "目的地", "destinations.html", "compass"),
+    ("themes", "主题玩法", "themes.html", "layers"),
+    ("cities", "城市攻略", "city-guides.html", "book"),
+    ("plan", "行程计划", "plan.html", "calendar"),
+    ("roadtrip", "自驾路书", "roadtrip.html", "car"),
+)
+# 抽屉菜单比顶栏多放两项，手机上所有入口都能找到。
+DRAWER_NAV = PRIMARY_NAV + (("tools", "实用工具", "tools.html", "tool"),)
+
+
 def site_header_html(page: Page, active_key: str = "") -> str:
-    home = rel_to(OUT / "index.html", page.output.parent)
-    user = rel_to(OUT / "user.html", page.output.parent)
-    roadtrip = rel_to(OUT / "roadtrip.html", page.output.parent)
-    destinations = rel_to(OUT / "destinations.html", page.output.parent)
-    themes = rel_to(OUT / "themes.html", page.output.parent)
-    city_guides = rel_to(OUT / "city-guides.html", page.output.parent)
-    tools = rel_to(OUT / "tools.html", page.output.parent)
-    items = [
-        ("home", "首页", home),
-        ("destinations", "目的地", destinations),
-        ("themes", "主题玩法", themes),
-        ("cities", "城市攻略", city_guides),
-        ("roadtrip", "自驾路书", roadtrip),
-        ("tools", "实用工具", tools),
-    ]
+    base = page.output.parent
+    home = rel_to(OUT / "index.html", base)
+    user = rel_to(OUT / "user.html", base)
+    destinations = rel_to(OUT / "destinations.html", base)
     links = "".join(
-        f'<a class="header-link{" active" if k == active_key else ""}" href="{html.escape(h)}">{lbl}</a>'
-        for k, lbl, h in items
+        f'<a class="header-link{" active" if key == active_key else ""}" href="{html.escape(rel_to(OUT / href, base))}"'
+        f'{" aria-current=\"page\"" if key == active_key else ""}>{label}</a>'
+        for key, label, href, _ in PRIMARY_NAV
     )
     user_active = " active" if active_key == "user" else ""
-    mobile_links = links + f'<a class="header-link{user_active}" href="{user}">用户中心</a>'
+    mobile_links = "".join(
+        f'<a class="header-link{" active" if key == active_key else ""}" href="{html.escape(rel_to(OUT / href, base))}">'
+        f'{icon(icon_name)}<span>{label}</span></a>'
+        for key, label, href, icon_name in DRAWER_NAV
+    ) + f'<a class="header-link{user_active}" href="{user}">{icon("user")}<span>用户中心</span></a>'
     return f"""  <header class="site-header">
     <div class="header-bar">
-      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topNav" aria-label="城市导航菜单">☰</button>
-      <a class="header-home" href="{home}"><span class="brand-mark" aria-hidden="true">🧭</span><span class="brand-name">游记<b>地图</b></span></a>
+      <a class="header-home" href="{home}" aria-label="游记地图首页"><span class="brand-mark" aria-hidden="true">游</span><span class="brand-name">游记<b>地图</b></span></a>
       <nav class="header-links" aria-label="功能导航">{links}</nav>
       <div class="global-search">
         <label class="global-search-box">
-          <span>全站搜索</span>
+          <span class="sr-only">全站搜索</span>
+          {icon("search", "icon search-icon")}
           <input id="siteSearch" type="search" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="siteSearchResults" placeholder="搜索城市、景点、美食、季节">
         </label>
         <div class="site-search-results" id="siteSearchResults" hidden>
@@ -3207,16 +3477,48 @@ def site_header_html(page: Page, active_key: str = "") -> str:
           <div class="site-search-options" id="siteSearchOptions" role="listbox" aria-label="城市与攻略搜索建议"></div>
         </div>
       </div>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topNav" aria-label="打开城市导航菜单">{icon("menu", "icon nav-open-icon")}{icon("close", "icon nav-close-icon")}<span class="nav-toggle-text">选城市</span></button>
+      {trip_toggle_html()}
       <a class="header-user{user_active}" href="{user}" aria-label="用户中心">
         <span class="user-avatar" id="headerAvatar" aria-hidden="true">👤</span>
-        <span class="header-user-name" id="headerUserName">用户中心</span>
+        <span class="header-user-name" id="headerUserName">我的</span>
       </a>
     </div>
     <nav class="top-nav" id="topNav" aria-label="城市导航">
-      {nav_html(page)}
-      <div class="mobile-primary-nav" aria-label="移动端功能导航">{mobile_links}</div>
+      <div class="top-nav-inner">
+        <div class="mobile-primary-nav" aria-label="移动端功能导航">{mobile_links}</div>
+        <div class="top-nav-head">
+          <div><strong>按省份选城市</strong><span>点开省份查看城市；想按季节、天数筛选可去目的地页。</span></div>
+          <a class="top-nav-all" href="{destinations}">全部目的地 {icon("arrow")}</a>
+        </div>
+        {nav_html(page)}
+      </div>
     </nav>
   </header>"""
+
+
+def mobile_tabbar_html(page: Page, active_key: str) -> str:
+    base = page.output.parent
+    tabs = (
+        ("home", "首页", "index.html", "home"),
+        ("destinations", "目的地", "destinations.html", "compass"),
+        ("plan", "行程", "plan.html", "calendar"),
+        ("roadtrip", "自驾", "roadtrip.html", "car"),
+    )
+    links = "".join(
+        f'<a class="tab{" active" if key == active_key else ""}" href="{html.escape(rel_to(OUT / href, base))}"'
+        f'{" aria-current=\"page\"" if key == active_key else ""}>{icon(icon_name)}<span>{label}</span></a>'
+        for key, label, href, icon_name in tabs
+    )
+    user_href = rel_to(OUT / "user.html", base)
+    return (
+        '  <nav class="mobile-tabbar" aria-label="移动端主导航">'
+        f'{links}'
+        f'<a class="tab{" active" if active_key == "user" else ""}" href="{html.escape(user_href)}">{icon("user")}<span>我的</span></a>'
+        '</nav>'
+    )
+
+
 
 
 AUTHOR_SECTION_HEADINGS = (
@@ -3258,7 +3560,7 @@ def strip_sections(markdown: str, headings: tuple[str, ...]) -> str:
 def extract_changelog_html() -> str:
     """从 记录.md 的作者向章节提取更新说明，供用户中心展示。"""
     try:
-        md = (ROOT / "记录.md").read_text(encoding="utf-8")
+        md = (RECORD_SOURCE).read_text(encoding="utf-8")
     except OSError:
         return "<p>暂无更新说明。</p>"
     blocks: list[tuple[str, list[str]]] = []
@@ -3281,33 +3583,63 @@ def extract_changelog_html() -> str:
     return "".join(parts) or "<p>暂无更新说明。</p>"
 
 
-def footer_html() -> str:
-    return (
-        '  <footer class="site-footer">\n'
-        '    <p>本页为个人离线旅游攻略整理，内容来自公开网络资料的归纳，仅供出行参考；'
-        '出发前请按官方景区、本地文旅、票务系统复核时间、票价与预约信息。</p>\n'
-        '    <p>城市与景点照片来自 <a href="https://commons.wikimedia.org/" target="_blank" rel="noreferrer">Wikimedia Commons</a> '
-        '等开放图库（遵循各自的 CC 授权）；无照片处使用程序生成的示意插画。</p>\n'
-        '  </footer>'
-    )
+def footer_html(page: Page) -> str:
+    base = page.output.parent
+
+    def href(name: str) -> str:
+        return html.escape(rel_to(OUT / name, base))
+
+    city_count = sum(1 for item in PAGES if item.key not in HUB_KEYS)
+    return f"""  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="header-home" href="{href("index.html")}"><span class="brand-mark" aria-hidden="true">游</span><span class="brand-name">游记<b>地图</b></span></a>
+        <p>个人整理的全国城市旅游攻略，收录 {city_count} 座城市的景点、美食、季节与路线。运行期纯静态，可安装到手机离线阅读。</p>
+      </div>
+      <nav class="footer-links" aria-label="浏览攻略"><strong>浏览</strong><a href="{href("destinations.html")}">目的地筛选</a><a href="{href("themes.html")}">主题玩法</a><a href="{href("city-guides.html")}">城市攻略</a><a href="{href("overview.html")}">跨城市总览</a></nav>
+      <nav class="footer-links" aria-label="旅行工具"><strong>工具</strong><a href="{href("plan.html")}">行程计划</a><a href="{href("roadtrip.html")}">自驾路书</a><a href="{href("tools.html")}">实用工具</a><a href="{href("user.html")}">用户中心</a></nav>
+      <div class="footer-note">
+        <strong>资料说明</strong>
+        <p>内容来自公开资料的归纳，仅供出行参考；门票、开放时间与预约请以官方景区、本地文旅和票务系统为准。</p>
+        <p>城市与景点照片来自 <a href="https://commons.wikimedia.org/" target="_blank" rel="noreferrer">Wikimedia Commons</a> 等开放图库，遵循各自 CC 授权。</p>
+      </div>
+    </div>
+    <p class="footer-copy">游记地图 · 收藏、行程与笔记只保存在你的浏览器</p>
+  </footer>"""
 
 
-def shell_page_html(
+SETTINGS_BOOT_SCRIPT = (
+    '<script>try{var s=JSON.parse(localStorage.getItem("tay_settings")||"{}"),r=document.documentElement;'
+    'if(s.vibrancy)r.setAttribute("data-vibrancy",s.vibrancy);if(s.font)r.setAttribute("data-font",s.font);'
+    'if(s.motion)r.setAttribute("data-motion",s.motion);var t=s.theme||"auto";'
+    'if(t==="auto")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";'
+    'r.setAttribute("data-theme",t);}catch(e){}</script>'
+)
+
+
+def document_html(
     page: Page,
     title: str,
     main_html: str,
     active_key: str,
+    *,
+    page_kind: str,
+    og_image: Path | None = None,
     extra_head: str = "",
     extra_scripts: str = "",
+    body_style: str = "",
 ) -> str:
-    """通用页壳：复用 header / footer / 资源，用于用户中心等非攻略页面。"""
-    site_root = rel_to(OUT, page.output.parent)
-    vite_head, vite_script = vite_asset_tags(page.output.parent)
+    """Shared page shell: metadata, header, footer, mobile tab bar and scripts."""
+    base = page.output.parent
+    site_root = rel_to(OUT, base)
+    vite_head, vite_script = vite_asset_tags(base)
+    image = og_image if og_image and og_image.exists() else ASSETS / "icon-512.png"
+    style = f"--accent:{page.accent}" + (f"; {body_style}" if body_style else "")
     return "\n".join(line.rstrip() for line in f"""<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>{html.escape(title)}</title>
   <meta name="description" content="{html.escape(page.subtitle)}">
   <meta name="theme-color" content="{page.accent}">
@@ -3318,31 +3650,48 @@ def shell_page_html(
   <meta property="og:url" content="{html.escape(public_page_url(page.output))}">
   <meta property="og:site_name" content="游记地图">
   <meta property="og:locale" content="zh_CN">
-  <meta property="og:image" content="{html.escape(public_page_url(ASSETS / 'icon-512.png'))}">
+  <meta property="og:image" content="{html.escape(public_page_url(image))}">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="manifest" href="{rel_to(OUT / 'manifest.webmanifest', page.output.parent)}">
-  <link rel="apple-touch-icon" href="{rel_to(ASSETS / 'icon-180.png', page.output.parent)}">
-  <link rel="stylesheet" href="{asset_href(ASSETS / 'travel.css', page.output.parent)}">
+  <link rel="manifest" href="{rel_to(OUT / 'manifest.webmanifest', base)}">
+  <link rel="icon" href="{rel_to(ASSETS / 'icon-192.png', base)}" type="image/png">
+  <link rel="apple-touch-icon" href="{rel_to(ASSETS / 'icon-180.png', base)}">
+  <link rel="stylesheet" href="{asset_href(ASSETS / 'travel.css', base)}">
 {vite_head}
 {extra_head}
   <noscript><style>.reveal{{opacity:1!important;transform:none!important}}</style></noscript>
-  <script>try{{var s=JSON.parse(localStorage.getItem("tay_settings")||"{{}}"),r=document.documentElement;if(s.vibrancy)r.setAttribute("data-vibrancy",s.vibrancy);if(s.font)r.setAttribute("data-font",s.font);if(s.motion)r.setAttribute("data-motion",s.motion);var t=s.theme||"auto";if(t==="auto")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";r.setAttribute("data-theme",t);}}catch(e){{}}</script>
+  {SETTINGS_BOOT_SCRIPT}
 </head>
-<body id="top" data-site-root="{html.escape(site_root)}" data-search-index="{asset_href(ASSETS / 'search-index.js', page.output.parent)}" style="--accent:{page.accent}">
+<body id="top" data-page="{page_kind}" data-site-root="{html.escape(site_root)}" data-search-index="{asset_href(ASSETS / 'search-index.js', base)}" style="{html.escape(style)}">
   <a class="skip-link" href="#mainContent">跳到主要内容</a>
 {site_header_html(page, active_key)}
   <main id="mainContent" tabindex="-1">
 {main_html}
   </main>
-{footer_html()}
+{footer_html(page)}
+{mobile_tabbar_html(page, active_key)}
 {trip_workspace_html(page)}
   <button class="to-top" id="toTop" type="button" aria-label="返回顶部" title="返回顶部">↑</button>
-  <script src="{asset_href(ASSETS / 'travel.js', page.output.parent)}"></script>
+  <script src="{asset_href(ASSETS / 'travel.js', base)}"></script>
 {vite_script}
 {extra_scripts}
 </body>
 </html>
 """.splitlines()) + "\n"
+
+
+def shell_page_html(
+    page: Page,
+    title: str,
+    main_html: str,
+    active_key: str,
+    extra_head: str = "",
+    extra_scripts: str = "",
+) -> str:
+    """通用页壳：用户中心、目录页与自驾路书等非攻略页面。"""
+    return document_html(
+        page, title, main_html, active_key,
+        page_kind=active_key or "app", extra_head=extra_head, extra_scripts=extra_scripts,
+    )
 
 
 def user_center_body() -> str:
@@ -3413,7 +3762,7 @@ def user_center_body() -> str:
       </section>
       <section class="user-panel guide-section" id="user-panel-trip" data-panel="trip" role="tabpanel" aria-labelledby="user-tab-trip" tabindex="0" hidden>
         <h2>我的行程</h2>
-        <p class="panel-hint">在城市卡片右上角点 ＋ 加入行程，这里可排序、估算节奏，规划一条出行线路。</p>
+        <p class="panel-hint">这里是想去的城市清单：可排序、对比和估算节奏。要把景点排进具体某一天、估算预算和分享，请用 <a href="plan.html">行程计划</a>。</p>
         <div class="trip-tools">
           <label for="tripPlanDays">计划天数</label>
           <input id="tripPlanDays" type="number" min="1" max="60" value="5" inputmode="numeric">
@@ -3550,7 +3899,7 @@ def user_center_body() -> str:
 
 
 def build_user_page() -> None:
-    page = Page(ROOT / "记录.md", OUT / "user.html", "user", "用户中心 · 游记地图",
+    page = Page(RECORD_SOURCE, OUT / "user.html", "user", "用户中心 · 游记地图",
                 "个人信息、收藏、设置与说明", "#0e9e8e", "")
     page.output.write_text(shell_page_html(page, "用户中心 · 游记地图", user_center_body(), "user"), encoding="utf-8")
 
@@ -3573,28 +3922,28 @@ def build_catalog_pages() -> None:
     province_count = len({city_profile(page)["province"] for page in PAGES if page.key != "record"})
     pages = [
         (
-            Page(ROOT / "记录.md", OUT / "destinations.html", "destinations", "目的地 · 游记地图",
+            Page(RECORD_SOURCE, OUT / "destinations.html", "destinations", "目的地 · 游记地图",
                  "按地区、季节、天数、主题和交通方式挑选下一站。", "#19756e", ""),
             "Destinations", "从条件开始，找到下一座城市", "按地区、季节、天数、主题和交通方式组合筛选；结果直接对应可收藏、可加入行程的完整城市攻略。",
             [(str(city_count), "座城市攻略"), (str(province_count), "个地区覆盖")],
             lambda page: home_finder_html(page) + city_explorer_html(page),
         ),
         (
-            Page(ROOT / "记录.md", OUT / "themes.html", "themes", "主题玩法 · 游记地图",
+            Page(RECORD_SOURCE, OUT / "themes.html", "themes", "主题玩法 · 游记地图",
                  "从旅行偏好出发，找到值得专程前往的城市。", "#b96733", ""),
             "Travel Themes", "用一份兴趣清单，决定一段旅程", "亲子、博物馆、山水、历史、美食、避暑、冬季与周末短途均可直接筛选；每个结果都保留到城市攻略的入口。",
             [("8", "种旅行主题"), (str(city_count), "座可筛选城市")],
             lambda page: home_themes_html() + city_explorer_html(page),
         ),
         (
-            Page(ROOT / "记录.md", OUT / "city-guides.html", "cities", "城市攻略 · 游记地图",
+            Page(RECORD_SOURCE, OUT / "city-guides.html", "cities", "城市攻略 · 游记地图",
                  "用关键词、省份和随机发现快速进入可执行的城市攻略。", "#295f89", ""),
             "City Guides", "全国城市攻略，按你的方式找", "每张卡片都包含季节、重点景点与代表美食，并支持收藏、加入行程和随机发现。",
             [(str(city_count), "座城市攻略"), ("本地保存", "收藏与行程")],
             lambda page: city_explorer_html(page),
         ),
         (
-            Page(ROOT / "记录.md", OUT / "tools.html", "tools", "实用工具 · 游记地图",
+            Page(RECORD_SOURCE, OUT / "tools.html", "tools", "实用工具 · 游记地图",
                  "把行程节奏、季节选择和出行准备变成可执行的小决定。", "#85662b", ""),
             "Travel Toolkit", "出发前，把关键决定做清楚", "这些工具不涉及购买或支付。个人数据仅保存在当前浏览器，也可以在用户中心统一管理。",
             [("离线可用", "本机浏览器保存"), ("0", "站内消费入口")],
@@ -3609,7 +3958,7 @@ def build_catalog_pages() -> None:
 def build_seo_files() -> None:
     """Emit deployment metadata from the same page inventory as the generator."""
     paths = {page.output for page in PAGES}
-    paths.update(OUT / name for name in ("destinations.html", "themes.html", "city-guides.html", "tools.html", "user.html", "roadtrip.html"))
+    paths.update(OUT / name for name in ("overview.html", "plan.html", "destinations.html", "themes.html", "city-guides.html", "tools.html", "user.html", "roadtrip.html"))
     urls = sorted({public_page_url(path) for path in paths})
     entries = "".join(f"  <url><loc>{html.escape(url)}</loc></url>\n" for url in urls)
     sitemap = (
@@ -3718,9 +4067,9 @@ def roadtrip_body() -> str:
                 <label class="rt-field"><span>每人门票参考</span><input id="rtTickets" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">填 0 时优先读取目的地攻略中的明确票价。</small></label>
               </div>
               <details class="rt-details">
-                <summary>离线估算参数</summary>
+                <summary>里程与收费（从导航应用查到后填入更准）</summary>
                 <div class="rt-field-grid" id="rtOfflineFields">
-                  <label class="rt-field"><span>预计单程公里数</span><input id="rtEstimatedKm" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">留 0 由系统估算。</small></label>
+                  <label class="rt-field"><span>预计单程公里数</span><input id="rtEstimatedKm" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">留 0 时系统按同城、同省或跨省和天数粗估，不是道路里程。</small></label>
                   <label class="rt-field"><span>预计道路收费</span><input id="rtEstimatedTolls" type="number" min="0" value="0" inputmode="numeric"><small class="rt-field-note">留 0 按里程估算。</small></label>
                 </div>
               </details>
@@ -3747,8 +4096,26 @@ def roadtrip_body() -> str:
     </section>"""
 
 
+def build_plan_page() -> None:
+    page = Page(RECORD_SOURCE, OUT / "plan.html", "plan", "行程计划 · 游记地图",
+                "把景点放进每一天，估算预算，保存、分享与旅途中查看今天安排。", "#2f6f9f", "")
+    masthead = catalog_masthead(
+        "Trip Planner",
+        "行程计划",
+        "把攻略里的景点和美食放进具体某一天，调整顺序和时间，查看每天的强度和参考预算；旅途中切到“今天”看当天安排和导航。",
+        [("本机保存", "刷新、关闭后可恢复"), ("不含交易", "费用均为自填估算")],
+    )
+    body = masthead + (
+        '<section class="plan-app" id="planApp" aria-label="行程计划工作台">'
+        '<p class="plan-loading">正在载入本机保存的行程…</p>'
+        '<noscript><p class="plan-notice">行程计划需要启用 JavaScript；攻略页面本身无需脚本即可阅读。</p></noscript>'
+        '</section>'
+    )
+    page.output.write_text(shell_page_html(page, page.title, body, "plan"), encoding="utf-8")
+
+
 def build_roadtrip_page() -> None:
-    page = Page(ROOT / "记录.md", OUT / "roadtrip.html", "roadtrip", "自驾路书 · 游记地图",
+    page = Page(RECORD_SOURCE, OUT / "roadtrip.html", "roadtrip", "自驾路书 · 游记地图",
                 "自驾路线、逐日安排、预算和风险清单", "#176b5d", "")
     head = f'  <link rel="stylesheet" href="{asset_href(ASSETS / "roadtrip.css", page.output.parent)}">'
     scripts = "\n".join([
@@ -3919,6 +4286,268 @@ def build_content_audit() -> None:
     report.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+# 全站内容完整度矩阵：衡量每座城市能否回答游客的核心问题，以及有多少是模板句。
+MATRIX_SECTIONS = (
+    ("结论", ("先看结论", "先看总览")),
+    ("怎么玩", ("快速决策索引",)),
+    ("月份", ("全年月份速查",)),
+    ("季节", ("季节限定景观", "适合季节与天数")),
+    ("开放/票价", ("景点营业时间和票价速查",)),
+    ("行前准备", ("行前准备",)),
+    ("住宿", ("住宿建议", "住宿区域")),
+    ("分区", ("地图分区",)),
+    ("景点", ("核心景点",)),
+    ("美食", ("美食总表", "美食推荐")),
+    ("路线", ("路线模板", "行程路线")),
+    ("交通", ("交通细节",)),
+    ("预算", ("预算参考", "时间与预算拆分")),
+    ("避坑", ("避坑和取舍", "避坑提醒")),
+    ("复核清单", ("出发前复核清单", "出发前复核")),
+)
+BOILERPLATE_MIN_CITIES = 15
+
+
+def markdown_value_lines(markdown: str) -> list[str]:
+    values = []
+    for line in markdown.splitlines():
+        match = re.match(r"^\s*-\s+(.+)$", line)
+        if not match:
+            continue
+        label, body = split_label(match.group(1))
+        values.append((body if label else match.group(1)).strip())
+    return values
+
+
+def boilerplate_values(pages: list[Page]) -> set[str]:
+    """出现在很多城市里的同一句话视为模板句（不是该城市的具体信息）。"""
+    seen: dict[str, set[str]] = {}
+    for page in pages:
+        for value in set(markdown_value_lines(read_markdown_cached(page))):
+            if len(value) >= 8:
+                seen.setdefault(value, set()).add(page.key)
+    return {value for value, keys in seen.items() if len(keys) >= BOILERPLATE_MIN_CITIES}
+
+
+def build_content_matrix() -> None:
+    city_pages = [page for page in PAGES if page.key not in HUB_KEYS]
+    templates = boilerplate_values(city_pages)
+    popular = set(HOME_CITY_KEYS)
+    rows = []
+    for page in city_pages:
+        markdown = read_markdown_cached(page)
+        headings = {line[3:].strip() for line in markdown.splitlines() if line.startswith("## ")}
+        covered = [name for name, options in MATRIX_SECTIONS if any(option in headings for option in options)]
+        values = [value for value in markdown_value_lines(markdown) if len(value) >= 8]
+        template_count = sum(value in templates for value in values)
+        hours_lines = re.findall(r"^\s*-\s*(?:营业时间|开放时间|时间限制)[：:]\s*(.+)$", markdown, re.M)
+        specific_hours = sum(1 for value in hours_lines if value.strip() not in templates)
+        price_lines = re.findall(r"^\s*-\s*(?:门票|票价|票价/预约方式)[：:]\s*(.+)$", markdown, re.M)
+        specific_prices = sum(1 for value in price_lines if value.strip() not in templates and re.search(r"\d", value))
+        attractions = len(extract_first_nodes_after(markdown, "## 核心景点", 99))
+        urls = extract_urls(markdown)
+        review = explicit_review_date(page, markdown)
+        cover = photo_is_publishable(PHOTO_CACHE.get(f"cityphoto|{page.key}"), page.key)
+        template_share = round(template_count / len(values), 2) if values else 0.0
+        score = (
+            len(covered) / len(MATRIX_SECTIONS) * 40
+            + (1 - template_share) * 25
+            + min(specific_hours, 4) * 2.5
+            + (10 if review != "未核验" else 0)
+            + (5 if official_source_count(urls) else 0)
+            + (10 if cover else 0)
+        )
+        rows.append({
+            "key": page.key,
+            "city": city_profile(page)["city"],
+            "province": city_profile(page)["province"],
+            "path": rel_to(page.output, ROOT),
+            "popular": page.key in popular,
+            "chars": len(markdown),
+            "sections": covered,
+            "missingSections": [name for name, _ in MATRIX_SECTIONS if name not in covered],
+            "attractions": attractions,
+            "specificHours": specific_hours,
+            "specificPrices": specific_prices,
+            "templateShare": template_share,
+            "sources": len(urls),
+            "officialSources": official_source_count(urls),
+            "reviewDate": review,
+            "licensedCover": cover,
+            "score": round(score, 1),
+        })
+    # 热门城市且分数低的排在最前：需求价值 × 缺口。
+    rows.sort(key=lambda row: (not row["popular"], row["score"], row["key"]))
+    reports = ROOT / "docs" / "reports"
+    reports.mkdir(parents=True, exist_ok=True)
+    (reports / "content-matrix.json").write_text(json.dumps({
+        "generatedBy": "tools/build_travel_html.py",
+        "boilerplateMinCities": BOILERPLATE_MIN_CITIES,
+        "boilerplateSentences": sorted(templates),
+        "cities": rows,
+    }, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
+    coverage = {name: sum(name in row["sections"] for row in rows) for name, _ in MATRIX_SECTIONS}
+    total_values = sum(len([v for v in markdown_value_lines(read_markdown_cached(p)) if len(v) >= 8]) for p in city_pages)
+    total_templates = sum(round(row["templateShare"] * len([v for v in markdown_value_lines(read_markdown_cached(p)) if len(v) >= 8])) for row, p in zip(rows, sorted(city_pages, key=lambda p: [r["key"] for r in rows].index(p.key))))
+    lines = [
+        "# 内容完整度矩阵",
+        "",
+        "> 由 `npm run build` 自动生成，衡量每座城市能否回答游客的核心问题。机器可读版本见 `content-matrix.json`。",
+        f"> 模板句定义：同一句话出现在 ≥{BOILERPLATE_MIN_CITIES} 座城市的条目里，视为通用模板而不是该城市的具体信息。",
+        "",
+        "## 全站概况",
+        "",
+        f"- 城市：{len(rows)}；已标注核验日期：{sum(row['reviewDate'] != '未核验' for row in rows)}；有授权实景封面：{sum(row['licensedCover'] for row in rows)}",
+        f"- 条目总数约 {total_values}，其中模板句约 {total_templates}（{total_templates / max(total_values, 1):.0%}）；全站识别出 {len(templates)} 种模板句",
+        f"- 有具体（非模板）开放时间的城市：{sum(row['specificHours'] > 0 for row in rows)}；有具体票价数字的城市：{sum(row['specificPrices'] > 0 for row in rows)}",
+        "",
+        "| 章节 | 覆盖城市数 |",
+        "| --- | ---: |",
+        *[f"| {name} | {count} |" for name, count in coverage.items()],
+        "",
+        "## 城市矩阵（热门且得分低的优先）",
+        "",
+        "得分 = 章节覆盖 40 + 非模板比例 25 + 具体开放时间 ≤10 + 核验日期 10 + 官方来源 5 + 授权封面 10。",
+        "",
+        "| 城市 | 省份 | 热门 | 得分 | 章节 | 缺少章节 | 景点 | 具体开放时间 | 具体票价 | 模板句占比 | 来源/官方 | 核验日期 | 封面 |",
+        "| --- | --- | :---: | ---: | ---: | --- | ---: | ---: | ---: | ---: | --- | --- | :---: |",
+    ]
+    for row in rows:
+        lines.append(
+            f"| [{row['city']}](../../{row['path']}) | {row['province']} | {'★' if row['popular'] else ''} | {row['score']} | "
+            f"{len(row['sections'])}/{len(MATRIX_SECTIONS)} | {'、'.join(row['missingSections']) or '—'} | {row['attractions']} | "
+            f"{row['specificHours']} | {row['specificPrices']} | {row['templateShare']:.0%} | {row['sources']}/{row['officialSources']} | "
+            f"{row['reviewDate']} | {'✓' if row['licensedCover'] else '—'} |"
+        )
+    lines += ["", "## 最常见的模板句", ""]
+    counts: dict[str, int] = {}
+    for page in city_pages:
+        for value in markdown_value_lines(read_markdown_cached(page)):
+            if value in templates:
+                counts[value] = counts.get(value, 0) + 1
+    for value, count in sorted(counts.items(), key=lambda item: -item[1])[:20]:
+        lines.append(f"- {count} 次：{value}")
+    (reports / "内容完整度矩阵.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def image_dimensions(path: Path) -> tuple[int, int]:
+    try:
+        with Image.open(path) as image:
+            return image.size
+    except Exception:
+        return (0, 0)
+
+
+def build_image_inventory() -> None:
+    """图片清单：每张图片的主体、来源、授权、尺寸、是否发布与审核结论。"""
+    load_photo_cache()
+    load_photo_editorial_decisions()
+    referenced: set[str] = set()
+    for html_path in OUT.rglob("*.html"):
+        for match in re.finditer(r'(?:src|data-src)="(?:\.\./)*(assets/(?:images|photos|item-images)/[^"?#]+)', html_path.read_text(encoding="utf-8")):
+            referenced.add(match.group(1))
+    by_path: dict[str, tuple[str, dict]] = {}
+    for key, entry in PHOTO_CACHE.items():
+        if isinstance(entry, dict) and entry.get("path"):
+            by_path.setdefault(str(entry["path"]), (key, entry))
+    records = []
+    hashes: dict[str, str] = {}
+    for path in sorted(list(IMAGES.rglob("*")) + list(PHOTOS.rglob("*")) + list(ITEM_IMAGES.rglob("*")) + list(SOURCE_MEDIA_DIR.rglob("*"))):
+        if not path.is_file() or path.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
+            continue
+        rel = rel_to(path, OUT)
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        width, height = image_dimensions(path)
+        cache_key, entry = by_path.get(rel, ("", {}))
+        if not entry and path.parent == IMAGES and path.suffix == ".jpg":
+            entry = PHOTO_CACHE.get(f"cityphoto|{path.stem}", {}) or {}
+            cache_key = f"cityphoto|{path.stem}"
+        if path.parent == COVER_SMALL:
+            subject, kind = path.stem, "封面小图"
+            entry = PHOTO_CACHE.get(f"cityphoto|{path.stem}", {}) or {}
+            cache_key = f"cityphoto|{path.stem}"
+        elif path.parent == IMAGES:
+            subject, kind = path.stem, "城市封面" if path.suffix == ".jpg" else "程序生成插画"
+        elif SOURCE_MEDIA_DIR in path.parents:
+            subject, kind = "来源网页截取", "来源网页媒体"
+        elif path.name.startswith("scenery-"):
+            subject, kind = path.parent.name, "封面衍生裁切"
+        elif path.name.startswith("cityphoto-src"):
+            subject, kind = path.parent.name, "封面原图"
+        else:
+            subject, kind = str(entry.get("title", "")).removeprefix("File:") or path.stem, "条目配图"
+        city_key = cache_key.split("|", 1)[1] if cache_key.startswith("cityphoto|") else path.parent.name if path.parent != IMAGES else path.stem
+        licensed = photo_has_republication_rights(entry) if entry else False
+        if cache_key.startswith("cityphoto|"):
+            rejection = photo_editorial_rejection(city_key, entry)
+        else:
+            rejection = photo_editorial_rejection(f"item:{cache_key}", entry) if entry else None
+        if kind == "程序生成插画":
+            verdict = "未展示：程序生成插画，不冒充实景"
+        elif kind == "来源网页媒体":
+            verdict = "不得发布：来源网页图片没有记录转载授权"
+        elif rejection:
+            verdict = f"移出展示：{rejection.get('reason', '内容审核未通过')}"
+        elif not licensed and kind in {"城市封面", "条目配图", "封面原图", "封面小图"}:
+            verdict = "不得发布：缺少可追溯授权"
+        elif rel in referenced:
+            reviewed_on = photo_content_review_date(entry)
+            verdict = (
+                f"展示中：授权可追溯；画面已于 {reviewed_on} 人工对照标注地点复核"
+                if reviewed_on else "展示中：授权可追溯；主体为自动匹配，人工语义复核待补"
+            )
+        else:
+            verdict = "未展示：页面未引用"
+        duplicate_of = hashes.get(digest, "")
+        hashes.setdefault(digest, rel)
+        records.append({
+            "path": rel, "kind": kind, "subject": subject, "city": city_key,
+            "source": entry.get("source", "") if entry else "", "author": entry.get("artist", "") if entry else "",
+            "license": entry.get("license", "") if entry else "", "width": width, "height": height,
+            "bytes": path.stat().st_size, "sha256": digest[:16], "duplicateOf": duplicate_of,
+            "displayed": rel in referenced, "verdict": verdict,
+        })
+    reports = ROOT / "docs" / "reports"
+    (reports / "image-inventory.json").write_text(json.dumps({"generatedBy": "tools/build_travel_html.py", "images": records}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    summary: dict[str, int] = {}
+    for record in records:
+        summary[record["verdict"].split("：")[0]] = summary.get(record["verdict"].split("：")[0], 0) + 1
+    kinds: dict[str, int] = {}
+    for record in records:
+        kinds[record["kind"]] = kinds.get(record["kind"], 0) + 1
+    displayed = [record for record in records if record["displayed"]]
+    lines = [
+        "# 图片清单",
+        "",
+        "> 由 `npm run build` 自动生成。逐张列出主体、来源、作者、许可、尺寸、是否展示和审核结论；完整字段见 `image-inventory.json`。",
+        "> “授权可追溯”只说明来源与许可字段齐全；主体是否切题、有无错配仍需人工复核，本清单不把自动匹配当作人工审核。",
+        "",
+        "## 汇总",
+        "",
+        f"- 图片文件：{len(records)}；页面实际展示：{len(displayed)}；重复文件：{sum(bool(r['duplicateOf']) for r in records)}",
+        *[f"- {kind}：{count}" for kind, count in sorted(kinds.items(), key=lambda item: -item[1])],
+        "",
+        "| 结论 | 数量 |",
+        "| --- | ---: |",
+        *[f"| {verdict} | {count} |" for verdict, count in sorted(summary.items(), key=lambda item: -item[1])],
+        "",
+        "## 页面展示中的图片",
+        "",
+        "| 图片 | 类型 | 主体 | 作者 | 许可 | 尺寸 | 来源 |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for record in displayed:
+        source = f"[来源]({record['source']})" if record["source"] else "—"
+        lines.append(f"| `{record['path']}` | {record['kind']} | {record['subject']} | {record['author'] or '—'} | {record['license'] or '—'} | {record['width']}×{record['height']} | {source} |")
+    lines += ["", "## 未展示或不得发布", "", "| 图片 | 类型 | 结论 |", "| --- | --- | --- |"]
+    for record in records:
+        if not record["displayed"] and record["kind"] != "封面衍生裁切":
+            lines.append(f"| `{record['path']}` | {record['kind']} | {record['verdict']} |")
+    lines.append("")
+    lines.append(f"另有 {kinds.get('封面衍生裁切', 0)} 张“封面衍生裁切”（`scenery-01.jpg`）是封面的缩略副本，页面不再展示。")
+    (reports / "图片清单.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def build_source_playbook() -> None:
     lines = [
         "# 资料来源与更新规则",
@@ -3945,13 +4574,13 @@ def build_source_playbook() -> None:
         "",
         "## 更新流程",
         "",
-        "1. 打开城市页的“联网核验入口”。",
+        "1. 在城市页景点卡片上点“查官网 / 地图 / 攻略”。",
         "2. 先核对官方开放时间、门票、预约和交通，再看攻略平台路线。",
-        "3. 把确认后的新增内容写入 `城市\\*.md` 的对应章节。",
+        "3. 把确认后的新增内容写入 `content\\城市\\*.md` 的对应章节。",
         "4. 新增来源写入该城市 Markdown 末尾的“来源参考”。",
         "5. 图片先核对 Commons 文件页的作者与许可证，再检查是否真实对应城市、主体清晰且适合旅游内容。",
         "6. 自动候选用 `TRAVEL_FETCH_CITY_KEYS` 定向抓取；人工选定文件用 `tools\\import_commons_city_photo.py` 导入。",
-        "7. 不合格来源写入 `assets\\photo-editorial-decisions.json`；拒绝与具体来源绑定，未来换图后自动失效。",
+        "7. 不合格来源写入 `site\\assets\\photo-editorial-decisions.json`；拒绝与具体来源绑定，未来换图后自动失效。",
         "8. 在项目根目录运行 `npm run check`，并检查 `docs/reports/内容与图片体检.md`；Windows 也可运行 `scripts/windows/重新生成网页.bat`。",
     ]
     guide = ROOT / "docs" / "guides" / "资料来源与更新规则.md"
@@ -3959,5724 +4588,313 @@ def build_source_playbook() -> None:
     guide.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def build_project_readme() -> None:
-    readme = """# 游记地图（Travel A Yuan）
-
-这是一个运行期纯静态、构建期由 Node/Vite/TypeScript 与 Python 共同生成的旅游攻略 PWA。源内容在 `城市\\*.md` 和 `记录.md`；Vite 构建渐进增强层，`tools\\build_travel_html.py` 统一生成页面、索引、PWA 与公共资源，因此无需 Python 后端也能部署到 GitHub Pages。
-
-## 项目入口与目录
-
-- GitHub 仓库：<https://github.com/shimmerjoe/youji-ditu>，仓库根目录就是本项目目录，克隆后直接在此运行命令。
-- GitHub Pages 目标地址：<https://shimmerjoe.github.io/youji-ditu/>。仓库上传与 Pages 上线是两件事，当前能否访问需以 Pages 配置和部署结果为准。
-- 根目录保留网站页面、PWA/SEO 文件、构建配置、README 和核心总览内容源 `记录.md`；`cities/` 是生成的城市页，`城市/` 是 Markdown 源文件。
-- `frontend/`、`tools/`、`assets/`：应用源码、生成与验证工具、网站资源。
-- `scripts/windows/`：Windows 启动、重建、补图和发布脚本；重复的打开入口已合并。
-- `docs/guides/`：便携运行、移动端与 APK、来源更新说明。
-- `docs/reports/`：自动生成的内容与图片体检报告；`docs/history/` 保存需求聊天和历史日志。
-- `docs/screenshots/`：界面预览；`app-capacitor/`：可选 Android 封装模板。
-- `dist/`、`node_modules/`、`artifacts/` 与 Python 缓存是构建或本机产物，不进入源码提交；完整迁移快照另存于仓库 Release。
-
-Windows 可双击 [本地预览脚本](scripts/windows/打开首页.bat)，默认访问 <http://localhost:8765/>。离线缓存、模块脚本和完整搜索应通过 HTTP 检查。
-
-## 常用命令
-
-```powershell
-npm ci
-npm run check
-npm run stage
-npm run preview
-```
-
-`npm run check` 会依次完成 Vite 构建、Python 全站生成、TypeScript 检查、Node/Python 测试和站内链接验证；`npm run stage` 只把公开运行文件复制到 `dist\\`。可另开终端执行真实断网审计：
-
-```powershell
-python -X utf8 tools\\offline_audit.py --self-serve --output D:\\.AI\\codex_tmp\\audits\\travel-ayuan\\offline
-```
-
-## 维护方式
-
-- 修改攻略正文：编辑 `城市\\*.md`。
-- 新增城市：新增城市 Markdown，必要时补 `tools\\city-page-meta.json`。
-- 补充图片：优先放到 `assets\\photos\\城市slug\\`，重新生成后进入页面相册和审计。
-- 图片审核：授权合规与内容适配是两道独立门槛；不合格来源记录在 `assets\\photo-editorial-decisions.json`，不要只删除本地文件。
-- 复核资料：查看城市页“联网核验入口”，再把确认后的链接写进“来源参考”。
-- 查看薄弱项：打开 [内容与图片体检](docs/reports/内容与图片体检.md)。
-
-### 定向补图
-
-自动搜索只刷新指定城市，避免一次抓取覆盖全部缓存：
-
-```powershell
-$env:TRAVEL_FETCH_COMMONS = "1"
-$env:TRAVEL_FETCH_CITY_KEYS = "beijing,tianjin"
-python -X utf8 tools\\build_travel_html.py
-Remove-Item Env:TRAVEL_FETCH_COMMONS, Env:TRAVEL_FETCH_CITY_KEYS
-```
-
-如果已在 Wikimedia Commons 人工选定准确文件，先无参数 `--apply` 预检元数据，再确认写入：
-
-```powershell
-python -X utf8 tools\\import_commons_city_photo.py --city beijing --source "https://commons.wikimedia.org/wiki/File:Example.jpg"
-python -X utf8 tools\\import_commons_city_photo.py --city beijing --source "https://commons.wikimedia.org/wiki/File:Example.jpg" --apply
-```
-
-导入器会校验 Commons 文件页、JPEG 尺寸、横向比例、许可证和作者，但不能替代肉眼语义审核；导入后仍须重建站点并检查桌面/手机裁切与 `docs/reports/内容与图片体检.md`。
-
-## 数据、离线与分享
-
-- 收藏、浏览记录、行程、清单、预算和笔记只保存在当前浏览器；版本化适配器支持 JSON 备份、导入和异常值清理。
-- 自驾路书没有地图密钥也能离线估算；“分享链接”携带路书快照，不上传服务器，链接请只发给可信对象。
-- Service Worker 首次联网缓存 App Shell；未缓存页面断网时会显示明确的离线说明，不伪装成实时地图、天气或票价服务。
-- 约 222 城的搜索索引在用户首次输入搜索词时才按需加载并缓存，不阻塞每次首屏；离线且从未加载索引时会给出失败说明和恢复建议。
-
-## 内容研究与素材边界
-
-- 外部攻略和社交平台只用于发现路线、主题和待核验线索；票价、开放时间、预约和交通优先回到官方来源确认。
-- 私人知识库、视频和下载目录只提供研究方法与候选线索，不直接复制原文、受限图片、视频或第三方组件到公开站点。
-- 图片只有在来源与授权字段可追溯、且通过目的地内容适配审核时才进入公开复制流程；无法确认授权或与城市无关的内容不发布。
-
-## 发布与公开地址
-
-公开站点目标地址是 GitHub Pages：<https://shimmerjoe.github.io/youji-ditu/>。
-
-每次维护完成后，先在本地完成生成、测试、浏览器检查和差异审查；只有本次变更得到明确授权、远端凭据可用且确认不会夹带其他工作时，才执行选择性提交与发布。发布顺序如下：
-
-1. 运行生成与校验：`python -X utf8 tools\\build_travel_html.py`、`python -X utf8 -m unittest discover -s tools -p 'test_*.py'`、`python -X utf8 tools\\validate_travel_site.py`。
-2. 用 `git status` 和 `git diff` 审查范围，只暂存本次文件（不要批量暂存所有文件），再创建清晰提交；没有明确授权时不推送。
-3. 仅在明确授权且认证成功时推送到项目远端；等待 GitHub Pages 更新后打开上述公开地址，核对本次内容、脚本版本和移动端导航均已生效。公开地址未核验前，发布状态只能记为“未验证”。
-
-公开站点与仓库同一提交的生成内容应保持一致。若发布或线上核验失败，保留可恢复的源码并记录失败原因，不要以本地预览替代公开验收。
-
-## 自驾路书与地图配置
-
-`roadtrip.html` 默认可以离线生成分天、预算、风险、保存和 Markdown 导出。若需真实地图、路网里程、预计时间和道路收费：
-
-1. 在高德开放平台创建“Web 端（JS API）”应用并取得 JS Key 与安全密钥，务必把可用域名限制为实际预览/发布域名。
-2. 构建前设置 `TRAVEL_AMAP_JS_KEY` 与 `TRAVEL_AMAP_SECURITY_CODE` 环境变量，再运行 `npm run build`。生成器会把两项浏览器配置安全内联到路书页，不再请求可能缺失的配置文件。
-3. 通过本地 HTTP 服务器预览，不能直接双击 HTML 测试地图。未设置变量时页面不会发起地图 SDK 请求，离线估算、保存、分享与导出仍完整可用。
-
-Web 端 JS Key 与安全密钥会出现在最终静态 HTML 中，这是浏览器地图 SDK 的运行方式；必须依赖域名白名单限制滥用。不要设置、提交或内联高德 Web 服务私钥。
-
-## 生成结果
-
-- `index.html`：首页工作台。
-- `roadtrip.html`：自驾路线、逐日安排、参考预算和风险清单。
-- `cities\\*.html`：城市攻略页。
-- `assets\\travel.css`、`assets\\travel.js`：由生成器输出。
-- `assets\\search-index.js`：按首次搜索需要加载的全站搜索索引。
-- `assets\\roadtrip-*.js`、`assets\\roadtrip.css`：自驾路书算法、城市数据和页面交互；浏览器地图配置由构建时环境变量内联。
-- `user.html`：本地用户中心。
-- `sitemap.xml`、`robots.txt`：由实际页面清单生成的搜索引擎入口。
-
-公开地址改变时，用环境变量 `TRAVEL_PUBLIC_URL` 覆盖默认基址后重新构建；不要把本地路径写入 canonical 或分享元数据。
-"""
-    (ROOT / "README.md").write_text(readme, encoding="utf-8")
+DAYS_LABELS = {"1": "1 天内", "2-3": "2-3 天", "4+": "4 天以上"}
 
 
-def page_html(page: Page, markdown: str) -> str:
-    if page.key == "record":
+def explicit_days_text(markdown: str) -> str:
+    """“推荐天数：3—4 天。……”里的天数部分，原样展示，避免被归档成粗略区间。"""
+    match = re.search(r"^-\s*(?:推荐天数|适合安排)[：:]\s*([0-9０-９一二三四五六七八九十半—\-～~ ]+天起?)", markdown, re.M)
+    return match.group(1).strip() if match else ""
+
+
+def chip_links(terms: list[str], anchor_index: AnchorIndex, css_class: str = "chip") -> str:
+    chips = []
+    for term in terms:
+        href = anchor_index.terms.get(term)
+        if href:
+            chips.append(f'<a class="{css_class}" href="{html.escape(href)}">{html.escape(term)}</a>')
+        else:
+            chips.append(f'<span class="{css_class}">{html.escape(term)}</span>')
+    return "".join(chips)
+
+
+def city_overview_html(page: Page, anchor_index: AnchorIndex | None = None) -> str:
+    """城市页正文顶部的「一眼看懂」：所在、季节、天数、资料状态，以及必看与必吃。"""
+    if page.key in HUB_KEYS:
+        return ""
+    anchor_index = anchor_index or AnchorIndex(terms={}, section_ids=set(), section_terms={})
+    prof = city_profile(page)
+    review_date = explicit_review_date(page, read_markdown_cached(page))
+    review_status = "reviewed" if review_date != "未核验" else "pending"
+    review_label = f"核验日期 {review_date}" if review_status == "reviewed" else "资料待复核"
+    highlights = [h for h in prof["highlights"] if h][:6]
+    foods = [f for f in prof["foods"] if f][:6]
+    cells = [
+        ("pin", "所在", prof["province"], ""),
+        ("calendar", "适宜季节", prof["season"], ""),
+        ("clock", "建议天数", explicit_days_text(read_markdown_cached(page)) or DAYS_LABELS.get(prof["daysClass"], "2-3 天"), ""),
+        ("info", "资料状态", review_label, f" co-review {review_status}"),
+    ]
+    facts = "".join(
+        f'<div class="co-cell{extra}"{f" data-review-status=\"{review_status}\"" if extra else ""}>'
+        f'<span class="co-ico">{icon(icon_name)}</span>'
+        f'<span class="co-k">{label}</span><span class="co-v">{html.escape(value)}</span></div>'
+        for icon_name, label, value, extra in cells
+    )
+    hl = chip_links(highlights, anchor_index) or '<span class="chip">见下方正文</span>'
+    fd = chip_links(foods, anchor_index, "chip chip-food") or '<span class="chip">见下方正文</span>'
+    return (
+        '<section class="city-overview" aria-label="城市速览">'
+        f'<div class="co-facts">{facts}</div>'
+        '<div class="co-blocks">'
+        f'<div class="co-block"><span class="co-bk">{icon("pin")}必看景点</span><div class="chip-row">{hl}</div></div>'
+        f'<div class="co-block"><span class="co-bk">{icon("food")}必吃美食</span><div class="chip-row">{fd}</div></div>'
+        '</div>'
+        '<p class="co-review-note">动态信息出行前复核：门票、开放时间与预约规则会变化，请以官方渠道为准。</p>'
+        '</section>'
+    )
+
+
+def city_actions_html(page: Page) -> str:
+    prof = city_profile(page)
+    href = rel_to(page.output, OUT)  # 相对站点根，供收藏/行程在用户中心回链
+    data_attrs = (
+        f'data-key="{html.escape(page.key)}" data-name="{html.escape(prof["title"])}" '
+        f'data-href="{html.escape(href)}" data-sub="{html.escape(prof["subtitle"])}"'
+    )
+    return (
+        '<div class="co-actions">'
+        f'<button class="co-fav" type="button" {data_attrs}>☆ 收藏</button>'
+        f'<button class="co-trip" type="button" {data_attrs}>＋ 加入行程</button>'
+        f'<button class="co-share" type="button" data-share-title="{html.escape(prof["title"])}" '
+        f'aria-label="分享{html.escape(prof["title"])}" title="分享当前城市攻略">↗ 分享</button>'
+        '</div>'
+    )
+
+
+def city_hero_html(page: Page, title: str) -> str:
+    base = page.output.parent
+    prof = city_profile(page)
+    entries = carousel_entries(page)
+    if entries:
+        media = hero_carousel_html(page, captions=False)
+        hero_class = "city-hero has-photo"
+    else:
+        media = f'<div class="hero-fallback" aria-hidden="true"><span>{html.escape(prof["city"][:2])}</span></div>'
+        hero_class = "city-hero no-photo"
+    home = rel_to(OUT / "index.html", base)
+    province_href = rel_to(OUT / "destinations.html", base) + "?province=" + quote(prof["province"])
+    crumbs = (
+        '<nav class="breadcrumb" aria-label="当前位置">'
+        f'<a href="{home}">首页</a><span aria-hidden="true">/</span>'
+        f'<a href="{html.escape(province_href)}">{html.escape(prof["province"])}</a><span aria-hidden="true">/</span>'
+        f'<span aria-current="page">{html.escape(prof["city"])}</span></nav>'
+    )
+    return (
+        f'<section class="{hero_class}">'
+        f'<div class="city-hero-media">{media}</div>'
+        '<div class="city-hero-inner">'
+        f'{crumbs}'
+        f'<p class="eyebrow">{html.escape(prof["region"])} · {html.escape(prof["province"])}</p>'
+        f'<h1>{html.escape(title)}</h1>'
+        f'<p class="subtitle">{html.escape(page.subtitle)}</p>'
+        f'{city_actions_html(page)}'
+        '</div>'
+        f'{city_cover_credit_html(page)}'
+        '</section>'
+    )
+
+
+def overview_hero_html(page: Page, title: str) -> str:
+    base = page.output.parent
+    home = rel_to(OUT / "index.html", base)
+    city_count = sum(1 for item in PAGES if item.key not in HUB_KEYS)
+    return (
+        '<section class="city-hero no-photo hub-hero">'
+        '<div class="city-hero-media"><div class="hero-fallback" aria-hidden="true"><span>总览</span></div></div>'
+        '<div class="city-hero-inner">'
+        f'<nav class="breadcrumb" aria-label="当前位置"><a href="{home}">首页</a><span aria-hidden="true">/</span><span aria-current="page">跨城市总览</span></nav>'
+        '<p class="eyebrow">Overview</p>'
+        f'<h1>{html.escape(title)}</h1>'
+        f'<p class="subtitle">{html.escape(page.subtitle)}。覆盖 {city_count} 座城市的时间成本、场景、季节与跨城路线。</p>'
+        '</div></section>'
+    )
+
+
+SECTION_TAB_LABELS = {
+    "overview": "结论", "quick": "怎么玩", "months": "月份", "seasonal": "季节",
+    "hours-prices": "票价", "prep": "准备", "stay": "住宿", "areas": "分区",
+    "attractions": "景点", "streets": "街区", "food": "美食", "shops": "店铺",
+    "museums": "博物馆", "nature": "周边", "routes": "路线", "transport": "交通",
+    "warnings": "避坑", "checklist": "清单",
+}
+
+
+def section_tabs_html(toc: list[tuple[int, str, str]]) -> str:
+    links = []
+    for level, text, sid in toc:
+        if level != 2:
+            continue
+        label = SECTION_TAB_LABELS.get(sid, text if len(text) <= 8 else text[:7] + "…")
+        links.append(f'<a href="#{sid}" title="{html.escape(text)}">{html.escape(label)}</a>')
+    if not links:
+        return ""
+    return (
+        '<nav class="section-tabs" aria-label="攻略章节">'
+        f'<div class="section-tabs-track toc">{"".join(links)}</div></nav>'
+    )
+
+
+def guide_page_html(page: Page, markdown: str) -> str:
+    """城市攻略页与跨城市总览页：封面、章节标签栏、正文组件和侧栏。"""
+    is_hub = page.key in HUB_KEYS
+    if is_hub:
         markdown = strip_author_sections(markdown)
     title = extract_title(markdown, page.title)
     # 底部来源抽屉用完整 markdown（含「来源参考」里的链接）
     build_source_media_index(page, markdown)
     # 正文渲染时剥离来源类章节，避免与底部「资料来源」重复
-    content_md = strip_sections(markdown, SOURCE_SECTION_HEADINGS) + reinforcement_appendix(page, markdown)
+    # 篇幅短的城市不再自动拼接通用的“行程执行补强”：那是把城市名填进同一套话术，
+    # 短板如实留在“内容与图片体检”的待补清单里。
+    content_md = strip_sections(markdown, SOURCE_SECTION_HEADINGS)
     anchor_index = collect_anchor_index(content_md)
     body, toc = render_markdown(content_md, page, anchor_index)
-    quick_cards = quick_cards_html(content_md, anchor_index)
-    if not quick_cards:
-        quick_cards = '<li><a class="hero-point-link" href="#overview"><span>开始浏览</span><small>按目录查看景点、吃喝、路线和避坑。</small></a></li>'
-    image_url = rel_to(IMAGES / f"{page.key}.jpg", page.output.parent)
-    carousel = hero_carousel_html(page)
-    cover_credit = city_cover_credit_html(page)
-    quickfind = hero_quickfind_html(anchor_index)
-    gallery_section = guide_gallery_html(page)
-    media_section = source_media_html(markdown, page)
-    # The complete destination catalog belongs on discovery pages. Embedding all
-    # 222 cards in every guide made a single city page thousands of DOM nodes
-    # larger and forced browsers to track hundreds of irrelevant lazy images.
-    city_explorer = city_explorer_html(page) if page.key == "record" else ""
-    home_top, home_tools = home_modules_html(page)
-    home_finder = home_finder_html(page)
-    city_overview = city_overview_html(page)
-    research_panel = research_panel_html(page)
-    mobile_quickbar = mobile_quickbar_html(page, anchor_index)
-    home_href = rel_to(OUT / "index.html", page.output.parent)
-    site_root = rel_to(OUT, page.output.parent)
+    hero = overview_hero_html(page, title) if is_hub else city_hero_html(page, title)
+    overview = city_overview_html(page, anchor_index)
     toc_links = "\n".join(
         f'<a class="toc-level-{level}" href="#{sid}">{html.escape(text)}</a>'
         for level, text, sid in toc
     )
-    city_links = card_links(page)
-    vite_head, vite_script = vite_asset_tags(page.output.parent)
-    return "\n".join(line.rstrip() for line in f"""<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{html.escape(title)}</title>
-  <meta name="description" content="{html.escape(page.subtitle)}">
-  <meta name="theme-color" content="{page.accent}">
-  <link rel="canonical" href="{html.escape(public_page_url(page.output))}">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="{html.escape(title)}">
-  <meta property="og:description" content="{html.escape(page.subtitle)}">
-  <meta property="og:url" content="{html.escape(public_page_url(page.output))}">
-  <meta property="og:site_name" content="游记地图">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:image" content="{html.escape(public_page_url(IMAGES / f'{page.key}.jpg'))}">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="manifest" href="{rel_to(OUT / 'manifest.webmanifest', page.output.parent)}">
-  <link rel="apple-touch-icon" href="{rel_to(ASSETS / 'icon-180.png', page.output.parent)}">
-  <link rel="stylesheet" href="{asset_href(ASSETS / 'travel.css', page.output.parent)}">
-{vite_head}
-  <noscript><style>.reveal{{opacity:1!important;transform:none!important}}</style></noscript>
-  <script>try{{var s=JSON.parse(localStorage.getItem("tay_settings")||"{{}}"),r=document.documentElement;if(s.vibrancy)r.setAttribute("data-vibrancy",s.vibrancy);if(s.font)r.setAttribute("data-font",s.font);if(s.motion)r.setAttribute("data-motion",s.motion);var t=s.theme||"auto";if(t==="auto")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";r.setAttribute("data-theme",t);}}catch(e){{}}</script>
-</head>
-<body id="top" data-site-root="{html.escape(site_root)}" data-search-index="{asset_href(ASSETS / 'search-index.js', page.output.parent)}" style="--accent:{page.accent}; --hero-image:url('{image_url}')">
-  <a class="skip-link" href="#mainContent">跳到主要内容</a>
-{site_header_html(page, "home" if page.key == "record" else "")}
-  <main id="mainContent" tabindex="-1">
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow">Travel Guide</p>
-        <h1>{html.escape(title)}</h1>
-        <p class="subtitle">{html.escape(page.subtitle)}</p>
-        <ul class="hero-points">
-          {quick_cards}
-        </ul>
-      </div>
-      <div class="hero-stage">
-        {carousel}
-        {cover_credit}
-        {quickfind}
-      </div>
-    </section>
-    {home_finder}
-    {city_overview}
-    {research_panel}
-    {home_top}
-    {city_explorer}
-    {home_tools}
-    <section class="tool-bar">
-      <label class="search-box">
-        <span>搜索</span>
-        <input id="guideSearch" type="search" placeholder="输入景点、店铺、路线或月份">
-      </label>
-      <button id="expandAll" type="button">清空搜索</button>
-      <button id="printPage" type="button">打印/另存 PDF</button>
-    </section>
-    <div class="layout">
-      <aside class="sidebar">
-        <div class="sidebar-panel">
+    main = f"""    {hero}
+    {section_tabs_html(toc)}
+    <div class="guide-layout">
+      <article class="content" id="guideContent">
+        {overview}
+        {body}
+      </article>
+      <aside class="guide-aside" aria-label="攻略工具与目录">
+        <div class="aside-card tool-bar">
+          <label class="search-box">
+            <span>在本页查找</span>
+            <input id="guideSearch" type="search" placeholder="景点、店铺、路线或月份">
+          </label>
+          <div class="tool-bar-actions">
+            <button id="expandAll" type="button">清空查找</button>
+            <button id="printPage" type="button">{icon("print")}打印 / PDF</button>
+          </div>
+        </div>
+        <div class="aside-card sidebar-panel">
           <h2>目录</h2>
           <div class="toc">{toc_links}</div>
         </div>
-        <div class="sidebar-panel">
+        <div class="aside-card sidebar-panel">
           <h2>相关攻略</h2>
-          <div class="city-grid mini">{city_links}</div>
+          <div class="city-grid mini">{card_links(page, 6)}</div>
         </div>
       </aside>
-      <article class="content" id="guideContent">
-        {body}
-      </article>
     </div>
-    {gallery_section}
-    {media_section}
-  </main>
-{footer_html()}
-  {mobile_quickbar}
-{trip_workspace_html(page)}
-  <button class="to-top" id="toTop" type="button" aria-label="返回顶部" title="返回顶部">↑</button>
-  <script src="{asset_href(ASSETS / 'travel.js', page.output.parent)}"></script>
-{vite_script}
-</body>
-</html>
-""".splitlines()) + "\n"
+    {research_panel_html(page) if is_hub else ""}
+    {source_media_html(markdown, page)}"""
+    og_image = None if is_hub else IMAGES / f"{page.key}.jpg"
+    return document_html(page, title, main, "overview" if is_hub else "", page_kind="overview" if is_hub else "city", og_image=og_image)
+
+
+HOME_POPULAR_KEYS = ("chengdu", "xian", "dali", "hangzhou", "qingdao", "chongqing", "sanya", "harbin")
+
+
+def home_hero_html(page: Page) -> str:
+    base = page.output.parent
+    city_pages = [p for p in PAGES if p.key not in HUB_KEYS]
+    provinces = {city_profile(p)["province"] for p in city_pages}
+    by_key = {p.key: p for p in city_pages}
+    popular = "".join(
+        f'<a href="{html.escape(rel_to(by_key[key].output, base))}">{html.escape(city_profile(by_key[key])["city"])}</a>'
+        for key in HOME_POPULAR_KEYS if key in by_key
+    )
+    destinations = rel_to(OUT / "destinations.html", base)
+    roadtrip = rel_to(OUT / "roadtrip.html", base)
+    return (
+        '<section class="home-hero">'
+        '<div class="home-hero-copy">'
+        '<p class="eyebrow">Travel A Yuan · 游记地图</p>'
+        f'<h1>{len(city_pages)} 座城市的玩法，<span>整理成能直接出发的攻略</span></h1>'
+        '<p class="subtitle">景点、美食、季节、路线与避坑一页看清；收藏城市、排行程、做自驾路书，全部在浏览器里完成。</p>'
+        f'<form class="hero-search" action="{destinations}" method="get" role="search">'
+        '<label class="sr-only" for="heroSearch">想去哪里</label>'
+        f'{icon("search")}<input id="heroSearch" name="q" type="search" autocomplete="off" placeholder="想去哪？试试：海边、古城、火锅、避暑">'
+        '<button type="submit">找城市</button></form>'
+        f'<div class="hero-popular"><span>热门</span>{popular}</div>'
+        '<dl class="hero-stats">'
+        f'<div><dt>城市攻略</dt><dd>{len(city_pages)}</dd></div>'
+        f'<div><dt>省级地区</dt><dd>{len(provinces)}</dd></div>'
+        '<div><dt>旅行主题</dt><dd>8</dd></div>'
+        '</dl>'
+        f'<div class="hero-cta"><a class="btn btn-primary" href="#travel-finder">{icon("filter")}按条件选城市</a>'
+        f'<a class="btn btn-ghost" href="{roadtrip}">{icon("car")}生成自驾路书</a></div>'
+        '</div>'
+        f'<div class="home-hero-stage">{hero_carousel_html(page)}</div>'
+        '</section>'
+    )
+
+
+def home_continue_html() -> str:
+    """“继续上次”占位：由 home-continue.ts 读取本机行程、浏览和收藏后填充，无数据时保持隐藏。"""
+    return (
+        '<section class="home-continue" id="homeContinue" aria-labelledby="homeContinueTitle" hidden>'
+        '<div class="home-section-head"><p class="eyebrow">Pick up where you left off</p>'
+        '<h2 id="homeContinueTitle">继续上次的旅行准备</h2></div>'
+        '<div class="continue-grid" id="homeContinueGrid"></div>'
+        '</section>'
+    )
+
+
+def home_overview_teaser_html(page: Page) -> str:
+    base = page.output.parent
+    overview = rel_to(OVERVIEW_PAGE.output, base)
+    cards = (
+        ("compass", "先看总览", "第一次去哪、口味总览与总体取舍", "overview"),
+        ("clock", "时间成本", "半天、1 天、2 天以上分别怎么安排", "time-cost"),
+        ("umbrella", "场景索引", "雨天、亲子、夜游、温泉等场景去处", "scenes"),
+        ("calendar", "季节总索引", "春花、夏避暑、秋色与冬季去处", "seasons"),
+        ("route", "跨城市路线", "贵州、云南、川渝等多城串联模板", "routes"),
+    )
+    items = "".join(
+        f'<a class="teaser-card" href="{html.escape(overview)}#{sid}"><span class="tile-ico">{icon(icon_name)}</span>'
+        f'<strong>{title}</strong><span>{desc}</span></a>'
+        for icon_name, title, desc, sid in cards
+    )
+    return (
+        '<section class="home-section reveal" id="home-overview" aria-labelledby="homeOverviewTitle">'
+        '<div class="home-section-head"><p class="eyebrow">Across cities</p>'
+        '<h2 id="homeOverviewTitle">跨城市攻略总览</h2>'
+        '<p>把原始笔记整理成按时间、场景、季节和路线查找的索引，适合多城市连游时先做取舍。</p>'
+        f'<a class="section-link" href="{html.escape(overview)}">打开总览 {icon("arrow")}</a></div>'
+        f'<div class="teaser-grid">{items}</div>'
+        '</section>'
+    )
+
+
+def home_page_html(page: Page) -> str:
+    main = "\n".join([
+        home_hero_html(page),
+        home_continue_html(),
+        home_featured_html(page),
+        home_themes_html(),
+        home_finder_html(page),
+        city_explorer_html(page),
+        home_tools_html(),
+        home_overview_teaser_html(page),
+        research_panel_html(page),
+    ])
+    return document_html(
+        page, "游记地图 · 全国城市旅游攻略", main, "home",
+        page_kind="home", og_image=IMAGES / "record.jpg",
+    )
+
+
+def page_html(page: Page, markdown: str) -> str:
+    if page.key == "record":
+        return home_page_html(page)
+    return guide_page_html(page, markdown)
 
 
-CSS = r"""
-:root {
-  color-scheme: light;
-  --bg: #f1f6f7;
-  --paper: rgba(255, 255, 255, 0.94);
-  --ink: #16212b;
-  --muted: #58646f;
-  --line: rgba(20, 35, 45, 0.12);
-  --hairline: rgba(20, 35, 45, 0.07);
-  --accent: #0f9e8c;
-  --accent-deep: color-mix(in srgb, var(--accent) 72%, #06201d);
-  --accent-soft: color-mix(in srgb, var(--accent) 14%, #ffffff);
-  --accent-tint: color-mix(in srgb, var(--accent) 7%, #ffffff);
-  /* 多彩点缀色 —— 让全站活力四射 */
-  --c1: #ff6b4a;
-  --c2: #ffb020;
-  --c3: #21c08a;
-  --c4: #3a86ff;
-  --c5: #8b5cf6;
-  --c6: #ff5d8f;
-  --sky: #3a86ff;
-  --sun: #ffb020;
-  --gold: #f0a72e;
-  --leaf: #21c08a;
-  --berry: #ff5d8f;
-  --food: #ff6b4a;
-  --radius: 16px;
-  --radius-sm: 10px;
-  --radius-lg: 24px;
-  --shadow-sm: 0 4px 14px rgba(26, 40, 50, 0.08);
-  --shadow: 0 16px 40px rgba(26, 40, 50, 0.14);
-  --shadow-lg: 0 28px 64px rgba(26, 40, 50, 0.2);
-  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-  --fs: 1;
-  font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
-  font-size: calc(16px * var(--fs));
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
+RUNTIME_DIR = ROOT / "frontend" / "runtime"
+CSS = (RUNTIME_DIR / "travel.css").read_text(encoding="utf-8")
 
-/* 设置面板：配色活力度 / 字号 / 动效 */
-html[data-vibrancy="calm"] body { filter: saturate(0.72); }
-html[data-vibrancy="vivid"] body { filter: saturate(1.24) contrast(1.02); }
-html[data-font="s"] { --fs: 0.92; }
-html[data-font="l"] { --fs: 1.12; }
-html[data-motion="off"] *, html[data-motion="off"] *::before, html[data-motion="off"] *::after {
-  animation: none !important;
-  transition: none !important;
-  scroll-behavior: auto !important;
-}
-html[data-motion="off"] .reveal { opacity: 1 !important; transform: none !important; }
 
-/* ===== 深色模式 ===== */
-html[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #0f1517;
-  --paper: rgba(26, 33, 36, 0.92);
-  --ink: #e9eeec;
-  --muted: #9db0ab;
-  --line: rgba(255, 255, 255, 0.13);
-  --hairline: rgba(255, 255, 255, 0.07);
-  --accent: #2bb6a4;
-  --accent-deep: color-mix(in srgb, var(--accent) 78%, #ffffff);
-  --accent-soft: color-mix(in srgb, var(--accent) 26%, #18201f);
-  --accent-tint: color-mix(in srgb, var(--accent) 14%, #161d1f);
-  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4);
-  --shadow: 0 16px 42px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 26px 60px rgba(0, 0, 0, 0.6);
-}
-html[data-theme="dark"] body {
-  background:
-    radial-gradient(circle at 12% 8%, rgba(43,182,164,.12), transparent 30vw),
-    radial-gradient(circle at 88% 6%, rgba(255,107,74,.08), transparent 26vw),
-    linear-gradient(160deg, #0f1517 0%, #121b1c 55%, #0f1517 100%);
-}
-html[data-theme="dark"] .site-header { background: rgba(18, 25, 27, 0.85); }
-html[data-theme="dark"] .guide-section,
-html[data-theme="dark"] .home-section,
-html[data-theme="dark"] .city-explorer,
-html[data-theme="dark"] .source-media {
-  background: linear-gradient(135deg, #1a2225, #161d1f);
-}
-html[data-theme="dark"] .sidebar-panel,
-html[data-theme="dark"] .stat-card,
-html[data-theme="dark"] .theme-card,
-html[data-theme="dark"] .tool-card,
-html[data-theme="dark"] .media-card,
-html[data-theme="dark"] .city-card,
-html[data-theme="dark"] .city-card.rich,
-html[data-theme="dark"] .list-card,
-html[data-theme="dark"] .source-link,
-html[data-theme="dark"] .hero-points li,
-html[data-theme="dark"] .header-home,
-html[data-theme="dark"] .nav-link,
-html[data-theme="dark"] .nav-group summary,
-html[data-theme="dark"] .nav-menu,
-html[data-theme="dark"] .site-search-results,
-html[data-theme="dark"] .mobile-quickbar,
-html[data-theme="dark"] .mobile-quickbar a,
-html[data-theme="dark"] input[type="search"],
-html[data-theme="dark"] .tool-card input,
-html[data-theme="dark"] .tool-card select,
-html[data-theme="dark"] button,
-html[data-theme="dark"] .tool-chip,
-html[data-theme="dark"] .tool-output {
-  background: #1b2326;
-  color: var(--ink);
-}
-html[data-theme="dark"] .list-card,
-html[data-theme="dark"] .visual-card,
-html[data-theme="dark"] .item-guide,
-html[data-theme="dark"] .glass-panel {
-  background: rgba(255, 255, 255, 0.045);
-}
-html[data-theme="dark"] .glass-panel { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
-html[data-theme="dark"] .stat-card { background: linear-gradient(160deg, #1d262a, var(--accent-tint)); }
-html[data-theme="dark"] .quickfind-card { background: rgba(255,255,255,0.05); }
-html[data-theme="dark"] a { color: color-mix(in srgb, var(--accent) 70%, #fff); }
-html[data-theme="dark"] .item-label,
-html[data-theme="dark"] .city-tags em,
-html[data-theme="dark"] .section-count { color: var(--accent-deep); }
-html[data-theme="dark"] code { background: rgba(255,255,255,0.1); }
-html[data-theme="dark"] .to-top { color: #fff; }
-html[data-theme="dark"] .hero h1 {
-  background: linear-gradient(120deg, #eef3f1 38%, color-mix(in srgb, var(--accent) 75%, #fff));
-  -webkit-background-clip: text; background-clip: text;
-}
 
-* { box-sizing: border-box; }
-a, button, input, select, textarea, summary { touch-action: manipulation; }
-html { scroll-behavior: smooth; }
+JS = (RUNTIME_DIR / "travel.js").read_text(encoding="utf-8")
 
-/* 跳到主要内容（仅键盘聚焦时显示） */
-.skip-link {
-  position: fixed;
-  top: -60px;
-  left: 12px;
-  z-index: 300;
-  padding: 10px 16px;
-  border-radius: var(--radius-sm);
-  background: var(--accent-deep);
-  color: #fff;
-  font-weight: 700;
-  box-shadow: var(--shadow);
-  transition: top .2s var(--ease);
-}
-.skip-link:focus { top: 12px; text-decoration: none; }
-
-/* 图片灯箱 */
-.lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 400;
-  display: none;
-  place-items: center;
-  padding: 24px;
-  background: rgba(10, 16, 16, 0.86);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  cursor: zoom-out;
-}
-.lightbox.open { display: grid; }
-html.lightbox-active { overflow: hidden; }
-.lightbox img {
-  max-width: min(96vw, 1400px);
-  max-height: 92vh;
-  border-radius: 12px;
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
-}
-.item-thumb[role="button"]:focus-visible,
-.media-card img[role="button"]:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--accent) 72%, #fff);
-  outline-offset: 3px;
-}
-.lightbox-close {
-  position: fixed;
-  top: 18px;
-  right: 18px;
-  min-height: 44px;
-  width: 44px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
-  font-size: 18px;
-}
-
-/* 顶部阅读进度条 */
-.read-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  width: 100%;
-  z-index: 200;
-  background: linear-gradient(90deg, var(--accent), var(--sun));
-  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 40%, transparent);
-  transform: scaleX(0);
-  transform-origin: left center;
-  pointer-events: none;
-}
-@supports (animation-timeline: scroll()) {
-  .read-progress {
-    animation: read-progress linear both;
-    animation-timeline: scroll(root block);
-  }
-  @keyframes read-progress { to { transform: scaleX(1); } }
-}
-
-/* 滚动渐入 */
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity .7s var(--ease), transform .7s var(--ease);
-  will-change: opacity, transform;
-}
-.reveal.in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1 !important; transform: none !important; transition: none; }
-  .read-progress { display: none; }
-  html { scroll-behavior: auto; }
-}
-body {
-  margin: 0;
-  background:
-    radial-gradient(circle at 6% 4%, color-mix(in srgb, var(--c4) 24%, transparent), transparent 24vw),
-    radial-gradient(circle at 94% 2%, color-mix(in srgb, var(--c2) 30%, transparent), transparent 22vw),
-    radial-gradient(circle at 82% 36%, color-mix(in srgb, var(--c6) 18%, transparent), transparent 24vw),
-    radial-gradient(circle at 14% 52%, color-mix(in srgb, var(--c3) 20%, transparent), transparent 26vw),
-    radial-gradient(circle at 50% 88%, color-mix(in srgb, var(--c5) 14%, transparent), transparent 30vw),
-    linear-gradient(160deg, #eef6f6 0%, #f1f5ef 45%, #f6f2ec 100%);
-  background-attachment: fixed;
-  color: var(--ink);
-  line-height: 1.72;
-}
-a { color: color-mix(in srgb, var(--accent) 82%, #111); text-decoration: none; }
-a:hover { text-decoration: underline; }
-.auto-link {
-  font-weight: 700;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
-:target {
-  scroll-margin-top: 132px;
-}
-.list-card:target,
-.guide-section:target {
-  outline: 3px solid color-mix(in srgb, var(--accent) 38%, var(--sun));
-  outline-offset: 3px;
-}
-
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 80;
-  background: rgba(255, 250, 242, 0.88);
-  backdrop-filter: blur(18px);
-  border-bottom: 1px solid var(--line);
-  box-shadow: 0 6px 18px rgba(36, 29, 21, 0.05);
-  overflow: visible;
-}
-.header-bar {
-  position: relative;
-  z-index: 90;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 8px clamp(16px, 4vw, 42px) 0;
-}
-.nav-toggle {
-  display: none;
-}
-.header-home {
-  flex: 0 0 auto;
-  min-height: 38px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0 12px;
-  border-radius: 999px;
-  color: var(--ink);
-  font-weight: 800;
-  background: #fff;
-  border: 1px solid var(--line);
-}
-.header-home:hover {
-  text-decoration: none;
-  border-color: color-mix(in srgb, var(--accent) 36%, var(--line));
-}
-.global-search {
-  position: relative;
-  flex: 1 1 420px;
-  max-width: 680px;
-  margin-left: auto;
-}
-.global-search-box {
-  display: block;
-  color: var(--muted);
-  font-size: 12px;
-}
-/* 隐藏"全站搜索"文字标题，让搜索框与品牌、用户中心在同一行对齐（保留无障碍可读） */
-.global-search-box > span {
-  position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0 0 0 0);
-  white-space: nowrap; border: 0;
-}
-.global-search-box input {
-  min-height: 40px;
-}
-.site-search-results {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  z-index: 220;
-  width: min(620px, calc(100vw - 32px));
-  max-height: min(520px, 70vh);
-  overflow: auto;
-  padding: 8px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: rgba(255, 250, 242, 0.98);
-  box-shadow: var(--shadow);
-}
-.site-search-results[hidden] { display: none; }
-.site-search-recent[hidden] { display: none; }
-.site-search-recent {
-  padding: 4px 4px 8px;
-}
-.search-recent-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 4px 6px 8px;
-  border-bottom: 1px solid var(--line);
-}
-.search-recent-head strong {
-  font-size: 13px;
-  letter-spacing: .04em;
-}
-.search-recent-clear {
-  min-height: 32px;
-  padding: 0 8px;
-  color: var(--muted);
-  font-size: 12px;
-  background: transparent;
-  border-color: transparent;
-}
-.search-recent-clear:hover {
-  color: var(--ink);
-  border-color: var(--line);
-  background: var(--accent-tint);
-}
-.search-recent-group {
-  padding: 10px 6px 2px;
-}
-.search-recent-group + .search-recent-group {
-  margin-top: 4px;
-  border-top: 1px solid var(--hairline);
-}
-.search-recent-group h3 {
-  margin: 0 0 7px;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 700;
-}
-.search-recent-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-.search-recent-query,
-.search-recent-visit {
-  min-height: 36px;
-  display: inline-flex;
-  align-items: center;
-  max-width: 100%;
-  padding: 0 11px;
-  overflow: hidden;
-  color: var(--ink);
-  font-size: 13px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-}
-.search-recent-query:hover,
-.search-recent-query:focus-visible,
-.search-recent-visit:hover,
-.search-recent-visit:focus-visible {
-  text-decoration: none;
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
-  background: var(--accent-tint);
-}
-.search-result {
-  display: grid;
-  gap: 4px;
-  padding: 10px;
-  border-radius: 7px;
-  color: var(--ink);
-}
-.search-result:hover,
-.search-result.active {
-  text-decoration: none;
-  background: var(--accent-soft);
-}
-.search-result strong {
-  line-height: 1.25;
-}
-.search-result span,
-.search-result small {
-  color: var(--muted);
-  line-height: 1.45;
-}
-.top-nav {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
-  padding: 8px clamp(16px, 4vw, 42px) 10px;
-  overflow: visible;
-}
-.nav-link {
-  position: relative;
-  z-index: 1;
-  flex: 0 0 auto;
-  padding: 7px 11px;
-  border-radius: 999px;
-  color: var(--muted);
-  font-size: 14px;
-  border: 1px solid transparent;
-}
-.nav-link.active,
-.nav-link:hover {
-  color: var(--ink);
-  background: #fff;
-  border-color: var(--line);
-  text-decoration: none;
-}
-.nav-group {
-  position: relative;
-  z-index: 1;
-  flex: 0 0 auto;
-}
-.nav-group:hover,
-.nav-group:focus-within,
-.nav-group[open] {
-  z-index: 120;
-}
-.nav-group summary {
-  position: relative;
-  z-index: 2;
-  list-style: none;
-  cursor: pointer;
-  padding: 7px 28px 7px 11px;
-  border-radius: 999px;
-  color: var(--muted);
-  font-size: 14px;
-  border: 1px solid transparent;
-  user-select: none;
-}
-.nav-group summary::-webkit-details-marker { display: none; }
-.nav-group summary::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  width: 7px;
-  height: 7px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: translateY(-65%) rotate(45deg);
-}
-.nav-group.active summary,
-.nav-group:hover summary,
-.nav-group[open] summary {
-  color: var(--ink);
-  background: #fff;
-  border-color: var(--line);
-}
-.nav-menu {
-  display: none;
-  position: absolute;
-  z-index: 130;
-  top: calc(100% + 8px);
-  left: 0;
-  min-width: 142px;
-  padding: 8px;
-  background: rgba(255, 250, 242, 0.98);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-.nav-group:hover .nav-menu,
-.nav-group:focus-within .nav-menu,
-.nav-group[open] .nav-menu {
-  display: grid;
-  gap: 4px;
-}
-.nav-menu-link {
-  display: block;
-  padding: 8px 10px;
-  border-radius: 6px;
-  color: var(--muted);
-  white-space: nowrap;
-}
-.nav-menu-link:hover,
-.nav-menu-link.active {
-  background: var(--accent-soft);
-  color: var(--ink);
-  text-decoration: none;
-}
-
-.hero {
-  min-height: 430px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-  gap: clamp(22px, 5vw, 58px);
-  align-items: stretch;
-  padding: clamp(26px, 5vw, 72px) clamp(16px, 5vw, 72px) 30px;
-}
-.hero-copy {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--accent-deep);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 12px;
-  margin: 0 0 12px;
-}
-.eyebrow::before {
-  content: "";
-  width: 26px;
-  height: 2px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--sun));
-}
-.hero h1 {
-  margin: 0;
-  font-size: clamp(36px, 7vw, 74px);
-  line-height: 1.04;
-  letter-spacing: -0.01em;
-  background: linear-gradient(120deg, var(--ink) 38%, color-mix(in srgb, var(--accent) 70%, var(--ink)));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.subtitle {
-  max-width: 820px;
-  color: var(--muted);
-  font-size: clamp(16px, 2.2vw, 22px);
-  margin: 18px 0 22px;
-}
-.hero-points {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 10px;
-}
-.hero-points li {
-  background: linear-gradient(90deg, rgba(255,255,255,.92), rgba(255,255,255,.70));
-  border: 1px solid var(--line);
-  border-left: 5px solid color-mix(in srgb, var(--accent) 65%, var(--sun));
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
-}
-.hero-points li:hover {
-  transform: translateX(4px);
-  box-shadow: 0 14px 30px rgba(38, 31, 25, 0.12);
-  border-left-color: var(--accent);
-}
-.hero-point-link {
-  display: grid;
-  gap: 3px;
-  padding: 12px 15px;
-  color: var(--ink);
-}
-.hero-point-link:hover {
-  text-decoration: none;
-  background: color-mix(in srgb, var(--accent) 8%, #ffffff);
-}
-.hero-point-link span {
-  font-weight: 800;
-}
-.hero-point-link small {
-  color: var(--muted);
-  line-height: 1.45;
-}
-.hero-visual {
-  position: relative;
-  min-height: 360px;
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  background-image:
-    linear-gradient(180deg, rgba(16,26,26,.04) 0%, rgba(16,26,26,.20) 58%, rgba(16,26,26,.50) 100%),
-    var(--hero-image),
-    linear-gradient(135deg, var(--accent-soft), #f4e4c8);
-  background-size: cover;
-  background-position: center;
-  padding: 22px;
-  transition: box-shadow .4s var(--ease);
-}
-.hero-visual:hover { box-shadow: var(--shadow-lg); }
-.hero-visual::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(16,26,26,.18));
-  pointer-events: none;
-}
-.hero-gallery {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  opacity: .94;
-  transform: rotate(-2deg) scale(1.06);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-}
-.gallery-track {
-  display: flex;
-  gap: 14px;
-  width: max-content;
-  animation: gallery-flow 120s linear infinite;
-}
-.gallery-track img {
-  flex: 0 0 auto;
-  width: 178px;
-  height: 112px;
-  object-fit: cover;
-  border-radius: 10px;
-  border: 3px solid rgba(255,255,255,.78);
-  box-shadow: 0 14px 30px rgba(0,0,0,.28);
-}
-.gallery-track img:nth-child(3n) { transform: translateY(-24px) rotate(1.5deg); }
-.gallery-track img:nth-child(4n) { transform: translateY(22px) rotate(-1.5deg); }
-@keyframes gallery-flow {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-.glass-panel {
-  position: absolute;
-  left: 22px;
-  right: 22px;
-  bottom: 22px;
-  z-index: 3;
-  width: min(100%, 420px);
-  padding: 18px;
-  border: 1px solid rgba(255,255,255,.52);
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius);
-}
-.glass-panel span {
-  display: block;
-  color: var(--muted);
-  font-size: 13px;
-}
-.glass-panel strong {
-  display: block;
-  font-size: 24px;
-  line-height: 1.2;
-  margin-top: 4px;
-}
-.glass-links {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 10px;
-}
-.glass-links a {
-  display: grid;
-  gap: 2px;
-  min-height: 58px;
-  padding: 8px 10px;
-  border-radius: 7px;
-  color: var(--ink);
-  background: rgba(255,255,255,.72);
-  border: 1px solid rgba(29,37,37,.09);
-}
-.glass-links a:hover {
-  text-decoration: none;
-  background: #fff;
-  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
-}
-.glass-links strong {
-  font-size: 17px;
-  margin: 0;
-}
-.glass-links span {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.source-media {
-  margin: 0 clamp(16px, 5vw, 72px) 24px;
-  padding: clamp(16px, 3vw, 24px);
-  background: rgba(255, 250, 242, 0.78);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: 0 10px 30px rgba(38, 31, 25, 0.06);
-}
-.source-media-head {
-  display: grid;
-  gap: 6px;
-  margin-bottom: 14px;
-}
-.source-media-head h2 {
-  margin: 0;
-  font-size: clamp(22px, 3vw, 30px);
-  line-height: 1.2;
-}
-.source-media-head p:last-child {
-  margin: 0;
-  color: var(--muted);
-}
-.media-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 12px;
-  margin-bottom: 14px;
-}
-.media-card {
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
-}
-.media-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
-}
-.media-card img { transition: transform .5s var(--ease); }
-.media-card:hover img { transform: scale(1.06); }
-.media-card iframe,
-.media-card img,
-.media-card video {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border: 0;
-  object-fit: cover;
-  background: #141414;
-}
-.media-card a {
-  display: block;
-  padding: 9px 11px;
-  color: var(--ink);
-  font-weight: 700;
-}
-.source-drawer summary {
-  cursor: pointer;
-  color: var(--accent);
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-.source-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 8px;
-}
-.source-link {
-  display: block;
-  padding: 10px 12px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-left: 3px solid color-mix(in srgb, var(--accent) 40%, var(--line));
-  border-radius: var(--radius-sm);
-  color: var(--ink);
-  transition: transform .2s var(--ease), border-color .2s var(--ease), box-shadow .2s var(--ease);
-}
-.source-link:hover {
-  text-decoration: none;
-  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
-  border-left-color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-}
-.source-link span,
-.source-link small {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.source-link span { font-weight: 700; }
-.source-link small { color: var(--muted); margin-top: 2px; }
-
-.city-explorer {
-  margin: 0 clamp(16px, 5vw, 72px) 24px;
-  padding: clamp(16px, 3vw, 26px);
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,250,242,.84)),
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 32%);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: 0 10px 30px rgba(38, 31, 25, 0.07);
-}
-.city-explorer-head {
-  display: grid;
-  gap: 6px;
-  margin-bottom: 14px;
-}
-.city-explorer-head h2 {
-  margin: 0;
-  font-size: clamp(24px, 3.5vw, 34px);
-  line-height: 1.2;
-}
-.city-explorer-head p:last-child {
-  margin: 0;
-  color: var(--muted);
-}
-.content-review-note {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 7px 12px;
-  margin-top: 4px !important;
-  padding: 10px 12px;
-  border-left: 3px solid #c98b2e;
-  background: color-mix(in srgb, #f0b64c 10%, transparent);
-  color: var(--ink) !important;
-  font-size: 13px;
-}
-.content-review-note strong { color: #8b5b19; }
-.content-review-note span { font-weight: 800; }
-.content-review-note small { color: var(--muted); line-height: 1.5; }
-.city-explorer-tools {
-  display: grid;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-.province-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.province-pill {
-  min-height: 34px;
-  padding: 0 13px;
-  border-radius: 999px;
-  color: var(--muted);
-  transition: transform .2s var(--ease), background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
-}
-.province-pill:hover {
-  color: var(--ink);
-  border-color: color-mix(in srgb, var(--accent) 34%, var(--line));
-  transform: translateY(-1px);
-}
-.province-pill.active {
-  color: var(--ink);
-  background: var(--accent-soft);
-  border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
-  font-weight: 800;
-}
-.review-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  padding-top: 2px;
-}
-.review-pill {
-  min-height: 34px;
-  padding: 0 13px;
-  border-radius: 999px;
-  color: var(--muted);
-  border-color: color-mix(in srgb, #c98b2e 28%, var(--line));
-  background: color-mix(in srgb, #f0b64c 6%, transparent);
-  transition: transform .2s var(--ease), background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
-}
-.review-pill:hover {
-  color: var(--ink);
-  border-color: color-mix(in srgb, #c98b2e 48%, var(--line));
-  transform: translateY(-1px);
-}
-.review-pill.active {
-  color: #6f4810;
-  background: color-mix(in srgb, #f0b64c 22%, var(--paper));
-  border-color: #c98b2e;
-  font-weight: 800;
-}
-.city-review-status {
-  width: fit-content;
-  max-width: 100%;
-  padding: 2px 7px;
-  border-radius: 999px;
-  font-size: 11px;
-  line-height: 1.4;
-  color: #7a551b;
-  background: color-mix(in srgb, #f0b64c 13%, transparent);
-  border: 1px solid color-mix(in srgb, #c98b2e 26%, var(--line));
-}
-.city-review-status.reviewed {
-  color: #176958;
-  background: color-mix(in srgb, #34a98a 13%, transparent);
-  border-color: color-mix(in srgb, #34a98a 28%, var(--line));
-}
-.city-explorer-search {
-  display: grid;
-  gap: 6px;
-  color: var(--muted);
-  font-size: 13px;
-}
-.rich-grid {
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  align-items: stretch;
-}
-
-.tool-bar {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: end;
-  padding: 0 clamp(16px, 5vw, 72px) 24px;
-}
-.search-box {
-  flex: 1 1 360px;
-  display: grid;
-  gap: 6px;
-  color: var(--muted);
-  font-size: 13px;
-}
-input[type="search"] {
-  width: 100%;
-  min-height: 44px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--line);
-  background: #fff;
-  padding: 0 14px;
-  font: inherit;
-  color: var(--ink);
-  transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
-}
-input[type="search"]:focus {
-  outline: none;
-  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
-}
-button {
-  min-height: 44px;
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--ink);
-  border-radius: var(--radius-sm);
-  padding: 0 16px;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  transition: border-color .2s var(--ease), background .2s var(--ease), transform .15s var(--ease), box-shadow .2s var(--ease);
-}
-button:hover {
-  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
-  background: var(--accent-tint);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
-}
-button:active { transform: translateY(0); }
-:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--accent) 60%, var(--sun));
-  outline-offset: 2px;
-}
-
-.layout {
-  display: grid;
-  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
-  gap: 24px;
-  align-items: start;
-  padding: 0 clamp(16px, 5vw, 72px) 72px;
-}
-.sidebar {
-  position: sticky;
-  top: 96px;
-  align-self: start;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  gap: 14px;
-  height: calc(100vh - 112px);
-  min-height: 0;
-  overflow: hidden;
-}
-.sidebar-panel {
-  min-height: 0;
-  background: rgba(255, 250, 242, 0.88);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: 0 8px 24px rgba(38, 31, 25, 0.06);
-}
-.sidebar-panel:first-child {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-.sidebar-panel:last-child {
-  max-height: 32vh;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-  overscroll-behavior: contain;
-}
-.sidebar-panel h2 {
-  flex: 0 0 auto;
-  margin: 0 0 10px;
-  font-size: 16px;
-}
-.toc {
-  min-height: 0;
-  display: grid;
-  gap: 4px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  padding-right: 6px;
-  scrollbar-gutter: stable;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--accent) 38%, #cfc7b9) transparent;
-}
-.toc::-webkit-scrollbar,
-.sidebar-panel:last-child::-webkit-scrollbar {
-  width: 9px;
-}
-.toc::-webkit-scrollbar-track,
-.sidebar-panel:last-child::-webkit-scrollbar-track {
-  background: rgba(29,37,37,.05);
-  border-radius: 999px;
-}
-.toc::-webkit-scrollbar-thumb,
-.sidebar-panel:last-child::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--accent) 38%, #cfc7b9);
-  border: 2px solid rgba(255,250,242,.88);
-  border-radius: 999px;
-}
-.toc a {
-  display: block;
-  padding: 7px 8px;
-  border-radius: 6px;
-  color: var(--muted);
-  font-size: 14px;
-}
-.toc a:hover,
-.toc a.active {
-  background: var(--accent-soft);
-  color: var(--ink);
-  text-decoration: none;
-}
-.toc-level-3 { padding-left: 20px !important; font-size: 13px !important; }
-
-.city-grid {
-  display: grid;
-  gap: 10px;
-}
-.city-grid.mini { gap: 8px; }
-.city-card {
-  position: relative;
-  display: block;
-  border: 1px solid var(--line);
-  border-left: 5px solid var(--accent);
-  background: #fff;
-  border-radius: var(--radius-sm);
-  padding: 10px;
-  color: var(--ink);
-  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
-}
-.city-card span { display: block; font-weight: 700; }
-.city-card small { display: block; color: var(--muted); line-height: 1.5; margin-top: 3px; }
-.city-card-title {
-  display: block;
-  color: var(--ink);
-  font-weight: 800;
-  line-height: 1.35;
-}
-.city-card-title:hover { color: var(--accent-deep); text-decoration: none; }
-.city-card-title::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border-radius: inherit;
-}
-.city-card-title:focus-visible { outline: none; }
-.city-card-title:focus-visible::after {
-  outline: 3px solid color-mix(in srgb, var(--accent) 72%, #fff);
-  outline-offset: 3px;
-}
-.city-card:hover {
-  text-decoration: none;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-  border-color: color-mix(in srgb, var(--accent) 30%, var(--line));
-}
-.city-card.rich {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  overflow: hidden;
-  padding: 0;
-  border-left: 0;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.98), rgba(255,250,242,.88)),
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 34%);
-}
-.city-card.rich:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
-}
-/* 无真实照片的城市卡：纯文字卡（顶部色条，不放插画） */
-.city-card.noimg {
-  position: relative;
-  border-left: 0;
-  border-top: 4px solid var(--accent);
-  padding: 14px 14px 12px;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.98), rgba(255,250,242,.9)),
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 40%);
-}
-.city-card.noimg:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-.city-card.noimg .city-card-body { padding: 0; }
-.city-card.noimg .fav-btn, .city-card.noimg .trip-btn { top: 12px; }
-.city-card.rich .img-frame {
-  display: block;
-  position: relative;
-  overflow: hidden;
-  border-bottom: 4px solid var(--accent);
-  background: var(--accent-soft);
-}
-.photo-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  z-index: 2;
-  padding: 2px 9px;
-  border-radius: 999px;
-  background: rgba(20, 30, 30, 0.66);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .04em;
-  backdrop-filter: blur(4px);
-}
-.city-explorer-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: end;
-}
-.city-explorer-row .city-explorer-search { flex: 1 1 280px; }
-.random-city {
-  flex: 0 0 auto;
-  min-height: 44px;
-  border-radius: 999px;
-  font-weight: 700;
-  background: var(--accent-tint);
-}
-.city-card.rich img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  transition: transform .55s var(--ease);
-}
-.city-card.rich:hover img { transform: scale(1.07); }
-.city-card-body {
-  display: grid;
-  gap: 7px;
-  padding: 12px;
-}
-.city-card.rich p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.45;
-}
-.city-card.rich p strong {
-  color: var(--ink);
-  margin-right: 6px;
-}
-.city-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 2px;
-}
-.city-tags em {
-  font-style: normal;
-  color: color-mix(in srgb, var(--accent) 78%, #111);
-  background: color-mix(in srgb, var(--accent) 12%, #fff);
-  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
-  border-radius: 999px;
-  padding: 1px 7px;
-  font-size: 12px;
-}
-
-.content {
-  display: grid;
-  gap: 18px;
-  min-width: 0;
-}
-/* 全局防溢出：允许长链接 / 超长不可断字符串换行，网格子项可收缩 */
-.guide-section, .md-list, .list-card, .visual-card, .item-text,
-.home-section, .city-explorer, .source-media, .sidebar, .sidebar-panel { min-width: 0; }
-.item-body, .item-label, .item-guide span, .auto-link,
-.list-card, .guide-section p, .city-card small, .toc a, .source-link span, .source-link small {
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-.guide-section {
-  position: relative;
-  background:
-    linear-gradient(135deg, #fff, color-mix(in srgb, var(--sc, var(--accent)) 5%, #fff)),
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--sc, var(--accent)) 16%, transparent), transparent 26%);
-  border: 1px solid var(--line);
-  border-top: 5px solid var(--sc, var(--accent));
-  border-radius: var(--radius);
-  padding: clamp(18px, 3vw, 32px);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow .3s var(--ease), transform .3s var(--ease);
-}
-.guide-section:hover {
-  box-shadow: 0 16px 40px rgba(38, 31, 25, 0.10);
-}
-/* 章节配色轮转，告别单调 */
-.content > .guide-section:nth-of-type(6n+1) { --sc: var(--c4); }
-.content > .guide-section:nth-of-type(6n+2) { --sc: var(--c2); }
-.content > .guide-section:nth-of-type(6n+3) { --sc: var(--c3); }
-.content > .guide-section:nth-of-type(6n+4) { --sc: var(--c6); }
-.content > .guide-section:nth-of-type(6n+5) { --sc: var(--c1); }
-.content > .guide-section:nth-of-type(6n)   { --sc: var(--c5); }
-.guide-section h2,
-.guide-section h3 {
-  margin: 0 0 14px;
-  line-height: 1.24;
-  letter-spacing: -0.01em;
-}
-.guide-section h2 {
-  font-size: clamp(24px, 3.5vw, 36px);
-  padding-bottom: 12px;
-  border-bottom: 2px solid color-mix(in srgb, var(--sc, var(--accent)) 30%, var(--hairline));
-  color: color-mix(in srgb, var(--sc, var(--accent)) 82%, #111);
-}
-.guide-section h3 {
-  font-size: 22px;
-  color: color-mix(in srgb, var(--sc, var(--accent)) 78%, #111);
-}
-.sec-ico {
-  display: inline-grid;
-  place-items: center;
-  width: 1.5em;
-  height: 1.5em;
-  margin-right: 10px;
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--sc, var(--accent)) 18%, #fff);
-  font-size: .82em;
-  vertical-align: -0.22em;
-}
-
-.md-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 10px;
-}
-/* 顶层列表改为响应式多列卡片网格，提升可扫读性 */
-.md-list.depth-0 {
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-  gap: 12px;
-  align-items: start;
-}
-/* 带子项 / 带配图 / 关键事实的卡片占满整行，避免参差 */
-.md-list.depth-0 > .list-card.has-children,
-.md-list.depth-0 > .list-card.visual-card,
-.md-list.depth-0 > .list-card.fact {
-  grid-column: 1 / -1;
-}
-/* 嵌套列表去掉树状连接线与缩进，改为干净的分组（不再像思维导图） */
-.md-list.depth-1,
-.md-list.depth-2,
-.md-list.depth-3 {
-  margin-top: 12px;
-  padding-left: 0;
-  border-left: 0;
-}
-/* 纯叶子列表平铺为多列小卡片 */
-.md-list.leaf-list {
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
-  gap: 8px;
-}
-/* 顶层带子项的卡片 = 彩色专题面板 */
-.md-list.depth-0 > .list-card.has-children {
-  background: #fff;
-  border: 1px solid var(--line);
-  border-left: 0;
-  border-top: 4px solid var(--tc, var(--accent));
-  border-radius: var(--radius);
-  padding: 16px 18px 18px;
-  box-shadow: var(--shadow-sm);
-}
-.md-list.depth-0 > .list-card.has-children:hover { box-shadow: var(--shadow); }
-.md-list.depth-0 > .list-card.has-children > .item-label,
-.md-list.depth-0 > .list-card.has-children > .item-body {
-  font-size: 16.5px;
-  font-weight: 800;
-  color: var(--ink);
-}
-.md-list.depth-0 > .list-card.has-children > .item-label {
-  background: var(--tc, var(--accent-soft));
-  color: #fff;
-}
-/* 顶层卡片按位置轮转多彩主色（呼应主题卡的活力配色） */
-.md-list.depth-0 > .list-card:nth-child(6n+1) { --tc: var(--c4); }
-.md-list.depth-0 > .list-card:nth-child(6n+2) { --tc: var(--c2); }
-.md-list.depth-0 > .list-card:nth-child(6n+3) { --tc: var(--c3); }
-.md-list.depth-0 > .list-card:nth-child(6n+4) { --tc: var(--c6); }
-.md-list.depth-0 > .list-card:nth-child(6n+5) { --tc: var(--c1); }
-.md-list.depth-0 > .list-card:nth-child(6n)   { --tc: var(--c5); }
-/* 深色模式下面板与卡片不要白底 */
-html[data-theme="dark"] .md-list.depth-0 > .list-card.has-children,
-html[data-theme="dark"] .list-card { background: #1b2326; }
-html[data-theme="dark"] .list-card .list-card { background: rgba(255,255,255,0.05); }
-html[data-theme="dark"] .guide-section {
-  background: linear-gradient(135deg, #1a2225, #161d1f);
-}
-
-/* 章节条目计数徽标 */
-.section-count {
-  margin-left: 10px;
-  padding: 2px 11px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-  font-size: 13px;
-  font-weight: 700;
-  vertical-align: middle;
-}
-/* 长章节折叠 */
-.clampable .section-body {
-  max-height: 600px;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(#000 74%, transparent);
-  mask-image: linear-gradient(#000 74%, transparent);
-}
-.clampable.expanded .section-body {
-  max-height: none;
-  -webkit-mask-image: none;
-  mask-image: none;
-}
-@media (max-width: 640px) {
-  .clampable .section-body { max-height: 420px; }
-}
-.section-toggle {
-  display: block;
-  margin: 16px auto 0;
-  min-height: 40px;
-  padding: 0 24px;
-  border-radius: 999px;
-  font-weight: 700;
-  color: var(--accent-deep);
-  background: var(--accent-tint);
-  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
-}
-.section-toggle:hover { background: var(--accent-soft); }
-.list-card {
-  background: #fff;
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--tc, color-mix(in srgb, var(--accent) 40%, var(--line)));
-  border-radius: var(--radius-sm);
-  padding: 11px 13px;
-  transition: border-color .2s var(--ease), box-shadow .2s var(--ease), transform .2s var(--ease);
-}
-.list-card:hover {
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-1px);
-}
-/* 面板内的子卡片用更轻的样式，避免"盒子套盒子" */
-.list-card .list-card {
-  border: 1px solid var(--hairline);
-  border-left: 3px solid color-mix(in srgb, var(--tc, var(--accent)) 60%, var(--line));
-  background: color-mix(in srgb, var(--tc, var(--accent)) 5%, #fff);
-}
-.list-card.fact {
-  background: color-mix(in srgb, var(--tc, var(--accent)) 10%, #fff);
-  border-left-color: var(--tc, var(--accent));
-}
-.visual-card {
-  padding: 12px;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.96), rgba(248,250,246,.86)),
-    radial-gradient(circle at 100% 0%, rgba(104,168,201,.18), transparent 36%);
-  border-left-color: color-mix(in srgb, var(--accent) 72%, var(--sky));
-}
-.visual-card.kind-food {
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,246,236,.88)),
-    radial-gradient(circle at 100% 0%, rgba(216,111,66,.20), transparent 36%);
-  border-left-color: var(--food);
-}
-.visual-layout {
-  display: grid;
-  grid-template-columns: minmax(150px, 240px) minmax(0, 1fr);
-  gap: 14px;
-  align-items: start;
-}
-.item-thumb-wrap {
-  position: relative;
-  margin: 0;
-  overflow: hidden;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(29,37,37,.10);
-  box-shadow: 0 10px 22px rgba(36, 29, 21, 0.10);
-}
-.item-thumb {
-  display: block;
-  width: 100%;
-  aspect-ratio: 5 / 3;
-  object-fit: cover;
-  transition: transform .55s var(--ease);
-}
-.visual-card:hover .item-thumb { transform: scale(1.06); }
-.item-thumb-wrap figcaption {
-  position: absolute;
-  left: 8px;
-  bottom: 8px;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: rgba(29,37,37,.72);
-  color: #fff;
-  font-size: 12px;
-}
-.photo-generated figcaption {
-  background: rgba(126, 92, 54, .78);
-}
-.item-text {
-  min-width: 0;
-  display: grid;
-  gap: 8px;
-}
-.item-guide {
-  display: grid;
-  gap: 3px;
-  padding: 9px 10px;
-  border-radius: 7px;
-  background: color-mix(in srgb, var(--accent) 9%, #ffffff);
-  border: 1px solid rgba(29,37,37,.08);
-}
-.kind-food .item-guide {
-  background: color-mix(in srgb, var(--food) 10%, #ffffff);
-}
-.item-guide strong {
-  color: color-mix(in srgb, var(--accent) 78%, #111);
-  font-size: 13px;
-}
-.kind-food .item-guide strong {
-  color: color-mix(in srgb, var(--food) 78%, #111);
-}
-.item-guide span {
-  color: var(--muted);
-}
-.item-label {
-  display: inline-flex;
-  align-items: center;
-  min-height: 24px;
-  margin-right: 8px;
-  padding: 1px 8px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--accent) 16%, #fff);
-  color: color-mix(in srgb, var(--accent) 80%, #111);
-  font-weight: 700;
-  font-size: 13px;
-}
-.item-body { color: var(--ink); }
-code {
-  background: rgba(29,37,37,.08);
-  border-radius: 5px;
-  padding: 1px 5px;
-}
-.is-hidden { display: none !important; }
-.search-empty {
-  border: 1px dashed var(--line);
-  background: #fff;
-  border-radius: var(--radius);
-  padding: 20px;
-  color: var(--muted);
-}
-.search-web {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-  padding: 10px 12px;
-  border-top: 1px solid var(--line);
-}
-.search-web span { color: var(--muted); font-size: 12px; }
-.search-web a {
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-  font-size: 13px;
-  font-weight: 700;
-}
-.search-web a:hover { text-decoration: none; background: color-mix(in srgb, var(--accent) 22%, #fff); }
-
-.scroll-threshold {
-  position: absolute;
-  top: 720px;
-  left: 0;
-  width: 1px;
-  height: 1px;
-  pointer-events: none;
-}
-.to-top {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  width: 46px;
-  height: 46px;
-  min-height: 46px;
-  padding: 0;
-  border-radius: 50%;
-  font-weight: 700;
-  font-size: 21px;
-  line-height: 1;
-  color: #fff;
-  background: var(--accent-deep);
-  border: 1px solid color-mix(in srgb, var(--accent) 60%, #000);
-  box-shadow: var(--shadow);
-  opacity: 0;
-  transform: translateY(12px);
-  pointer-events: none;
-  transition: opacity .25s var(--ease), transform .25s var(--ease), box-shadow .2s var(--ease);
-}
-.to-top:hover {
-  background: var(--accent);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-.to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.mobile-quickbar {
-  display: none;
-}
-
-/* ===== 全站行程工作台：桌面侧栏 / 移动端底部面板 ===== */
-.trip-dock-toggle {
-  position: fixed;
-  right: 18px;
-  bottom: 76px;
-  z-index: 150;
-  min-height: 48px;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0 12px;
-  color: #fff;
-  background: #173e39;
-  border: 1px solid rgba(255,255,255,.24);
-  border-radius: 999px;
-  box-shadow: var(--shadow);
-  font: inherit;
-  font-weight: 900;
-  cursor: pointer;
-}
-.trip-dock-toggle > span:first-child {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  overflow: hidden;
-  border-radius: 50%;
-  color: transparent;
-  background: #f3c35a;
-}
-.trip-dock-toggle > span:first-child::before { content: "↗"; color: #173e39; font-size: 16px; }
-.trip-dock-toggle strong {
-  min-width: 25px;
-  height: 25px;
-  display: grid;
-  place-items: center;
-  padding: 0 6px;
-  border-radius: 999px;
-  color: #173e39;
-  background: #f3c35a;
-  font-size: 12px;
-}
-.trip-dock-toggle[aria-expanded="true"] { background: #0f2e2a; }
-.trip-dock-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 169;
-  background: rgba(12, 22, 22, .42);
-}
-.trip-dock-backdrop[hidden],
-.trip-dock[hidden] { display: none !important; }
-.trip-dock {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 170;
-  width: min(390px, 100vw);
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  color: var(--ink);
-  background: var(--paper);
-  border-left: 1px solid var(--line);
-  box-shadow: -20px 0 55px rgba(15, 35, 33, .2);
-}
-.trip-dock-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 22px 20px 16px;
-  border-bottom: 1px solid var(--line);
-}
-.trip-dock-head h2 { margin: 2px 0 0; font-size: 25px; }
-.trip-dock-head .eyebrow { margin: 0; }
-.trip-dock-close {
-  width: 44px;
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  color: var(--ink);
-  background: transparent;
-  font-size: 24px;
-  cursor: pointer;
-}
-.trip-dock-body { min-height: 0; overflow: auto; padding: 16px 20px 22px; }
-.trip-dock-intro { margin: 0 0 15px; color: var(--muted); font-size: 13px; line-height: 1.65; }
-.trip-dock-list { display: grid; gap: 8px; }
-.trip-dock-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 44px;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 8px 10px 12px;
-  border-left: 3px solid var(--accent);
-  background: var(--accent-tint);
-}
-.trip-dock-item-main { min-width: 0; display: grid; gap: 3px; color: var(--ink); }
-.trip-dock-item-main:hover { text-decoration: none; }
-.trip-dock-item-main strong,
-.trip-dock-item-main span { overflow-wrap: anywhere; }
-.trip-dock-item-main span { color: var(--muted); font-size: 12px; line-height: 1.45; }
-.trip-dock-remove {
-  width: 44px;
-  min-height: 44px;
-  padding: 0;
-  border: 0;
-  color: var(--muted);
-  background: transparent;
-  font-size: 20px;
-  cursor: pointer;
-}
-.trip-dock-empty { min-height: 190px; display: grid; place-items: center; align-content: center; gap: 6px; text-align: center; color: var(--muted); }
-.trip-dock-empty strong { color: var(--ink); font-size: 18px; }
-.trip-dock-empty[hidden] { display: none; }
-.trip-dock-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
-  border-top: 1px solid var(--line);
-  background: var(--paper);
-}
-.trip-dock-footer button,
-.trip-dock-footer a {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 13px;
-  border-radius: var(--radius-sm);
-  font-weight: 850;
-}
-.trip-dock-footer button { color: var(--muted); background: transparent; border: 1px solid var(--line); cursor: pointer; }
-.trip-dock-footer button:disabled { opacity: .45; cursor: default; }
-.trip-dock-footer a { color: #fff; background: #173e39; }
-.trip-dock-footer a:hover { color: #fff; text-decoration: none; background: #0f2e2a; }
-body.trip-dock-open { overflow: hidden; }
-html[data-theme="dark"] .trip-dock,
-html[data-theme="dark"] .trip-dock-footer { background: #18211f; }
-html[data-theme="dark"] .trip-dock-item { background: rgba(255,255,255,.055); }
-
-/* ===== 首页增强模块：数据速览 / 精选主题 / 实用工具 ===== */
-.home-section {
-  margin: 0 clamp(16px, 5vw, 72px) 24px;
-  padding: clamp(18px, 3vw, 30px);
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,250,242,.84)),
-    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 36%);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-}
-.home-section-head {
-  display: grid;
-  gap: 6px;
-  margin-bottom: 16px;
-}
-.home-section-head h2 {
-  margin: 0;
-  font-size: clamp(22px, 3.2vw, 32px);
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
-.home-section-head p:last-child { margin: 0; color: var(--muted); }
-
-/* 数据速览 */
-.home-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-}
-.stat-card {
-  position: relative;
-  overflow: hidden;
-  padding: 18px 18px 16px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: linear-gradient(160deg, #fff, var(--accent-tint));
-  box-shadow: var(--shadow-sm);
-  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
-}
-.stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-.stat-card::after {
-  content: "";
-  position: absolute;
-  right: -28px;
-  top: -28px;
-  width: 86px;
-  height: 86px;
-  border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%);
-}
-.stat-card .stat-num {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  font-size: clamp(30px, 4vw, 42px);
-  font-weight: 800;
-  line-height: 1;
-  color: var(--accent-deep);
-  letter-spacing: -0.02em;
-}
-.stat-card .stat-num small { font-size: 15px; font-weight: 700; color: var(--muted); }
-.stat-card .stat-label { display: block; margin-top: 8px; color: var(--muted); font-size: 14px; }
-
-/* 精选主题 */
-/* 编辑精选 · 人气目的地横向滑条 */
-.featured-strip {
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  padding: 4px 2px 14px;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-}
-.featured-card {
-  position: relative;
-  flex: 0 0 auto;
-  width: 230px;
-  height: 150px;
-  border-radius: var(--radius);
-  overflow: hidden;
-  scroll-snap-align: start;
-  box-shadow: var(--shadow-sm);
-  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
-}
-.featured-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-.featured-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
-.featured-card:hover img { transform: scale(1.07); }
-.featured-grad {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, transparent 40%, rgba(10,16,16,.72));
-}
-.featured-name {
-  position: absolute;
-  left: 12px; bottom: 10px; right: 12px;
-  color: #fff; font-weight: 800; font-size: 17px;
-  text-shadow: 0 1px 6px rgba(0,0,0,.4);
-}
-
-.theme-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
-}
-.theme-card {
-  display: grid;
-  gap: 6px;
-  padding: 16px;
-  text-align: left;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: #fff;
-  color: var(--ink);
-  cursor: pointer;
-  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
-}
-.theme-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
-  border-color: color-mix(in srgb, var(--accent) 32%, var(--line));
-  text-decoration: none;
-}
-.theme-card .theme-emoji {
-  font-size: 26px;
-  line-height: 1;
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border-radius: 14px;
-  background: var(--accent-soft);
-}
-.theme-card strong { font-size: 17px; }
-.theme-card span { color: var(--muted); font-size: 13px; line-height: 1.5; }
-
-/* 实用工具 */
-.tools-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 14px;
-}
-.tool-card {
-  display: grid;
-  gap: 12px;
-  align-content: start;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-top: 4px solid color-mix(in srgb, var(--accent) 55%, var(--sun));
-  border-radius: var(--radius-sm);
-  background: #fff;
-  box-shadow: var(--shadow-sm);
-}
-.tool-card h3 { margin: 0; font-size: 18px; }
-.tool-card p.tool-hint { margin: 0; color: var(--muted); font-size: 13px; }
-.tool-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
-.tool-row label { color: var(--muted); font-size: 13px; }
-.tool-card input[type="number"],
-.tool-card select {
-  min-height: 42px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--line);
-  background: #fff;
-  padding: 0 12px;
-  font: inherit;
-  color: var(--ink);
-}
-.tool-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.tool-chip {
-  min-height: 36px;
-  padding: 0 13px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.tool-chip.active {
-  color: var(--ink);
-  background: var(--accent-soft);
-  border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
-}
-.tool-output {
-  min-height: 54px;
-  padding: 13px 15px;
-  border-radius: var(--radius-sm);
-  background: var(--accent-tint);
-  border: 1px solid var(--hairline);
-  color: var(--ink);
-  font-size: 14px;
-  line-height: 1.6;
-}
-.tool-output strong { color: var(--accent-deep); }
-.tool-output ul { margin: 6px 0 0; padding-left: 18px; }
-.tool-output li { margin: 2px 0; }
-.tool-action {
-  margin-top: 10px;
-  min-height: 34px;
-  padding: 0 14px;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 13px;
-  color: #fff;
-  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-  border: 0;
-  cursor: pointer;
-}
-.tool-action:hover { filter: brightness(1.06); transform: translateY(-1px); }
-
-.site-footer {
-  margin: 12px clamp(16px, 5vw, 72px) 40px;
-  padding: 20px clamp(16px, 3vw, 26px);
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
-}
-.site-footer p { margin: 0 0 4px; }
-.site-footer a { font-weight: 600; }
-
-/* ===================== 头部导航重构 ===================== */
-.header-bar {
-  flex-wrap: wrap;
-}
-.header-home {
-  gap: 7px;
-  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, var(--c4)));
-  color: #fff;
-  border: 0;
-  font-weight: 800;
-  padding: 0 14px;
-}
-.header-home:hover { filter: brightness(1.06); }
-.brand-mark { font-size: 17px; }
-.brand-name b { font-weight: 900; }
-.header-links {
-  display: flex;
-  gap: 2px;
-  flex: 0 1 auto;
-}
-.header-link {
-  padding: 7px 12px;
-  border-radius: 999px;
-  color: var(--muted);
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.header-link:hover, .header-link.active {
-  color: var(--ink);
-  background: var(--accent-soft);
-  text-decoration: none;
-}
-.global-search { margin-left: auto; flex: 1 1 280px; }
-.header-user {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 40px;
-  padding: 0 12px 0 8px;
-  border-radius: 999px;
-  background: #fff;
-  border: 1px solid var(--line);
-  color: var(--ink);
-  font-weight: 700;
-  font-size: 14px;
-  transition: border-color .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
-}
-.header-user:hover {
-  text-decoration: none;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
-}
-.header-user.active { background: var(--accent-soft); }
-.user-avatar {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--c4), var(--c5));
-  font-size: 16px;
-}
-
-/* ===================== Hero：大图轮播 + 横排快速查找 ===================== */
-.hero-stage {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  min-height: 360px;
-}
-.hero-carousel {
-  position: relative;
-  flex: 1 1 auto;
-  min-height: 384px;
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  background: linear-gradient(135deg, var(--accent-soft), #eef3f0);
-}
-.hero-carousel[data-count="1"] .hero-arrow,
-.hero-carousel[data-count="1"] .hero-dots,
-.hero-carousel[data-count="1"] .hero-pause { display: none; }
-.hero-slides { position: absolute; inset: 0; }
-.hero-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: scale(1.06);
-  transition: opacity .9s var(--ease), transform 6s linear;
-  pointer-events: none;
-}
-.hero-slide.active { opacity: 1; transform: scale(1); pointer-events: auto; }
-.hero-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.hero-slide::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(10,18,24,0) 40%, rgba(10,18,24,.16) 70%, rgba(10,18,24,.62) 100%);
-}
-.slide-cap {
-  position: absolute;
-  left: 20px;
-  bottom: 18px;
-  right: 20px;
-  z-index: 2;
-  color: #fff;
-  text-shadow: 0 2px 14px rgba(0,0,0,.5);
-}
-.slide-cap strong { display: block; font-size: clamp(20px, 3vw, 28px); font-weight: 800; }
-.slide-cap span { display: block; font-size: 13px; opacity: .92; margin-top: 2px; }
-a.hero-slide:hover img { filter: brightness(1.04); }
-.hero-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  width: 42px;
-  height: 42px;
-  min-height: 0;
-  padding: 0;
-  border-radius: 50%;
-  border: 0;
-  background: rgba(255,255,255,.82);
-  color: var(--ink);
-  font-size: 24px;
-  line-height: 1;
-  box-shadow: var(--shadow-sm);
-  opacity: 0;
-  transition: opacity .25s var(--ease), background .2s var(--ease);
-}
-.hero-carousel:hover .hero-arrow { opacity: 1; }
-.hero-arrow:hover { background: #fff; }
-.hero-arrow.prev { left: 12px; }
-.hero-arrow.next { right: 12px; }
-.hero-dots {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 10px;
-  z-index: 3;
-  display: flex;
-  gap: 7px;
-  justify-content: center;
-}
-.hero-dot {
-  width: 8px;
-  height: 8px;
-  min-height: 0;
-  padding: 0;
-  border-radius: 50%;
-  border: 0;
-  background: rgba(255,255,255,.55);
-  box-shadow: 0 1px 4px rgba(0,0,0,.3);
-  cursor: pointer;
-  transition: transform .25s var(--ease), background .25s var(--ease);
-}
-.hero-dot.active { background: #fff; transform: scaleX(2.25); }
-.hero-pause {
-  position: absolute;
-  right: 12px;
-  bottom: 10px;
-  z-index: 4;
-  width: 36px;
-  height: 36px;
-  min-height: 0;
-  padding: 0;
-  border: 1px solid rgba(255,255,255,.42);
-  border-radius: 50%;
-  color: #fff;
-  background: rgba(12,35,34,.62);
-  box-shadow: 0 2px 12px rgba(0,0,0,.25);
-  font-size: 13px;
-  line-height: 1;
-  backdrop-filter: blur(4px);
-}
-.hero-pause:hover { background: rgba(12,35,34,.86); }
-.hero-pause:disabled { cursor: default; opacity: .74; }
-.hero-quickfind {
-  flex: 0 0 auto;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 12px 14px;
-  box-shadow: var(--shadow-sm);
-}
-.qf-title {
-  display: block;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--accent-deep);
-  margin-bottom: 8px;
-}
-.qf-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-}
-.quickfind-card {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 11px 12px;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(150deg, #fff, var(--accent-tint));
-  border: 1px solid var(--hairline);
-  color: var(--ink);
-  transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s var(--ease);
-}
-.quickfind-card:hover {
-  text-decoration: none;
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-sm);
-  border-color: color-mix(in srgb, var(--accent) 36%, var(--line));
-}
-.qf-emoji { font-size: 22px; line-height: 1; }
-.qf-text strong { display: block; font-size: 15px; }
-.qf-text small { color: var(--muted); font-size: 12px; }
-.quickfind-card:nth-child(1) .qf-emoji { filter: none; }
-
-/* ===================== 城市卡片收藏 / 加入行程按钮 ===================== */
-.fav-btn, .trip-btn {
-  position: absolute;
-  top: 8px;
-  z-index: 3;
-  width: 34px;
-  height: 34px;
-  min-height: 0;
-  padding: 0;
-  border-radius: 50%;
-  border: 0;
-  background: rgba(255,255,255,.85);
-  color: var(--c2);
-  font-size: 18px;
-  line-height: 34px;
-  text-align: center;
-  cursor: pointer;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 2px 8px rgba(0,0,0,.18);
-  transition: transform .18s var(--ease), background .18s var(--ease);
-}
-.fav-btn { right: 8px; }
-.trip-btn { right: 48px; color: var(--c5); font-weight: 800; }
-.fav-btn:hover, .trip-btn:hover { transform: scale(1.12); background: #fff; }
-.fav-btn.faved { color: #fff; background: linear-gradient(135deg, var(--c2), var(--c1)); }
-.trip-btn.added { color: #fff; background: linear-gradient(135deg, var(--c5), var(--c4)); }
-
-/* ===================== 彩色点缀：主题卡 / 统计卡 / 区块条 ===================== */
-.theme-card:nth-child(8n+1) { --tc: var(--c4); }
-.theme-card:nth-child(8n+2) { --tc: var(--c6); }
-.theme-card:nth-child(8n+3) { --tc: var(--c3); }
-.theme-card:nth-child(8n+4) { --tc: var(--c2); }
-.theme-card:nth-child(8n+5) { --tc: var(--c5); }
-.theme-card:nth-child(8n+6) { --tc: var(--c1); }
-.theme-card:nth-child(8n+7) { --tc: var(--c3); }
-.theme-card:nth-child(8n+8) { --tc: var(--c4); }
-.theme-card .theme-emoji {
-  background: color-mix(in srgb, var(--tc, var(--accent)) 20%, #fff);
-}
-.theme-card:hover { border-color: color-mix(in srgb, var(--tc, var(--accent)) 50%, var(--line)); }
-.theme-card::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  border-radius: 4px 0 0 4px;
-  background: var(--tc, var(--accent));
-  opacity: 0;
-  transition: opacity .2s var(--ease);
-}
-.theme-card { position: relative; overflow: hidden; }
-.theme-card:hover::before { opacity: 1; }
-.stat-card:nth-child(4n+1) { --tc: var(--c4); }
-.stat-card:nth-child(4n+2) { --tc: var(--c1); }
-.stat-card:nth-child(4n+3) { --tc: var(--c3); }
-.stat-card:nth-child(4n+4) { --tc: var(--c5); }
-.stat-card {
-  background: linear-gradient(160deg, #fff, color-mix(in srgb, var(--tc, var(--accent)) 12%, #fff));
-}
-.stat-card .stat-num { color: color-mix(in srgb, var(--tc, var(--accent)) 78%, #11202a); }
-.stat-card::after { background: radial-gradient(circle, color-mix(in srgb, var(--tc, var(--accent)) 28%, transparent), transparent 70%); }
-.content > .guide-section:nth-of-type(6n+1) { border-top-color: var(--c4); }
-.content > .guide-section:nth-of-type(6n+2) { border-top-color: var(--c1); }
-.content > .guide-section:nth-of-type(6n+3) { border-top-color: var(--c3); }
-.content > .guide-section:nth-of-type(6n+4) { border-top-color: var(--c2); }
-.content > .guide-section:nth-of-type(6n+5) { border-top-color: var(--c5); }
-.content > .guide-section:nth-of-type(6n+6) { border-top-color: var(--c6); }
-
-/* ===================== 用户中心 ===================== */
-.user-hero {
-  margin: clamp(16px, 4vw, 32px) clamp(16px, 5vw, 72px) 18px;
-  padding: clamp(20px, 3vw, 32px);
-  border-radius: var(--radius-lg);
-  background:
-    radial-gradient(circle at 88% -10%, color-mix(in srgb, var(--c4) 28%, transparent), transparent 50%),
-    linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 50%, var(--c5)));
-  color: #fff;
-  box-shadow: var(--shadow);
-}
-.user-id-card { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-.user-id-card .eyebrow { color: rgba(255,255,255,.85); }
-.user-id-card .eyebrow::before { background: rgba(255,255,255,.7); }
-.user-id-card h1 { margin: 4px 0 6px; font-size: clamp(26px, 4vw, 38px); color: #fff; -webkit-text-fill-color: #fff; }
-.user-id-card .subtitle { color: rgba(255,255,255,.92); margin: 0; }
-.user-avatar-big {
-  width: 84px;
-  height: 84px;
-  min-height: 0;
-  padding: 0;
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  border: 3px solid rgba(255,255,255,.6);
-  background: rgba(255,255,255,.2);
-  font-size: 44px;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-}
-.user-stat-row { display: flex; gap: 26px; margin-top: 20px; flex-wrap: wrap; }
-.user-stat strong { font-size: 26px; font-weight: 800; }
-.user-stat span { display: block; font-size: 13px; color: rgba(255,255,255,.85); }
-.user-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 0 clamp(16px, 5vw, 72px) 16px;
-}
-.user-tab {
-  min-height: 44px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--muted);
-  font-weight: 700;
-}
-.user-tab.active {
-  color: #fff;
-  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-  border-color: transparent;
-}
-.user-panels { margin: 0 clamp(16px, 5vw, 72px) 60px; }
-.user-panel { margin: 0; }
-.user-panel h2 { margin-top: 0; }
-.panel-hint { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
-.storage-transfer {
-  max-width: 620px;
-  margin-top: 24px;
-  padding: 16px;
-  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
-  border-left: 4px solid var(--accent);
-  border-radius: var(--radius-sm);
-  background: var(--accent-tint);
-}
-.storage-transfer > strong { display: block; margin-bottom: 5px; }
-.storage-transfer > p { margin: 0 0 12px; color: var(--muted); font-size: 13px; line-height: 1.65; }
-.storage-transfer-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-.file-btn {
-  min-height: 40px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--paper);
-  color: var(--ink);
-  font-weight: 700;
-  cursor: pointer;
-}
-.file-btn:hover { border-color: var(--accent); color: var(--accent-deep); }
-.storage-transfer .save-tip { display: block; margin-top: 10px; }
-.storage-transfer .save-tip.error { color: #b54135; }
-.field-row { display: grid; gap: 7px; margin-bottom: 16px; max-width: 460px; }
-.field-row label, .field-label { font-weight: 700; font-size: 14px; }
-.field-row input[type="text"] {
-  min-height: 44px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--line);
-  padding: 0 14px;
-  font: inherit;
-  background: #fff;
-  color: var(--ink);
-}
-.field-row input:focus { outline: none; border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent); }
-.avatar-picker { display: flex; flex-wrap: wrap; gap: 8px; }
-.avatar-opt {
-  width: 46px;
-  height: 46px;
-  min-height: 0;
-  padding: 0;
-  display: grid;
-  place-items: center;
-  line-height: 1;
-  border-radius: 50%;
-  border: 2px solid var(--line);
-  background: #fff;
-  font-size: 24px;
-  cursor: pointer;
-  transition: transform .15s var(--ease), border-color .15s var(--ease);
-}
-.avatar-opt:hover { transform: scale(1.1); }
-.avatar-opt.active { border-color: var(--accent); background: var(--accent-soft); }
-.primary-btn {
-  min-height: 46px;
-  padding: 0 22px;
-  border-radius: 999px;
-  border: 0;
-  color: #fff;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-}
-.primary-btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
-.ghost-btn {
-  min-height: 42px;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--c1) 50%, var(--line));
-  color: var(--c1);
-  background: #fff;
-  font-weight: 700;
-  margin-top: 8px;
-}
-.ghost-btn:hover { background: color-mix(in srgb, var(--c1) 10%, #fff); }
-.save-tip { margin-left: 12px; color: var(--c3); font-weight: 700; }
-.setting-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--hairline);
-}
-.setting-row strong { display: block; }
-.setting-row small { color: var(--muted); }
-.seg { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--accent-tint); border: 1px solid var(--line); }
-.seg button {
-  min-height: 34px;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--muted);
-  font-weight: 700;
-}
-.seg button.active { background: #fff; color: var(--ink); box-shadow: var(--shadow-sm); }
-.guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
-.guide-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: var(--radius-sm); background: var(--accent-tint); border: 1px solid var(--hairline); }
-.gi-emoji { font-size: 26px; line-height: 1; }
-.guide-item strong { display: block; margin-bottom: 3px; }
-.guide-item p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
-.fav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
-.fav-item {
-  position: relative;
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--ink);
-  box-shadow: var(--shadow-sm);
-}
-.fav-item img { width: 72px; height: 56px; object-fit: cover; border-radius: 8px; }
-.fav-item-body { min-width: 0; }
-.fav-item strong { display: block; font-size: 15px; }
-.fav-item small { color: var(--muted); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.fav-remove {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 24px;
-  height: 24px;
-  min-height: 0;
-  padding: 0;
-  border-radius: 50%;
-  border: 0;
-  background: color-mix(in srgb, var(--c1) 14%, #fff);
-  color: var(--c1);
-  font-size: 13px;
-  line-height: 24px;
-  cursor: pointer;
-}
-/* 我的行程 */
-.trip-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
-.trip-tools label { color: var(--muted); font-size: 14px; }
-.trip-tools input[type="number"] { width: 84px; min-height: 40px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #fff; padding: 0 12px; font: inherit; color: var(--ink); }
-.trip-tools .ghost-btn { margin-top: 0; }
-.trip-summary { margin-bottom: 12px; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--accent-tint); border: 1px solid var(--hairline); font-size: 14px; }
-.trip-summary:empty { display: none; }
-.trip-compare { margin: 0 0 16px; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); }
-.trip-compare-table { width: 100%; min-width: 620px; border-collapse: collapse; background: #fff; font-size: 13px; }
-.trip-compare-table th,
-.trip-compare-table td { padding: 10px 12px; text-align: left; vertical-align: top; border-right: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
-.trip-compare-table th:first-child { width: 90px; color: var(--muted); background: var(--accent-tint); }
-.trip-compare-table thead th { color: var(--ink); background: color-mix(in srgb, var(--c4) 8%, #fff); }
-.trip-compare-table tr:last-child th,
-.trip-compare-table tr:last-child td { border-bottom: 0; }
-.trip-compare-table th:last-child,
-.trip-compare-table td:last-child { border-right: 0; }
-.trip-compare-note { margin: 0; padding: 9px 12px; color: var(--muted); font-size: 12px; background: var(--accent-tint); border-top: 1px solid var(--hairline); }
-.trip-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.trip-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: #fff;
-}
-.trip-order {
-  flex: 0 0 auto;
-  width: 28px; height: 28px;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--c4), var(--c5));
-  color: #fff; font-weight: 800; font-size: 14px;
-}
-.trip-item img { width: 76px; height: 50px; object-fit: cover; border-radius: 7px; flex: 0 0 auto; }
-.trip-item-body { min-width: 0; flex: 1 1 auto; }
-.trip-item-body strong { display: block; font-size: 15px; }
-.trip-item-body small { color: var(--muted); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.trip-actions { display: flex; gap: 4px; flex: 0 0 auto; }
-.trip-actions button { width: 32px; height: 32px; min-height: 0; padding: 0; border-radius: 8px; border: 1px solid var(--line); background: #fff; cursor: pointer; }
-.trip-actions button:disabled { opacity: .35; cursor: default; }
-.roadbook-list { display: grid; gap: 10px; }
-.roadbook-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
-  align-items: center;
-  padding: 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: #f8faf7;
-}
-.roadbook-item strong { display: block; margin-bottom: 4px; }
-.roadbook-item small { display: block; color: var(--muted); }
-.roadbook-actions { display: flex; gap: 6px; }
-.roadbook-actions a,
-.roadbook-actions button { min-height: 34px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; color: var(--ink); font-size: 13px; }
-
-/* 用户中心 · 本地旅行工作台 */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-.user-panel-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-.user-panel-head h2 { margin-bottom: 6px; }
-.user-panel-head .panel-hint { margin-bottom: 0; }
-.tool-export-btn {
-  flex: 0 0 auto;
-  min-height: 40px;
-  padding: 0 14px;
-  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
-  border-radius: var(--radius-sm);
-  background: var(--accent-tint);
-  color: var(--accent-deep);
-  font-weight: 800;
-  cursor: pointer;
-}
-.tool-export-btn:hover { background: var(--accent-soft); }
-.travel-tool-layout {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 28px 32px;
-}
-.tool-workspace {
-  min-width: 0;
-  padding-top: 14px;
-  border-top: 3px solid var(--accent);
-}
-.checklist-workspace { border-top-color: var(--c3); }
-.budget-workspace { border-top-color: var(--c2); }
-.notes-workspace { grid-column: 1 / -1; border-top-color: var(--c4); }
-.tool-workspace-head {
-  min-height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-.tool-workspace-head > div { display: flex; align-items: center; gap: 9px; min-width: 0; }
-.tool-workspace-head h3 { margin: 0; font-size: 18px; }
-.tool-workspace-head > strong { color: var(--muted); font-size: 14px; white-space: nowrap; }
-.tool-symbol {
-  width: 32px;
-  height: 32px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  color: #fff;
-  font-weight: 900;
-  line-height: 1;
-}
-.checklist-symbol { background: var(--c3); }
-.budget-symbol { background: var(--c2); color: #3e2a00; }
-.notes-symbol { background: var(--c4); }
-.tool-inline-form,
-.budget-form {
-  display: grid;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.tool-inline-form { grid-template-columns: minmax(0, 1fr) 42px; }
-.budget-form { grid-template-columns: minmax(120px, 1.4fr) minmax(84px, .7fr) minmax(88px, .7fr) 42px; }
-.tool-inline-form input,
-.budget-form input,
-.budget-form select,
-.notes-workspace textarea {
-  width: 100%;
-  min-width: 0;
-  min-height: 42px;
-  box-sizing: border-box;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fff;
-  color: var(--ink);
-  padding: 0 12px;
-  font: inherit;
-}
-.notes-workspace textarea {
-  min-height: 174px;
-  padding: 12px 14px;
-  line-height: 1.7;
-  resize: vertical;
-}
-.tool-inline-form input:focus,
-.budget-form input:focus,
-.budget-form select:focus,
-.notes-workspace textarea:focus {
-  outline: 0;
-  border-color: color-mix(in srgb, var(--accent) 58%, var(--line));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 13%, transparent);
-}
-.square-action,
-.tool-delete {
-  width: 42px;
-  height: 42px;
-  min-height: 0;
-  padding: 0;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--ink);
-  color: #fff;
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-}
-.square-action:hover { background: var(--accent-deep); }
-.checklist-list,
-.budget-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 2px;
-}
-.checklist-item,
-.budget-item {
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 0;
-  border-bottom: 1px solid var(--hairline);
-}
-.checklist-item label { min-width: 0; flex: 1 1 auto; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-.checklist-item input { width: 18px; height: 18px; accent-color: var(--c3); flex: 0 0 auto; }
-.checklist-item span { overflow-wrap: anywhere; }
-.checklist-item.done span { color: var(--muted); text-decoration: line-through; }
-.budget-item-main { min-width: 0; flex: 1 1 auto; }
-.budget-item-main strong { display: block; overflow-wrap: anywhere; }
-.budget-item-main small { color: var(--muted); }
-.budget-value { flex: 0 0 auto; color: var(--ink); font-weight: 800; white-space: nowrap; }
-.tool-delete {
-  width: 32px;
-  height: 32px;
-  background: #fff;
-  color: var(--muted);
-  font-size: 17px;
-}
-.tool-delete:hover { color: var(--c1); border-color: color-mix(in srgb, var(--c1) 42%, var(--line)); }
-.tool-empty { margin: 10px 0 0; color: var(--muted); font-size: 13px; }
-.tool-empty[hidden] { display: none; }
-.autosave-status { color: var(--muted); font-size: 12px; white-space: nowrap; }
-.autosave-status.saved { color: var(--c3); }
-html[data-theme="dark"] .tool-inline-form input,
-html[data-theme="dark"] .budget-form input,
-html[data-theme="dark"] .budget-form select,
-html[data-theme="dark"] .notes-workspace textarea,
-html[data-theme="dark"] .tool-delete { background: #111918; }
-
-@media (max-width: 760px) {
-  .user-panel-head { align-items: stretch; }
-  .tool-export-btn { align-self: flex-start; }
-  .travel-tool-layout { grid-template-columns: 1fr; gap: 24px; }
-  .notes-workspace { grid-column: auto; }
-  .budget-form { grid-template-columns: minmax(0, 1fr) minmax(92px, .65fr) 42px; }
-  .budget-form #budgetName { grid-column: 1 / -1; }
-}
-
-@media (max-width: 460px) {
-  .user-panel-head { display: grid; }
-  .budget-form { grid-template-columns: minmax(0, 1fr) 42px; }
-  .budget-form #budgetName,
-  .budget-form #budgetCategory { grid-column: 1 / -1; }
-}
-
-.changelog-block { margin-bottom: 18px; }
-.changelog-block h3 { margin: 0 0 8px; font-size: 17px; color: var(--accent-deep); }
-.changelog-block ul { margin: 0; padding-left: 18px; color: var(--muted); line-height: 1.7; }
-
-/* 城市页 · 速览名片 */
-.city-overview {
-  margin: 0 clamp(16px, 5vw, 72px) 24px;
-  padding: clamp(16px, 3vw, 24px);
-  display: grid;
-  gap: 14px;
-  background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--accent) 7%, #fff));
-  border: 1px solid var(--line);
-  border-left: 5px solid var(--accent);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-}
-.co-facts { display: flex; flex-wrap: wrap; gap: 10px 30px; }
-.co-cell { display: flex; align-items: baseline; gap: 8px; }
-.co-k { color: var(--muted); font-size: 13px; }
-.co-v { font-weight: 800; font-size: 16px; }
-.co-review { flex-wrap: wrap; }
-.co-review-note {
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--sun) 16%, #fff);
-  color: color-mix(in srgb, var(--sun) 74%, #24180b);
-  font-size: 12px;
-  font-weight: 800;
-}
-.co-review.reviewed .co-v { color: color-mix(in srgb, var(--leaf) 78%, #10231d); }
-.co-review.pending .co-v { color: color-mix(in srgb, var(--sun) 80%, #24180b); }
-.co-block { display: grid; gap: 8px; }
-.co-bk { font-weight: 800; color: var(--accent-deep); }
-.co-chips { display: flex; flex-wrap: wrap; gap: 7px; }
-.co-chips em {
-  font-style: normal;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 4px 11px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-}
-.co-chips em.food {
-  background: color-mix(in srgb, var(--food) 16%, #fff);
-  color: color-mix(in srgb, var(--food) 80%, #111);
-}
-.co-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-.co-fav, .co-trip, .co-share {
-  min-height: 42px;
-  padding: 0 18px;
-  border-radius: 999px;
-  font-weight: 800;
-  border: 1px solid var(--line);
-  background: #fff;
-  cursor: pointer;
-  transition: transform .15s var(--ease), box-shadow .2s var(--ease);
-}
-.co-fav:hover, .co-trip:hover, .co-share:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
-.co-fav.on { color: #fff; background: linear-gradient(135deg, var(--c2), var(--c1)); border-color: transparent; }
-.co-trip.on { color: #fff; background: linear-gradient(135deg, var(--c5), var(--c4)); border-color: transparent; }
-.co-share.copied { color: #fff; background: var(--c3); border-color: transparent; }
-html[data-theme="dark"] .city-overview { background: linear-gradient(135deg, #1b2326, #161d1f); }
-html[data-theme="dark"] .co-fav, html[data-theme="dark"] .co-trip, html[data-theme="dark"] .co-share { background: #1b2326; color: var(--ink); }
-html[data-theme="dark"] .co-review-note { background: rgba(240, 178, 80, .16); color: #f3cf91; }
-html[data-theme="dark"] .co-review.reviewed .co-v { color: #8ee0c4; }
-html[data-theme="dark"] .co-review.pending .co-v { color: #f0c878; }
-html[data-theme="dark"] .trip-compare-table { background: #111918; }
-
-@media (max-width: 920px) {
-  .hero { grid-template-columns: 1fr; }
-  .hero-stage { min-height: 0; }
-  .hero-carousel { min-height: 240px; }
-  .hero-visual { min-height: 240px; }
-  /* 单栏阅读：移动端隐藏桌面侧栏（目录 + 其他攻略列表），正文占满宽度 */
-  .layout { display: block; padding-bottom: 40px; }
-  .sidebar { display: none; }
-  .content { display: grid; gap: 16px; }
-  .visual-layout { grid-template-columns: 1fr; }
-  /* 卡片网格统一收为单列，避免窄屏挤压 / 横向溢出 */
-  .md-list.depth-0,
-  .md-list.leaf-list,
-  .theme-grid,
-  .tools-grid,
-  .rich-grid { grid-template-columns: 1fr; }
-  .home-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
-@media (max-width: 720px) {
-  html, body {
-    overflow-x: hidden;
-    max-width: 100%;
-  }
-  body {
-    padding-bottom: calc(86px + env(safe-area-inset-bottom));
-  }
-  /* 防止长文字 / 网格撑破视口 */
-  .content, .guide-section, .home-section, .city-explorer, .source-media,
-  .md-list, .list-card, .visual-card, .item-text { min-width: 0; }
-  .list-card, .item-body, .item-guide span, .toc a, .city-card small,
-  .stat-label, .theme-card span { overflow-wrap: anywhere; word-break: break-word; }
-  .home-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .guide-section { padding: 16px 14px; }
-  .home-section, .city-explorer, .source-media { padding: 16px 14px; }
-  .guide-section h2 { font-size: 21px; }
-  :target {
-    scroll-margin-top: 92px;
-  }
-  .site-header {
-    overflow: visible;
-  }
-  .header-bar {
-    flex-wrap: wrap;
-    padding: 8px 12px;
-  }
-  .nav-toggle {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 0 11px;
-    border-radius: 999px;
-  }
-  .header-home {
-    min-height: 44px;
-  }
-  .header-links { display: none; }
-  .nav-toggle { font-size: 18px; padding: 0 12px; }
-  .header-user { order: 2; margin-left: auto; }
-  .header-user-name { display: none; }
-  .global-search {
-    order: 3;
-    flex-basis: 100%;
-    max-width: none;
-    margin-left: 0;
-  }
-  .qf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .user-hero, .user-tabs, .user-panels { margin-left: 12px; margin-right: 12px; }
-  .user-tabs {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 6px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-  }
-  .user-tab { scroll-snap-align: start; }
-  .site-search-results {
-    left: 0;
-    right: auto;
-    width: 100%;
-  }
-  .top-nav {
-    display: none;
-    max-height: 62vh;
-    overflow: auto;
-    padding: 0 12px 12px;
-    background: rgba(255, 250, 242, 0.96);
-  }
-  .site-header.nav-open .top-nav {
-    display: flex;
-  }
-  .nav-link,
-  .nav-group {
-    flex-basis: 100%;
-  }
-  .nav-link,
-  .nav-group summary {
-    width: 100%;
-    border-radius: 7px;
-    background: rgba(255,255,255,.72);
-  }
-  .nav-menu {
-    position: static;
-    width: 100%;
-    margin-top: 6px;
-    box-shadow: none;
-  }
-  .hero {
-    padding-top: 20px;
-  }
-  .hero h1 {
-    font-size: 36px;
-  }
-  .hero-points {
-    gap: 8px;
-  }
-  .city-explorer,
-  .source-media,
-  .city-overview,
-  .home-section {
-    margin-left: 12px;
-    margin-right: 12px;
-  }
-  .rich-grid {
-    grid-template-columns: 1fr;
-  }
-  .tool-bar,
-  .layout {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-  .mobile-quickbar {
-    position: fixed;
-    left: 10px;
-    right: 10px;
-    bottom: calc(8px + env(safe-area-inset-bottom));
-    z-index: 90;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(54px, 1fr));
-    gap: 6px;
-    padding: 7px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: rgba(255, 250, 242, 0.94);
-    backdrop-filter: blur(14px);
-    box-shadow: var(--shadow);
-  }
-  .mobile-quickbar a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    border-radius: 999px;
-    color: var(--ink);
-    font-weight: 800;
-    font-size: 13px;
-    background: #fff;
-  }
-  .mobile-quickbar a:hover {
-    text-decoration: none;
-    background: var(--accent-soft);
-  }
-  .to-top {
-    bottom: 84px;
-  }
-  .mobile-quickbar + .trip-dock-toggle {
-    right: 12px;
-    bottom: calc(78px + env(safe-area-inset-bottom));
-  }
-  .trip-dock-toggle > span:nth-child(2) { display: none; }
-  .trip-dock {
-    top: auto;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    max-height: min(76vh, 620px);
-    border-top: 1px solid var(--line);
-    border-left: 0;
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -18px 48px rgba(15, 35, 33, .24);
-  }
-  .trip-dock-head { padding: 16px 16px 12px; }
-  .trip-dock-body { padding: 13px 16px 18px; }
-  .trip-dock-footer { padding-left: 16px; padding-right: 16px; }
-}
-
-@media print {
-  .site-header, .tool-bar, .sidebar, .to-top, .hero-visual, .source-media, .city-explorer, .mobile-quickbar,
-  .trip-dock-toggle, .trip-dock, .trip-dock-backdrop { display: none !important; }
-  body { background: #fff; }
-  .hero { min-height: 0; display: block; padding: 0 0 18px; }
-  .layout { display: block; padding: 0; }
-  .guide-section { box-shadow: none; break-inside: avoid; }
-}
-
-/* ===== 2026 实用型重构覆盖层 ===== */
-:root {
-  --bg: #f6f4ee;
-  --paper: #ffffff;
-  --ink: #1d2428;
-  --muted: #66706f;
-  --line: rgba(28, 38, 40, .14);
-  --hairline: rgba(28, 38, 40, .08);
-  --accent: #1f7a68;
-  --accent-deep: #16564b;
-  --accent-soft: color-mix(in srgb, var(--accent) 11%, #ffffff);
-  --accent-tint: color-mix(in srgb, var(--accent) 5%, #ffffff);
-  --c1: #b85c38;
-  --c2: #d69b38;
-  --c3: #2f8664;
-  --c4: #2f6f9f;
-  --c5: #6b658f;
-  --c6: #9d5263;
-  --radius: 8px;
-  --radius-sm: 6px;
-  --radius-lg: 8px;
-  --shadow-sm: 0 1px 2px rgba(28, 38, 40, .05), 0 8px 20px rgba(28, 38, 40, .06);
-  --shadow: 0 16px 34px rgba(28, 38, 40, .11);
-  --shadow-lg: 0 22px 48px rgba(28, 38, 40, .16);
-  letter-spacing: 0;
-}
-
-body {
-  background: linear-gradient(180deg, #f7f5ef 0%, #eef3f1 100%);
-  background-attachment: fixed;
-  line-height: 1.68;
-}
-
-.site-header {
-  top: 0;
-  background: rgba(255, 255, 255, .92);
-  border-bottom: 1px solid var(--line);
-  box-shadow: 0 8px 22px rgba(28, 38, 40, .06);
-}
-.header-bar {
-  max-width: 1480px;
-  min-height: 58px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-.header-home,
-.header-link,
-.header-user,
-.nav-link,
-.nav-group summary,
-.global-search-box,
-button,
-input,
-select {
-  border-radius: var(--radius-sm);
-}
-.brand-mark {
-  display: grid;
-  width: 28px;
-  height: 28px;
-  place-items: center;
-  border-radius: var(--radius-sm);
-  background: var(--accent);
-  color: #fff;
-  font-size: 0;
-}
-.brand-mark::after {
-  content: "T";
-  font-size: 15px;
-  font-weight: 900;
-}
-.brand-name b { color: var(--accent-deep); }
-.header-links { gap: 4px; }
-.header-link { min-height: 36px; padding: 0 12px; }
-.global-search { max-width: 420px; }
-.global-search-box { min-height: 40px; background: #f7f8f5; }
-.top-nav {
-  max-width: 1480px;
-  padding-top: 6px;
-  padding-bottom: 10px;
-  gap: 6px;
-  overflow-x: auto;
-}
-.destination-nav {
-  position: relative;
-  z-index: 140;
-  flex: 0 0 auto;
-}
-.destination-nav summary {
-  min-height: 36px;
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 0 12px;
-  list-style: none;
-  cursor: pointer;
-  color: var(--ink);
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  font-weight: 800;
-}
-.destination-nav summary::-webkit-details-marker { display: none; }
-.destination-nav summary small { color: var(--muted); font-size: 12px; font-weight: 600; }
-.destination-nav summary i {
-  width: 7px;
-  height: 7px;
-  margin-left: 2px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: translateY(-2px) rotate(45deg);
-}
-.destination-nav[open] summary i { transform: translateY(2px) rotate(225deg); }
-.destination-panel {
-  position: absolute;
-  z-index: 160;
-  top: calc(100% + 8px);
-  left: 0;
-  width: min(1240px, calc(100vw - 84px));
-  max-height: calc(100vh - 132px);
-  overflow: auto;
-  padding: 18px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: 0 18px 48px rgba(23, 34, 38, .18);
-}
-.destination-panel-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--line);
-}
-.destination-panel-head strong { font-size: 17px; }
-.destination-panel-head span { color: var(--muted); font-size: 13px; }
-.destination-groups {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 18px 14px;
-}
-.destination-group { min-width: 0; }
-.destination-group h3 {
-  margin: 0 0 5px;
-  color: var(--accent-deep);
-  font-size: 13px;
-}
-.destination-group > div { display: flex; flex-wrap: wrap; gap: 2px 6px; }
-.destination-city {
-  min-height: 28px;
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 5px;
-  color: var(--muted);
-  font-size: 13px;
-}
-.destination-city:hover,
-.destination-city.active {
-  color: var(--ink);
-  text-decoration: none;
-  background: var(--accent-tint);
-  border-radius: 5px;
-}
-.destination-quick {
-  min-width: 0;
-  display: flex;
-  flex: 1 1 auto;
-  gap: 2px;
-  overflow: hidden;
-}
-.destination-quick-link {
-  min-height: 34px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0 10px;
-  color: var(--muted);
-  font-size: 13px;
-  white-space: nowrap;
-}
-.destination-quick-link:hover,
-.destination-quick-link.active {
-  color: var(--ink);
-  text-decoration: none;
-  background: var(--accent-tint);
-  border-radius: var(--radius-sm);
-}
-.province-nav-list {
-  position: relative;
-  z-index: 140;
-  display: flex;
-  flex: 1 1 100%;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-}
-.province-nav {
-  position: static;
-  z-index: auto;
-}
-.province-nav summary {
-  gap: 7px;
-  padding: 0 10px;
-  font-size: 13px;
-  font-weight: 750;
-}
-.province-nav:first-child summary {
-  color: var(--accent-deep);
-  border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
-  background: var(--accent-tint);
-}
-.province-nav.active summary,
-.province-nav[open] summary {
-  color: var(--ink);
-  border-color: color-mix(in srgb, var(--accent) 48%, var(--line));
-  background: var(--accent-soft);
-}
-.province-menu {
-  top: calc(100% + 8px);
-  left: 0;
-  right: 0;
-  width: auto;
-  max-height: min(460px, calc(100vh - 150px));
-  padding: 16px;
-}
-.province-menu-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--line);
-}
-.province-menu-head > div {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  min-width: 0;
-}
-.province-menu-head strong { font-size: 17px; }
-.province-menu-head span {
-  color: var(--muted);
-  font-size: 13px;
-}
-.province-directory-link {
-  flex: 0 0 auto;
-  min-height: 36px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0 11px;
-  color: var(--accent-deep);
-  font-size: 13px;
-  font-weight: 800;
-  border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--line));
-  border-radius: var(--radius-sm);
-}
-.province-directory-link:hover {
-  text-decoration: none;
-  background: var(--accent-tint);
-}
-.province-city-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
-  gap: 6px;
-}
-.province-city-list .destination-city {
-  min-height: 38px;
-  padding: 0 10px;
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-}
-.province-city-list .destination-city:hover,
-.province-city-list .destination-city.active {
-  border-color: color-mix(in srgb, var(--accent) 34%, var(--line));
-}
-.province-menu-status {
-  grid-column: 1 / -1;
-  margin: 0;
-  padding: 14px;
-  color: var(--muted);
-  text-align: center;
-  background: var(--accent-tint);
-  border-radius: var(--radius-sm);
-}
-.nav-link,
-.nav-group summary {
-  min-height: 34px;
-  padding: 0 11px;
-  background: #f7f8f5;
-}
-.nav-menu {
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-}
-
-.hero {
-  max-width: 1480px;
-  min-height: auto;
-  grid-template-columns: minmax(0, .94fr) minmax(360px, .72fr);
-  gap: clamp(18px, 3vw, 44px);
-  padding: clamp(28px, 4vw, 60px) clamp(16px, 5vw, 72px) 24px;
-}
-.hero h1 {
-  max-width: 920px;
-  margin-top: 6px;
-  margin-bottom: 12px;
-  font-size: clamp(34px, 5.2vw, 70px);
-  line-height: 1.03;
-  color: var(--ink);
-  background: none;
-  -webkit-text-fill-color: currentColor;
-}
-.subtitle {
-  max-width: 760px;
-  color: var(--muted);
-}
-.hero-points {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 22px;
-}
-
-.hero-points li,
-.hero-point-link,
-.qf-grid a,
-.quickfind-card,
-.theme-card,
-.tool-card,
-.stat-card,
-.city-card,
-.list-card,
-.visual-card,
-.media-card,
-.source-link,
-.guide-section,
-.home-section,
-.city-explorer,
-.source-media,
-.city-overview,
-.research-panel,
-.sidebar-panel {
-  border-radius: var(--radius);
-}
-.hero-points li {
-  background: #fff;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-}
-.hero-point-link { padding: 14px 15px; }
-.hero-points,
-.hero-points li,
-.hero-point-link,
-.research-panel,
-.research-grid,
-.research-grid a,
-.city-card,
-.city-card-body,
-.guide-section,
-.list-card,
-.visual-card,
-.tool-card,
-.theme-card {
-  min-width: 0;
-}
-.hero-point-link span,
-.hero-point-link small,
-.research-grid strong,
-.research-grid span,
-.city-card span,
-.city-card small,
-.city-card p,
-.list-card,
-.visual-card,
-.guide-section p,
-.guide-section li {
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-.hero-stage { gap: 10px; align-self: stretch; }
-.hero-carousel {
-  min-height: 320px;
-  border: 1px solid rgba(255,255,255,.8);
-  border-radius: var(--radius);
-}
-.hero-photo-credit {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 4px 9px;
-  min-width: 0;
-  margin: -2px 4px 0;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.45;
-}
-.hero-photo-credit-kicker {
-  color: var(--ink);
-  font-weight: 800;
-  letter-spacing: .04em;
-}
-.hero-photo-credit-meta { overflow-wrap: anywhere; }
-.hero-photo-credit a {
-  color: var(--accent-deep);
-  font-weight: 800;
-  text-underline-offset: 3px;
-}
-.hero-photo-credit a:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--accent) 58%, transparent);
-  outline-offset: 3px;
-  border-radius: 3px;
-}
-.hero-quickfind {
-  position: static;
-  width: auto;
-  margin: 0;
-  padding: 12px;
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, .94);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-}
-.qf-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
-.research-panel,
-.home-section,
-.city-explorer,
-.source-media,
-.city-overview {
-  max-width: 1480px;
-  margin: 18px auto 24px;
-  padding: clamp(18px, 3vw, 30px);
-  background: #fff;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-}
-.research-panel {
-  display: grid;
-  grid-template-columns: minmax(220px, .42fr) minmax(0, 1fr);
-  gap: 18px;
-}
-.research-copy h2,
-.home-section-head h2,
-.city-explorer-head h2 {
-  margin: 2px 0 8px;
-  font-size: clamp(24px, 3vw, 34px);
-  line-height: 1.18;
-}
-.research-copy p:last-child,
-.home-section-head p:last-child,
-.city-explorer-head p:last-child {
-  color: var(--muted);
-}
-.research-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
-}
-.research-grid a {
-  min-height: 86px;
-  padding: 14px;
-  display: grid;
-  gap: 6px;
-  align-content: start;
-  color: var(--ink);
-  background: #f7f8f5;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-}
-.research-grid a:hover {
-  text-decoration: none;
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
-  background: var(--accent-tint);
-}
-.research-grid span {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.home-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.stat-card {
-  min-height: 118px;
-  background: #f7f8f5;
-  border: 1px solid var(--line);
-}
-.stat-num { color: var(--accent-deep); }
-.featured-strip { gap: 10px; padding-bottom: 6px; }
-.featured-card {
-  min-width: 210px;
-  height: 138px;
-  border-radius: var(--radius);
-}
-.theme-grid,
-.tools-grid,
-.rich-grid { gap: 12px; }
-.theme-card,
-.tool-card {
-  background: #f7f8f5;
-  border: 1px solid var(--line);
-  box-shadow: none;
-}
-.city-explorer-tools { gap: 12px; }
-.province-pills { gap: 6px; }
-.province-pill,
-.random-city,
-.tool-chip { border-radius: 999px; }
-.city-card.rich,
-.city-card.noimg,
-.city-card {
-  background: #fff;
-  border: 1px solid var(--line);
-  box-shadow: none;
-}
-.city-card.rich:hover,
-.city-card.noimg:hover,
-.theme-card:hover,
-.tool-card:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
-}
-.city-card.rich .img-frame { border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
-.city-card-body { padding: 13px; }
-.city-tags em { border-radius: 999px; }
-
-.tool-bar {
-  max-width: 1480px;
-  margin: 0 auto;
-  padding: 10px clamp(16px, 5vw, 72px);
-}
-.search-box {
-  border-radius: var(--radius-sm);
-  background: #fff;
-}
-.layout {
-  max-width: 1480px;
-  grid-template-columns: minmax(250px, 300px) minmax(0, 1fr);
-  gap: 18px;
-  padding-top: 8px;
-}
-.sidebar { top: 124px; }
-.sidebar-panel,
-.guide-section {
-  background: #fff;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-}
-.guide-section {
-  padding: clamp(22px, 3vw, 34px) 0;
-  background: transparent;
-  border: 0;
-  border-top: 1px solid var(--line);
-  border-radius: 0;
-  box-shadow: none;
-}
-.guide-section:hover {
-  transform: none;
-  box-shadow: none;
-}
-.guide-section h2,
-.guide-section h3 { letter-spacing: 0; }
-.guide-section h2 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-bottom: 10px;
-  border-bottom: 0;
-  color: var(--ink);
-  font-size: clamp(23px, 2.6vw, 31px);
-}
-.sec-ico {
-  flex: 0 0 auto;
-  border-radius: 8px;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sc, var(--accent)) 16%, transparent);
-}
-.md-list.depth-0 { gap: 0; }
-.list-card,
-.visual-card {
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--hairline);
-  border-radius: 0;
-  padding: 12px 2px;
-}
-.list-card:hover {
-  transform: none;
-  box-shadow: none;
-  background: color-mix(in srgb, var(--accent) 3%, transparent);
-}
-.md-list.depth-0 > .list-card.has-children {
-  padding: 18px 0 22px;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--line);
-  border-radius: 0;
-  box-shadow: none;
-}
-.md-list.depth-0 > .list-card.has-children:hover { box-shadow: none; }
-.md-list.leaf-list {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 26px;
-  margin-top: 10px;
-}
-.list-card .list-card {
-  min-height: 46px;
-  display: grid;
-  grid-template-columns: minmax(88px, .34fr) minmax(0, 1fr);
-  align-items: start;
-  gap: 10px;
-  padding: 10px 0;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--hairline);
-  border-radius: 0;
-}
-.list-card .list-card.fact {
-  background: transparent;
-  border-left: 0;
-}
-.source-media { margin-bottom: 56px; }
-.source-link,
-.media-card {
-  background: #f7f8f5;
-  border: 1px solid var(--line);
-}
-.poi-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin: 10px 0 2px;
-  padding-top: 10px;
-  border-top: 1px solid var(--hairline);
-}
-.poi-action {
-  display: inline-flex;
-  min-height: 32px;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 9px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: #fff;
-  color: var(--ink);
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1;
-}
-.poi-action:hover {
-  text-decoration: none;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
-}
-.poi-action i {
-  display: grid;
-  width: 18px;
-  height: 18px;
-  place-items: center;
-  border-radius: 5px;
-  font-style: normal;
-}
-.poi-action i::before { font-size: 13px; line-height: 1; }
-.poi-action-search i { background: #e8f5ef; color: #17694f; }
-.poi-action-search i::before { content: "⌕"; }
-.poi-action-map i { background: #eaf2fb; color: #1f5f9a; }
-.poi-action-map i::before { content: "⌖"; }
-.poi-action-book i { background: #fff0e8; color: #9a4d28; }
-.poi-action-book i::before { content: "▤"; }
-.poi-action b,
-.source-link b { margin-left: 2px; color: var(--muted); font-size: 11px; }
-.source-media.compact {
-  display: grid;
-  grid-template-columns: minmax(240px, .55fr) minmax(0, 1fr);
-  align-items: center;
-  gap: 24px;
-  padding-top: 22px;
-  padding-bottom: 22px;
-  border-right: 0;
-  border-left: 0;
-  box-shadow: none;
-}
-.source-media-head.compact-head h2 {
-  margin: 3px 0 6px;
-  font-size: clamp(21px, 2.4vw, 28px);
-}
-.source-media-head.compact-head p:last-child {
-  max-width: 760px;
-  font-size: 13px;
-}
-.source-drawer { min-width: 0; }
-.source-drawer summary {
-  min-height: 38px;
-  display: flex;
-  align-items: center;
-  color: var(--accent-deep);
-}
-.city-overview {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-left: 0;
-}
-.co-actions { grid-column: 1 / -1; }
-.co-chips em,
-.section-count { border-radius: 999px; }
-
-.mobile-primary-nav { display: none; }
-
-.travel-finder {
-  width: 100%;
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: minmax(230px, .42fr) minmax(0, 1fr);
-  gap: clamp(22px, 4vw, 64px);
-  margin: 0 auto 26px;
-  padding: clamp(24px, 4vw, 48px) clamp(16px, 5vw, 72px);
-  color: #f8fbf8;
-  background: #173e39;
-  border-top: 4px solid #d69b38;
-  border-bottom: 1px solid rgba(255, 255, 255, .18);
-}
-.travel-finder-copy { align-self: center; }
-.travel-finder-copy .eyebrow { color: #8ed8c6; }
-.travel-finder-copy h2 {
-  margin: 4px 0 10px;
-  color: #fff;
-  font-size: clamp(26px, 3.4vw, 44px);
-  line-height: 1.12;
-}
-.travel-finder-copy p:last-child { max-width: 520px; margin: 0; color: #cfddd9; }
-.travel-finder-form {
-  min-width: 0;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(112px, 1fr));
-  gap: 12px;
-  align-items: end;
-}
-.travel-finder-form label { min-width: 0; display: grid; gap: 6px; }
-.travel-finder-form label > span { color: #dce7e3; font-size: 12px; font-weight: 800; }
-.travel-finder-form input,
-.travel-finder-form select {
-  width: 100%;
-  min-height: 44px;
-  padding: 0 12px;
-  color: #1c2628;
-  background: #fff;
-  border: 1px solid rgba(255, 255, 255, .38);
-}
-.finder-query { grid-column: 1 / -1; }
-.finder-query input { font-size: 16px; }
-.travel-finder-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.finder-reset {
-  width: 44px;
-  height: 44px;
-  flex: 0 0 44px;
-  padding: 0;
-  color: #fff;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, .45);
-  font-size: 20px;
-}
-.finder-reset:hover { background: rgba(255, 255, 255, .1); }
-.finder-results-link {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 14px;
-  color: #172523;
-  background: #f3c35a;
-  border-radius: var(--radius-sm);
-  font-weight: 900;
-}
-.finder-results-link:hover { color: #172523; text-decoration: none; background: #ffd67a; }
-.finder-summary {
-  grid-column: 2 / -1;
-  margin: 0;
-  color: #cfddd9;
-  font-size: 13px;
-}
-.city-explorer-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
-}
-.city-explorer-footer p { margin: 0; color: var(--muted); }
-.city-explorer-footer .city-catalog-link { margin-left: auto; }
-.city-load-more {
-  min-height: 42px;
-  padding: 0 16px;
-  color: #fff;
-  background: var(--accent-deep);
-  border: 0;
-  font-weight: 800;
-}
-.city-load-more[hidden] { display: none; }
-.user-tab { flex: 0 0 auto; min-width: max-content; white-space: nowrap; }
-
-/* 独立目录页：让导航入口落在完整页面，而非首页锚点。 */
-.catalog-masthead {
-  width: 100%;
-  min-height: 250px;
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(250px, .6fr);
-  align-items: end;
-  gap: clamp(22px, 5vw, 72px);
-  padding: clamp(28px, 5vw, 72px);
-  color: #f7fbf9;
-  background: #173e39;
-  border-bottom: 4px solid #d69b38;
-}
-.catalog-masthead .eyebrow { color: #9addcb; }
-.catalog-masthead h1 { max-width: 780px; margin: 6px 0 12px; color: #fff; font-size: clamp(32px, 3.7vw, 50px); line-height: 1.1; }
-.catalog-masthead p:not(.eyebrow) { max-width: 720px; margin: 0; color: #d3e2dd; font-size: 16px; line-height: 1.75; }
-.catalog-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-left: 1px solid rgba(255,255,255,.24); }
-.catalog-facts div { min-height: 88px; display: grid; align-content: center; padding: 0 18px; border-bottom: 1px solid rgba(255,255,255,.18); }
-.catalog-facts strong { color: #f3c35a; font-size: 28px; line-height: 1.1; }
-.catalog-facts span { margin-top: 7px; color: #d3e2dd; font-size: 13px; font-weight: 700; }
-
-/* 宽屏保持左右比例一致，并允许省份菜单越过导航行显示。 */
-.header-bar,
-.top-nav,
-.hero,
-.research-panel,
-.home-section,
-.city-explorer,
-.source-media,
-.city-overview,
-.tool-bar,
-.layout {
-  width: 100%;
-  max-width: none;
-  box-sizing: border-box;
-}
-.top-nav { overflow: visible; }
-.nav-group summary::marker {
-  content: "";
-  font-size: 0;
-}
-.nav-group summary::after { display: none; }
-
-html[data-theme="dark"] {
-  --bg: #111716;
-  --paper: #18211f;
-  --ink: #eef2ee;
-  --muted: #a7b4af;
-  --line: rgba(255,255,255,.13);
-  --hairline: rgba(255,255,255,.08);
-  --accent: #36b391;
-  --accent-deep: #74d6bd;
-}
-html[data-theme="dark"] body {
-  background: linear-gradient(180deg, #0f1514 0%, #111918 100%);
-}
-html[data-theme="dark"] .site-header,
-html[data-theme="dark"] .destination-panel,
-html[data-theme="dark"] .destination-nav summary,
-html[data-theme="dark"] .research-panel,
-html[data-theme="dark"] .home-section,
-html[data-theme="dark"] .city-explorer,
-html[data-theme="dark"] .source-media,
-html[data-theme="dark"] .city-overview,
-html[data-theme="dark"] .sidebar-panel,
-html[data-theme="dark"] .guide-section,
-html[data-theme="dark"] .hero-points li,
-html[data-theme="dark"] .hero-quickfind,
-html[data-theme="dark"] .city-card.rich,
-html[data-theme="dark"] .city-card.noimg,
-html[data-theme="dark"] .city-card {
-  background: #18211f;
-}
-html[data-theme="dark"] .travel-finder { background: #112d29; }
-html[data-theme="dark"] .review-pill.active { color: #ffe1a1; background: color-mix(in srgb, #c98b2e 28%, #202a28); }
-html[data-theme="dark"] .city-review-status { color: #f0c878; }
-html[data-theme="dark"] .city-review-status.reviewed { color: #8ee0c4; }
-html[data-theme="dark"] .research-grid a,
-html[data-theme="dark"] .theme-card,
-html[data-theme="dark"] .tool-card,
-html[data-theme="dark"] .stat-card,
-html[data-theme="dark"] .list-card,
-html[data-theme="dark"] .visual-card,
-html[data-theme="dark"] .source-link,
-html[data-theme="dark"] .media-card,
-html[data-theme="dark"] .poi-action,
-html[data-theme="dark"] .global-search-box,
-html[data-theme="dark"] .nav-link,
-html[data-theme="dark"] .nav-group summary,
-html[data-theme="dark"] .destination-nav summary,
-html[data-theme="dark"] .province-menu,
-html[data-theme="dark"] .search-recent-query,
-html[data-theme="dark"] .search-recent-visit {
-  background: #202a28;
-}
-
-@media (max-width: 920px) {
-  .site-header.nav-open .top-nav { display: flex; }
-  .top-nav {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    padding: 10px 12px 14px;
-  }
-  .destination-nav { width: 100%; }
-  .destination-nav summary {
-    width: 100%;
-    min-height: 44px;
-    justify-content: space-between;
-  }
-  .destination-panel {
-    position: static;
-    width: 100%;
-    max-height: 62vh;
-    margin-top: 8px;
-    padding: 14px;
-    box-shadow: none;
-  }
-  .destination-groups { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .destination-quick {
-    width: 100%;
-    flex-wrap: wrap;
-    overflow: visible;
-  }
-  .destination-quick-link { min-height: 40px; }
-  .province-nav-list {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    align-items: start;
-    width: 100%;
-  }
-  .province-nav { width: auto; }
-  .province-nav[open] { grid-column: 1 / -1; }
-  .province-nav summary {
-    min-width: 0;
-    padding: 0 9px;
-  }
-  .province-menu {
-    width: 100%;
-    max-height: 52vh;
-  }
-  .mobile-primary-nav {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 6px;
-    padding-top: 10px;
-    border-top: 1px solid var(--line);
-  }
-  .mobile-primary-nav .header-link {
-    min-height: 42px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 8px;
-    background: var(--accent-tint);
-  }
-  .hero {
-    grid-template-columns: 1fr;
-    padding-top: 20px;
-  }
-  .hero-stage { order: 0; }
-  .research-panel,
-  .city-overview,
-  .source-media.compact {
-    grid-template-columns: 1fr;
-  }
-  .qf-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .travel-finder { grid-template-columns: 1fr; }
-  .travel-finder-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .finder-query { grid-column: 1 / -1; }
-  .finder-summary { grid-column: 1 / -1; }
-  .catalog-masthead { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 720px) {
-  .top-nav {
-    max-height: calc(100vh - 116px);
-    max-height: calc(100dvh - 116px);
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-  }
-  .site-header.nav-open ~ .mobile-quickbar,
-  .site-header.nav-open ~ .trip-dock-toggle { display: none; }
-  .province-nav-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .province-menu-head {
-    align-items: flex-start;
-  }
-  .province-menu-head > div {
-    display: grid;
-    gap: 2px;
-  }
-  .province-city-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .search-recent-query,
-  .search-recent-visit { min-height: 42px; }
-  .destination-panel-head { display: block; }
-  .destination-panel-head span { display: block; margin-top: 2px; }
-  .destination-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .md-list.leaf-list { grid-template-columns: 1fr; }
-  .list-card .list-card { grid-template-columns: minmax(82px, .34fr) minmax(0, 1fr); }
-  .hero h1 { font-size: 34px; }
-  .home-stats,
-  .research-grid {
-    grid-template-columns: 1fr;
-  }
-  .hero-points {
-    display: flex;
-    max-width: 100%;
-    gap: 9px;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 2px;
-    padding: 2px 2px 8px;
-    scrollbar-width: thin;
-  }
-  .hero-points li {
-    flex: 0 0 min(82vw, 286px);
-    scroll-snap-align: start;
-  }
-  .hero-point-link { min-height: 112px; align-content: center; }
-  .user-hero { padding: 17px; border-radius: var(--radius); }
-  .user-id-card { gap: 12px; }
-  .user-avatar-big { width: 58px; height: 58px; font-size: 30px; }
-  .user-id-card h1 { font-size: 26px; }
-  .user-id-card .subtitle { font-size: 14px; line-height: 1.6; }
-  .user-stat-row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 14px;
-  }
-  .user-stat { padding-top: 10px; border-top: 1px solid rgba(255,255,255,.28); }
-  .user-stat strong { font-size: 22px; }
-  .research-panel,
-  .home-section,
-  .city-explorer,
-  .source-media,
-  .city-overview {
-    width: calc(100% - 24px);
-    margin-left: 12px;
-    margin-right: 12px;
-  }
-  .travel-finder-form { grid-template-columns: 1fr; }
-  .finder-query,
-  .finder-summary { grid-column: 1; }
-  .travel-finder-actions { justify-content: space-between; }
-  .city-explorer-footer { align-items: stretch; flex-direction: column; }
-  .city-load-more { width: 100%; }
-  .catalog-masthead { width: 100%; min-height: 0; padding: 30px 20px; }
-  .catalog-facts { border-left: 0; border-top: 1px solid rgba(255,255,255,.24); }
-  .catalog-facts div { padding: 14px 10px 0; min-height: 0; }
-}
-"""
-
-
-JS = r"""
-(function () {
-  const input = document.getElementById("guideSearch");
-  const content = document.getElementById("guideContent");
-  const sections = Array.from(document.querySelectorAll(".guide-section"));
-  const tocLinks = Array.from(document.querySelectorAll(".toc a"));
-  const toTop = document.getElementById("toTop");
-  const printBtn = document.getElementById("printPage");
-  const expandBtn = document.getElementById("expandAll");
-  const navGroups = Array.from(document.querySelectorAll(".nav-group, .destination-nav"));
-  const navToggle = document.getElementById("navToggle");
-  const header = document.querySelector(".site-header");
-   const cityExplorerSearch = document.getElementById("cityExplorerSearch");
-   const cityExplorerCards = Array.from(document.querySelectorAll("#cityExplorer .city-card"));
-   const provincePills = Array.from(document.querySelectorAll(".province-pill"));
-   const reviewPills = Array.from(document.querySelectorAll(".review-pill"));
-  const travelFinderForm = document.getElementById("travelFinderForm");
-  const travelQuery = document.getElementById("travelQuery");
-  const travelRegion = document.getElementById("travelRegion");
-  const travelSeason = document.getElementById("travelSeason");
-  const travelDays = document.getElementById("travelDays");
-  const travelTheme = document.getElementById("travelTheme");
-  const travelTransport = document.getElementById("travelTransport");
-  const travelFinderSummary = document.getElementById("travelFinderSummary");
-  const cityExplorerSummary = document.getElementById("cityExplorerSummary");
-  const cityLoadMore = document.getElementById("cityLoadMore");
-  const CITY_PAGE_SIZE = window.matchMedia("(max-width: 640px)").matches ? 12
-    : window.matchMedia("(max-width: 1100px)").matches ? 24
-    : 36;
-   let emptyBox = null;
-   let activeProvince = "全部";
-   let activeReview = "all";
-   let cityVisibleLimit = CITY_PAGE_SIZE;
-
-  function normalize(s) {
-    return (s || "").toLowerCase().trim();
-  }
-
-  function filterCityExplorer(resetLimit) {
-    if (!cityExplorerCards.length) return;
-    if (resetLimit) cityVisibleLimit = CITY_PAGE_SIZE;
-    const q = normalize(travelQuery ? travelQuery.value : (cityExplorerSearch ? cityExplorerSearch.value : ""));
-    const region = travelRegion ? travelRegion.value : "";
-    const season = travelSeason ? travelSeason.value : "";
-    const days = travelDays ? travelDays.value : "";
-     const theme = travelTheme ? travelTheme.value : "";
-     const transport = travelTransport ? travelTransport.value : "";
-     const matches = cityExplorerCards.filter((card) => {
-       const provinceHit = activeProvince === "全部" || card.dataset.province === activeProvince;
-       const reviewHit = activeReview === "all" || card.dataset.reviewStatus === activeReview;
-       const textHit = !q || normalize(card.dataset.search).includes(q);
-      const regionHit = !region || card.dataset.region === region;
-      const seasonHit = !season || normalize(card.dataset.season).includes(normalize(season));
-      const daysHit = !days || card.dataset.days === days;
-      const themeHit = !theme || normalize(card.dataset.theme).includes(normalize(theme));
-      const transportHit = !transport || normalize(card.dataset.transport).includes(normalize(transport));
-       return provinceHit && reviewHit && textHit && regionHit && seasonHit && daysHit && themeHit && transportHit;
-    });
-    cityExplorerCards.forEach((card) => card.classList.add("is-hidden"));
-    matches.slice(0, cityVisibleLimit).forEach((card) => card.classList.remove("is-hidden"));
-    const shown = Math.min(matches.length, cityVisibleLimit);
-    const summary = matches.length
-      ? `已匹配 ${matches.length} 座城市，当前显示 ${shown} 座`
-      : "没有匹配城市，请放宽一个条件或重置筛选";
-    if (travelFinderSummary) travelFinderSummary.textContent = summary;
-    if (cityExplorerSummary) cityExplorerSummary.textContent = summary;
-    if (cityLoadMore) {
-      cityLoadMore.hidden = shown >= matches.length;
-      cityLoadMore.textContent = `再显示 ${Math.min(CITY_PAGE_SIZE, matches.length - shown)} 座`;
-    }
-   }
-
-   function readFinderState() {
-     const params = new URLSearchParams(window.location.search);
-    if (travelQuery) travelQuery.value = params.get("q") || "";
-    if (travelRegion) travelRegion.value = params.get("region") || "";
-    if (travelSeason) travelSeason.value = params.get("season") || "";
-    if (travelDays) travelDays.value = params.get("days") || "";
-    if (travelTheme) travelTheme.value = params.get("theme") || "";
-     if (travelTransport) travelTransport.value = params.get("transport") || "";
-     activeProvince = params.get("province") || "全部";
-     const review = params.get("review") || "all";
-     activeReview = ["all", "reviewed", "pending"].includes(review) ? review : "all";
-     if (cityExplorerSearch) cityExplorerSearch.value = travelQuery ? travelQuery.value : (params.get("q") || "");
-     provincePills.forEach((pill) => {
-       pill.classList.toggle("active", (pill.dataset.province || "") === activeProvince);
-     });
-     reviewPills.forEach((pill) => {
-       pill.classList.toggle("active", (pill.dataset.review || "") === activeReview);
-     });
-   }
-
-   function writeFinderState() {
-     const params = new URLSearchParams(window.location.search);
-     const values = {
-       q: travelQuery ? travelQuery.value.trim() : (cityExplorerSearch ? cityExplorerSearch.value.trim() : ""),
-      region: travelRegion ? travelRegion.value : "",
-      season: travelSeason ? travelSeason.value : "",
-      days: travelDays ? travelDays.value : "",
-      theme: travelTheme ? travelTheme.value : "",
-       transport: travelTransport ? travelTransport.value : "",
-       province: activeProvince === "全部" ? "" : activeProvince,
-       review: activeReview === "all" ? "" : activeReview,
-     };
-    Object.keys(values).forEach((key) => {
-      if (values[key]) params.set(key, values[key]);
-      else params.delete(key);
-    });
-    const query = params.toString();
-    const next = window.location.pathname + (query ? "?" + query : "") + window.location.hash;
-    history.replaceState({ finder: values }, "", next);
-  }
-
-  function keepTocLinkVisible(link) {
-    const toc = link && link.closest(".toc");
-    if (!toc || window.matchMedia("(max-width: 920px)").matches) return;
-    const top = link.offsetTop;
-    const bottom = top + link.offsetHeight;
-    const visibleTop = toc.scrollTop;
-    const visibleBottom = visibleTop + toc.clientHeight;
-    if (top < visibleTop) {
-      toc.scrollTop = Math.max(0, top - 8);
-    } else if (bottom > visibleBottom) {
-      toc.scrollTop = bottom - toc.clientHeight + 8;
-    }
-  }
-
-  function filter() {
-    const q = normalize(input.value);
-    let visible = 0;
-    sections.forEach((section) => {
-      const hit = !q || normalize(section.textContent).includes(q);
-      section.classList.toggle("is-hidden", !hit);
-      if (hit) visible += 1;
-    });
-    if (!emptyBox) {
-      emptyBox = document.createElement("div");
-      emptyBox.className = "search-empty";
-      emptyBox.textContent = "没有匹配结果，换一个景点、店铺、城市或月份试试。";
-      content.appendChild(emptyBox);
-    }
-    emptyBox.classList.toggle("is-hidden", visible !== 0);
-  }
-
-  if (input) input.addEventListener("input", filter);
-  if (printBtn) printBtn.addEventListener("click", () => window.print());
-  if (expandBtn) {
-    expandBtn.addEventListener("click", () => {
-      input.value = "";
-      filter();
-      const first = document.querySelector(".guide-section");
-      if (first) first.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-  }
-
-  if (navToggle && header) {
-    function closeMobileNav() {
-      header.classList.remove("nav-open");
-      navToggle.setAttribute("aria-expanded", "false");
-    }
-    navToggle.addEventListener("click", () => {
-      const open = header.classList.toggle("nav-open");
-      navToggle.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-    document.querySelectorAll(".top-nav a").forEach((link) => {
-      link.addEventListener("click", () => {
-        closeMobileNav();
-      });
-    });
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && header.classList.contains("nav-open")) {
-        closeMobileNav();
-        navToggle.focus();
-      }
-    });
-  }
-
-  if (cityExplorerSearch) cityExplorerSearch.addEventListener("input", () => {
-    if (travelQuery) travelQuery.value = cityExplorerSearch.value;
-    filterCityExplorer(true);
-    writeFinderState();
-  });
-  if (travelQuery) travelQuery.addEventListener("input", () => {
-    if (cityExplorerSearch) cityExplorerSearch.value = travelQuery.value;
-    filterCityExplorer(true);
-    writeFinderState();
-  });
-  [travelRegion, travelSeason, travelDays, travelTheme, travelTransport].forEach((control) => {
-    if (control) control.addEventListener("change", () => {
-      filterCityExplorer(true);
-      writeFinderState();
-    });
-  });
-  if (travelFinderForm) {
-    travelFinderForm.addEventListener("submit", (event) => event.preventDefault());
-     travelFinderForm.addEventListener("reset", () => {
-       setTimeout(() => {
-         activeProvince = "全部";
-         activeReview = "all";
-         provincePills.forEach((pill) => pill.classList.toggle("active", (pill.dataset.province || "") === "全部"));
-         reviewPills.forEach((pill) => pill.classList.toggle("active", (pill.dataset.review || "") === "all"));
-         if (cityExplorerSearch) cityExplorerSearch.value = "";
-        filterCityExplorer(true);
-        writeFinderState();
-      }, 0);
-    });
-  }
-  if (cityLoadMore) cityLoadMore.addEventListener("click", () => {
-    cityVisibleLimit += CITY_PAGE_SIZE;
-    filterCityExplorer(false);
-  });
-   provincePills.forEach((pill) => {
-    pill.addEventListener("click", () => {
-      activeProvince = pill.dataset.province || "全部";
-      if (travelRegion) travelRegion.value = "";
-      provincePills.forEach((item) => item.classList.toggle("active", item === pill));
-      filterCityExplorer(true);
-       writeFinderState();
-     });
-   });
-   reviewPills.forEach((pill) => {
-     pill.addEventListener("click", () => {
-       activeReview = ["all", "reviewed", "pending"].includes(pill.dataset.review || "") ? pill.dataset.review : "all";
-       reviewPills.forEach((item) => item.classList.toggle("active", item === pill));
-       filterCityExplorer(true);
-       writeFinderState();
-     });
-   });
-  readFinderState();
-  filterCityExplorer(true);
-  window.addEventListener("popstate", () => {
-    readFinderState();
-    filterCityExplorer(true);
-  });
-
-  navGroups.forEach((group) => {
-    group.addEventListener("toggle", () => {
-      if (!group.open) return;
-      navGroups.forEach((other) => {
-        if (other !== group) other.open = false;
-      });
-    });
-  });
-  document.addEventListener("click", (event) => {
-    if (event.target.closest(".nav-group, .destination-nav")) return;
-    navGroups.forEach((group) => { group.open = false; });
-  });
-
-  const observer = new IntersectionObserver((entries) => {
-    const active = entries
-      .filter((entry) => entry.isIntersecting)
-      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!active) return;
-    let activeLink = null;
-    tocLinks.forEach((a) => {
-      const hit = a.getAttribute("href") === "#" + active.target.id;
-      a.classList.toggle("active", hit);
-      if (hit) activeLink = a;
-    });
-    if (activeLink) keepTocLinkVisible(activeLink);
-  }, { rootMargin: "-20% 0px -65% 0px", threshold: [0.1, 0.3, 0.6] });
-  sections.forEach((section) => observer.observe(section));
-
-  if (toTop && "IntersectionObserver" in window) {
-    const scrollThreshold = document.createElement("span");
-    scrollThreshold.className = "scroll-threshold";
-    scrollThreshold.setAttribute("aria-hidden", "true");
-    document.body.appendChild(scrollThreshold);
-    const topObserver = new IntersectionObserver(([entry]) => {
-      const passedThreshold = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-      toTop.classList.toggle("visible", passedThreshold);
-    });
-    topObserver.observe(scrollThreshold);
-  }
-  if (toTop) toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-
-  // 顶部阅读进度条由 CSS scroll-driven animation 驱动，避免逐帧执行 JavaScript。
-  const progress = document.createElement("div");
-  progress.className = "read-progress";
-  progress.setAttribute("aria-hidden", "true");
-  document.body.appendChild(progress);
-
-  // 滚动渐入
-  const revealEls = Array.from(document.querySelectorAll(".reveal"));
-  if (revealEls.length) {
-    if ("IntersectionObserver" in window) {
-      const ro = new IntersectionObserver((entries, obs) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) { e.target.classList.add("in"); obs.unobserve(e.target); }
-        });
-      }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
-      revealEls.forEach((el) => ro.observe(el));
-    } else {
-      revealEls.forEach((el) => el.classList.add("in"));
-    }
-  }
-
-  // 数据速览数字滚动
-  const counters = Array.from(document.querySelectorAll(".stat-count"));
-  function animateCount(el) {
-    const target = parseInt(el.dataset.count, 10) || 0;
-    const dur = 1100;
-    const start = performance.now();
-    function step(now) {
-      const t = Math.min((now - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      el.textContent = Math.round(target * eased).toString();
-      if (t < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-  if (counters.length) {
-    if ("IntersectionObserver" in window) {
-      const co = new IntersectionObserver((entries, obs) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) { animateCount(e.target); obs.unobserve(e.target); }
-        });
-      }, { threshold: 0.5 });
-      counters.forEach((el) => co.observe(el));
-    } else {
-      counters.forEach(animateCount);
-    }
-  }
-
-  // 精选主题 / 工具 → 联动城市筛选并滚动到城市攻略
-  const explorerSection = document.getElementById("city-explorer");
-  function gotoExplorer(kw) {
-    if (cityExplorerSearch) {
-      cityExplorerSearch.value = kw || "";
-      if (travelQuery) travelQuery.value = kw || "";
-      if (travelTheme && Array.from(travelTheme.options).some((option) => option.value === kw)) {
-        travelTheme.value = kw;
-        cityExplorerSearch.value = "";
-        if (travelQuery) travelQuery.value = "";
-      }
-      activeProvince = "全部";
-      provincePills.forEach((p) => p.classList.toggle("active", (p.dataset.province || "") === "全部"));
-      filterCityExplorer(true);
-      writeFinderState();
-    }
-    if (explorerSection) explorerSection.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-  document.querySelectorAll(".theme-card").forEach((card) => {
-    card.addEventListener("click", () => gotoExplorer(card.dataset.themeSearch || ""));
-  });
-  // 工具结果里的「按主题筛选」行动按钮（事件委托）
-  document.addEventListener("click", (e) => {
-    const a = e.target.closest("[data-goto]");
-    if (a) { e.preventDefault(); gotoExplorer(a.dataset.goto); }
-  });
-
-  // 工具：行程节奏速算
-  const tripDays = document.getElementById("tripDays");
-  const tripPaceOut = document.getElementById("tripPaceOut");
-  function updateTripPace() {
-    if (!tripDays || !tripPaceOut) return;
-    let d = parseInt(tripDays.value, 10);
-    if (isNaN(d) || d < 1) d = 1;
-    if (d > 30) d = 30;
-    let cities, pace, tip;
-    if (d <= 2) { cities = "1"; pace = "单城深度"; tip = "锁定 1 座城市，集中玩核心区与代表美食，不折腾远郊。"; }
-    else if (d <= 4) { cities = "1–2"; pace = "1 主 1 辅"; tip = "1 座主城 + 半天周边，留出机动时间应对天气与排队。"; }
-    else if (d <= 7) { cities = "2–3"; pace = "主线串联"; tip = "2–3 座临近城市连成一条线，避免天天换酒店。"; }
-    else if (d <= 12) { cities = "3–4"; pace = "区域环线"; tip = "按省 / 片区走环线，预留 1 天缓冲与休整。"; }
-    else { cities = "4–6"; pace = "跨区慢游"; tip = "拆成 2 段、每段 1 个区域，体力和预算都更可控。"; }
-    tripPaceOut.innerHTML = "建议覆盖 <strong>" + cities + "</strong> 座城市 · 节奏：<strong>" + pace + "</strong><br>" + tip +
-      '<br><button type="button" class="tool-action" data-goto="">去「城市攻略」挑城市 →</button>';
-  }
-  if (tripDays) { tripDays.addEventListener("input", updateTripPace); updateTripPace(); }
-
-  // 工具：月份适宜速查（含可点击的主题筛选关键词）
-  const tripMonth = document.getElementById("tripMonth");
-  const monthGuideOut = document.getElementById("monthGuideOut");
-  const MONTH_GUIDE = {
-    1: ["雪山 · 温泉 · 冬日暖阳", "丽江 / 香格里拉雪景、腾冲温泉、西双版纳避寒", "雪山"],
-    2: ["早春花事 · 民俗年味", "罗平油菜花与樱花前奏、古镇过年氛围", "花"],
-    3: ["赏花季 · 踏青", "贵安樱花、罗平油菜花、江南早春园林", "花"],
-    4: ["春花尾声 · 山水回暖", "川西草甸返青、桂林漓江烟雨、苏杭园林", "喀斯特"],
-    5: ["初夏 · 高原最佳", "稻城亚丁、川西雪山草原、洱海骑行", "雪山"],
-    6: ["避暑前奏 · 雨季初", "贵州凉都避暑、西双版纳雨林、高原清凉", "避暑"],
-    7: ["盛夏避暑 · 草原花海", "六盘水 / 贵阳避暑、乌蒙草原、高原花海", "避暑"],
-    8: ["避暑 · 高原观星", "川西高原、香格里拉、海拔高处更凉爽", "避暑"],
-    9: ["秋色初现 · 舒适月", "稻城亚丁金秋、九寨沟、各地秋高气爽", "雪山"],
-    10: ["最佳秋色 · 黄金期", "九寨沟 / 黄龙、川西彩林、层林尽染", "雪山"],
-    11: ["深秋红叶 · 银杏", "腾冲银杏村、川西彩林尾声、江南红枫", "古镇"],
-    12: ["初冬 · 温泉避寒", "腾冲火山热海、西双版纳 / 海南避寒、雪山初雪", "温泉"]
-  };
-  function updateMonthGuide() {
-    if (!tripMonth || !monthGuideOut) return;
-    const m = parseInt(tripMonth.value, 10);
-    const g = MONTH_GUIDE[m];
-    if (!g) { monthGuideOut.textContent = ""; return; }
-    monthGuideOut.innerHTML = "<strong>" + m + " 月推荐主题</strong>：" + g[0] + "<br>去处参考：" + g[1] +
-      '<br><button type="button" class="tool-action" data-goto="' + g[2] + '">按「' + g[2] + '」看推荐城市 →</button>';
-  }
-  if (tripMonth) {
-    const nowM = new Date().getMonth() + 1;
-    tripMonth.value = String(nowM);
-    tripMonth.addEventListener("change", updateMonthGuide);
-    updateMonthGuide();
-  }
-
-  // 工具：打包清单生成
-  const packTypes = document.getElementById("packTypes");
-  const packListOut = document.getElementById("packListOut");
-  const PACK_BASE = ["身份证 / 证件", "手机 + 充电宝", "常用药品", "移动支付 + 少量现金"];
-  const PACK_EXTRA = {
-    city: ["舒适步行鞋", "轻便单肩包", "折叠雨伞"],
-    mountain: ["登山鞋 + 速干衣", "冲锋衣 / 防风层", "护膝 + 登山杖", "能量补给"],
-    plateau: ["防晒霜 + 墨镜 + 帽子", "保暖外套（昼夜温差大）", "润唇膏 / 保湿", "按需备抗高反药"],
-    summer: ["防晒 + 遮阳", "驱蚊液", "薄外套（室内空调）", "备用换洗衣物"],
-    winter: ["羽绒服 / 厚外套", "保暖帽 + 手套 + 围巾", "保湿护肤", "暖宝宝"]
-  };
-  let activePack = "city";
-  function updatePackList() {
-    if (!packListOut) return;
-    const items = PACK_BASE.concat(PACK_EXTRA[activePack] || []);
-    packListOut.innerHTML = "<strong>随身清单</strong><ul>" + items.map((i) => "<li>" + i + "</li>").join("") + "</ul>";
-  }
-  if (packTypes) {
-    packTypes.querySelectorAll(".tool-chip").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        activePack = chip.dataset.pack || "city";
-        packTypes.querySelectorAll(".tool-chip").forEach((c) => c.classList.toggle("active", c === chip));
-        updatePackList();
-      });
-    });
-    updatePackList();
-  }
-
-  // 随机城市探索
-  const randomBtn = document.getElementById("randomCity");
-  if (randomBtn) {
-    randomBtn.addEventListener("click", () => {
-      const visible = cityExplorerCards.filter((c) => !c.classList.contains("is-hidden"));
-      const pool = visible.length ? visible : cityExplorerCards;
-      if (!pool.length) return;
-      const card = pool[Math.floor(Math.random() * pool.length)];
-      const href = card.dataset.href || (card.querySelector(".city-card-title") || {}).href;
-      if (href) window.location.href = href;
-    });
-  }
-
-  // 图片加载淡入（用内联样式，禁用 JS 时图片始终可见，不会被隐藏）
-  document.querySelectorAll(".city-card.rich img, .media-card img, .item-thumb, .hero-gallery img").forEach((img) => {
-    if (img.complete && img.naturalWidth > 0) return;
-    img.style.opacity = "0";
-    img.style.transition = "opacity .5s ease";
-    const show = () => { img.style.opacity = "1"; };
-    img.addEventListener("load", show, { once: true });
-    img.addEventListener("error", show, { once: true });
-  });
-
-  // ===== 本地存储工具 =====
-  // Values remain backward-compatible JSON, while a small schema envelope
-  // records migrations and rejects malformed data instead of rendering it.
-  const STORAGE_SCHEMA = 2;
-  const STORAGE_META_KEY = "tay_storage_meta";
-  const STORAGE_ARRAY_KEYS = new Set(["tay_favs", "tay_recent", "tay_search_recent", "tay_trip", "tay_roadtrips", "tay_checklist", "tay_budget"]);
-  const STORAGE_OBJECT_KEYS = new Set(["tay_profile", "tay_settings", "tay_last_roadtrip"]);
-  const STORAGE_STRING_KEYS = new Set(["tay_notes"]);
-  const STORAGE_KNOWN_KEYS = new Set([
-    ...STORAGE_ARRAY_KEYS,
-    ...STORAGE_OBJECT_KEYS,
-    ...STORAGE_STRING_KEYS,
-  ]);
-
-  function parseStored(raw) {
-    if (raw == null) return null;
-    try { return JSON.parse(raw); } catch (_) { return null; }
-  }
-  function readStored(key, raw) {
-    const value = parseStored(raw);
-    // Early versions of the notes field may have been written as plain text;
-    // migrate that form instead of treating it as a corrupt object.
-    if (value == null && raw != null && STORAGE_STRING_KEYS.has(key)) return raw;
-    return value;
-  }
-  function validStoredValue(key, value) {
-    if (STORAGE_ARRAY_KEYS.has(key)) return Array.isArray(value);
-    if (STORAGE_OBJECT_KEYS.has(key)) return Boolean(value && typeof value === "object" && !Array.isArray(value));
-    if (STORAGE_STRING_KEYS.has(key)) return typeof value === "string";
-    return true;
-  }
-  function migrateStorage() {
-    let meta = parseStored(localStorage.getItem(STORAGE_META_KEY));
-    const version = Number(meta && meta.version) || 1;
-    if (version < STORAGE_SCHEMA) {
-      STORAGE_KNOWN_KEYS.forEach((key) => {
-        const raw = localStorage.getItem(key);
-        if (raw == null) return;
-        const value = readStored(key, raw);
-        if (!validStoredValue(key, value)) localStorage.removeItem(key);
-      });
-      meta = { version: STORAGE_SCHEMA, migratedAt: new Date().toISOString() };
-      try { localStorage.setItem(STORAGE_META_KEY, JSON.stringify(meta)); } catch (_) {}
-    } else if (!meta || version !== STORAGE_SCHEMA) {
-      meta = { version: STORAGE_SCHEMA, migratedAt: new Date().toISOString() };
-      try { localStorage.setItem(STORAGE_META_KEY, JSON.stringify(meta)); } catch (_) {}
-    }
-    return meta;
-  }
-  function emitStorageChange(key, action) {
-    window.dispatchEvent(new CustomEvent("tay:storage-change", { detail: { key: key, action: action } }));
-  }
-  const LS = {
-    get(k, d) {
-      migrateStorage();
-      const value = readStored(k, localStorage.getItem(k));
-      if (value == null || !validStoredValue(k, value)) {
-        if (value == null && localStorage.getItem(k) != null) {
-          try { localStorage.removeItem(k); } catch (_) {}
-        }
-        return d;
-      }
-      return value;
-    },
-    set(k, v) {
-      migrateStorage();
-      if (!validStoredValue(k, v)) return false;
-      try { localStorage.setItem(k, JSON.stringify(v)); emitStorageChange(k, "set"); return true; } catch (_) { return false; }
-    },
-    del(k) {
-      try { localStorage.removeItem(k); emitStorageChange(k, "delete"); } catch (_) {}
-    },
-    exportData() {
-      migrateStorage();
-      const data = {};
-      STORAGE_KNOWN_KEYS.forEach((key) => {
-        const value = readStored(key, localStorage.getItem(key));
-        if (value != null && validStoredValue(key, value)) data[key] = value;
-      });
-      return { schemaVersion: STORAGE_SCHEMA, exportedAt: new Date().toISOString(), data: data };
-    },
-    importData(payload) {
-      if (!payload || typeof payload !== "object" || !payload.data || typeof payload.data !== "object") return false;
-      let imported = 0;
-      STORAGE_KNOWN_KEYS.forEach((key) => {
-        if (!Object.prototype.hasOwnProperty.call(payload.data, key)) return;
-        const value = payload.data[key];
-        if (!validStoredValue(key, value)) return;
-        try { localStorage.setItem(key, JSON.stringify(value)); imported += 1; emitStorageChange(key, "import"); } catch (_) {}
-      });
-      migrateStorage();
-      return imported > 0 || Object.keys(payload.data).length === 0;
-    }
-  };
-  migrateStorage();
-  window.TAY_STORAGE = LS;
-  window.addEventListener("storage", (event) => {
-    if (event.storageArea === localStorage && event.key && event.key.indexOf("tay_") === 0) {
-      migrateStorage();
-      emitStorageChange(event.key, "external");
-    }
-  });
-  const AVATARS = ["👤", "🧭", "🏔️", "🌊", "🏯", "🐼", "🌸", "🍜", "🚆", "⛺", "🦋", "🌅"];
-
-  // 城市页打开时记录最近浏览；不上传数据，最多保留 12 条。
-  (function recordCityVisit() {
-    const city = document.querySelector(".co-fav[data-key]");
-    if (!city) return;
-    const entry = {
-      key: city.dataset.key,
-      name: city.dataset.name,
-      href: city.dataset.href,
-      sub: city.dataset.sub,
-      viewedAt: new Date().toISOString()
-    };
-    const recent = LS.get("tay_recent", []).filter((item) => item.key !== entry.key);
-    recent.unshift(entry);
-    LS.set("tay_recent", recent.slice(0, 12));
-  })();
-
-  // 把昵称 / 头像同步到顶部用户中心入口（所有页面）
-  function applyProfileToHeader() {
-    const p = LS.get("tay_profile", {});
-    const av = document.getElementById("headerAvatar");
-    const nm = document.getElementById("headerUserName");
-    if (av && p.avatar) av.textContent = p.avatar;
-    if (nm && p.name) nm.textContent = p.name;
-  }
-  applyProfileToHeader();
-
-  // ===== 全站行程工作台 =====
-  const tripDockToggle = document.getElementById("tripDockToggle");
-  const tripDockCount = document.getElementById("tripDockCount");
-  const tripDock = document.getElementById("tripDock");
-  const tripDockList = document.getElementById("tripDockList");
-  const tripDockEmpty = document.getElementById("tripDockEmpty");
-  const tripDockClose = document.getElementById("tripDockClose");
-  const tripDockBackdrop = document.getElementById("tripDockBackdrop");
-  const tripDockClear = document.getElementById("tripDockClear");
-  let tripDockPreviousFocus = null;
-
-  function rootHref(path) {
-    const href = String(path || "").trim();
-    if (!href || /^(?:https?:|mailto:|tel:|#|\/)/i.test(href)) return href || "#";
-    const root = (document.body.dataset.siteRoot || ".").replace(/\/$/, "");
-    const normalized = href.replace(/^(?:\.\.\/|\.\/)+/, "");
-    return root + "/" + normalized;
-  }
-
-  function syncTripControls() {
-    const keys = new Set(LS.get("tay_trip", []).map((item) => item && item.key).filter(Boolean));
-    document.querySelectorAll(".trip-btn[data-key]").forEach((button) => {
-      const added = keys.has(button.dataset.key);
-      button.classList.toggle("added", added);
-      button.textContent = added ? "✓" : "＋";
-      button.setAttribute("aria-label", (added ? "从行程移除 " : "加入行程 ") + (button.dataset.name || "城市"));
-    });
-    document.querySelectorAll(".co-trip[data-key]").forEach((button) => {
-      const added = keys.has(button.dataset.key);
-      button.classList.toggle("on", added);
-      button.textContent = added ? "✓ 已在行程" : "＋ 加入行程";
-    });
-  }
-
-  function renderTripDock() {
-    if (!tripDockList) return;
-    const trip = LS.get("tay_trip", []).filter((item) => item && item.key);
-    tripDockList.replaceChildren();
-    trip.forEach((item, index) => {
-      const row = document.createElement("div");
-      row.className = "trip-dock-item";
-      const link = document.createElement("a");
-      link.className = "trip-dock-item-main";
-      link.href = rootHref(item.href);
-      const name = document.createElement("strong");
-      name.textContent = item.name || "未命名城市";
-      const summary = document.createElement("span");
-      summary.textContent = item.sub || "打开攻略查看行程信息";
-      link.append(name, summary);
-      const remove = document.createElement("button");
-      remove.className = "trip-dock-remove";
-      remove.type = "button";
-      remove.textContent = "×";
-      remove.setAttribute("aria-label", "从行程移除 " + name.textContent);
-      remove.addEventListener("click", () => {
-        const next = LS.get("tay_trip", []).filter((entry) => entry && entry.key !== item.key);
-        LS.set("tay_trip", next);
-      });
-      row.append(link, remove);
-      row.style.setProperty("--trip-index", String(index + 1));
-      tripDockList.appendChild(row);
-    });
-    if (tripDockCount) {
-      tripDockCount.textContent = String(trip.length);
-      tripDockCount.setAttribute("aria-label", "行程中有 " + trip.length + " 座城市");
-    }
-    if (tripDockEmpty) tripDockEmpty.hidden = trip.length > 0;
-    if (tripDockClear) tripDockClear.disabled = trip.length === 0;
-    syncTripControls();
-  }
-
-  function tripDockFocusables() {
-    if (!tripDock) return [];
-    return Array.from(tripDock.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'))
-      .filter((element) => !element.hidden && element.offsetParent !== null);
-  }
-
-  function openTripDock() {
-    if (!tripDock || !tripDockToggle) return;
-    tripDockPreviousFocus = document.activeElement;
-    renderTripDock();
-    tripDock.hidden = false;
-    if (tripDockBackdrop) tripDockBackdrop.hidden = false;
-    tripDockToggle.setAttribute("aria-expanded", "true");
-    document.body.classList.add("trip-dock-open");
-    requestAnimationFrame(() => tripDock.focus());
-  }
-
-  function closeTripDock() {
-    if (!tripDock || tripDock.hidden) return;
-    tripDock.hidden = true;
-    if (tripDockBackdrop) tripDockBackdrop.hidden = true;
-    if (tripDockToggle) tripDockToggle.setAttribute("aria-expanded", "false");
-    document.body.classList.remove("trip-dock-open");
-    if (tripDockPreviousFocus && typeof tripDockPreviousFocus.focus === "function") tripDockPreviousFocus.focus();
-    tripDockPreviousFocus = null;
-  }
-
-  if (tripDockToggle && tripDock) {
-    tripDockToggle.addEventListener("click", () => tripDock.hidden ? openTripDock() : closeTripDock());
-    if (tripDockClose) tripDockClose.addEventListener("click", closeTripDock);
-    if (tripDockBackdrop) tripDockBackdrop.addEventListener("click", closeTripDock);
-    if (tripDockClear) tripDockClear.addEventListener("click", () => {
-      const trip = LS.get("tay_trip", []);
-      if (!trip.length || !window.confirm("清空当前行程中的全部城市？")) return;
-      LS.set("tay_trip", []);
-    });
-    document.addEventListener("keydown", (event) => {
-      if (tripDock.hidden) return;
-      if (event.key === "Escape") { event.preventDefault(); closeTripDock(); return; }
-      if (event.key !== "Tab") return;
-      const focusable = tripDockFocusables();
-      if (!focusable.length) { event.preventDefault(); tripDock.focus(); return; }
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-    });
-    window.addEventListener("tay:storage-change", (event) => {
-      if (event.detail && event.detail.key === "tay_trip") renderTripDock();
-    });
-    renderTripDock();
-  }
-
-  // ===== 收藏 =====
-  function getFavs() { return LS.get("tay_favs", []); }
-  function setFavs(v) { LS.set("tay_favs", v); }
-  function isFav(key) { return getFavs().some((f) => f.key === key); }
-  document.querySelectorAll(".fav-btn").forEach((btn) => {
-    const key = btn.dataset.key;
-    if (isFav(key)) { btn.classList.add("faved"); btn.textContent = "★"; }
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      let favs = getFavs();
-      const i = favs.findIndex((f) => f.key === key);
-      let nowFav;
-      if (i >= 0) { favs.splice(i, 1); nowFav = false; }
-      else { favs.unshift({ key: key, name: btn.dataset.name, href: btn.dataset.href, sub: btn.dataset.sub }); nowFav = true; }
-      setFavs(favs);
-      btn.classList.toggle("faved", nowFav);
-      btn.textContent = nowFav ? "★" : "☆";
-    });
-  });
-
-  // ===== 行程（加入 / 移除）=====
-  document.querySelectorAll(".trip-btn").forEach((btn) => {
-    const key = btn.dataset.key;
-    const inTrip = () => LS.get("tay_trip", []).some((t) => t.key === key);
-    if (inTrip()) { btn.classList.add("added"); btn.textContent = "✓"; }
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      let trip = LS.get("tay_trip", []);
-      const i = trip.findIndex((t) => t.key === key);
-      let added;
-      if (i >= 0) { trip.splice(i, 1); added = false; }
-      else { trip.push({ key: key, name: btn.dataset.name, href: btn.dataset.href, sub: btn.dataset.sub }); added = true; }
-      LS.set("tay_trip", trip);
-      btn.classList.toggle("added", added);
-      btn.textContent = added ? "✓" : "＋";
-    });
-  });
-
-  // ===== 城市页速览：收藏 / 加入行程（带文字标签）=====
-  document.querySelectorAll(".co-fav").forEach((btn) => {
-    const key = btn.dataset.key;
-    const sync = () => { const f = isFav(key); btn.classList.toggle("on", f); btn.textContent = f ? "★ 已收藏" : "☆ 收藏"; };
-    sync();
-    btn.addEventListener("click", () => {
-      let favs = getFavs();
-      const i = favs.findIndex((f) => f.key === key);
-      if (i >= 0) favs.splice(i, 1);
-      else favs.unshift({ key: key, name: btn.dataset.name, href: btn.dataset.href, sub: btn.dataset.sub });
-      setFavs(favs);
-      sync();
-    });
-  });
-  document.querySelectorAll(".co-trip").forEach((btn) => {
-    const key = btn.dataset.key;
-    const sync = () => { const t = LS.get("tay_trip", []).some((x) => x.key === key); btn.classList.toggle("on", t); btn.textContent = t ? "✓ 已在行程" : "＋ 加入行程"; };
-    sync();
-    btn.addEventListener("click", () => {
-      let trip = LS.get("tay_trip", []);
-      const i = trip.findIndex((x) => x.key === key);
-      if (i >= 0) trip.splice(i, 1);
-      else trip.push({ key: key, name: btn.dataset.name, href: btn.dataset.href, sub: btn.dataset.sub });
-      LS.set("tay_trip", trip);
-      sync();
-    });
-  });
-  document.querySelectorAll(".co-share").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const original = "↗ 分享";
-      const title = btn.dataset.shareTitle || document.title;
-      const url = location.href.split("#")[0];
-      try {
-        if (navigator.share) {
-          await navigator.share({ title: title, text: title, url: url });
-          return;
-        }
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(url);
-        } else {
-          const input = document.createElement("input");
-          input.value = url;
-          input.setAttribute("readonly", "");
-          input.style.position = "fixed";
-          input.style.opacity = "0";
-          document.body.appendChild(input);
-          input.select();
-          document.execCommand("copy");
-          input.remove();
-        }
-        btn.textContent = "✓ 已复制链接";
-        btn.classList.add("copied");
-        setTimeout(() => { btn.textContent = original; btn.classList.remove("copied"); }, 1800);
-      } catch (error) {
-        if (error && error.name === "AbortError") return;
-        btn.textContent = "复制失败";
-        setTimeout(() => { btn.textContent = original; }, 1800);
-      }
-    });
-  });
-
-  // ===== Hero 大图轮播 =====
-  (function () {
-    const car = document.getElementById("heroCarousel");
-    if (!car) return;
-    const slides = Array.from(car.querySelectorAll(".hero-slide"));
-    const dots = Array.from(car.querySelectorAll(".hero-dot"));
-    const pauseButton = car.querySelector(".hero-pause");
-    if (slides.length <= 1) return;
-    let idx = 0, timer = null;
-    let userPaused = false;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    function hydrateSlide(n) {
-      const slide = slides[(n + slides.length) % slides.length];
-      const image = slide && slide.querySelector("img[data-src]");
-      if (!image) return;
-      image.src = image.dataset.src;
-      image.removeAttribute("data-src");
-    }
-    function motionDisabled() {
-      return userPaused || reducedMotion.matches || document.documentElement.getAttribute("data-motion") === "off";
-    }
-    function syncPauseButton() {
-      if (!pauseButton) return;
-      const systemPaused = reducedMotion.matches || document.documentElement.getAttribute("data-motion") === "off";
-      const paused = userPaused || systemPaused;
-      pauseButton.setAttribute("aria-pressed", String(paused));
-      pauseButton.textContent = paused ? "▶" : "Ⅱ";
-      pauseButton.disabled = systemPaused;
-      const label = systemPaused ? "已按减少动态设置关闭自动轮播" : (paused ? "恢复自动轮播" : "暂停自动轮播");
-      pauseButton.setAttribute("aria-label", label);
-      pauseButton.title = label;
-    }
-    function go(n) {
-      idx = (n + slides.length) % slides.length;
-      hydrateSlide(idx);
-      hydrateSlide(idx + 1);
-      slides.forEach((s, i) => {
-        const active = i === idx;
-        s.classList.toggle("active", active);
-        s.setAttribute("aria-hidden", String(!active));
-        if (s.matches("a")) s.tabIndex = active ? 0 : -1;
-      });
-      dots.forEach((d, i) => {
-        d.classList.toggle("active", i === idx);
-        if (i === idx) d.setAttribute("aria-current", "true");
-        else d.removeAttribute("aria-current");
-      });
-    }
-    function start() {
-      stop();
-      if (motionDisabled()) return;
-      timer = setInterval(() => go(idx + 1), 4800);
-    }
-    function stop() { if (timer) clearInterval(timer); timer = null; }
-    dots.forEach((d) => d.addEventListener("click", () => { go(parseInt(d.dataset.i, 10)); start(); }));
-    car.querySelectorAll(".hero-arrow").forEach((a) => a.addEventListener("click", (e) => {
-      e.preventDefault();
-      go(idx + parseInt(a.dataset.dir, 10));
-      start();
-    }));
-    car.addEventListener("mouseenter", stop);
-    car.addEventListener("mouseleave", start);
-    if (pauseButton) pauseButton.addEventListener("click", () => {
-      userPaused = !userPaused;
-      syncPauseButton();
-      if (userPaused) stop(); else start();
-    });
-    // 触控滑动
-    let tx = 0;
-    car.addEventListener("touchstart", (e) => { tx = e.touches[0].clientX; stop(); }, { passive: true });
-    car.addEventListener("touchend", (e) => {
-      const dx = e.changedTouches[0].clientX - tx;
-      if (Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1));
-      start();
-    }, { passive: true });
-    document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else start(); });
-    const onMotionChange = () => { syncPauseButton(); if (motionDisabled()) stop(); else start(); };
-    if (reducedMotion.addEventListener) reducedMotion.addEventListener("change", onMotionChange);
-    else if (reducedMotion.addListener) reducedMotion.addListener(onMotionChange);
-    go(0);
-    syncPauseButton();
-    start();
-  })();
-
-  // ===== 用户中心 =====
-  (function () {
-    const tabsWrap = document.getElementById("userTabs");
-    if (!tabsWrap) return;
-    const tabBtns = Array.from(tabsWrap.querySelectorAll(".user-tab"));
-    const panels = Array.from(document.querySelectorAll(".user-panel"));
-    function activateUserTab(button, options) {
-      if (!button) return;
-      const settings = options || {};
-      tabBtns.forEach((candidate) => {
-        const active = candidate === button;
-        candidate.classList.toggle("active", active);
-        candidate.setAttribute("aria-selected", String(active));
-        candidate.tabIndex = active ? 0 : -1;
-      });
-      panels.forEach((panel) => { panel.hidden = panel.dataset.panel !== button.dataset.tab; });
-      button.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-      if (settings.focus) button.focus();
-      if (settings.updateHash) {
-        const next = new URL(location.href);
-        next.hash = "tab=" + encodeURIComponent(button.dataset.tab || "profile");
-        history.pushState({ userTab: button.dataset.tab }, "", next);
-      }
-    }
-    function tabFromHash() {
-      const rawHash = decodeURIComponent(location.hash.replace(/^#/, ""));
-      const key = new URLSearchParams(rawHash).get("tab") || rawHash.replace(/^user-panel-/, "");
-      return tabBtns.find((button) => button.dataset.tab === key) || null;
-    }
-    tabBtns.forEach((button) => {
-      button.addEventListener("click", () => activateUserTab(button, { updateHash: true }));
-      button.addEventListener("keydown", (event) => {
-        const current = tabBtns.indexOf(button);
-        let target = -1;
-        if (event.key === "ArrowRight") target = (current + 1) % tabBtns.length;
-        if (event.key === "ArrowLeft") target = (current - 1 + tabBtns.length) % tabBtns.length;
-        if (event.key === "Home") target = 0;
-        if (event.key === "End") target = tabBtns.length - 1;
-        if (target < 0) return;
-        event.preventDefault();
-        activateUserTab(tabBtns[target], { focus: true, updateHash: true });
-      });
-    });
-    const initialTab = tabFromHash();
-    if (initialTab) activateUserTab(initialTab);
-    window.addEventListener("popstate", () => {
-      const requested = tabFromHash();
-      if (requested) activateUserTab(requested);
-    });
-
-    // 个人信息
-    const profile = LS.get("tay_profile", { name: "", avatar: "👤", slogan: "" });
-    let chosen = profile.avatar || "👤";
-    const nameInput = document.getElementById("ucNameInput");
-    const slogan = document.getElementById("ucSlogan");
-    const nameShow = document.getElementById("ucNameShow");
-    const bigAvatar = document.getElementById("ucAvatar");
-    const picker = document.getElementById("avatarPicker");
-    if (nameInput) nameInput.value = profile.name || "";
-    if (slogan) slogan.value = profile.slogan || "";
-    if (nameShow) nameShow.textContent = profile.name || "旅行者";
-    if (bigAvatar) bigAvatar.textContent = chosen;
-    function syncPickerActive() {
-      if (picker) picker.querySelectorAll(".avatar-opt").forEach((x) => x.classList.toggle("active", x.textContent === chosen));
-    }
-    if (picker) {
-      AVATARS.forEach((a) => {
-        const b = document.createElement("button");
-        b.className = "avatar-opt" + (a === chosen ? " active" : "");
-        b.type = "button";
-        b.textContent = a;
-        b.addEventListener("click", () => { chosen = a; if (bigAvatar) bigAvatar.textContent = a; syncPickerActive(); });
-        picker.appendChild(b);
-      });
-    }
-    if (bigAvatar) bigAvatar.addEventListener("click", () => {
-      const i = AVATARS.indexOf(chosen);
-      chosen = AVATARS[(i + 1) % AVATARS.length];
-      bigAvatar.textContent = chosen;
-      syncPickerActive();
-    });
-    const saveBtn = document.getElementById("ucSaveProfile");
-    const saveTip = document.getElementById("ucSaveTip");
-    if (saveBtn) saveBtn.addEventListener("click", () => {
-      const p = { name: nameInput ? nameInput.value.trim() : "", avatar: chosen, slogan: slogan ? slogan.value.trim() : "" };
-      LS.set("tay_profile", p);
-      if (nameShow) nameShow.textContent = p.name || "旅行者";
-      if (saveTip) { saveTip.hidden = false; setTimeout(() => { saveTip.hidden = true; }, 1800); }
-      applyProfileToHeader();
-    });
-
-    // 设置
-    const settings = LS.get("tay_settings", { theme: "auto", vibrancy: "normal", font: "m", motion: "on" });
-    function applyTheme() {
-      let t = settings.theme || "auto";
-      if (t === "auto") t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
-      document.documentElement.setAttribute("data-theme", t);
-    }
-    function bindSeg(id, key) {
-      const seg = document.getElementById(id);
-      if (!seg) return;
-      seg.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.val === settings[key]));
-      seg.addEventListener("click", (e) => {
-        const b = e.target.closest("button");
-        if (!b) return;
-        seg.querySelectorAll("button").forEach((x) => x.classList.toggle("active", x === b));
-        settings[key] = b.dataset.val;
-        LS.set("tay_settings", settings);
-        const r = document.documentElement;
-        r.setAttribute("data-vibrancy", settings.vibrancy);
-        r.setAttribute("data-font", settings.font);
-        r.setAttribute("data-motion", settings.motion);
-        applyTheme();
-      });
-    }
-    bindSeg("setTheme", "theme");
-    bindSeg("setVibrancy", "vibrancy");
-    bindSeg("setFont", "font");
-    bindSeg("setMotion", "motion");
-    const reset = document.getElementById("ucResetAll");
-    if (reset) reset.addEventListener("click", () => {
-      if (confirm("确定清除本地保存的昵称、收藏、行程、路书、旅行工具和设置吗？")) {
-        ["tay_profile", "tay_settings", "tay_favs", "tay_recent", "tay_search_recent", "tay_trip", "tay_roadtrips", "tay_last_roadtrip", "tay_checklist", "tay_budget", "tay_notes"].forEach((k) => LS.del(k));
-        location.reload();
-      }
-    });
-
-    // 收藏渲染
-    const favGrid = document.getElementById("favGrid");
-    const favEmpty = document.getElementById("favEmpty");
-    const favCount = document.getElementById("ucFavCount");
-    function esc(s) { return String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
-    function renderFavs() {
-      const favs = getFavs();
-      if (favCount) favCount.textContent = String(favs.length);
-      if (!favGrid) return;
-      favGrid.innerHTML = "";
-      if (!favs.length) { if (favEmpty) favEmpty.hidden = false; return; }
-      if (favEmpty) favEmpty.hidden = true;
-      favs.forEach((f) => {
-        const div = document.createElement("div");
-        div.className = "fav-item";
-        div.innerHTML =
-          '<img src="assets/images/' + esc(f.key) + '.jpg" alt="' + esc(f.name) + '" width="800" height="480" loading="lazy">' +
-          '<div class="fav-item-body"><strong>' + esc(f.name) + '</strong><small>' + esc(f.sub) + '</small>' +
-          '<a href="' + esc(f.href) + '">查看攻略 →</a></div>' +
-          '<button class="fav-remove" data-key="' + esc(f.key) + '" aria-label="移除收藏">✕</button>';
-        favGrid.appendChild(div);
-      });
-      favGrid.querySelectorAll(".fav-remove").forEach((b) => b.addEventListener("click", () => {
-        setFavs(getFavs().filter((x) => x.key !== b.dataset.key));
-        renderFavs();
-      }));
-    }
-    renderFavs();
-
-    // 最近浏览
-    const historyList = document.getElementById("historyList");
-    const historyEmpty = document.getElementById("historyEmpty");
-    const historyClear = document.getElementById("historyClear");
-    function renderHistory() {
-      if (!historyList) return;
-      const recent = LS.get("tay_recent", []);
-      historyList.innerHTML = "";
-      if (!recent.length) {
-        if (historyEmpty) historyEmpty.hidden = false;
-        if (historyClear) historyClear.hidden = true;
-        return;
-      }
-      if (historyEmpty) historyEmpty.hidden = true;
-      if (historyClear) historyClear.hidden = false;
-      recent.forEach((item) => {
-        const when = item.viewedAt ? new Date(item.viewedAt).toLocaleDateString("zh-CN", { month: "numeric", day: "numeric" }) : "刚刚浏览";
-        const row = document.createElement("article");
-        row.className = "fav-item";
-        row.innerHTML =
-          '<img src="assets/images/' + esc(item.key) + '.jpg" alt="' + esc(item.name) + '" width="800" height="480" loading="lazy">' +
-          '<div class="fav-item-body"><strong>' + esc(item.name) + '</strong><small>' + esc(item.sub) + ' · ' + esc(when) + '</small>' +
-          '<a href="' + esc(item.href) + '">继续阅读 →</a></div>';
-        historyList.appendChild(row);
-      });
-    }
-    if (historyClear) historyClear.addEventListener("click", () => { LS.del("tay_recent"); renderHistory(); });
-    renderHistory();
-
-    // 行程渲染
-    const tripList = document.getElementById("tripList");
-    const tripEmpty = document.getElementById("tripEmpty");
-    const tripSummary = document.getElementById("tripSummary");
-    const tripDaysInput = document.getElementById("tripPlanDays");
-    const tripCompare = document.getElementById("tripCompare");
-    const tripCompareTable = document.getElementById("tripCompareTable");
-    let compareOpen = false;
-    function getTrip() { return LS.get("tay_trip", []); }
-    function setTrip(v) { LS.set("tay_trip", v); }
-    function renderTripCompare() {
-      if (!tripCompareTable || !tripCompare) return;
-      const trip = getTrip();
-      tripCompare.disabled = trip.length < 2;
-      if (trip.length < 2) compareOpen = false;
-      tripCompare.textContent = compareOpen ? "收起对比" : "对比城市";
-      tripCompareTable.hidden = !compareOpen;
-      if (!compareOpen) { tripCompareTable.innerHTML = ""; return; }
-      const selected = trip.slice(0, 4).map((entry) => {
-        const profile = allSearchItems.find((item) => item.key === entry.key) || {};
-        return { trip: entry, profile: profile };
-      });
-      const cells = (render) => selected.map(render).join("");
-      const row = (label, render) => '<tr><th scope="row">' + label + '</th>' + cells((item) => '<td>' + render(item) + '</td>') + '</tr>';
-      const table =
-        '<table class="trip-compare-table"><thead><tr><th scope="col">对比项</th>' +
-        cells((item) => '<th scope="col"><a href="' + esc(item.trip.href) + '">' + esc(item.trip.name.replace("旅游攻略", "")) + '</a></th>') +
-        '</tr></thead><tbody>' +
-        row("地区", (item) => esc(item.profile.province || "待补充")) +
-        row("适宜季节", (item) => esc(item.profile.season || "见城市攻略")) +
-        row("旅行印象", (item) => esc(item.profile.subtitle || item.trip.sub || "见城市攻略")) +
-        row("代表景点", (item) => esc((item.profile.highlights || []).slice(0, 4).join("、") || "见城市攻略")) +
-        row("代表美食", (item) => esc((item.profile.foods || []).slice(0, 4).join("、") || "见城市攻略")) +
-        '</tbody></table>';
-      const note = trip.length > 4 ? '<p class="trip-compare-note">为保证可读性，仅对比行程中的前 4 座城市；可通过上移调整顺序。</p>' : "";
-      tripCompareTable.innerHTML = table + note;
-    }
-    function renderTrip() {
-      if (!tripList) return;
-      const trip = getTrip();
-      tripList.innerHTML = "";
-      renderTripCompare();
-      if (!trip.length) {
-        if (tripEmpty) tripEmpty.hidden = false;
-        if (tripSummary) tripSummary.innerHTML = "";
-        return;
-      }
-      if (tripEmpty) tripEmpty.hidden = true;
-      let days = parseInt(tripDaysInput && tripDaysInput.value, 10);
-      if (isNaN(days) || days < 1) days = trip.length;
-      const per = days / trip.length;
-      const tip = per < 1.2 ? "偏赶，建议减城市或加天数" : (per > 3 ? "较宽松，可加入周边" : "节奏适中");
-      if (tripSummary) tripSummary.innerHTML = "共 <strong>" + trip.length + "</strong> 座城市 · 计划 <strong>" + days + "</strong> 天 · 平均每城约 <strong>" + per.toFixed(1) + "</strong> 天（" + tip + "）";
-      trip.forEach((t, idx) => {
-        const li = document.createElement("li");
-        li.className = "trip-item";
-        li.innerHTML =
-          '<span class="trip-order">' + (idx + 1) + '</span>' +
-          '<img src="assets/images/' + esc(t.key) + '.jpg" alt="" width="800" height="480" loading="lazy">' +
-          '<div class="trip-item-body"><strong>' + esc(t.name) + '</strong><small>' + esc(t.sub) + '</small><a href="' + esc(t.href) + '">查看攻略 →</a></div>' +
-          '<div class="trip-actions">' +
-          '<button data-act="up" data-key="' + esc(t.key) + '" aria-label="上移"' + (idx === 0 ? " disabled" : "") + '>↑</button>' +
-          '<button data-act="down" data-key="' + esc(t.key) + '" aria-label="下移"' + (idx === trip.length - 1 ? " disabled" : "") + '>↓</button>' +
-          '<button data-act="del" data-key="' + esc(t.key) + '" aria-label="移除">✕</button>' +
-          '</div>';
-        tripList.appendChild(li);
-      });
-      tripList.querySelectorAll("button[data-act]").forEach((b) => b.addEventListener("click", () => {
-        let trip = getTrip();
-        const i = trip.findIndex((x) => x.key === b.dataset.key);
-        if (i < 0) return;
-        if (b.dataset.act === "del") trip.splice(i, 1);
-        else if (b.dataset.act === "up" && i > 0) { const t = trip[i - 1]; trip[i - 1] = trip[i]; trip[i] = t; }
-        else if (b.dataset.act === "down" && i < trip.length - 1) { const t = trip[i + 1]; trip[i + 1] = trip[i]; trip[i] = t; }
-        setTrip(trip);
-        renderTrip();
-      }));
-    }
-    if (tripDaysInput) tripDaysInput.addEventListener("input", renderTrip);
-    if (tripCompare) tripCompare.addEventListener("click", () => { compareOpen = !compareOpen; renderTripCompare(); });
-    const tripClear = document.getElementById("tripClear");
-    if (tripClear) tripClear.addEventListener("click", () => { if (confirm("清空行程？")) { setTrip([]); renderTrip(); } });
-    renderTrip();
-
-    // 已保存的自驾路书
-    const roadbookList = document.getElementById("roadbookList");
-    const roadbookEmpty = document.getElementById("roadbookEmpty");
-    function getRoadbooks() { return LS.get("tay_roadtrips", []); }
-    function renderRoadbooks() {
-      if (!roadbookList) return;
-      const plans = getRoadbooks();
-      roadbookList.innerHTML = "";
-      if (!plans.length) { if (roadbookEmpty) roadbookEmpty.hidden = false; return; }
-      if (roadbookEmpty) roadbookEmpty.hidden = true;
-      plans.forEach((plan) => {
-        const div = document.createElement("article");
-        div.className = "roadbook-item";
-        const summary = plan.summary || {};
-        div.innerHTML =
-          '<div><strong>' + esc(plan.title) + '</strong><small>' + esc(summary.days) + ' 天 · 约 ' + esc(summary.totalKm) + ' 公里 · ' + esc(plan.generatedAt) + '</small></div>' +
-          '<div class="roadbook-actions"><a href="roadtrip.html?plan=' + encodeURIComponent(plan.id) + '">打开</a>' +
-          '<button type="button" data-roadbook-id="' + esc(plan.id) + '">删除</button></div>';
-        roadbookList.appendChild(div);
-      });
-      roadbookList.querySelectorAll("button[data-roadbook-id]").forEach((button) => button.addEventListener("click", () => {
-        LS.set("tay_roadtrips", getRoadbooks().filter((plan) => plan.id !== button.dataset.roadbookId));
-        renderRoadbooks();
-      }));
-    }
-    renderRoadbooks();
-
-    // 旅行工具：清单、预算和笔记均只保存在当前浏览器
-    const checklistForm = document.getElementById("checklistForm");
-    const checklistInput = document.getElementById("checklistInput");
-    const checklistList = document.getElementById("travelChecklist");
-    const checklistEmpty = document.getElementById("checklistEmpty");
-    const checklistProgress = document.getElementById("checklistProgress");
-    function uniqueId(prefix) {
-      return prefix + "-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7);
-    }
-    function getChecklist() {
-      const items = LS.get("tay_checklist", []);
-      return Array.isArray(items) ? items : [];
-    }
-    function setChecklist(items) { LS.set("tay_checklist", items); }
-    function renderChecklist() {
-      if (!checklistList) return;
-      const items = getChecklist();
-      const done = items.filter((item) => item.done).length;
-      checklistList.innerHTML = "";
-      if (checklistProgress) checklistProgress.textContent = done + " / " + items.length;
-      if (checklistEmpty) checklistEmpty.hidden = items.length > 0;
-      items.forEach((item) => {
-        const li = document.createElement("li");
-        li.className = "checklist-item" + (item.done ? " done" : "");
-        li.innerHTML =
-          '<label><input type="checkbox" data-check-id="' + esc(item.id) + '"' + (item.done ? " checked" : "") + '><span>' + esc(item.text) + '</span></label>' +
-          '<button class="tool-delete" type="button" data-check-delete="' + esc(item.id) + '" title="删除事项" aria-label="删除清单事项">×</button>';
-        checklistList.appendChild(li);
-      });
-      checklistList.querySelectorAll("input[data-check-id]").forEach((box) => box.addEventListener("change", () => {
-        const items = getChecklist();
-        const item = items.find((entry) => entry.id === box.dataset.checkId);
-        if (item) item.done = box.checked;
-        setChecklist(items);
-        renderChecklist();
-      }));
-      checklistList.querySelectorAll("button[data-check-delete]").forEach((button) => button.addEventListener("click", () => {
-        setChecklist(getChecklist().filter((item) => item.id !== button.dataset.checkDelete));
-        renderChecklist();
-      }));
-    }
-    if (checklistForm) checklistForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const text = checklistInput ? checklistInput.value.trim() : "";
-      if (!text) { if (checklistInput) checklistInput.focus(); return; }
-      const items = getChecklist();
-      items.push({ id: uniqueId("check"), text: text, done: false });
-      setChecklist(items);
-      checklistInput.value = "";
-      checklistInput.focus();
-      renderChecklist();
-    });
-    renderChecklist();
-
-    const budgetForm = document.getElementById("budgetForm");
-    const budgetName = document.getElementById("budgetName");
-    const budgetCategory = document.getElementById("budgetCategory");
-    const budgetAmount = document.getElementById("budgetAmount");
-    const budgetList = document.getElementById("budgetList");
-    const budgetEmpty = document.getElementById("budgetEmpty");
-    const budgetTotal = document.getElementById("budgetTotal");
-    function getBudget() {
-      const items = LS.get("tay_budget", []);
-      return Array.isArray(items) ? items : [];
-    }
-    function setBudget(items) { LS.set("tay_budget", items); }
-    function formatMoney(value) {
-      const amount = Number(value) || 0;
-      return "¥" + amount.toFixed(2);
-    }
-    function renderBudget() {
-      if (!budgetList) return;
-      const items = getBudget();
-      const total = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-      budgetList.innerHTML = "";
-      if (budgetTotal) budgetTotal.textContent = formatMoney(total);
-      if (budgetEmpty) budgetEmpty.hidden = items.length > 0;
-      items.forEach((item) => {
-        const li = document.createElement("li");
-        li.className = "budget-item";
-        li.innerHTML =
-          '<div class="budget-item-main"><strong>' + esc(item.name) + '</strong><small>' + esc(item.category) + '</small></div>' +
-          '<span class="budget-value">' + formatMoney(item.amount) + '</span>' +
-          '<button class="tool-delete" type="button" data-budget-delete="' + esc(item.id) + '" title="删除预算项目" aria-label="删除预算项目">×</button>';
-        budgetList.appendChild(li);
-      });
-      budgetList.querySelectorAll("button[data-budget-delete]").forEach((button) => button.addEventListener("click", () => {
-        setBudget(getBudget().filter((item) => item.id !== button.dataset.budgetDelete));
-        renderBudget();
-      }));
-    }
-    if (budgetForm) budgetForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const name = budgetName ? budgetName.value.trim() : "";
-      const amount = budgetAmount ? Number(budgetAmount.value) : 0;
-      if (!name) { if (budgetName) budgetName.focus(); return; }
-      if (!Number.isFinite(amount) || amount <= 0) { if (budgetAmount) budgetAmount.focus(); return; }
-      const items = getBudget();
-      items.push({ id: uniqueId("budget"), name: name, category: budgetCategory ? budgetCategory.value : "其他", amount: amount });
-      setBudget(items);
-      budgetName.value = "";
-      budgetAmount.value = "";
-      budgetName.focus();
-      renderBudget();
-    });
-    renderBudget();
-
-    const travelNotes = document.getElementById("travelNotes");
-    const notesSaveStatus = document.getElementById("notesSaveStatus");
-    let notesTimer = null;
-    if (travelNotes) {
-      travelNotes.value = LS.get("tay_notes", "");
-      travelNotes.addEventListener("input", () => {
-        LS.set("tay_notes", travelNotes.value);
-        if (notesSaveStatus) {
-          notesSaveStatus.textContent = "已保存";
-          notesSaveStatus.classList.add("saved");
-          clearTimeout(notesTimer);
-          notesTimer = setTimeout(() => {
-            notesSaveStatus.textContent = "自动保存在本机";
-            notesSaveStatus.classList.remove("saved");
-          }, 1400);
-        }
-      });
-    }
-
-    function markdownCell(value) {
-      return String(value || "").replace(/\|/g, "\\|").replace(/[\r\n]+/g, " ");
-    }
-    function downloadText(filename, value) {
-      const blob = new Blob(["\ufeff" + value], { type: "text/markdown;charset=utf-8" });
-      const href = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.href = href;
-      anchor.download = filename;
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
-      setTimeout(() => URL.revokeObjectURL(href), 0);
-    }
-    function downloadJson(filename, value) {
-      const blob = new Blob([JSON.stringify(value, null, 2)], { type: "application/json;charset=utf-8" });
-      const href = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.href = href;
-      anchor.download = filename;
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
-      setTimeout(() => URL.revokeObjectURL(href), 0);
-    }
-    const dataExport = document.getElementById("dataExport");
-    const dataImport = document.getElementById("dataImport");
-    const dataTransferStatus = document.getElementById("dataTransferStatus");
-    function showTransferStatus(message, isError) {
-      if (!dataTransferStatus) return;
-      dataTransferStatus.hidden = false;
-      dataTransferStatus.textContent = message;
-      dataTransferStatus.classList.toggle("error", Boolean(isError));
-    }
-    if (dataExport) dataExport.addEventListener("click", () => {
-      downloadJson("游记地图-本机数据备份.json", LS.exportData());
-      showTransferStatus("已导出本机数据备份", false);
-    });
-    if (dataImport) dataImport.addEventListener("change", () => {
-      const file = dataImport.files && dataImport.files[0];
-      if (!file) return;
-      file.text().then((text) => {
-        let payload;
-        try { payload = JSON.parse(text); } catch (_) { showTransferStatus("导入失败：JSON 文件无法解析", true); return; }
-        if (!LS.importData(payload)) { showTransferStatus("导入失败：备份格式或字段不受支持", true); return; }
-        showTransferStatus("已恢复本机数据，页面即将刷新", false);
-        setTimeout(() => location.reload(), 450);
-      }).catch(() => showTransferStatus("导入失败：无法读取文件", true));
-      dataImport.value = "";
-    });
-    const toolsExport = document.getElementById("toolsExport");
-    if (toolsExport) toolsExport.addEventListener("click", () => {
-      const checklist = getChecklist();
-      const budget = getBudget();
-      const notes = travelNotes ? travelNotes.value.trim() : LS.get("tay_notes", "").trim();
-      const lines = ["# 旅行工作台", "", "> 导出时间：" + new Date().toLocaleString("zh-CN", { hour12: false }), "", "## 出行清单", ""];
-      if (checklist.length) checklist.forEach((item) => lines.push("- [" + (item.done ? "x" : " ") + "] " + item.text));
-      else lines.push("暂无清单事项。");
-      lines.push("", "## 预算记录", "");
-      if (budget.length) {
-        lines.push("| 分类 | 项目 | 金额 |", "| --- | --- | ---: |");
-        budget.forEach((item) => lines.push("| " + markdownCell(item.category) + " | " + markdownCell(item.name) + " | " + formatMoney(item.amount) + " |"));
-        lines.push("", "合计：" + formatMoney(budget.reduce((sum, item) => sum + (Number(item.amount) || 0), 0)));
-      } else lines.push("暂无预算项目。");
-      lines.push("", "## 旅行笔记", "", notes || "暂无旅行笔记。", "");
-      downloadText("旅行工作台.md", lines.join("\n"));
-    });
-  })();
-
-  // 长章节折叠 + 顶层条目计数（渐进增强：无 JS 时正文完整展示）
-  document.querySelectorAll(".guide-section").forEach((sec) => {
-    const head = sec.querySelector("h2, h3");
-    if (!head) return;
-    const topItems = sec.querySelectorAll(".md-list.depth-0 > li").length;
-    if (topItems >= 4 && !head.querySelector(".section-count")) {
-      const badge = document.createElement("span");
-      badge.className = "section-count";
-      badge.textContent = topItems + " 条";
-      head.appendChild(badge);
-    }
-    const body = document.createElement("div");
-    body.className = "section-body";
-    let n = head.nextSibling;
-    while (n) { const next = n.nextSibling; body.appendChild(n); n = next; }
-    sec.appendChild(body);
-    requestAnimationFrame(() => {
-      if (body.scrollHeight > 660) {
-        sec.classList.add("clampable");
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "section-toggle";
-        btn.textContent = "展开全部 ▾";
-        btn.addEventListener("click", () => {
-          const open = sec.classList.toggle("expanded");
-          btn.textContent = open ? "收起 ▴" : "展开全部 ▾";
-          if (!open) sec.scrollIntoView({ behavior: "smooth", block: "start" });
-        });
-        sec.appendChild(btn);
-      }
-    });
-  });
-
-  // 图片灯箱：保留触发元素焦点，支持键盘打开、关闭与焦点返回。
-  const zoomImages = Array.from(document.querySelectorAll(".item-thumb, .media-card img"));
-  if (zoomImages.length) {
-    const lb = document.createElement("div");
-    lb.className = "lightbox";
-    lb.setAttribute("role", "dialog");
-    lb.setAttribute("aria-modal", "true");
-    lb.setAttribute("aria-label", "旅行图片预览");
-    const lbImg = document.createElement("img");
-    lbImg.alt = "";
-    const closeButton = document.createElement("button");
-    closeButton.className = "lightbox-close";
-    closeButton.type = "button";
-    closeButton.setAttribute("aria-label", "关闭图片预览");
-    closeButton.textContent = "✕";
-    lb.append(lbImg, closeButton);
-    document.body.appendChild(lb);
-    let lightboxTrigger = null;
-
-    function closeLightbox() {
-      if (!lb.classList.contains("open")) return;
-      lb.classList.remove("open");
-      document.documentElement.classList.remove("lightbox-active");
-      lbImg.removeAttribute("src");
-      if (lightboxTrigger) lightboxTrigger.focus();
-    }
-
-    function openLightbox(img) {
-      lightboxTrigger = img;
-      lbImg.src = img.currentSrc || img.src;
-      lbImg.alt = img.alt || "旅行图片大图";
-      lb.classList.add("open");
-      document.documentElement.classList.add("lightbox-active");
-      closeButton.focus();
-    }
-
-    closeButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-      closeLightbox();
-    });
-    lb.addEventListener("click", (event) => {
-      if (event.target === lb) closeLightbox();
-    });
-    document.addEventListener("keydown", (event) => {
-      if (!lb.classList.contains("open")) return;
-      if (event.key === "Escape") closeLightbox();
-      if (event.key === "Tab") {
-        event.preventDefault();
-        closeButton.focus();
-      }
-    });
-    zoomImages.forEach((img) => {
-      img.style.cursor = "zoom-in";
-      img.setAttribute("role", "button");
-      img.tabIndex = 0;
-      img.setAttribute("aria-label", "查看大图：" + (img.alt || "旅行图片"));
-      img.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        openLightbox(img);
-      });
-      img.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        openLightbox(img);
-      });
-    });
-  }
-
-  // PWA Service Worker（仅在 http/https 下注册；file:// 直接打开会自动跳过）
-  if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
-    const root = document.body.dataset.siteRoot || ".";
-    window.addEventListener("load", () => navigator.serviceWorker.register(root + "/sw.js").catch(() => {}));
-  }
-})();
-"""
 
 
 def build_pwa_assets() -> None:
@@ -9715,9 +4933,12 @@ def build_pwa_assets() -> None:
     (OUT / "manifest.webmanifest").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     build_digest = ASSET_BUILD or hashlib.sha256((CSS + "\n" + JS).encode("utf-8")).hexdigest()[:10]
     # Keep first-install work small. Destination catalog pages are cached after a
-    # successful visit, so downloading the entire catalog is unnecessary here.
+    # successful visit (and the planner caches the cities in a saved itinerary),
+    # so downloading the entire catalog is unnecessary here. The itinerary and
+    # road-trip tools are what travellers open on the road, often offline, so
+    # they are precached even if never visited.
     app_shell = [
-        "./index.html", "./manifest.webmanifest",
+        "./index.html", "./plan.html", "./roadtrip.html", "./manifest.webmanifest",
         f"./assets/travel.css?v={build_digest}",
         f"./assets/travel.js?v={build_digest}",
         "./assets/icon-180.png", "./assets/icon-192.png", "./assets/icon-512.png",
@@ -9726,6 +4947,9 @@ def build_pwa_assets() -> None:
     for bundle_file in [entry_file, *imported_files, *css_files]:
         if bundle_file:
             app_shell.append(f"./assets/{bundle_file}?v={build_digest}")
+    # Lazy chunks are requested by dynamic import without the version query.
+    app_shell.extend(f"./assets/{chunk.name}" for chunk in sorted(ASSETS.glob("travel-chunk-*.js")))
+    app_shell.extend(f"./assets/{name}?v={build_digest}" for name in ("roadtrip.css", "roadtrip-data.js", "roadtrip-core.js", "roadtrip-app.js"))
     app_shell_json = json.dumps(app_shell, ensure_ascii=False, separators=(",", ","))
     sw = (
         f"const CACHE='tay-{build_digest}';\n"
@@ -9761,6 +4985,47 @@ def build_pwa_assets() -> None:
     (OUT / "sw.js").write_text(sw, encoding="utf-8")
 
 
+def build_cover_variants() -> None:
+    """为授权封面生成 640px 宽的小图，供城市卡片和手机端 srcset 使用。
+
+    只在小图缺失或封面内容变化时重新编码，避免每次构建都改写已提交的文件。
+    """
+    COVER_SMALL.mkdir(parents=True, exist_ok=True)
+    index_path = COVER_SMALL / "index.json"
+    try:
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        index = {}
+    wanted: dict[str, str] = {}
+    for cover in sorted(IMAGES.glob("*.jpg")):
+        digest = hashlib.sha256(cover.read_bytes()).hexdigest()[:16]
+        wanted[cover.stem] = digest
+        target = COVER_SMALL / cover.name
+        if target.is_file() and index.get(cover.stem) == digest:
+            continue
+        with Image.open(cover) as image:
+            image = image.convert("RGB")
+            width, height = image.size
+            if width > 640:
+                image = image.resize((640, round(height * 640 / width)), Image.Resampling.LANCZOS)
+            image.save(target, "JPEG", quality=78, optimize=True, progressive=True)
+    for stale in COVER_SMALL.glob("*.jpg"):
+        if stale.stem not in wanted:
+            stale.unlink()
+    index_path.write_text(json.dumps(wanted, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def cover_srcset(key: str, from_dir: Path) -> str:
+    """封面图的 srcset 属性（小图存在时）。"""
+    small = COVER_SMALL / f"{key}.jpg"
+    large = IMAGES / f"{key}.jpg"
+    if not small.is_file() or not large.is_file():
+        return ""
+    return (
+        f' srcset="{html.escape(rel_to(small, from_dir))} 640w, {html.escape(rel_to(large, from_dir))} 1280w"'
+    )
+
+
 def prepare_image_output() -> None:
     """Clean generated image output without deleting versioned photo derivatives."""
     load_photo_cache()
@@ -9780,7 +5045,7 @@ def prepare_image_output() -> None:
             preserved.add(expected.resolve())
 
     for child in list(IMAGES.iterdir()):
-        if child.resolve() in preserved:
+        if child.resolve() in preserved or child.resolve() == COVER_SMALL.resolve():
             continue
         if child.is_dir():
             shutil.rmtree(child)
@@ -9792,12 +5057,17 @@ def build() -> None:
     global ASSET_BUILD
     ASSETS.mkdir(parents=True, exist_ok=True)
     prepare_image_output()
+    build_cover_variants()
     if ITEM_IMAGES.exists():
         shutil.rmtree(ITEM_IMAGES)
     ITEM_IMAGES.mkdir(parents=True, exist_ok=True)
     CITIES_OUT.mkdir(parents=True, exist_ok=True)
     search_index = site_search_index_js()
     build_hash = hashlib.sha256((CSS + "\n" + JS + "\n" + search_index).encode("utf-8"))
+    # 路书脚本和数据也用同一个 ?v=，改动它们必须换版本号，否则回访用户会拿到旧缓存。
+    for name in ("roadtrip-core.js", "roadtrip-app.js", "roadtrip.css"):
+        build_hash.update((ROOT / "tools" / name).read_bytes())
+    build_hash.update(roadtrip_data_js().encode("utf-8"))
     entry_file, imported_files, css_files = vite_bundle_files()
     for bundle_file in [entry_file, *imported_files, *css_files]:
         if bundle_file:
@@ -9819,15 +5089,16 @@ def build() -> None:
         markdown = page.source.read_text(encoding="utf-8")
         page.output.parent.mkdir(parents=True, exist_ok=True)
         page.output.write_text(page_html(page, markdown), encoding="utf-8")
-    record = PAGES[0]
-    record.output.write_text(page_html(record, record.source.read_text(encoding="utf-8")), encoding="utf-8")
+    OVERVIEW_PAGE.output.write_text(page_html(OVERVIEW_PAGE, OVERVIEW_PAGE.source.read_text(encoding="utf-8")), encoding="utf-8")
     build_user_page()
     build_roadtrip_page()
+    build_plan_page()
     build_catalog_pages()
     build_seo_files()
     build_content_audit()
+    build_content_matrix()
+    build_image_inventory()
     build_source_playbook()
-    build_project_readme()
     sync_source_folders()
 
 

@@ -148,11 +148,20 @@
     return [`沿途按“${theme || '综合'}”偏好选择一处短停`, '下午尽量在天黑前抵达住宿地'];
   }
 
+  // 没有地图服务时，里程只能来自用户填写或粗估；粗估不是道路里程，也不是直线距离，界面必须明说。
+  const SOURCE_NOTES = {
+    amap: '里程、预计时间和道路收费来自高德地图路线结果；景点、票价与提示来自本站攻略及其标注来源。',
+    user: '单程里程按你填写的公里数计算；驾驶时间按平均 75 公里/小时推算，未填道路收费时按每公里 0.28 元粗估。出发前请用导航应用复核。',
+    heuristic: '里程为粗估：没有地图服务，也没有填写里程，系统按“同城 80 公里、同省 280 公里、跨省按天数×220 公里（360–1800 公里）”推算。这不是道路里程，也不是直线距离，只能看预算量级；请在导航应用查到单程公里数后填入“预计单程公里数”重新生成。',
+  };
+
   function buildPlan(input, routeData, cities) {
     const errors = validateInput(input);
     if (errors.length) return { errors };
     const destinationData = findCity(input.destination, cities);
-    const oneWayKm = routeData && number(routeData.distanceKm, 0) > 0
+    const fromMap = Boolean(routeData && number(routeData.distanceKm, 0) > 0);
+    const distanceBasis = fromMap ? 'amap' : number(input.estimatedOneWayKm, 0) > 0 ? 'user' : 'heuristic';
+    const oneWayKm = fromMap
       ? Math.round(number(routeData.distanceKm, 0))
       : inferOfflineOneWayKm(input, cities);
     const totalKm = totalDistanceKm(oneWayKm, input.tripType || 'oneway');
@@ -204,9 +213,8 @@
       risks: buildRiskFlags(input, days),
       destination: destinationData,
       mapMode: routeData ? 'amap' : 'offline',
-      sourceNote: routeData
-        ? '里程、预计时间和道路收费来自高德地图路线结果；景点、票价与提示来自本站攻略及其标注来源。'
-        : '地图密钥尚未配置，当前里程、时间和道路收费为离线估算；出发前请使用导航应用复核。',
+      distanceBasis,
+      sourceNote: SOURCE_NOTES[distanceBasis],
     };
     return plan;
   }
@@ -217,7 +225,7 @@
       '',
       `生成时间：${plan.generatedAt}`,
       '',
-      `总里程：约 ${plan.summary.totalKm} 公里`,
+      `总里程：约 ${plan.summary.totalKm} 公里${plan.distanceBasis === 'heuristic' ? '（粗估，不是道路里程）' : ''}`,
       `预计驾驶：约 ${plan.summary.driveHours} 小时`,
       `出行天数：${plan.summary.days} 天`,
       `参考预算：¥${plan.budget.low}–¥${plan.budget.high}`,

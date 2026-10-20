@@ -6,7 +6,7 @@
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CITY_DIR = ROOT / "城市"
+CITY_DIR = ROOT / "content" / "城市"
 
 # 每座城市：省、市、主色、定位、第一梯队、全部景点(名:简介)、美食、自然远郊、路线
 CITIES = [

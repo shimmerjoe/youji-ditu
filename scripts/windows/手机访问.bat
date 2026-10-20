@@ -13,5 +13,5 @@ echo ------------------------------------------------------------
 echo  本机回环测试: http://127.0.0.1:8000/index.html
 echo  关闭本窗口即停止服务。
 echo ============================================================
-python -X utf8 -m http.server 8000 --bind 0.0.0.0
+python -X utf8 -m http.server 8000 --bind 0.0.0.0 --directory site
 pause

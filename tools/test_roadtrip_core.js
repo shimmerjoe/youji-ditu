@@ -95,3 +95,17 @@ test('round trips finish back at the origin', () => {
   assert.equal(plan.summary.totalKm, 1200);
   assert.match(plan.days.at(-1).title, /返回郑州/);
 });
+
+test('labels offline mileage by where it came from', () => {
+  const base = { origin: '郑州', destination: '成都', days: 5, travelers: 2, tripType: 'oneway', vehicle: 'gas' };
+  const rough = core.buildPlan(base, null, []);
+  assert.equal(rough.distanceBasis, 'heuristic');
+  assert.match(rough.sourceNote, /不是道路里程，也不是直线距离/);
+  assert.match(core.toMarkdown(rough), /粗估，不是道路里程/);
+  const typed = core.buildPlan(Object.assign({}, base, { estimatedOneWayKm: 1150 }), null, []);
+  assert.equal(typed.distanceBasis, 'user');
+  assert.equal(typed.summary.oneWayKm, 1150);
+  assert.doesNotMatch(core.toMarkdown(typed), /不是道路里程/);
+  const mapped = core.buildPlan(base, { distanceKm: 1162, durationMinutes: 780, tolls: 560 }, []);
+  assert.equal(mapped.distanceBasis, 'amap');
+});

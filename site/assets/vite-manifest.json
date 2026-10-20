@@ -1,0 +1,48 @@
+{
+  "_travel-chunk-BnVJroi2.js": {
+    "file": "travel-chunk-BnVJroi2.js",
+    "name": "plan-dom"
+  },
+  "frontend/src/app.ts": {
+    "file": "travel-app.js",
+    "name": "app",
+    "src": "frontend/src/app.ts",
+    "isEntry": true,
+    "dynamicImports": [
+      "frontend/src/plan-picker.ts",
+      "frontend/src/home-continue.ts",
+      "frontend/src/planner-page.ts"
+    ],
+    "css": [
+      "travel-app.css"
+    ]
+  },
+  "frontend/src/home-continue.ts": {
+    "file": "travel-chunk-C83R6lCE.js",
+    "name": "home-continue",
+    "src": "frontend/src/home-continue.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "frontend/src/app.ts",
+      "_travel-chunk-BnVJroi2.js"
+    ]
+  },
+  "frontend/src/plan-picker.ts": {
+    "file": "travel-chunk-CG8-HqzY.js",
+    "name": "plan-picker",
+    "src": "frontend/src/plan-picker.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_travel-chunk-BnVJroi2.js"
+    ]
+  },
+  "frontend/src/planner-page.ts": {
+    "file": "travel-chunk-V_UfxQmb.js",
+    "name": "planner-page",
+    "src": "frontend/src/planner-page.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_travel-chunk-BnVJroi2.js"
+    ]
+  }
+}

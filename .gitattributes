@@ -1,0 +1,4 @@
+# GitHub 语言统计只计算手写源码：site/ 是生成的网站，docs/ 与 backup/ 是文档和记录。
+site/** linguist-generated=true
+docs/** linguist-documentation=true
+backup/** linguist-documentation=true

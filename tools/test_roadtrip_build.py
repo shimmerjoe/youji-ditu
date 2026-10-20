@@ -10,9 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 class RoadtripBuildContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.page_path = ROOT / "roadtrip.html"
+        cls.page_path = ROOT / "site" / "roadtrip.html"
         cls.page = cls.page_path.read_text(encoding="utf-8") if cls.page_path.exists() else ""
-        cls.data_path = ROOT / "assets" / "roadtrip-data.js"
+        cls.data_path = ROOT / "site" / "assets" / "roadtrip-data.js"
         cls.data_js = cls.data_path.read_text(encoding="utf-8") if cls.data_path.exists() else ""
 
     def test_roadtrip_page_contains_complete_planner_surface(self):
@@ -62,7 +62,7 @@ class RoadtripBuildContractTests(unittest.TestCase):
             self.assertTrue(required.issubset(city), city)
 
     def test_navigation_and_homepage_link_to_the_planner(self):
-        index = (ROOT / "index.html").read_text(encoding="utf-8")
+        index = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
         self.assertIn('href="roadtrip.html"', index)
         self.assertIn("生成自驾路书", index)
 
@@ -115,8 +115,16 @@ class RoadtripBuildContractTests(unittest.TestCase):
         self.assertIn('class="rt-map-frame is-idle"', self.page)
         self.assertRegex(self.page, r'class="rt-result-actions"[^>]*hidden')
         source = (ROOT / "tools" / "roadtrip-app.js").read_text(encoding="utf-8")
-        self.assertIn("mapFrame.classList.remove('is-idle')", source)
+        # 只有拿到真实路网时地图区才展开；离线粗估没有可画的路线。
+        self.assertIn("mapFrame.classList.toggle('is-idle', plan.mapMode !== 'amap')", source)
         self.assertIn("resultActions.hidden = false", source)
+
+
+    def test_offline_mileage_is_labelled_as_rough_estimate(self):
+        source = (ROOT / "tools" / "roadtrip-app.js").read_text(encoding="utf-8")
+        self.assertIn("里程是粗估，不是道路里程", source)
+        self.assertIn("data-rt-fill-km", source)
+        self.assertIn("不是道路里程", self.page)
 
 
 if __name__ == "__main__":

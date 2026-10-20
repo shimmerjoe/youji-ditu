@@ -17,7 +17,7 @@ class MaintenanceDocumentationTests(unittest.TestCase):
                 self.assertIn('%~dp0..\\..', script.read_text(encoding="utf-8"))
 
     def test_iteration_log_records_priority_backlog_and_evidence(self):
-        log = ROOT / "docs" / "iteration-log.md"
+        log = ROOT / "docs" / "history" / "iteration-log.md"
         self.assertTrue(log.exists(), "iteration log must be retained with the generated site")
         content = log.read_text(encoding="utf-8")
         for heading in ("## 待办清单", "## 第 9 轮", "问题", "验证结果", "遗留风险"):
@@ -37,7 +37,7 @@ class MaintenanceDocumentationTests(unittest.TestCase):
 
     def test_readme_documents_the_reviewed_photo_workflow(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("assets\\photo-editorial-decisions.json", readme)
+        self.assertIn("site/assets/photo-editorial-decisions.json", readme)
         self.assertIn("tools\\import_commons_city_photo.py", readme)
         self.assertIn("TRAVEL_FETCH_CITY_KEYS", readme)
         self.assertIn("授权合规", readme)

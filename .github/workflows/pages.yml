@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install Python build dependencies
-        run: python -m pip install -r requirements-build.txt
+        run: python -m pip install -r tools/requirements-build.txt
       - run: npm ci
       - run: npm run check
       - run: npm run stage

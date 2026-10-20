@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "城市" / "山东_青岛.md"
+SOURCE = ROOT / "content" / "城市" / "山东_青岛.md"
 
 
 class QingdaoContentTests(unittest.TestCase):

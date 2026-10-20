@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 class PwaCacheTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-        cls.home = (ROOT / "index.html").read_text(encoding="utf-8")
+        cls.sw = (ROOT / "site" / "sw.js").read_text(encoding="utf-8")
+        cls.home = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
 
     def test_cache_name_tracks_the_current_build(self):
         self.assertRegex(self.sw, r"const CACHE='tay-[0-9a-f]{10}'")
@@ -59,12 +59,17 @@ class PwaCacheTests(unittest.TestCase):
             "./destinations.html",
             "./themes.html",
             "./city-guides.html",
-            "./roadtrip.html",
             "./tools.html",
             "./user.html",
         ):
             with self.subTest(resource=resource):
                 self.assertNotIn(resource, self.sw)
+
+    def test_on_trip_tools_work_offline_without_a_prior_visit(self):
+        # 行程计划和自驾路书是旅途中（常常没信号）才打开的页面，必须随安装预缓存。
+        for resource in ("./plan.html", "./roadtrip.html", "./assets/roadtrip-app.js", "./assets/travel-chunk-"):
+            with self.subTest(resource=resource):
+                self.assertIn(resource, self.sw)
 
 
 if __name__ == "__main__":

@@ -18,7 +18,7 @@ class ValidatorParserTests(unittest.TestCase):
         self.assertEqual(("assets/travel.js", "guide"), split_local_link("assets/travel.js?v=abc123#guide"))
 
     def test_generated_pages_do_not_include_trailing_whitespace(self):
-        root = Path(__file__).resolve().parents[1]
+        root = Path(__file__).resolve().parents[1] / "site"
         for page in (root / "index.html", root / "cities" / "qingdao.html"):
             with self.subTest(page=page.name):
                 self.assertTrue(all(line == line.rstrip() for line in page.read_text(encoding="utf-8").splitlines()))

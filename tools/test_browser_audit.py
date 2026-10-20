@@ -24,7 +24,7 @@ class BrowserAuditTests(unittest.TestCase):
 
     def test_generated_pages_size_every_real_image(self):
         for page_name in ("index.html", "cities/qingdao.html"):
-            page = (ROOT / page_name).read_text(encoding="utf-8")
+            page = (ROOT / "site" / page_name).read_text(encoding="utf-8")
             images = [tag for tag in re.findall(r"<img\b[^>]*>", page) if re.search(r'\bsrc="[^"]+"', tag)]
             with self.subTest(page=page_name):
                 self.assertTrue(images)

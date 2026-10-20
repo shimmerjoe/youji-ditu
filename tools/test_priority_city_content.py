@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CITY_DIR = ROOT / "城市"
+CITY_DIR = ROOT / "content" / "城市"
 
 
 class PriorityCityContentTests(unittest.TestCase):

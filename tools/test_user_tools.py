@@ -4,10 +4,10 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-USER_HTML = ROOT / "user.html"
-TRAVEL_JS = ROOT / "assets" / "travel.js"
-SEARCH_INDEX = ROOT / "assets" / "search-index.js"
-QINGDAO_HTML = ROOT / "cities" / "qingdao.html"
+USER_HTML = ROOT / "site" / "user.html"
+TRAVEL_JS = ROOT / "site" / "assets" / "travel.js"
+SEARCH_INDEX = ROOT / "site" / "assets" / "search-index.js"
+QINGDAO_HTML = ROOT / "site" / "cities" / "qingdao.html"
 
 
 class UserToolsTests(unittest.TestCase):

@@ -17,9 +17,13 @@ from urllib.request import Request, urlopen
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 
-ROOT = Path(__file__).resolve().parents[1]
-CITY_DIR = ROOT / "城市"
-OUT = ROOT
+try:
+    from tools.project_paths import CITY_SOURCES, RECORD_SOURCE, ROOT, SITE
+except ModuleNotFoundError:  # Direct execution from the tools directory.
+    from project_paths import CITY_SOURCES, RECORD_SOURCE, ROOT, SITE
+
+CITY_DIR = CITY_SOURCES
+OUT = SITE
 ASSETS = OUT / "assets"
 IMAGES = ASSETS / "images"
 ITEM_IMAGES = ASSETS / "item-images"
@@ -133,7 +137,7 @@ class AnchorIndex:
 
 
 PAGES = [
-    Page(ROOT / "记录.md", OUT / "index.html", "record", "综合旅游攻略记录", "跨城市总览、场景索引、季节索引和路线模板", "#2f6f73", "china travel landscape"),
+    Page(RECORD_SOURCE, OUT / "index.html", "record", "综合旅游攻略记录", "跨城市总览、场景索引、季节索引和路线模板", "#2f6f73", "china travel landscape"),
     Page(CITY_DIR / "贵州_贵阳.md", CITIES_OUT / "guiyang.html", "guiyang", "贵州贵阳旅游攻略", "城市山林、老城烟火、酸汤和避暑", "#25736a", "guiyang guizhou china"),
     Page(CITY_DIR / "贵州_兴义.md", CITIES_OUT / "xingyi.html", "xingyi", "贵州兴义旅游攻略", "万峰林、马岭河、布依村寨和羊肉粉", "#5c7a31", "xingyi guizhou karst"),
     Page(CITY_DIR / "贵州_安顺.md", CITIES_OUT / "anshun.html", "anshun", "贵州安顺旅游攻略", "黄果树、龙宫、屯堡和裹卷凉粉", "#7b6a2f", "anshun huangguoshu waterfall guizhou"),
@@ -3258,7 +3262,7 @@ def strip_sections(markdown: str, headings: tuple[str, ...]) -> str:
 def extract_changelog_html() -> str:
     """从 记录.md 的作者向章节提取更新说明，供用户中心展示。"""
     try:
-        md = (ROOT / "记录.md").read_text(encoding="utf-8")
+        md = (RECORD_SOURCE).read_text(encoding="utf-8")
     except OSError:
         return "<p>暂无更新说明。</p>"
     blocks: list[tuple[str, list[str]]] = []
@@ -3550,7 +3554,7 @@ def user_center_body() -> str:
 
 
 def build_user_page() -> None:
-    page = Page(ROOT / "记录.md", OUT / "user.html", "user", "用户中心 · 游记地图",
+    page = Page(RECORD_SOURCE, OUT / "user.html", "user", "用户中心 · 游记地图",
                 "个人信息、收藏、设置与说明", "#0e9e8e", "")
     page.output.write_text(shell_page_html(page, "用户中心 · 游记地图", user_center_body(), "user"), encoding="utf-8")
 
@@ -3573,28 +3577,28 @@ def build_catalog_pages() -> None:
     province_count = len({city_profile(page)["province"] for page in PAGES if page.key != "record"})
     pages = [
         (
-            Page(ROOT / "记录.md", OUT / "destinations.html", "destinations", "目的地 · 游记地图",
+            Page(RECORD_SOURCE, OUT / "destinations.html", "destinations", "目的地 · 游记地图",
                  "按地区、季节、天数、主题和交通方式挑选下一站。", "#19756e", ""),
             "Destinations", "从条件开始，找到下一座城市", "按地区、季节、天数、主题和交通方式组合筛选；结果直接对应可收藏、可加入行程的完整城市攻略。",
             [(str(city_count), "座城市攻略"), (str(province_count), "个地区覆盖")],
             lambda page: home_finder_html(page) + city_explorer_html(page),
         ),
         (
-            Page(ROOT / "记录.md", OUT / "themes.html", "themes", "主题玩法 · 游记地图",
+            Page(RECORD_SOURCE, OUT / "themes.html", "themes", "主题玩法 · 游记地图",
                  "从旅行偏好出发，找到值得专程前往的城市。", "#b96733", ""),
             "Travel Themes", "用一份兴趣清单，决定一段旅程", "亲子、博物馆、山水、历史、美食、避暑、冬季与周末短途均可直接筛选；每个结果都保留到城市攻略的入口。",
             [("8", "种旅行主题"), (str(city_count), "座可筛选城市")],
             lambda page: home_themes_html() + city_explorer_html(page),
         ),
         (
-            Page(ROOT / "记录.md", OUT / "city-guides.html", "cities", "城市攻略 · 游记地图",
+            Page(RECORD_SOURCE, OUT / "city-guides.html", "cities", "城市攻略 · 游记地图",
                  "用关键词、省份和随机发现快速进入可执行的城市攻略。", "#295f89", ""),
             "City Guides", "全国城市攻略，按你的方式找", "每张卡片都包含季节、重点景点与代表美食，并支持收藏、加入行程和随机发现。",
             [(str(city_count), "座城市攻略"), ("本地保存", "收藏与行程")],
             lambda page: city_explorer_html(page),
         ),
         (
-            Page(ROOT / "记录.md", OUT / "tools.html", "tools", "实用工具 · 游记地图",
+            Page(RECORD_SOURCE, OUT / "tools.html", "tools", "实用工具 · 游记地图",
                  "把行程节奏、季节选择和出行准备变成可执行的小决定。", "#85662b", ""),
             "Travel Toolkit", "出发前，把关键决定做清楚", "这些工具不涉及购买或支付。个人数据仅保存在当前浏览器，也可以在用户中心统一管理。",
             [("离线可用", "本机浏览器保存"), ("0", "站内消费入口")],
@@ -3748,7 +3752,7 @@ def roadtrip_body() -> str:
 
 
 def build_roadtrip_page() -> None:
-    page = Page(ROOT / "记录.md", OUT / "roadtrip.html", "roadtrip", "自驾路书 · 游记地图",
+    page = Page(RECORD_SOURCE, OUT / "roadtrip.html", "roadtrip", "自驾路书 · 游记地图",
                 "自驾路线、逐日安排、预算和风险清单", "#176b5d", "")
     head = f'  <link rel="stylesheet" href="{asset_href(ASSETS / "roadtrip.css", page.output.parent)}">'
     scripts = "\n".join([
@@ -3957,120 +3961,6 @@ def build_source_playbook() -> None:
     guide = ROOT / "docs" / "guides" / "资料来源与更新规则.md"
     guide.parent.mkdir(parents=True, exist_ok=True)
     guide.write_text("\n".join(lines) + "\n", encoding="utf-8")
-
-
-def build_project_readme() -> None:
-    readme = """# 游记地图（Travel A Yuan）
-
-这是一个运行期纯静态、构建期由 Node/Vite/TypeScript 与 Python 共同生成的旅游攻略 PWA。源内容在 `城市\\*.md` 和 `记录.md`；Vite 构建渐进增强层，`tools\\build_travel_html.py` 统一生成页面、索引、PWA 与公共资源，因此无需 Python 后端也能部署到 GitHub Pages。
-
-## 项目入口与目录
-
-- GitHub 仓库：<https://github.com/shimmerjoe/youji-ditu>，仓库根目录就是本项目目录，克隆后直接在此运行命令。
-- GitHub Pages 目标地址：<https://shimmerjoe.github.io/youji-ditu/>。仓库上传与 Pages 上线是两件事，当前能否访问需以 Pages 配置和部署结果为准。
-- 根目录保留网站页面、PWA/SEO 文件、构建配置、README 和核心总览内容源 `记录.md`；`cities/` 是生成的城市页，`城市/` 是 Markdown 源文件。
-- `frontend/`、`tools/`、`assets/`：应用源码、生成与验证工具、网站资源。
-- `scripts/windows/`：Windows 启动、重建、补图和发布脚本；重复的打开入口已合并。
-- `docs/guides/`：便携运行、移动端与 APK、来源更新说明。
-- `docs/reports/`：自动生成的内容与图片体检报告；`docs/history/` 保存需求聊天和历史日志。
-- `docs/screenshots/`：界面预览；`app-capacitor/`：可选 Android 封装模板。
-- `dist/`、`node_modules/`、`artifacts/` 与 Python 缓存是构建或本机产物，不进入源码提交；完整迁移快照另存于仓库 Release。
-
-Windows 可双击 [本地预览脚本](scripts/windows/打开首页.bat)，默认访问 <http://localhost:8765/>。离线缓存、模块脚本和完整搜索应通过 HTTP 检查。
-
-## 常用命令
-
-```powershell
-npm ci
-npm run check
-npm run stage
-npm run preview
-```
-
-`npm run check` 会依次完成 Vite 构建、Python 全站生成、TypeScript 检查、Node/Python 测试和站内链接验证；`npm run stage` 只把公开运行文件复制到 `dist\\`。可另开终端执行真实断网审计：
-
-```powershell
-python -X utf8 tools\\offline_audit.py --self-serve --output D:\\.AI\\codex_tmp\\audits\\travel-ayuan\\offline
-```
-
-## 维护方式
-
-- 修改攻略正文：编辑 `城市\\*.md`。
-- 新增城市：新增城市 Markdown，必要时补 `tools\\city-page-meta.json`。
-- 补充图片：优先放到 `assets\\photos\\城市slug\\`，重新生成后进入页面相册和审计。
-- 图片审核：授权合规与内容适配是两道独立门槛；不合格来源记录在 `assets\\photo-editorial-decisions.json`，不要只删除本地文件。
-- 复核资料：查看城市页“联网核验入口”，再把确认后的链接写进“来源参考”。
-- 查看薄弱项：打开 [内容与图片体检](docs/reports/内容与图片体检.md)。
-
-### 定向补图
-
-自动搜索只刷新指定城市，避免一次抓取覆盖全部缓存：
-
-```powershell
-$env:TRAVEL_FETCH_COMMONS = "1"
-$env:TRAVEL_FETCH_CITY_KEYS = "beijing,tianjin"
-python -X utf8 tools\\build_travel_html.py
-Remove-Item Env:TRAVEL_FETCH_COMMONS, Env:TRAVEL_FETCH_CITY_KEYS
-```
-
-如果已在 Wikimedia Commons 人工选定准确文件，先无参数 `--apply` 预检元数据，再确认写入：
-
-```powershell
-python -X utf8 tools\\import_commons_city_photo.py --city beijing --source "https://commons.wikimedia.org/wiki/File:Example.jpg"
-python -X utf8 tools\\import_commons_city_photo.py --city beijing --source "https://commons.wikimedia.org/wiki/File:Example.jpg" --apply
-```
-
-导入器会校验 Commons 文件页、JPEG 尺寸、横向比例、许可证和作者，但不能替代肉眼语义审核；导入后仍须重建站点并检查桌面/手机裁切与 `docs/reports/内容与图片体检.md`。
-
-## 数据、离线与分享
-
-- 收藏、浏览记录、行程、清单、预算和笔记只保存在当前浏览器；版本化适配器支持 JSON 备份、导入和异常值清理。
-- 自驾路书没有地图密钥也能离线估算；“分享链接”携带路书快照，不上传服务器，链接请只发给可信对象。
-- Service Worker 首次联网缓存 App Shell；未缓存页面断网时会显示明确的离线说明，不伪装成实时地图、天气或票价服务。
-- 约 222 城的搜索索引在用户首次输入搜索词时才按需加载并缓存，不阻塞每次首屏；离线且从未加载索引时会给出失败说明和恢复建议。
-
-## 内容研究与素材边界
-
-- 外部攻略和社交平台只用于发现路线、主题和待核验线索；票价、开放时间、预约和交通优先回到官方来源确认。
-- 私人知识库、视频和下载目录只提供研究方法与候选线索，不直接复制原文、受限图片、视频或第三方组件到公开站点。
-- 图片只有在来源与授权字段可追溯、且通过目的地内容适配审核时才进入公开复制流程；无法确认授权或与城市无关的内容不发布。
-
-## 发布与公开地址
-
-公开站点目标地址是 GitHub Pages：<https://shimmerjoe.github.io/youji-ditu/>。
-
-每次维护完成后，先在本地完成生成、测试、浏览器检查和差异审查；只有本次变更得到明确授权、远端凭据可用且确认不会夹带其他工作时，才执行选择性提交与发布。发布顺序如下：
-
-1. 运行生成与校验：`python -X utf8 tools\\build_travel_html.py`、`python -X utf8 -m unittest discover -s tools -p 'test_*.py'`、`python -X utf8 tools\\validate_travel_site.py`。
-2. 用 `git status` 和 `git diff` 审查范围，只暂存本次文件（不要批量暂存所有文件），再创建清晰提交；没有明确授权时不推送。
-3. 仅在明确授权且认证成功时推送到项目远端；等待 GitHub Pages 更新后打开上述公开地址，核对本次内容、脚本版本和移动端导航均已生效。公开地址未核验前，发布状态只能记为“未验证”。
-
-公开站点与仓库同一提交的生成内容应保持一致。若发布或线上核验失败，保留可恢复的源码并记录失败原因，不要以本地预览替代公开验收。
-
-## 自驾路书与地图配置
-
-`roadtrip.html` 默认可以离线生成分天、预算、风险、保存和 Markdown 导出。若需真实地图、路网里程、预计时间和道路收费：
-
-1. 在高德开放平台创建“Web 端（JS API）”应用并取得 JS Key 与安全密钥，务必把可用域名限制为实际预览/发布域名。
-2. 构建前设置 `TRAVEL_AMAP_JS_KEY` 与 `TRAVEL_AMAP_SECURITY_CODE` 环境变量，再运行 `npm run build`。生成器会把两项浏览器配置安全内联到路书页，不再请求可能缺失的配置文件。
-3. 通过本地 HTTP 服务器预览，不能直接双击 HTML 测试地图。未设置变量时页面不会发起地图 SDK 请求，离线估算、保存、分享与导出仍完整可用。
-
-Web 端 JS Key 与安全密钥会出现在最终静态 HTML 中，这是浏览器地图 SDK 的运行方式；必须依赖域名白名单限制滥用。不要设置、提交或内联高德 Web 服务私钥。
-
-## 生成结果
-
-- `index.html`：首页工作台。
-- `roadtrip.html`：自驾路线、逐日安排、参考预算和风险清单。
-- `cities\\*.html`：城市攻略页。
-- `assets\\travel.css`、`assets\\travel.js`：由生成器输出。
-- `assets\\search-index.js`：按首次搜索需要加载的全站搜索索引。
-- `assets\\roadtrip-*.js`、`assets\\roadtrip.css`：自驾路书算法、城市数据和页面交互；浏览器地图配置由构建时环境变量内联。
-- `user.html`：本地用户中心。
-- `sitemap.xml`、`robots.txt`：由实际页面清单生成的搜索引擎入口。
-
-公开地址改变时，用环境变量 `TRAVEL_PUBLIC_URL` 覆盖默认基址后重新构建；不要把本地路径写入 canonical 或分享元数据。
-"""
-    (ROOT / "README.md").write_text(readme, encoding="utf-8")
 
 
 def page_html(page: Page, markdown: str) -> str:
@@ -9827,7 +9717,6 @@ def build() -> None:
     build_seo_files()
     build_content_audit()
     build_source_playbook()
-    build_project_readme()
     sync_source_folders()
 
 

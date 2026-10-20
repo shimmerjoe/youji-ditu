@@ -111,7 +111,7 @@ def import_city_photo(city_key: str, source_url: str, apply: bool) -> dict:
     if not apply:
         return result
 
-    target = builder.ROOT / entry["path"]
+    target = builder.OUT / entry["path"]
     candidate = target.with_name("cityphoto-import-candidate.jpg")
     candidate.parent.mkdir(parents=True, exist_ok=True)
     candidate.unlink(missing_ok=True)

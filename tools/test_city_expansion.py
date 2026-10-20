@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CITY_DIR = ROOT / "城市"
+CITY_DIR = ROOT / "content" / "城市"
 META_PATH = ROOT / "tools" / "city-page-meta.json"
 
 
@@ -65,8 +65,8 @@ class CityExpansionTests(unittest.TestCase):
         self.assertIn("TOP_LEVEL_REGIONS = DIRECT_MUNICIPALITIES | SPECIAL_REGIONS", generator)
 
     def test_special_regions_have_a_dedicated_discovery_route(self):
-        index = (ROOT / "index.html").read_text(encoding="utf-8")
-        destinations = (ROOT / "destinations.html").read_text(encoding="utf-8")
+        index = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
+        destinations = (ROOT / "site" / "destinations.html").read_text(encoding="utf-8")
         self.assertIn("destinations.html?region=%E6%B8%AF%E6%BE%B3", index)
         self.assertIn('data-province="香港"', destinations)
         self.assertIn('data-province="澳门"', destinations)
@@ -74,20 +74,20 @@ class CityExpansionTests(unittest.TestCase):
         self.assertIn('href="cities/beijing.html"', destinations)
 
     def test_generated_site_exposes_all_new_destinations(self):
-        index = (ROOT / "index.html").read_text(encoding="utf-8")
-        catalog = (ROOT / "city-guides.html").read_text(encoding="utf-8")
+        index = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
+        catalog = (ROOT / "site" / "city-guides.html").read_text(encoding="utf-8")
         self.assertIn('data-count="222">222</span><small>座</small>', index)
         self.assertIn('data-nav-group="直辖市"', index)
         for stem, config in self.cities.items():
             with self.subTest(city=stem):
-                output = ROOT / "cities" / f'{config["slug"]}.html'
+                output = ROOT / "site" / "cities" / f'{config["slug"]}.html'
                 self.assertTrue(output.exists())
                 self.assertIn(f'cities/{config["slug"]}.html', catalog)
 
     def test_new_city_quick_find_exposes_all_four_core_sections(self):
         for config in self.cities.values():
             with self.subTest(city=config["slug"]):
-                output = ROOT / "cities" / f'{config["slug"]}.html'
+                output = ROOT / "site" / "cities" / f'{config["slug"]}.html'
                 html = output.read_text(encoding="utf-8")
                 self.assertIn('href="#attractions"', html)
                 self.assertIn('href="#food"', html)
@@ -97,13 +97,13 @@ class CityExpansionTests(unittest.TestCase):
                 self.assertEqual(4, quick_find.count('class="quickfind-card"'))
 
     def test_new_city_cover_photos_are_local_and_licensed(self):
-        cache = json.loads((ROOT / "assets" / "photo-cache.json").read_text(encoding="utf-8"))
+        cache = json.loads((ROOT / "site" / "assets" / "photo-cache.json").read_text(encoding="utf-8"))
         for config in self.cities.values():
             key = f'cityphoto|{config["slug"]}'
             with self.subTest(city=config["slug"]):
                 entry = cache[key]
                 self.assertEqual("hit", entry["status"])
-                self.assertTrue((ROOT / entry["path"]).exists())
+                self.assertTrue((ROOT / "site" / entry["path"]).exists())
                 self.assertIn("commons.wikimedia.org", entry["source"])
                 self.assertTrue(entry["license"])
 

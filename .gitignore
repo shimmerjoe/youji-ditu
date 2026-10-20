@@ -1,7 +1,7 @@
 # 本机配置与可重建产物（源码、文档和脚本应入库）
 .claude/
 # 本机密钥配置、浏览器报告与原始大图
-assets/roadtrip-config.js
+site/assets/roadtrip-config.js
 /dist/
 artifacts/
 app-capacitor/node_modules/

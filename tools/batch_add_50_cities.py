@@ -7,9 +7,9 @@ from urllib.parse import quote
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CITY_DIR = ROOT / "城市"
+CITY_DIR = ROOT / "content" / "城市"
 META_FILE = ROOT / "tools" / "city-page-meta.json"
-RECORD = ROOT / "记录.md"
+RECORD = ROOT / "content" / "记录.md"
 
 DIRECT = {"北京", "上海", "天津", "重庆"}
 

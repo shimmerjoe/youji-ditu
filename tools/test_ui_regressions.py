@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CSS_PATH = ROOT / "assets" / "travel.css"
+CSS_PATH = ROOT / "site" / "assets" / "travel.css"
 OVERRIDE_MARKER = "/* ===== 2026 实用型重构覆盖层 ===== */"
 
 
@@ -55,12 +55,12 @@ class DesktopNavigationRegressionTests(unittest.TestCase):
 
 class MobileActionRegressionTests(unittest.TestCase):
     def test_mobile_navigation_can_be_closed_with_escape(self):
-        script = (ROOT / "assets" / "travel.js").read_text(encoding="utf-8")
+        script = (ROOT / "site" / "assets" / "travel.js").read_text(encoding="utf-8")
         self.assertIn("function closeMobileNav()", script)
         self.assertIn('event.key === "Escape" && header.classList.contains("nav-open")', script)
 
     def test_back_to_top_is_a_compact_icon_button(self):
-        roadtrip = (ROOT / "roadtrip.html").read_text(encoding="utf-8")
+        roadtrip = (ROOT / "site" / "roadtrip.html").read_text(encoding="utf-8")
         css = CSS_PATH.read_text(encoding="utf-8")
         self.assertIn('aria-label="返回顶部"', roadtrip)
         self.assertRegex(roadtrip, r'<button class="to-top"[^>]*>↑</button>')
@@ -74,7 +74,7 @@ class MobileActionRegressionTests(unittest.TestCase):
 
 class CityMediaRegressionTests(unittest.TestCase):
     def test_single_image_city_hero_has_no_inert_carousel_controls(self):
-        city = (ROOT / "cities" / "qingdao.html").read_text(encoding="utf-8")
+        city = (ROOT / "site" / "cities" / "qingdao.html").read_text(encoding="utf-8")
         self.assertIn('hero-carousel" id="heroCarousel" data-count="1"', city)
         self.assertNotIn('class="hero-arrow', city)
         self.assertNotIn('class="hero-dot', city)

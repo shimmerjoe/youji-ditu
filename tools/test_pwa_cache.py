@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 class PwaCacheTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.sw = (ROOT / "sw.js").read_text(encoding="utf-8")
-        cls.home = (ROOT / "index.html").read_text(encoding="utf-8")
+        cls.sw = (ROOT / "site" / "sw.js").read_text(encoding="utf-8")
+        cls.home = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
 
     def test_cache_name_tracks_the_current_build(self):
         self.assertRegex(self.sw, r"const CACHE='tay-[0-9a-f]{10}'")

@@ -17,7 +17,7 @@ class MaintenanceDocumentationTests(unittest.TestCase):
                 self.assertIn('%~dp0..\\..', script.read_text(encoding="utf-8"))
 
     def test_iteration_log_records_priority_backlog_and_evidence(self):
-        log = ROOT / "docs" / "iteration-log.md"
+        log = ROOT / "docs" / "history" / "iteration-log.md"
         self.assertTrue(log.exists(), "iteration log must be retained with the generated site")
         content = log.read_text(encoding="utf-8")
         for heading in ("## 待办清单", "## 第 9 轮", "问题", "验证结果", "遗留风险"):

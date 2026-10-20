@@ -14,7 +14,7 @@
     "validate": "python -X utf8 tools/validate_travel_site.py",
     "check": "npm run build && npm test && npm run validate",
     "stage": "python -X utf8 tools/stage_pages.py",
-    "preview": "python -m http.server 8765"
+    "preview": "python -m http.server 8765 --directory site"
   },
   "devDependencies": {
     "@types/node": "26.2.0",

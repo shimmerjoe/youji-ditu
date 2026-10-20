@@ -10,9 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 class RoadtripBuildContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.page_path = ROOT / "roadtrip.html"
+        cls.page_path = ROOT / "site" / "roadtrip.html"
         cls.page = cls.page_path.read_text(encoding="utf-8") if cls.page_path.exists() else ""
-        cls.data_path = ROOT / "assets" / "roadtrip-data.js"
+        cls.data_path = ROOT / "site" / "assets" / "roadtrip-data.js"
         cls.data_js = cls.data_path.read_text(encoding="utf-8") if cls.data_path.exists() else ""
 
     def test_roadtrip_page_contains_complete_planner_surface(self):
@@ -62,7 +62,7 @@ class RoadtripBuildContractTests(unittest.TestCase):
             self.assertTrue(required.issubset(city), city)
 
     def test_navigation_and_homepage_link_to_the_planner(self):
-        index = (ROOT / "index.html").read_text(encoding="utf-8")
+        index = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
         self.assertIn('href="roadtrip.html"', index)
         self.assertIn("生成自驾路书", index)
 

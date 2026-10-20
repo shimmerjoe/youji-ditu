@@ -10,8 +10,8 @@ from tools import build_travel_html as builder
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CACHE_PATH = ROOT / "assets" / "photo-cache.json"
-EDITORIAL_PATH = ROOT / "assets" / "photo-editorial-decisions.json"
+CACHE_PATH = ROOT / "site" / "assets" / "photo-cache.json"
+EDITORIAL_PATH = ROOT / "site" / "assets" / "photo-editorial-decisions.json"
 CITY_SLUGS = ("jinhua", "wanning", "sanya", "chuzhou", "nanchang")
 APPROVED_CREDIT_SLUGS = (
     "beijing",
@@ -53,7 +53,7 @@ class PriorityCityImageTests(unittest.TestCase):
     def test_priority_city_covers_are_real_local_photos(self):
         for slug in CITY_SLUGS:
             with self.subTest(city=slug):
-                cover = ROOT / "assets" / "images" / f"{slug}.jpg"
+                cover = ROOT / "site" / "assets" / "images" / f"{slug}.jpg"
                 self.assertTrue(cover.exists())
                 with Image.open(cover) as image:
                     self.assertGreaterEqual(image.width, 1200)
@@ -71,7 +71,7 @@ class PriorityCityImageTests(unittest.TestCase):
                 self.assertNotIn("CADAL", entry["source"])
                 self.assertTrue(entry["license"])
                 self.assertTrue(entry.get("title"))
-                self.assertTrue((ROOT / entry["path"]).exists())
+                self.assertTrue((ROOT / "site" / entry["path"]).exists())
                 sources.add(entry["source"])
         self.assertEqual(len(CITY_SLUGS), len(sources))
 
@@ -86,7 +86,7 @@ class PriorityCityImageTests(unittest.TestCase):
             expected = f"assets/images/{slug}.jpg"
             with self.subTest(city=slug):
                 self.assertEqual(expected, entry["path"])
-                self.assertTrue((ROOT / expected).exists())
+                self.assertTrue((ROOT / "site" / expected).exists())
 
     def test_image_cleanup_preserves_cache_backed_cover_and_removes_stale_output(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -121,8 +121,8 @@ class PriorityCityImageTests(unittest.TestCase):
     def test_jinhua_and_chuzhou_have_three_local_gallery_sources(self):
         for slug in ("jinhua", "chuzhou"):
             with self.subTest(city=slug):
-                photo_dir = ROOT / "assets" / "photos" / slug
-                photos = [ROOT / self.cache[f"cityphoto|{slug}"]["path"]] + [
+                photo_dir = ROOT / "site" / "assets" / "photos" / slug
+                photos = [ROOT / "site" / self.cache[f"cityphoto|{slug}"]["path"]] + [
                     path for path in photo_dir.iterdir()
                     if path.name.startswith("scenery-")
                     and path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}
@@ -197,7 +197,7 @@ class PriorityCityImageTests(unittest.TestCase):
 
     def test_editorially_rejected_photos_render_as_text_cards(self):
         decisions = json.loads(EDITORIAL_PATH.read_text(encoding="utf-8"))["decisions"]
-        catalog = (ROOT / "city-guides.html").read_text(encoding="utf-8")
+        catalog = (ROOT / "site" / "city-guides.html").read_text(encoding="utf-8")
         no_image_keys = set(
             re.findall(r'<article class="city-card noimg"[^>]+data-key="([^"]+)"', catalog)
         )
@@ -243,7 +243,7 @@ class PriorityCityImageTests(unittest.TestCase):
         for slug in APPROVED_CREDIT_SLUGS:
             with self.subTest(city=slug):
                 entry = self.cache[f"cityphoto|{slug}"]
-                output = (ROOT / "cities" / f"{slug}.html").read_text(encoding="utf-8")
+                output = (ROOT / "site" / "cities" / f"{slug}.html").read_text(encoding="utf-8")
                 self.assertIn('class="hero-photo-credit"', output)
                 self.assertIn(entry["artist"], output)
                 self.assertIn(entry["license"], output)
@@ -257,7 +257,7 @@ class PriorityCityImageTests(unittest.TestCase):
                 entry = self.cache[f"cityphoto|{slug}"]
                 self.assertFalse(builder.photo_is_publishable(entry, slug))
                 self.assertEqual("", builder.city_cover_credit_html(page))
-                output = (ROOT / "cities" / f"{slug}.html").read_text(encoding="utf-8")
+                output = (ROOT / "site" / "cities" / f"{slug}.html").read_text(encoding="utf-8")
                 self.assertNotIn('class="hero-photo-credit"', output)
 
 

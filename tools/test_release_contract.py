@@ -29,10 +29,10 @@ class ReleaseContractTests(unittest.TestCase):
 
     def test_pages_workflow_installs_the_pinned_python_build_dependency(self):
         workflow = (ROOT / ".github" / "workflows" / "pages.yml").read_text(encoding="utf-8")
-        requirements = ROOT / "requirements-build.txt"
+        requirements = ROOT / "tools" / "requirements-build.txt"
         self.assertTrue(requirements.is_file())
         self.assertIn("Pillow==12.2.0", requirements.read_text(encoding="utf-8"))
-        self.assertIn("python -m pip install -r requirements-build.txt", workflow)
+        self.assertIn("python -m pip install -r tools/requirements-build.txt", workflow)
 
 
 if __name__ == "__main__":

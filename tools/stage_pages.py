@@ -5,6 +5,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SITE = ROOT / "site"
 DIST = (ROOT / "dist").resolve()
 
 ROOT_FILES = (
@@ -61,13 +62,13 @@ def stage() -> None:
     DIST.mkdir(parents=True)
 
     for name in ROOT_FILES:
-        copy_required(ROOT / name, DIST / name)
+        copy_required(SITE / name, DIST / name)
     for name in ROOT_DIRECTORIES:
-        copy_required(ROOT / name, DIST / name)
+        copy_required(SITE / name, DIST / name)
     for name in ASSET_FILES:
-        copy_required(ROOT / "assets" / name, DIST / "assets" / name)
+        copy_required(SITE / "assets" / name, DIST / "assets" / name)
     for name in ASSET_DIRECTORIES:
-        copy_required(ROOT / "assets" / name, DIST / "assets" / name)
+        copy_required(SITE / "assets" / name, DIST / "assets" / name)
 
     forbidden = tuple(DIST.rglob("roadtrip-config.js"))
     if forbidden:

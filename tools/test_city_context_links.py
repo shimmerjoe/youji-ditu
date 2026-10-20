@@ -4,8 +4,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-QINGDAO_HTML = ROOT / "cities" / "qingdao.html"
-INDEX_HTML = ROOT / "index.html"
+QINGDAO_HTML = ROOT / "site" / "cities" / "qingdao.html"
+INDEX_HTML = ROOT / "site" / "index.html"
 
 
 class CityContextLinkTests(unittest.TestCase):

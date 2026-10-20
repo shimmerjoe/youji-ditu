@@ -7,7 +7,7 @@ const rootDir = fileURLToPath(new URL(".", import.meta.url));
 export default defineConfig({
   base: "./",
   build: {
-    outDir: resolve(rootDir, "assets"),
+    outDir: resolve(rootDir, "site/assets"),
     assetsDir: ".",
     emptyOutDir: false,
     manifest: "vite-manifest.json",

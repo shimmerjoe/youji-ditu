@@ -9,10 +9,10 @@ ROOT = Path(__file__).resolve().parents[1]
 class ContentTransparencyTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.page = (ROOT / "city-guides.html").read_text(encoding="utf-8")
-        cls.reviewed_city = (ROOT / "cities" / "qingdao.html").read_text(encoding="utf-8")
-        cls.pending_city = (ROOT / "cities" / "changsha.html").read_text(encoding="utf-8")
-        cls.css = (ROOT / "assets" / "travel.css").read_text(encoding="utf-8")
+        cls.page = (ROOT / "site" / "city-guides.html").read_text(encoding="utf-8")
+        cls.reviewed_city = (ROOT / "site" / "cities" / "qingdao.html").read_text(encoding="utf-8")
+        cls.pending_city = (ROOT / "site" / "cities" / "changsha.html").read_text(encoding="utf-8")
+        cls.css = (ROOT / "site" / "assets" / "travel.css").read_text(encoding="utf-8")
 
     def test_city_finder_exposes_review_status_without_claiming_freshness(self):
         self.assertIn("资料状态", self.page)

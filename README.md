@@ -6,13 +6,13 @@
 
 | 用途 | 地址 | 状态 |
 | --- | --- | --- |
-| 公开网站（GitHub Pages） | <https://shimmerjoe.github.io/youji-ditu/> | **还不能访问**：Pages 还没开启，重构代码也还没合并到 `main`，见下文 [开启公开地址](#开启公开地址) |
-| 城市攻略示例 | <https://shimmerjoe.github.io/youji-ditu/cities/beijing.html> | Pages 开启后可用 |
-| 跨城市总览 | <https://shimmerjoe.github.io/youji-ditu/overview.html> | Pages 开启后可用 |
+| 公开网站（GitHub Pages） | <https://shimmerjoe.github.io/youji-ditu/> | 已上线：2026-10-20 合并重构后由 Actions 部署，桌面和手机验收通过 |
+| 城市攻略示例 | <https://shimmerjoe.github.io/youji-ditu/cities/beijing.html> | 已上线 |
+| 跨城市总览 | <https://shimmerjoe.github.io/youji-ditu/overview.html> | 已上线 |
 | 源码仓库 | <https://github.com/shimmerjoe/youji-ditu> | 公开 |
 | 本机预览 | <http://localhost:8765/> | 运行 `npm run preview` 或双击 `scripts/windows/打开首页.bat` |
 
-> 代码推送到仓库和网站上线是两件事：只有 Pages 开启并且 Actions 部署成功，上面的公开地址才能打开。上线前请先用本机预览检查。
+> 每次推送到 `main` 都会自动构建、测试并部署；部署失败时线上保持上一版。改动前先用本机预览检查。
 
 ## 界面预览
 
@@ -125,7 +125,7 @@ python -X utf8 tools\import_commons_city_photo.py --city beijing --source "https
 
 导入器会校验 Commons 文件页、JPEG 尺寸、横向比例、许可证和作者，但不能代替人眼判断图片是否切题。导入后还要重新生成网站，检查桌面和手机上的裁切效果。
 
-## 开启公开地址
+## 公开地址的部署方式
 
 仓库已经包含 `.github/workflows/pages.yml`：每次推送到 `main`，GitHub Actions 会自动执行 `npm ci → npm run check → npm run stage`，再把 `dist/` 部署到 Pages。要让公开地址可以访问，需要仓库所有者完成以下步骤：
 

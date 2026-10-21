@@ -3,7 +3,7 @@
 本文件是本轮重构的状态与交接记录。中断后请先读本文件和 `git log`，再从“下一条任务”继续。
 
 - 分支：`claude/gifted-bardeen-mrb6ex`（基于 `main` 的 `d16cd1d`）
-- 仓库：`shimmerjoe/youji-ditu`（已由所有者改为公开；GitHub Pages 未开启，`has_pages=false`）
+- 仓库：`shimmerjoe/youji-ditu`（公开）；PR #1 于 2026-10-20 合并，GitHub Actions 部署成功，<https://shimmerjoe.github.io/youji-ditu/> 已上线
 - 统一校验命令：`npm ci && python -m pip install -r tools/requirements-build.txt && npm run check && npm run stage`
 
 ## 检查范围说明
@@ -56,4 +56,4 @@
 1. 按矩阵优先级继续深化：南京、苏州、昆明、杭州、成都，只写能在官方来源核实的信息，其余标“待核验”。
 2. 为 198 座没有逐月资料的城市按当地气候补写月份表。
 3. 为 103 座无图城市人工挑选开放授权、画面切题的封面（用 `tools/import_commons_city_photo.py`，导入后人工复核并记入 `reviewedSources`）。
-4. 仓库所有者开启 GitHub Pages 并合并 PR 后，在公开地址上做一次桌面和手机验收。
+4. ~~开启 Pages 并在公开地址验收~~ 2026-10-20 已上线；首页、北京、亲子筛选、行程计划、自驾路书在 1366×768 与 390×844 下均返回 200、无横向溢出、无控制台错误，Service Worker 已注册。

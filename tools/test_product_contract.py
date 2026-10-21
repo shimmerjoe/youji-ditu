@@ -305,12 +305,12 @@ class ProductContractTests(unittest.TestCase):
         )
 
     def test_unreviewed_city_does_not_use_filesystem_mtime_as_travel_fact_date(self):
-        # 南京还没有按官方来源复核，必须显示“未核验”；北京已标注真实核验日期。
-        nanjing = (ROOT / "site" / "cities" / "nanjing.html").read_text(encoding="utf-8")
+        # 临沧还没有按官方来源复核，必须显示“未核验”；北京已标注真实核验日期。
+        lincang = (ROOT / "site" / "cities" / "lincang.html").read_text(encoding="utf-8")
         beijing = (ROOT / "site" / "cities" / "beijing.html").read_text(encoding="utf-8")
         roadtrip_data = (ROOT / "site" / "assets" / "roadtrip-data.js").read_text(encoding="utf-8")
-        self.assertIn("资料整理日期：未核验", nanjing)
-        self.assertRegex(roadtrip_data, r'"key":"nanjing"[^}]*"updatedAt":"未核验"')
+        self.assertIn("资料整理日期：未核验", lincang)
+        self.assertRegex(roadtrip_data, r'"key":"lincang"[^}]*"updatedAt":"未核验"')
         self.assertIn("资料整理日期：2026-10-20", beijing)
 
     def test_content_audit_exposes_raw_evidence_and_unreviewed_cities(self):

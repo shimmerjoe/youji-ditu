@@ -1955,10 +1955,11 @@
   "cityphoto|guiyang": {
     "status": "hit",
     "path": "assets/images/guiyang.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Nanming,_Guiyang,_Guizhou,_China_-_panoramio.jpg",
-    "license": "CC BY-SA 3.0",
-    "artist": "landagent",
-    "query": "guiyang guizhou china"
+    "title": "File:Jiaxiu building and Nanming river in Guiyang.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Jiaxiu_building_and_Nanming_river_in_Guiyang.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "DWojtowicz",
+    "query": "manual:File:Jiaxiu building and Nanming river in Guiyang.jpg"
   },
   "cityphoto|anshun": {
     "status": "hit",
@@ -1971,10 +1972,11 @@
   "cityphoto|qiandongnan": {
     "status": "hit",
     "path": "assets/images/qiandongnan.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Miao_women_in_Langde_village_(2006).jpg",
-    "license": "CC BY 2.0",
-    "artist": "Tianjin24",
-    "query": "qiandongnan miao dong village"
+    "title": "File:Xijiang Qianhu Miaozhai.Skyline.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Xijiang_Qianhu_Miaozhai.Skyline.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Popolon",
+    "query": "manual:File:Xijiang Qianhu Miaozhai.Skyline.jpg"
   },
   "cityphoto|ganzi": {
     "status": "hit",
@@ -2884,10 +2886,11 @@
   "cityphoto|hulunbuir": {
     "status": "hit",
     "path": "assets/images/hulunbuir.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Hulunbuir.jpg",
-    "license": "CC BY-SA 3.0",
-    "artist": "Fanghong",
-    "query": "呼伦贝尔 内蒙古 china travel"
+    "title": "File:Hulun Buir.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Hulun_Buir.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Emmazzye",
+    "query": "manual:File:Hulun Buir.jpg"
   },
   "cityphoto|hohhot": {
     "status": "hit",
@@ -3030,10 +3033,11 @@
   "cityphoto|yantai": {
     "status": "hit",
     "path": "assets/images/yantai.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Yantai_City_Seaside_Scenery.jpg",
-    "license": "CC BY-SA 4.0",
-    "artist": "Zhuo1221",
-    "query": "烟台 山东 china travel"
+    "title": "File:PenglaiPavilion.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:PenglaiPavilion.jpg",
+    "license": "CC BY 2.0",
+    "artist": "Chrishcn",
+    "query": "manual:File:PenglaiPavilion.jpg"
   },
   "cityphoto|qingdao": {
     "status": "hit",
@@ -3046,10 +3050,11 @@
   "cityphoto|taiyuan": {
     "status": "hit",
     "path": "assets/images/taiyuan.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Skyline_of_Taiyuan,_Oct_1_2023.png",
-    "license": "CC BY-SA 4.0",
-    "artist": "A Chinese ID",
-    "query": "太原 山西 china travel"
+    "title": "File:Jinci Temple (54572159327).jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Jinci_Temple_%2854572159327%29.jpg",
+    "license": "CC BY 2.0",
+    "artist": "xiquinhosilva",
+    "query": "manual:File:Jinci Temple (54572159327).jpg"
   },
   "cityphoto|xinzhou": {
     "status": "hit",
@@ -3078,10 +3083,11 @@
   "cityphoto|foshan": {
     "status": "hit",
     "path": "assets/images/foshan.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:39459-Foshan.jpg",
-    "license": "CC BY 2.0",
-    "artist": "xiquinhosilva from Cacau",
-    "query": "佛山 广东 china travel"
+    "title": "File:Foshan Zu Miao 2012.11.20 15-41-28.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Foshan_Zu_Miao_2012.11.20_15-41-28.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Zhangzhugang",
+    "query": "manual:File:Foshan Zu Miao 2012.11.20 15-41-28.jpg"
   },
   "cityphoto|meizhou": {
     "status": "hit",
@@ -3257,10 +3263,11 @@
   "cityphoto|qinhuangdao": {
     "status": "hit",
     "path": "assets/images/qinhuangdao.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Qinhuangdao_%E7%A7%A6%E7%9A%87%E5%B2%9B.jpg",
-    "license": "CC BY-SA 3.0 de",
-    "artist": "Arne Müseler",
-    "query": "秦皇岛 河北 china travel"
+    "title": "File:ShanhaiguanGreatWall-end.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:ShanhaiguanGreatWall-end.jpg",
+    "license": "CC BY 2.0",
+    "artist": "fuzheado",
+    "query": "manual:File:ShanhaiguanGreatWall-end.jpg"
   },
   "cityphoto|nanyang": {
     "status": "hit",
@@ -3490,26 +3497,29 @@
   "cityphoto|wuhan": {
     "status": "hit",
     "path": "assets/images/wuhan.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Wuhan_Botanical_Garden.jpg",
-    "license": "CC BY-SA 4.0",
-    "artist": "Sun Jiao (Interaccoonale)",
-    "query": "武汉 湖北 china travel"
+    "title": "File:Yellow Crane Tower 61476-Wuhan (49149984773).jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Yellow_Crane_Tower_61476-Wuhan_%2849149984773%29.jpg",
+    "license": "CC BY 2.0",
+    "artist": "xiquinhosilva",
+    "query": "manual:File:Yellow Crane Tower 61476-Wuhan (49149984773).jpg"
   },
   "cityphoto|xiangyang": {
     "status": "hit",
     "path": "assets/images/xiangyang.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Xiangyang_skyline_02.jpg",
+    "title": "File:20260904 Xiangyang City Wall 03.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:20260904_Xiangyang_City_Wall_03.jpg",
     "license": "CC BY-SA 4.0",
-    "artist": "Fxqf",
-    "query": "襄阳 湖北 china travel"
+    "artist": "Windmemories",
+    "query": "manual:File:20260904 Xiangyang City Wall 03.jpg"
   },
   "cityphoto|yueyang": {
     "status": "hit",
     "path": "assets/images/yueyang.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Yueyang_01.jpg",
-    "license": "CC BY 2.0",
-    "artist": "Steve Webel from Yueyang (??), Hunan (??), China (??)",
-    "query": "岳阳 湖南 china travel"
+    "title": "File:Yueyang Tower, photographed from the side.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Yueyang_Tower%2C_photographed_from_the_side.jpg",
+    "license": "CC0",
+    "artist": "Huangdan2060",
+    "query": "manual:File:Yueyang Tower, photographed from the side.jpg"
   },
   "cityphoto|xiangxi": {
     "status": "hit",
@@ -3588,10 +3598,11 @@
   "cityphoto|nanping": {
     "status": "hit",
     "path": "assets/images/nanping.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:%E7%99%BD%E8%8A%B1%E5%B2%A9%E4%B8%8A%E7%9C%8B%E6%AD%A6%E5%A4%B7%E5%B1%B1%E5%B8%82_-_Wuyishan_City_Viewed_from_Baihua_Rock_-_2015.11_-_panoramio.jpg",
-    "license": "CC BY 3.0",
-    "artist": "rheins",
-    "query": "南平 福建 china travel"
+    "title": "File:China Wuyishan River View.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:China_Wuyishan_River_View.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Lennartbj",
+    "query": "manual:File:China Wuyishan River View.jpg"
   },
   "cityphoto|ningde": {
     "status": "hit",
@@ -3809,10 +3820,11 @@
   "cityphoto|wenzhou": {
     "status": "hit",
     "path": "assets/images/wenzhou.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:%E9%9B%81%E8%8D%A1%E5%B1%B1%E5%B1%B1%E5%BA%84_Yandangshan_Mountain_Villa_-_panoramio.jpg",
-    "license": "CC BY-SA 3.0",
-    "artist": "wanghongliu",
-    "query": "温州 浙江 china travel"
+    "title": "File:Jiangxin Temple 07 2018-10.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Jiangxin_Temple_07_2018-10.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "猫猫的日记本",
+    "query": "manual:File:Jiangxin Temple 07 2018-10.jpg"
   },
   "cityphoto|wenchang": {
     "status": "hit",
@@ -3958,11 +3970,11 @@
   "cityphoto|urumqi": {
     "status": "hit",
     "path": "assets/images/urumqi.jpg",
-    "title": "File:Urumqi skyline (3).jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Urumqi_skyline_(3).jpg",
-    "license": "CC BY 3.0 pl",
-    "artist": "Radosław Botev",
-    "query": "manual:File:Urumqi skyline (3).jpg"
+    "title": "File:乌鲁木齐市.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:%E4%B9%8C%E9%B2%81%E6%9C%A8%E9%BD%90%E5%B8%82.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "螺钉",
+    "query": "manual:File:乌鲁木齐市.jpg"
   },
   "cityphoto|handan": {
     "status": "hit",
@@ -4105,10 +4117,11 @@
   "cityphoto|shenyang": {
     "status": "hit",
     "path": "assets/images/shenyang.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Shenyang-shiboyuan2.jpg",
-    "license": "CC BY-SA 3.0",
-    "artist": "Emmanuel Grolleau",
-    "query": "沈阳 辽宁 china travel"
+    "title": "File:Mukden Palace drone view 6.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Mukden_Palace_drone_view_6.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Techyan",
+    "query": "manual:File:Mukden Palace drone view 6.jpg"
   },
   "cityphoto|hanzhong": {
     "status": "hit",

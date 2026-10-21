@@ -27,9 +27,12 @@ APPROVED_CREDIT_SLUGS = (
     "changsha",
     "lanzhou",
     "haikou",
+    # 2026-10-21 人工换上的新封面（原封面已被审核撤下）。
+    "wuhan",
+    "urumqi",
+    "qinhuangdao",
 )
-# 乌鲁木齐原封面是灰霾天际线，2026-10-20 人工审核撤下。
-REJECTED_CREDIT_SLUGS = ("benxi", "city-cd061af662", "urumqi")
+REJECTED_CREDIT_SLUGS = ("benxi", "city-cd061af662")
 PLACEHOLDER_LICENSES = {"", "unknown", "wikipedia", "wikimedia commons"}
 
 

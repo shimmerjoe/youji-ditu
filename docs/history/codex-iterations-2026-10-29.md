@@ -68,4 +68,25 @@
 - 数据只在当前浏览器；禁用存储时只能临时编排并导出，不提供账户或云同步。分享链接中的内容对拿到链接的人可见。
 - 浏览器验收使用 Windows Edge 临时配置；未验收实际手机安装、Safari、真实打印机或付费地图服务。可访问性覆盖语义、键盘、焦点、无横向溢出等相关检查，不声称完成全部 WCAG 审计或 Lighthouse 评分。
 - 后续内容与图片工作应另按缺口矩阵分批核验官方来源与素材授权；不能从代码通过推断全站事实正确。
-- 公开部署与线上回归结果在发布完成后补记，不能由以上本地结果代替。
+- 全城资料、图片新鲜度和外部链接本轮未重新全量核验，优先从现有缺口矩阵继续，不把本轮代码验收扩大为内容验收。
+
+## 公开发布与回执
+
+- 本轮 13 个实质改进阶段（10 个计划阶段 + 3 个复查补充）已实施。前 11 轮逐轮提交，入口 / PWA 的最后两项复查合并验证与提交。
+- 功能版本 `61efab611e824e97a798c05f153d7c2e8b599bc1` 已快进推送到 `main`。[Actions 40916772043](https://github.com/shimmerjoe/youji-ditu/actions/runs/40916772043) 的构建与 Pages 部署均成功。
+- 在 [公开网站](https://shimmerjoe.github.io/youji-ditu/) 重新执行两组四视口验收：行程累计 44 项、完整发布流程 44 项，均通过；包括真实 Service Worker 断网后带 `?plan=` 刷新及继续编辑。
+- 线上没有 pageerror、console error、非取消请求失败或 HTTP 错误。桌面阶段记录了 3 次跳转取消的图片下载（`ERR_ABORTED`），已分别直接请求复核为 200；没有将其删除或冒记为损坏资源。记录详见公开验收 JSON。离线未缓存页面的 503 是设计中的明确兜底，不是联网失败。
+- 初次推送被 GitHub 邮箱隐私保护拒绝；仅对本任务未发布提交改用账号的 GitHub noreply 邮箱。重新推送前核对项目 tree 哈希未变；未修改全局 Git 或账号隐私设置，未强推。
+- 该任务的工作副本位于 `D:/.AI/codex_tmp/sources/youji-ditu-20261029`；没有恢复已迁走的旧 `D:/2Life/1Travel`。启动方法见 README，独立测试服务已退出。
+
+### 可复核证据
+
+- [本地发布流程](audits/2026-10-29-release-local.json)、[本地行程回归](audits/2026-10-29-planner-local.json)。
+- [公开发布流程](audits/2026-10-29-release-public.json)、[公开行程回归](audits/2026-10-29-planner-public.json)。
+- [桌面完整截图](../screenshots/iterations-2026-10-29/planner-desktop.png)、[手机完整截图](../screenshots/iterations-2026-10-29/planner-mobile.png)；截图使用合成测试行程，不包含用户真实本机数据。
+
+桌面与手机视口：
+
+![行程计划桌面验收](../screenshots/iterations-2026-10-29/planner-desktop-viewport.png)
+
+![行程计划手机验收](../screenshots/iterations-2026-10-29/planner-mobile-viewport.png)

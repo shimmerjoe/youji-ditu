@@ -1,0 +1,222 @@
+[
+  {
+    "width": 1920,
+    "case": "capacity-no-loss",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "case": "duplicate-identities",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "case": "validated-import",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "case": "blocked-storage-export",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "case": "share-validation-preview",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "case": "schedule-conflicts",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "case": "travel-buffer-persistence",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "case": "zero-vs-unknown-cost",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "case": "meal-budget-and-large-values",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "case": "intentional-repeat-and-focus",
+    "passed": true
+  },
+  {
+    "width": 1920,
+    "case": "cross-tab-recovery",
+    "passed": true
+  },
+  {
+    "width": 1366,
+    "case": "capacity-no-loss",
+    "passed": true
+  },
+  {
+    "width": 1366,
+    "case": "duplicate-identities",
+    "passed": true
+  },
+  {
+    "width": 1366,
+    "case": "validated-import",
+    "passed": true
+  },
+  {
+    "width": 1366,
+    "case": "blocked-storage-export",
+    "passed": true
+  },
+  {
+    "width": 1366,
+    "case": "share-validation-preview",
+    "passed": true
+  },
+  {
+    "width": 1366,
+    "case": "schedule-conflicts",
+    "passed": true
+  },
+  {
+    "width": 1366,
+    "case": "travel-buffer-persistence",
+    "passed": true
+  },
+  {
+    "width": 1366,
+    "case": "zero-vs-unknown-cost",
+    "passed": true
+  },
+  {
+    "width": 1366,
+    "case": "meal-budget-and-large-values",
+    "passed": true
+  },
+  {
+    "width": 1366,
+    "case": "intentional-repeat-and-focus",
+    "passed": true
+  },
+  {
+    "width": 1366,
+    "case": "cross-tab-recovery",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "capacity-no-loss",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "duplicate-identities",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "validated-import",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "blocked-storage-export",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "share-validation-preview",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "schedule-conflicts",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "travel-buffer-persistence",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "zero-vs-unknown-cost",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "meal-budget-and-large-values",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "intentional-repeat-and-focus",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "case": "cross-tab-recovery",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "case": "capacity-no-loss",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "case": "duplicate-identities",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "case": "validated-import",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "case": "blocked-storage-export",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "case": "share-validation-preview",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "case": "schedule-conflicts",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "case": "travel-buffer-persistence",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "case": "zero-vs-unknown-cost",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "case": "meal-budget-and-large-values",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "case": "intentional-repeat-and-focus",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "case": "cross-tab-recovery",
+    "passed": true
+  }
+]

@@ -1,0 +1,131 @@
+[
+  {
+    "width": 1920,
+    "height": 1080,
+    "passed": true,
+    "cases": [
+      "keyboard-search-history",
+      "favorite",
+      "navigation",
+      "filter-url-reload-empty",
+      "json-roundtrip",
+      "markdown",
+      "share-save-private-notes",
+      "print-handler-and-media",
+      "roadtrip-generate-save-export-restore",
+      "offline-plan-edit-reload",
+      "offline-fallback"
+    ],
+    "onlinePageErrors": [],
+    "onlineConsoleErrors": [],
+    "onlineNetworkFailures": [],
+    "onlineBadResponses": [],
+    "onlineCancelledRequests": [
+      {
+        "url": "https://shimmerjoe.github.io/youji-ditu/assets/images/w640/qingdao.jpg",
+        "reason": "net::ERR_ABORTED",
+        "type": "image"
+      },
+      {
+        "url": "https://shimmerjoe.github.io/youji-ditu/assets/images/w640/suzhou.jpg",
+        "reason": "net::ERR_ABORTED",
+        "type": "image"
+      },
+      {
+        "url": "https://shimmerjoe.github.io/youji-ditu/assets/images/w640/shanghai.jpg",
+        "reason": "net::ERR_ABORTED",
+        "type": "image"
+      }
+    ],
+    "cancelledResourcesRechecked": [
+      {
+        "url": "https://shimmerjoe.github.io/youji-ditu/assets/images/w640/qingdao.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://shimmerjoe.github.io/youji-ditu/assets/images/w640/shanghai.jpg",
+        "status": 200
+      },
+      {
+        "url": "https://shimmerjoe.github.io/youji-ditu/assets/images/w640/suzhou.jpg",
+        "status": 200
+      }
+    ],
+    "uncachedOfflineFallbackStatus": 503
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "passed": true,
+    "cases": [
+      "keyboard-search-history",
+      "favorite",
+      "navigation",
+      "filter-url-reload-empty",
+      "json-roundtrip",
+      "markdown",
+      "share-save-private-notes",
+      "print-handler-and-media",
+      "roadtrip-generate-save-export-restore",
+      "offline-plan-edit-reload",
+      "offline-fallback"
+    ],
+    "onlinePageErrors": [],
+    "onlineConsoleErrors": [],
+    "onlineNetworkFailures": [],
+    "onlineBadResponses": [],
+    "onlineCancelledRequests": [],
+    "cancelledResourcesRechecked": [],
+    "uncachedOfflineFallbackStatus": 503
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "passed": true,
+    "cases": [
+      "keyboard-search-history",
+      "favorite",
+      "navigation",
+      "filter-url-reload-empty",
+      "json-roundtrip",
+      "markdown",
+      "share-save-private-notes",
+      "print-handler-and-media",
+      "roadtrip-generate-save-export-restore",
+      "offline-plan-edit-reload",
+      "offline-fallback"
+    ],
+    "onlinePageErrors": [],
+    "onlineConsoleErrors": [],
+    "onlineNetworkFailures": [],
+    "onlineBadResponses": [],
+    "onlineCancelledRequests": [],
+    "cancelledResourcesRechecked": [],
+    "uncachedOfflineFallbackStatus": 503
+  },
+  {
+    "width": 360,
+    "height": 800,
+    "passed": true,
+    "cases": [
+      "keyboard-search-history",
+      "favorite",
+      "navigation",
+      "filter-url-reload-empty",
+      "json-roundtrip",
+      "markdown",
+      "share-save-private-notes",
+      "print-handler-and-media",
+      "roadtrip-generate-save-export-restore",
+      "offline-plan-edit-reload",
+      "offline-fallback"
+    ],
+    "onlinePageErrors": [],
+    "onlineConsoleErrors": [],
+    "onlineNetworkFailures": [],
+    "onlineBadResponses": [],
+    "onlineCancelledRequests": [],
+    "cancelledResourcesRechecked": [],
+    "uncachedOfflineFallbackStatus": 503
+  }
+]

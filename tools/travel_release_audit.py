@@ -28,10 +28,16 @@ def run(base, output):
             for width, height in SIZES:
                 context = browser.new_context(viewport={"width": width, "height": height}, accept_downloads=True)
                 page = context.new_page()
-                errors, console_errors, failures = [], [], []
+                errors, console_errors, failures, cancellations = [], [], [], []
                 page.on("pageerror", lambda error: errors.append(str(error)))
                 page.on("console", lambda message: console_errors.append(message.text) if message.type == "error" else None)
-                page.on("requestfailed", lambda request: failures.append({"url": request.url, "reason": request.failure}))
+                def failed_request(request):
+                    record = {"url": request.url, "reason": request.failure, "type": request.resource_type}
+                    if request.failure == "net::ERR_ABORTED":
+                        cancellations.append(record)
+                    else:
+                        failures.append(record)
+                page.on("requestfailed", failed_request)
                 bad_responses = []
                 page.on("response", lambda response: bad_responses.append({"url": response.url, "status": response.status}) if response.status >= 400 else None)
 
@@ -81,6 +87,7 @@ def run(base, output):
                 assert page.locator("#cityExplorerEmpty").is_visible()
                 page.locator("#finderChips .clear-all").click()
                 assert page.locator("#cityExplorer .city-card:not(.is-hidden)").count() > 0
+                page.wait_for_load_state("networkidle")
                 page.goto(base + "user.html")
                 page.wait_for_selector("#userTabs")
                 snapshot("user")
@@ -152,9 +159,15 @@ def run(base, output):
                 page.wait_for_selector(".rt-day")
                 assert "恢复上次" in page.locator("#rtMapStatus").inner_text()
                 snapshot("roadtrip")
+                rechecked = []
+                for url in sorted({record["url"] for record in cancellations if record["url"].startswith(base)}):
+                    asset = context.request.get(url)
+                    assert asset.ok and asset.body(), (url, "cancelled resource failed direct verification", asset.status)
+                    rechecked.append({"url": url, "status": asset.status})
                 assert not errors and not console_errors and not failures and not bad_responses, (errors, console_errors, failures, bad_responses)
                 online = {"onlinePageErrors": list(errors), "onlineConsoleErrors": list(console_errors),
-                          "onlineNetworkFailures": list(failures), "onlineBadResponses": list(bad_responses)}
+                          "onlineNetworkFailures": list(failures), "onlineBadResponses": list(bad_responses),
+                          "onlineCancelledRequests": list(cancellations), "cancelledResourcesRechecked": rechecked}
 
                 page.goto(base + "plan.html")
                 page.evaluate("navigator.serviceWorker.ready.then(() => true)")

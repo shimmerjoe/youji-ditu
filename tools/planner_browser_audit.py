@@ -216,6 +216,19 @@ def run(base, output, round_number):
                     page.goto(base + "plan.html")
                     page.wait_for_selector(".plan-bar")
                     results.append({"width": width, "case": "intentional-repeat-and-focus", "passed": True})
+                if round_number >= 11:
+                    seed(fixture())
+                    other = context.new_page()
+                    other.goto(base + "index.html")
+                    other.evaluate("localStorage.setItem('tay_plans', '{broken-by-other-tab')")
+                    page.wait_for_function("document.querySelector('.plan-status').textContent.includes('保留本页')")
+                    assert page.locator(".plan-item").count() == 3
+                    with page.expect_download() as download:
+                        page.locator('[data-action="export-json"]').click()
+                    backup = json.loads(Path(download.value.path()).read_text(encoding="utf-8"))
+                    assert sum(len(day["items"]) for day in backup["plans"][0]["days"]) == 3
+                    other.close()
+                    results.append({"width": width, "case": "cross-tab-recovery", "passed": True})
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth"), "horizontal overflow"
                 assert not errors, errors
                 page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True, animations="disabled")

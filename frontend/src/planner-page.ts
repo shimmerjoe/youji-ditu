@@ -130,7 +130,7 @@ export function bootstrapPlannerPage(): void {
     const plan = active();
     if (plan) saveActivePlanId(plan.id);
     const time = new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" });
-    status = ok ? `${message} · ${time}` : "保存失败：浏览器存储不可用或空间不足，请先导出 JSON 备份。";
+    status = ok ? `${message} · ${time}` : "保存失败：存储不可用、空间不足或旧数据尚未备份，请先导出 JSON。原存储内容未被覆盖。";
     shareUrl = "";
   };
 
@@ -648,7 +648,13 @@ export function bootstrapPlannerPage(): void {
   });
 
   onPlansChanged(() => {
-    plans = loadPlans().plans;
+    const next = loadPlans();
+    if (next.unavailable || next.unreadable) {
+      status = "其他标签页的行程无法读取，暂时保留本页可用行程。请先导出 JSON 备份，再检查浏览器存储。";
+      render();
+      return;
+    }
+    plans = next.plans;
     activeId = loadActivePlanId() || activeId;
     status = "已同步其他标签页的修改";
     render();

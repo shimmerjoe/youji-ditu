@@ -157,7 +157,7 @@ export function bootstrapPlanPicker(): void {
       return;
     }
     if (!savePlans(plans)) {
-      status.textContent = "保存失败：浏览器存储不可用或空间不足。可在行程计划页导出备份。";
+      status.textContent = "保存失败：存储不可用、空间不足或旧数据未能备份，原内容未被覆盖。可在行程计划页导出备份。";
       return;
     }
     saveActivePlanId(plan.id);

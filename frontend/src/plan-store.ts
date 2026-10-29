@@ -63,6 +63,8 @@ export function loadPlans(): PlanLoadResult {
 export function savePlans(plans: TripPlan[]): boolean {
   const store = storage();
   if (!store) return false;
+  const existing = loadPlans();
+  if (existing.unavailable || (existing.repaired && !existing.backupSaved)) return false;
   try {
     store.setItem(PLANS_KEY, JSON.stringify(plans));
     emit(PLANS_KEY, "set");

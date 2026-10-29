@@ -44,3 +44,14 @@ test("repair detects nested loss and ID changes but ignores object key order", (
     assert.equal(loadPlans().backupSaved, true);
   });
 });
+
+test("a failed raw backup prevents overwriting corrupt originals even if the main key is writable", () => {
+  const data = new Map([[PLANS_KEY, "{unrecoverable"]]);
+  usingStorage({
+    getItem(key: string) { return data.get(key) ?? null; },
+    setItem(key: string, value: string) { if (key === PLANS_BACKUP_KEY) throw new Error("quota"); data.set(key, value); },
+  }, () => {
+    assert.equal(savePlans([createPlan("新行程")]), false);
+    assert.equal(data.get(PLANS_KEY), "{unrecoverable");
+  });
+});

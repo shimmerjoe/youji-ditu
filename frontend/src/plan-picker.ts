@@ -1,5 +1,5 @@
 /** 攻略页上的“加入行程”弹窗：把景点或美食放进某份行程的某一天。 */
-import { addDay, addItem, createPlan, dayDate, type PlanItem, type TripPlan } from "./trip-plan.ts";
+import { addDay, addItem, createPlan, dayDate, plannedDayFor, type PlanItem, type TripPlan } from "./trip-plan.ts";
 import { loadActivePlanId, loadPlans, onPlansChanged, saveActivePlanId, savePlans } from "./plan-store.ts";
 import { cityPlanTitle, formatDate, h, siteHref } from "./plan-dom.ts";
 
@@ -27,7 +27,7 @@ function itemFromButton(button: HTMLElement): PendingItem {
 function isPlanned(plans: TripPlan[], activeId: string, item: PendingItem): number {
   const plan = plans.find((candidate) => candidate.id === activeId);
   if (!plan) return -1;
-  return plan.days.findIndex((day) => day.items.some((entry) => entry.name === item.name && entry.cityKey === item.cityKey));
+  return plannedDayFor(plan, item);
 }
 
 function syncPlanButtons(): void {
@@ -54,6 +54,9 @@ export function bootstrapPlanPicker(): void {
   const select = h("select", { id: "planPickerSelect" });
   const days = h("div", { class: "plan-picker-days", role: "group", "aria-label": "选择第几天" });
   const status = h("p", { class: "plan-picker-status", role: "status", "aria-live": "polite" });
+  const duplicateHint = h("p", { class: "plan-picker-duplicate", hidden: true });
+  const repeat = h("input", { type: "checkbox", id: "planAllowRepeat" });
+  const repeatField = h("label", { class: "plan-picker-repeat", hidden: true }, repeat, h("span", { text: "这是再次到访，仍添加一次" }));
   const open = h("a", { class: "btn btn-primary", href: siteHref("plan.html") }, "打开行程计划");
   dialog.append(
     h("div", { class: "plan-picker-head" }, title, close),
@@ -61,6 +64,8 @@ export function bootstrapPlanPicker(): void {
     h("label", { class: "plan-picker-field", for: "planPickerSelect" }, h("span", { text: "放进哪份行程" }), select),
     h("p", { class: "plan-picker-label", text: "放到第几天" }),
     days,
+    duplicateHint,
+    repeatField,
     status,
     h("div", { class: "plan-picker-foot" }, h("span", { class: "plan-picker-hint", text: "停留时长先按 2 小时（美食 1 小时）计，可在行程计划里调整。" }), open),
   );
@@ -70,18 +75,24 @@ export function bootstrapPlanPicker(): void {
     if (!pending) return;
     const { plans } = loadPlans();
     const plan = plans.find((candidate) => candidate.id === select.value);
+    const existing = plan ? plannedDayFor(plan, pending) : -1;
+    duplicateHint.hidden = existing < 0;
+    duplicateHint.textContent = existing >= 0 ? `已在第 ${existing + 1} 天安排。可打开行程移动；如果确实要再次到访，请勾选下方选项。` : "";
+    repeatField.hidden = existing < 0;
+    if (existing < 0) repeat.checked = false;
+    const blockedRepeat = existing >= 0 && !repeat.checked;
     days.replaceChildren();
     const dayCount = plan ? plan.days.length : 2;
     for (let index = 0; index < dayCount; index += 1) {
       const count = plan ? plan.days[index].items.length : 0;
       const date = plan ? dayDate(plan, index) : "";
-      days.append(h("button", { type: "button", class: "plan-day-choice", "data-day": index },
+      days.append(h("button", { type: "button", class: "plan-day-choice", "data-day": index, disabled: blockedRepeat || count >= 20 },
         h("strong", { text: `第 ${index + 1} 天` }),
         h("small", { text: [date ? formatDate(date) : "", count ? `${count} 个安排` : "空"].filter(Boolean).join(" · ") }),
       ));
     }
     if (!plan || plan.days.length < 30) {
-      days.append(h("button", { type: "button", class: "plan-day-choice add", "data-day": "new" }, h("strong", { text: "＋ 新的一天" })));
+      days.append(h("button", { type: "button", class: "plan-day-choice add", "data-day": "new", disabled: blockedRepeat }, h("strong", { text: "＋ 新的一天" })));
     }
   };
 
@@ -102,12 +113,13 @@ export function bootstrapPlanPicker(): void {
     source = button;
     itemLine.replaceChildren(h("strong", { text: pending.name }), h("span", { text: [pending.city, pending.kind === "food" ? "美食" : "景点/地点"].filter(Boolean).join(" · ") }));
     status.textContent = "";
+    repeat.checked = false;
     renderSelect();
     renderDays();
     if (typeof dialog.showModal === "function") dialog.showModal();
     else dialog.setAttribute("open", "");
-    const first = days.querySelector<HTMLButtonElement>("button");
-    first?.focus();
+    const first = days.querySelector<HTMLButtonElement>("button:not([disabled])");
+    (first || select).focus();
   };
 
   const closePicker = (): void => {
@@ -115,15 +127,20 @@ export function bootstrapPlanPicker(): void {
     source?.focus();
   };
 
-  select.addEventListener("change", renderDays);
+  select.addEventListener("change", () => { repeat.checked = false; status.textContent = ""; renderDays(); });
+  repeat.addEventListener("change", renderDays);
   close.addEventListener("click", closePicker);
   dialog.addEventListener("click", (event) => { if (event.target === dialog) closePicker(); });
-  dialog.addEventListener("close", () => { syncPlanButtons(); });
+  dialog.addEventListener("close", () => { syncPlanButtons(); source?.focus(); });
   days.addEventListener("click", (event) => {
     const button = (event.target as HTMLElement).closest<HTMLButtonElement>("button[data-day]");
     if (!button || !pending) return;
     const { plans } = loadPlans();
     let plan = plans.find((candidate) => candidate.id === select.value);
+    if (plan && plannedDayFor(plan, pending) >= 0 && !repeat.checked) {
+      status.textContent = "这个地点已在行程里，未重复添加。请先选择是否再次到访。";
+      return;
+    }
     if (!plan) {
       plan = createPlan(cityPlanTitle(pending.city), 2);
       plans.unshift(plan);
@@ -144,6 +161,7 @@ export function bootstrapPlanPicker(): void {
       return;
     }
     saveActivePlanId(plan.id);
+    repeat.checked = false;
     status.textContent = `已加入「${plan.title}」第 ${dayIndex + 1} 天。`;
     renderSelect();
     select.value = plan.id;

@@ -305,6 +305,11 @@ export function findItem(plan: TripPlan, itemId: string): { day: number; index: 
   return null;
 }
 
+export function plannedDayFor(plan: TripPlan, item: Pick<PlanItem, "name" | "cityKey" | "kind">): number {
+  return plan.days.findIndex((day) => day.items.some((entry) =>
+    entry.name === text(item.name, 60) && entry.cityKey === text(item.cityKey, 40) && entry.kind === item.kind));
+}
+
 /** 把条目移动到指定天的指定位置（默认末尾）。 */
 export function moveItem(plan: TripPlan, itemId: string, toDay: number, toIndex?: number): boolean {
   const from = findItem(plan, itemId);

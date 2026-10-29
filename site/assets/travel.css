@@ -767,6 +767,9 @@ h3.section-title { font-size: 19px; font-weight: 800; }
 .plan-day-choice:hover, .plan-day-choice:focus-visible { border-color: var(--accent); background: var(--accent-soft); }
 .plan-day-choice.add { place-items: center; border-style: dashed; }
 .plan-picker-status { min-height: 1.6em; margin-top: 10px; color: var(--brand-strong); font-weight: 700; font-size: 14px; }
+.plan-picker-duplicate { margin-top: 12px; color: var(--ink-2); font-size: 14px; }
+.plan-picker-repeat { display: flex; align-items: center; gap: 8px; margin-top: 8px; min-height: 44px; font-size: 14px; }
+.plan-picker-repeat input { width: 18px; height: 18px; accent-color: var(--brand); flex-shrink: 0; }
 .plan-picker-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; }
 .plan-picker-hint { color: var(--muted); font-size: 12.5px; flex: 1 1 200px; }
 

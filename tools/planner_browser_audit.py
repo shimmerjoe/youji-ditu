@@ -188,6 +188,34 @@ def run(base, output, round_number):
                     page.keyboard.press("ArrowRight")
                     page.wait_for_function("document.querySelector('.plan-budget-scroll').scrollLeft > 0")
                     results.append({"width": width, "case": "meal-budget-and-large-values", "passed": True})
+                if round_number >= 10:
+                    page.goto(base + "cities/qingdao.html")
+                    page.wait_for_selector(".plan-picker", state="attached")
+                    source = page.locator("[data-plan-add]").first
+                    data = source.evaluate("el => ({name:el.dataset.name,city:el.dataset.city,cityKey:el.dataset.cityKey,kind:el.dataset.kind})")
+                    repeated = fixture((1, 0))
+                    repeated["days"][0]["items"][0].update(data)
+                    page.evaluate("p => { localStorage.setItem('tay_plans', JSON.stringify([p])); localStorage.setItem('tay_active_plan', JSON.stringify(p.id)); }", repeated)
+                    page.reload()
+                    page.wait_for_selector(".plan-picker", state="attached")
+                    source = page.locator("[data-plan-add]").first
+                    parent = source.locator("xpath=ancestor::details[1]")
+                    if parent.count() and parent.get_attribute("open") is None:
+                        parent.locator("summary").first.click()
+                    source.click()
+                    dialog = page.locator("dialog.plan-picker")
+                    assert dialog.locator('[data-day="1"]').is_disabled()
+                    assert "已在第 1 天" in dialog.locator(".plan-picker-duplicate").inner_text()
+                    assert page.evaluate("JSON.parse(localStorage.getItem('tay_plans'))[0].days.flatMap(d=>d.items).length") == 1
+                    dialog.locator("#planAllowRepeat").check()
+                    dialog.locator('[data-day="1"]').click()
+                    assert page.evaluate("JSON.parse(localStorage.getItem('tay_plans'))[0].days.flatMap(d=>d.items).length") == 2
+                    page.keyboard.press("Escape")
+                    assert not dialog.is_visible()
+                    assert source.evaluate("el => el === document.activeElement")
+                    page.goto(base + "plan.html")
+                    page.wait_for_selector(".plan-bar")
+                    results.append({"width": width, "case": "intentional-repeat-and-focus", "passed": True})
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth"), "horizontal overflow"
                 assert not errors, errors
                 page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True, animations="disabled")

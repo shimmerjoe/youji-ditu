@@ -18,6 +18,7 @@ import {
   normalizePlan,
   normalizePlans,
   parsePlanImport,
+  plannedDayFor,
   planToMarkdown,
   removeDay,
   removeItem,
@@ -80,6 +81,14 @@ test("items can move between days, reorder, update and be removed", () => {
   assert.deepEqual(plan.days[1].items.map((item) => item.time), ["08:00", "18:30"]);
   assert.equal(removeItem(plan, duck.id)?.name, "北京烤鸭");
   assert.equal(removeItem(plan, "missing"), null);
+});
+
+test("repeat visit detection distinguishes cities and kinds", () => {
+  const plan = samplePlan();
+  assert.equal(plannedDayFor(plan, { name: " 故宫博物院 ", cityKey: "beijing", kind: "place" }), 0);
+  assert.equal(plannedDayFor(plan, { name: "故宫博物院", cityKey: "other", kind: "place" }), -1);
+  assert.equal(plannedDayFor(plan, { name: "北京烤鸭", cityKey: "beijing", kind: "place" }), -1);
+  assert.equal(plannedDayFor(plan, { name: "八达岭长城", cityKey: "beijing", kind: "place" }), 1);
 });
 
 test("restored day and stop identities are unique across the whole plan", () => {

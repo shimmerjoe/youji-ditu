@@ -56,6 +56,21 @@ def run(base, output, round_number):
                 assert "没有移动" in page.locator(".plan-status").inner_text()
                 assert page.locator(".plan-day").nth(1).locator(".plan-item").count() == 1
                 results.append({"width": width, "case": "capacity-no-loss", "passed": True})
+                if round_number >= 2:
+                    duplicate = fixture()
+                    for day in duplicate["days"]:
+                        day["id"] = "duplicate"
+                        for item in day["items"]:
+                            item["id"] = "duplicate"
+                    seed(duplicate)
+                    note = page.locator('[data-field="note"]').nth(1)
+                    note.fill("只改第二项")
+                    note.press("Tab")
+                    saved = page.evaluate("JSON.parse(localStorage.getItem('tay_plans'))[0]")
+                    assert saved["days"][0]["items"][0]["note"] == ""
+                    assert saved["days"][0]["items"][1]["note"] == "只改第二项"
+                    assert len(set(page.locator("[data-item-id]").evaluate_all("els => els.map(el => el.dataset.itemId)"))) == 3
+                    results.append({"width": width, "case": "duplicate-identities", "passed": True})
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth"), "horizontal overflow"
                 assert not errors, errors
                 page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True)

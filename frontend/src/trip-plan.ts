@@ -181,6 +181,16 @@ export function normalizePlan(raw: unknown): TripPlan | null {
     ? value.days.map(normalizeDay).filter((day): day is PlanDay => day !== null).slice(0, MAX_DAYS)
     : [];
   const now = new Date().toISOString();
+  const identities = new Set<string>();
+  const unique = (id: string, prefix: string): string => {
+    while (identities.has(id)) id = makeId(prefix);
+    identities.add(id);
+    return id;
+  };
+  for (const day of days) {
+    day.id = unique(day.id, "d");
+    for (const item of day.items) item.id = unique(item.id, "i");
+  }
   return {
     schema: PLAN_SCHEMA,
     id: text(value.id, 40) || makeId(),

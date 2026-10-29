@@ -78,6 +78,20 @@ test("items can move between days, reorder, update and be removed", () => {
   assert.equal(removeItem(plan, "missing"), null);
 });
 
+test("restored day and stop identities are unique across the whole plan", () => {
+  const plan = normalizePlan({ title: "重复标识", days: [
+    { id: "same", items: [{ id: "same", name: "甲" }, { id: "same", name: "乙" }] },
+    { id: "same", items: [{ id: "same", name: "丙" }] },
+  ] });
+  assert.ok(plan);
+  const ids = plan.days.flatMap((day) => [day.id, ...day.items.map((item) => item.id)]);
+  assert.equal(new Set(ids).size, ids.length);
+  updateItem(plan, plan.days[0].items[1].id, { note: "只改乙" });
+  assert.equal(plan.days[0].items[0].note, "");
+  assert.equal(plan.days[0].items[1].note, "只改乙");
+  assert.equal(plan.days[1].items[0].note, "");
+});
+
 
 test("removing a day keeps its stops instead of silently deleting them", () => {
   const plan = samplePlan();

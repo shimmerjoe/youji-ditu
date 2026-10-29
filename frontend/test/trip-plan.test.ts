@@ -14,6 +14,7 @@ import {
   moveItem,
   normalizePlan,
   normalizePlans,
+  parsePlanImport,
   planToMarkdown,
   removeDay,
   removeItem,
@@ -90,6 +91,18 @@ test("restored day and stop identities are unique across the whole plan", () => 
   assert.equal(plan.days[0].items[0].note, "");
   assert.equal(plan.days[0].items[1].note, "只改乙");
   assert.equal(plan.days[1].items[0].note, "");
+});
+
+test("import rejects unrelated, mixed, future or oversized structures atomically", () => {
+  assert.equal(normalizePlan({ foo: "bar" }), null);
+  for (const raw of [{ foo: "bar" }, {}, [samplePlan(), null], { schema: 999, plans: [samplePlan()] }, { title: "overflow", days: Array(31).fill({ items: [] }) }, { title: "overflow", days: [{ items: Array(21).fill({ name: "站点" }) }] }]) {
+    const result = parsePlanImport(raw);
+    assert.equal(result.plans.length, 0);
+    assert.ok(result.error);
+  }
+  const restored = parsePlanImport({ schema: 1, plans: [samplePlan()] });
+  assert.equal(restored.error, "");
+  assert.equal(restored.plans[0].days[0].items[0].name, "故宫博物院");
 });
 
 

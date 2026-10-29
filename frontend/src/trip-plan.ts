@@ -8,6 +8,7 @@
 export const PLAN_SCHEMA = 1;
 export const MAX_DAYS = 30;
 export const MAX_ITEMS_PER_DAY = 20;
+export const MAX_IMPORT_BYTES = 1024 * 1024;
 
 export type PlanItemKind = "place" | "food" | "custom";
 
@@ -177,6 +178,7 @@ export function normalizeBudget(raw: unknown): BudgetAssumptions {
 export function normalizePlan(raw: unknown): TripPlan | null {
   if (!raw || typeof raw !== "object") return null;
   const value = raw as Record<string, unknown>;
+  if (!Array.isArray(value.days) && !text(value.title, 40)) return null;
   const days = Array.isArray(value.days)
     ? value.days.map(normalizeDay).filter((day): day is PlanDay => day !== null).slice(0, MAX_DAYS)
     : [];
@@ -216,6 +218,28 @@ export function normalizePlans(raw: unknown): TripPlan[] {
     plans.push(plan);
   }
   return plans;
+}
+
+/** 导入先整体检查，避免把无关文件变成空行程，或在限额处静默截掉用户安排。 */
+export function parsePlanImport(raw: unknown): { plans: TripPlan[]; error: string } {
+  const wrapper = raw && typeof raw === "object" ? raw as Record<string, unknown> : {};
+  if (wrapper.schema !== undefined && wrapper.schema !== PLAN_SCHEMA) return { plans: [], error: "不支持这个备份版本，请保留原文件。" };
+  const list = Array.isArray(raw) ? raw : Array.isArray(wrapper.plans) ? wrapper.plans : [raw];
+  if (!list.length || list.length > 100) return { plans: [], error: "每次请导入 1–100 份行程，文件未被修改。" };
+  for (const [index, candidate] of list.entries()) {
+    const plan = normalizePlan(candidate);
+    if (!plan) return { plans: [], error: `第 ${index + 1} 项不是可识别的行程，未导入任何内容。` };
+    const source = candidate as Record<string, unknown>;
+    if (source.schema !== undefined && source.schema !== PLAN_SCHEMA) return { plans: [], error: "行程版本不支持，请保留原文件。" };
+    const days = source.days;
+    if (days !== undefined && (!Array.isArray(days) || days.length > MAX_DAYS)) return { plans: [], error: "行程日期结构无效或超过 30 天，未截断导入。" };
+    if (Array.isArray(days)) for (const day of days) {
+      if (!day || typeof day !== "object" || !Array.isArray(day.items) || day.items.length > MAX_ITEMS_PER_DAY || day.items.some((item: unknown) => !normalizeItem(item))) {
+        return { plans: [], error: "某天的安排无效或超过 20 项，请整理原文件后再导入。" };
+      }
+    }
+  }
+  return { plans: normalizePlans(list), error: "" };
 }
 
 export function createPlan(title: string, dayCount = 2, now = new Date()): TripPlan {

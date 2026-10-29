@@ -71,6 +71,17 @@ def run(base, output, round_number):
                     assert saved["days"][0]["items"][1]["note"] == "只改第二项"
                     assert len(set(page.locator("[data-item-id]").evaluate_all("els => els.map(el => el.dataset.itemId)"))) == 3
                     results.append({"width": width, "case": "duplicate-identities", "passed": True})
+                if round_number >= 3:
+                    seed(fixture())
+                    for raw in ({"foo": "bar"}, {"plans": [fixture(), None]}):
+                        page.locator('[data-action="import-json"]').set_input_files({"name": "bad.json", "mimeType": "application/json", "buffer": json.dumps(raw).encode()})
+                        page.wait_for_function("document.querySelector('.plan-status').textContent.includes('导入失败')")
+                        assert page.evaluate("JSON.parse(localStorage.getItem('tay_plans')).length") == 1
+                    page.locator('[data-action="import-json"]').set_input_files({"name": "large.json", "mimeType": "application/json", "buffer": b" " * (1024 * 1024 + 1)})
+                    assert "超过 1 MB" in page.locator(".plan-status").inner_text()
+                    page.locator('[data-action="import-json"]').set_input_files({"name": "good.json", "mimeType": "application/json", "buffer": json.dumps({"schema": 1, "plans": [fixture()]}).encode()})
+                    page.wait_for_function("JSON.parse(localStorage.getItem('tay_plans')).length === 2")
+                    results.append({"width": width, "case": "validated-import", "passed": True})
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth"), "horizontal overflow"
                 assert not errors, errors
                 page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True)

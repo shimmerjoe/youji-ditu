@@ -10,10 +10,12 @@ import {
   encodeShare,
   estimateBudget,
   localDateString,
+  MAX_IMPORT_BYTES,
   mapSearchUrl,
   moveItem,
   normalizePlan,
   normalizePlans,
+  parsePlanImport,
   planToMarkdown,
   removeDay,
   removeItem,
@@ -557,17 +559,24 @@ export function bootstrapPlannerPage(): void {
     if (target.dataset.action === "import-json") {
       const file = (target as HTMLInputElement).files?.[0];
       if (!file) return;
+      if (file.size > MAX_IMPORT_BYTES) {
+        status = "导入失败：文件超过 1 MB，请拆分备份后再导入。现有行程未改变。";
+        target.value = "";
+        render();
+        return;
+      }
       file.text().then((text) => {
         let payload: unknown;
         try { payload = JSON.parse(text); } catch { status = "导入失败：不是有效的 JSON 文件"; render(); return; }
-        const list = Array.isArray(payload) ? payload
-          : payload && typeof payload === "object" && Array.isArray((payload as Record<string, unknown>).plans) ? (payload as Record<string, unknown>).plans
-            : [payload];
-        const imported = normalizePlans(list);
-        if (!imported.length) { status = "导入失败：文件里没有可识别的行程"; render(); return; }
+        const result = parsePlanImport(payload);
+        if (result.error) { status = `导入失败：${result.error}`; render(); return; }
+        const imported = result.plans;
         remember("导入");
         const ids = new Set(plans.map((candidate) => candidate.id));
-        imported.forEach((candidate) => { if (ids.has(candidate.id)) Object.assign(candidate, clonePlan(candidate, candidate.title)); });
+        imported.forEach((candidate) => {
+          if (ids.has(candidate.id)) Object.assign(candidate, clonePlan(candidate, candidate.title));
+          ids.add(candidate.id);
+        });
         plans = [...imported, ...plans];
         activeId = imported[0].id;
         persist(`已导入 ${imported.length} 份行程`);

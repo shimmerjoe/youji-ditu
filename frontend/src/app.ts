@@ -8,6 +8,9 @@ import {
 import { bootstrapDestinationNavigation, bootstrapSiteSearch } from "./site-search";
 
 function bootstrapRuntime(): void {
+  // A versioned entry and an unversioned import are distinct module URLs.
+  // Guard the effects as well as keeping shared helpers out of the entry chunk.
+  if (document.documentElement.dataset.appRuntime === "ready") return;
   const node = document.createElement("div");
   node.id = "appRuntimeStatus";
   node.className = "app-runtime-status";

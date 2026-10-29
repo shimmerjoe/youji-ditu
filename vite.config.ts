@@ -34,6 +34,11 @@ export default defineConfig({
     rolldownOptions: {
       input: resolve(rootDir, "frontend/src/app.ts"),
       output: {
+        // The homepage lazy module shares this pure helper with the entry.
+        // Keep it out of the bootstrap: app.js?v=... and app.js are distinct URLs.
+        codeSplitting: {
+          groups: [{ name: "recent-visits", test: /[\\/]recent-visits\.ts$/ }],
+        },
         entryFileNames: "travel-app.js",
         chunkFileNames: "travel-chunk-[hash].js",
         assetFileNames: "travel-app.[ext]"

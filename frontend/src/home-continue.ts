@@ -1,7 +1,7 @@
 /** 首页“继续上次的旅行准备”：当前行程、今天安排、最近浏览与收藏。没有本机数据时保持隐藏。 */
 import { dayLoad, localDateString, todayIndex } from "./trip-plan.ts";
 import { loadActivePlanId, loadPlans } from "./plan-store.ts";
-import { normalizeRecentVisits } from "./site-search.ts";
+import { normalizeRecentVisits } from "./recent-visits.ts";
 import { h, siteHref } from "./plan-dom.ts";
 
 function storedArray(key: string): unknown[] {

@@ -1,0 +1,1 @@
+function e(e,t=4){if(!Array.isArray(e))return[];let n=new Set,r=[];for(let i of e){if(!i||typeof i!=`object`)continue;let e=i;if(typeof e.key!=`string`||typeof e.name!=`string`||typeof e.href!=`string`)continue;let a=e.key.trim(),o=e.name.trim(),s=e.href.trim();if(!(!a||!o||!s||n.has(a))&&(n.add(a),r.push({key:a,name:o,href:s}),r.length>=t))break}return r}export{e as t};

@@ -15,6 +15,7 @@
 
 ## 历史记录
 
+- [2026-10-29 行程可靠性与出行体验迭代](history/codex-iterations-2026-10-29.md)：执行指令、每轮改动与验证证据。
 - [2026-10-20 界面重构与目录整理](history/ui-redesign-2026-10-20.md)
 - [2026-10-20 云端迁移记录](history/cloud-migration-2026-10-20.md)；迁移快照清单与比对见 [backup/](../backup/README.md)
 - [迭代日志](history/iteration-log.md)、[交接说明](history/handoff.md)、`history/audits/` 验收审计、`history/superpowers/` 早期计划

@@ -4966,7 +4966,9 @@ def build_pwa_assets() -> None:
         "  if(e.request.mode==='navigate'||e.request.destination==='document'){\n"
         "    e.respondWith(caches.open(CACHE).then(async c=>{\n"
         "      try{const res=await fetch(e.request);if(res&&res.ok)c.put(e.request,res.clone());return res;}\n"
-        "      catch(_){return await c.match(e.request)||offlineResponse();}\n"
+        # HTML is static; query parameters restore client-side plans/filters, not
+        # a different server document. Keep strict version matching for assets.
+        "      catch(_){return await c.match(e.request)||await c.match(e.request,{ignoreSearch:true})||offlineResponse();}\n"
         "    }));return;\n"
         "  }\n"
         "  if(e.request.destination==='script'||e.request.destination==='style'){\n"

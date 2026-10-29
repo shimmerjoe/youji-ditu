@@ -28,13 +28,13 @@ class QuietHandler(SimpleHTTPRequestHandler):
         pass
 
 
-def run(base, output, round_number):
+def run(base, output, round_number, viewports=((1366, 768), (390, 844))):
     results = []
     output.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as p:
         browser = p.chromium.launch(executable_path=EDGE, headless=True)
         try:
-            for width, height in ((1366, 768), (390, 844)):
+            for width, height in viewports:
                 context = browser.new_context(viewport={"width": width, "height": height}, accept_downloads=True)
                 page = context.new_page()
                 errors = []
@@ -231,6 +231,7 @@ def run(base, output, round_number):
                     results.append({"width": width, "case": "cross-tab-recovery", "passed": True})
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth"), "horizontal overflow"
                 assert not errors, errors
+                page.evaluate("scrollTo({top:0,left:0,behavior:'instant'})")
                 page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True, animations="disabled")
                 context.close()
         finally:
@@ -241,17 +242,21 @@ def run(base, output, round_number):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--round", type=int, default=10)
+    parser.add_argument("--round", type=int, default=11)
     parser.add_argument("--output", type=Path, default=ROOT / "artifacts" / "planner-audit")
     parser.add_argument("--base-url", default="")
+    parser.add_argument("--viewports", default="1366x768,390x844", help="Comma-separated WIDTHxHEIGHT sizes")
     args = parser.parse_args()
+    sizes = tuple(tuple(map(int, size.split("x"))) for size in args.viewports.split(","))
+    if any(len(size) != 2 or min(size) < 1 for size in sizes):
+        parser.error("--viewports must contain positive WIDTHxHEIGHT pairs")
     if args.base_url:
-        run(args.base_url.rstrip("/") + "/", args.output, args.round)
+        run(args.base_url.rstrip("/") + "/", args.output, args.round, sizes)
     else:
         server = ThreadingHTTPServer(("127.0.0.1", 0), partial(QuietHandler, directory=str(ROOT / "site")))
         Thread(target=server.serve_forever, daemon=True).start()
         try:
-            run(f"http://127.0.0.1:{server.server_port}/", args.output, args.round)
+            run(f"http://127.0.0.1:{server.server_port}/", args.output, args.round, sizes)
         finally:
             server.shutdown()
             server.server_close()

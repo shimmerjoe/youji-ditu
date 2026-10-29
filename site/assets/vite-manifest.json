@@ -3,11 +3,18 @@
     "file": "travel-chunk-0dWcLiNJ.js",
     "name": "plan-dom"
   },
+  "_travel-chunk-CYqY2T6Q.js": {
+    "file": "travel-chunk-CYqY2T6Q.js",
+    "name": "recent-visits"
+  },
   "frontend/src/app.ts": {
     "file": "travel-app.js",
     "name": "app",
     "src": "frontend/src/app.ts",
     "isEntry": true,
+    "imports": [
+      "_travel-chunk-CYqY2T6Q.js"
+    ],
     "dynamicImports": [
       "frontend/src/plan-picker.ts",
       "frontend/src/home-continue.ts",
@@ -18,12 +25,12 @@
     ]
   },
   "frontend/src/home-continue.ts": {
-    "file": "travel-chunk-CUjNxvFI.js",
+    "file": "travel-chunk-B_fDK9bS.js",
     "name": "home-continue",
     "src": "frontend/src/home-continue.ts",
     "isDynamicEntry": true,
     "imports": [
-      "frontend/src/app.ts",
+      "_travel-chunk-CYqY2T6Q.js",
       "_travel-chunk-0dWcLiNJ.js"
     ]
   },

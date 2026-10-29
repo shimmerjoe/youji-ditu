@@ -38,6 +38,15 @@ class NodeBuildContractTests(unittest.TestCase):
         self.assertIn('<article class="content" id="guideContent">', qingdao)
         self.assertIn("<noscript>", qingdao)
 
+    def test_lazy_chunks_do_not_import_the_versioned_bootstrap_entry(self):
+        manifest = json.loads((ROOT / "site" / "assets" / "vite-manifest.json").read_text(encoding="utf-8"))
+        entry_keys = {key for key, value in manifest.items() if value.get("isEntry")}
+        for key, value in manifest.items():
+            if key not in entry_keys:
+                with self.subTest(chunk=key):
+                    self.assertFalse(entry_keys.intersection(value.get("imports", [])),
+                                     "An unversioned back-import would run the versioned bootstrap twice")
+
 
 if __name__ == "__main__":
     unittest.main()

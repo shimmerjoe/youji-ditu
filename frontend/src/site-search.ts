@@ -1,3 +1,6 @@
+import { normalizeRecentVisits } from "./recent-visits.ts";
+export { normalizeRecentVisits, type RecentVisitEntry } from "./recent-visits.ts";
+
 export interface TravelSearchItem {
   key: string;
   title: string;
@@ -17,12 +20,6 @@ export interface RankedSearchItem {
 }
 
 export type RecentSearchEntry = string;
-
-export interface RecentVisitEntry {
-  key: string;
-  name: string;
-  href: string;
-}
 
 const SEARCH_HISTORY_KEY = "tay_search_recent";
 const VISIT_HISTORY_KEY = "tay_recent";
@@ -80,26 +77,6 @@ export function rememberSearchQuery(
     cleaned,
     ...existing.filter((entry) => normalize(entry) !== identity),
   ].slice(0, limit);
-}
-
-export function normalizeRecentVisits(value: unknown, limit = 4): RecentVisitEntry[] {
-  if (!Array.isArray(value)) return [];
-  const seen = new Set<string>();
-  const entries: RecentVisitEntry[] = [];
-  for (const candidate of value) {
-    if (!candidate || typeof candidate !== "object") continue;
-    const raw = candidate as Record<string, unknown>;
-    if (typeof raw.key !== "string" || typeof raw.name !== "string" || typeof raw.href !== "string") continue;
-    const key = raw.key.trim();
-    const name = raw.name.trim();
-    const href = raw.href.trim();
-    if (!key || !name || !href || seen.has(key)) continue;
-    seen.add(key);
-    const entry: RecentVisitEntry = { key, name, href };
-    entries.push(entry);
-    if (entries.length >= limit) break;
-  }
-  return entries;
 }
 
 export function destinationItemsForGroup(

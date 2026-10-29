@@ -6,7 +6,7 @@
 
 | 用途 | 地址 | 状态 |
 | --- | --- | --- |
-| 公开网站（GitHub Pages） | <https://shimmerjoe.github.io/youji-ditu/> | 已上线：2026-10-20 合并重构后由 Actions 部署，桌面和手机验收通过 |
+| 公开网站（GitHub Pages） | <https://shimmerjoe.github.io/youji-ditu/> | 已启用；每次更新的线上版本以 Actions 成功部署记录为准 |
 | 城市攻略示例 | <https://shimmerjoe.github.io/youji-ditu/cities/beijing.html> | 已上线 |
 | 跨城市总览 | <https://shimmerjoe.github.io/youji-ditu/overview.html> | 已上线 |
 | 源码仓库 | <https://github.com/shimmerjoe/youji-ditu> | 公开 |
@@ -36,6 +36,10 @@
 - **跨城市总览**（`overview.html`）：把 `记录.md` 整理成时间成本、场景、季节和多城路线索引。
 - **导航**：桌面端点“选城市”展开省份面板；手机端顶部是抽屉菜单，底部有首页 / 目的地 / 自驾 / 行程 / 我的五个标签。全站搜索支持城市、景点、美食和季节，还会记住最近的搜索和浏览。
 - **行程计划**（`plan.html`）：在城市页景点、美食卡上点“＋ 加入行程”，放到某一天；可以改日期、人数、开始时间、停留时长和费用，跨天移动，看每天的强度和预算（全程与人均），标记需预约的地点；支持多份行程、复制、删除后撤销、导出 Markdown / JSON、从 JSON 恢复、打印和分享链接（默认不含备注）；旅途中打开“今天”视图直接看当天安排和高德导航链接。
+  - 每项可手填交通 / 排队 / 休息预留，显示预计结束时间；提醒时间重叠、顺序异常和跨午夜安排。这是计划检查，不是实时交通或开放时间判断。
+  - 费用留空与明确填 `0` 分开；每日餐费取“日预算”和“已填美食合计”较高值，避免重复计费。大额预算在表格内部横向滚动，支持键盘。
+  - 已安排的景点显示所在日期，只有明确勾选“再次到访”才重复添加。删除日期超出相邻日容量时拒绝操作，不截断安排或备注。
+  - 导入先整体检查（文件不超过 1 MB，每次最多 100 份、每份最多 30 天 / 每天 20 项），不把无关 JSON 当成行程；分享过长时提示改用 JSON。
 - **行程与用户中心**：收藏、浏览记录、行程排序与对比、自驾路书、清单、预算和笔记都只保存在当前浏览器，可以导出或导入 JSON 备份。
 - **自驾路书**（`roadtrip.html`）：不配地图密钥时，可以填入导航应用查到的单程公里数来分天、算预算和看风险；不填则按同城、同省或跨省和天数粗估，页面会标明“粗估，不是道路里程”。配置高德 JS Key 后切换成真实路网。
 - **体验**：支持深色模式、字号和动效偏好、打印 / 另存 PDF；作为 PWA 可以离线缓存。
@@ -62,7 +66,7 @@ youji-ditu/
 │  ├─ requirements-build.txt  Python 构建依赖（Pillow）
 │  └─ test_*.py / *.test   自动化测试
 ├─ site/                   ← 网站目录（由生成器输出，提交进仓库，可直接预览）
-│  ├─ index.html、overview.html、destinations.html、themes.html、city-guides.html、roadtrip.html、tools.html、user.html
+│  ├─ index.html、overview.html、destinations.html、themes.html、city-guides.html、plan.html、roadtrip.html、tools.html、user.html
 │  ├─ cities/*.html        城市攻略页
 │  ├─ assets/              样式、脚本、搜索索引、城市封面与图片库及其授权记录
 │  └─ manifest.webmanifest、sw.js、sitemap.xml、robots.txt
@@ -89,11 +93,23 @@ npm run preview    # 在 http://localhost:8765/ 预览 site/
 | 命令 | 作用 |
 | --- | --- |
 | `npm run build` | 用 Vite 打包 `frontend/src`，再用 Python 把 `content/` 生成到 `site/` |
-| `npm test` | TypeScript 检查、16 项 Node 测试、144 项 Python 测试 |
+| `npm test` | TypeScript 检查、38 项 Node 测试、164 项 Python 测试（数量随新增测试变化） |
 | `npm run validate` | 检查 `site/` 中的失效链接、锚点、重复 ID 和缺失 alt |
 | `npm run stage` | 按白名单把公开文件复制到 `dist/`，供 Pages 部署 |
 
 Windows 用户可以直接双击 `scripts/windows/` 里的脚本：`打开首页.bat` 用于本机预览，`手机访问.bat` 用于局域网预览，`重新生成网页.bat` 用于重新生成网站。离线缓存、模块脚本和完整搜索都需要通过 HTTP 访问，直接双击 HTML 文件无法完整使用。
+
+### 可选浏览器验收
+
+Windows 安装 Python Playwright，并保留默认位置的 Microsoft Edge 后，可运行独立、临时浏览器中的回归检查；不会读取个人浏览器配置。
+
+```powershell
+python -m pip install playwright
+python -X utf8 tools/planner_browser_audit.py --viewports 1920x1080,1366x768,390x844,360x800
+python -X utf8 tools/travel_release_audit.py
+```
+
+两个脚本会自行启动仅本机可访问的临时服务；报告和截图默认在忽略提交的 `artifacts/` 下。加 `--base-url https://shimmerjoe.github.io/youji-ditu/` 可以对已发布版本执行相同检查，测试数据只写入临时浏览器。打印检查覆盖调用入口和打印样式，不代表实际打印机出纸。
 
 ## 维护方式
 
@@ -148,6 +164,7 @@ python -X utf8 tools\import_commons_city_photo.py --city beijing --source "https
 ## 数据、离线与隐私
 
 - 收藏、浏览记录、行程、清单、预算、笔记和城市复核清单都只保存在当前浏览器的 localStorage 中。数据格式带版本号，支持迁移和 JSON 备份 / 恢复。
+- 行程旧格式 / 损坏数据会尝试保留原文到 `tay_plans_backup`；无法备份时拒绝覆盖原值。存储被禁用时可临时编排并导出 JSON，但不能保证刷新后保留；其他标签页写入不可读数据时，本页会提示并保留仍能导出的行程。
 - 自驾路书的“分享链接”会把路书快照写进链接本身，不上传服务器，请只发给信任的人。
 - Service Worker 第一次联网访问时会缓存首页、行程计划和自驾路书；打开行程时，行程涉及的城市攻略也会存到本机，旅途中没信号也能查看。断网打开未缓存的页面时，会显示明确的离线说明，不会冒充实时地图、天气或票价服务。
 - 222 城的搜索索引在第一次输入搜索词时才加载，不会拖慢首屏。
@@ -176,3 +193,4 @@ Web 端 JS Key 和安全密钥会出现在静态 HTML 里，这是浏览器端�
 - [手机、PWA 与 APK](docs/guides/移动端与APK说明.md)
 - [资料来源与更新规则](docs/guides/资料来源与更新规则.md)
 - [内容与图片体检](docs/reports/内容与图片体检.md)
+- [2026-10-29 自主迭代指令、逐轮结果与验收](docs/history/codex-iterations-2026-10-29.md)

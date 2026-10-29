@@ -21,10 +21,16 @@ class PwaCacheTests(unittest.TestCase):
         self.assertNotIn("return hit||net", self.sw)
 
     def test_navigation_has_a_readable_offline_fallback(self):
-        self.assertIn("return await c.match(e.request)||offlineResponse()", self.sw)
+        self.assertIn("return await c.match(e.request)||await c.match(e.request,{ignoreSearch:true})||offlineResponse()", self.sw)
         self.assertNotIn("c.match(OFFLINE_FALLBACK)", self.sw)
         self.assertIn("离线", self.sw)
         self.assertIn("status:503", self.sw)
+
+    def test_client_state_queries_do_not_block_cached_documents_offline(self):
+        navigation = self.sw.split("if(e.request.mode==='navigate'", 1)[1].split("if(e.request.destination==='script'", 1)[0]
+        self.assertIn("{ignoreSearch:true}", navigation)
+        assets = self.sw.split("if(e.request.destination==='script'", 1)[1]
+        self.assertNotIn("ignoreSearch", assets, "versioned scripts must not fall back to old query versions")
 
     def test_scripts_and_styles_are_network_first_to_avoid_stale_interactions(self):
         self.assertIn("e.request.destination==='script'||e.request.destination==='style'", self.sw)

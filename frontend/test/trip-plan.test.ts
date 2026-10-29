@@ -181,6 +181,21 @@ test("an explicitly entered zero cost differs from an unknown legacy zero", () =
   assert.match(planToMarkdown(plan), /尚未填写.*费用待核验/);
 });
 
+test("listed food is included within the daily meal allowance rather than counted twice", () => {
+  const plan = createPlan("餐费口径", 1);
+  plan.travelers = 2;
+  plan.budget = { hotelPerNight: 0, mealsPerPerson: 50, localTransportPerDay: 0, intercity: 0, other: 0 };
+  addItem(plan, 0, { name: "午餐", kind: "food", cost: 80 });
+  addItem(plan, 0, { name: "小吃", kind: "food", cost: 20 });
+  addItem(plan, 0, { name: "景点", cost: 30 });
+  assert.equal(estimateBudget(plan).days[0].meals, 200);
+  assert.equal(estimateBudget(plan).days[0].tickets, 60);
+  assert.equal(estimateBudget(plan).total, 260);
+  plan.budget.mealsPerPerson = 120;
+  assert.equal(estimateBudget(plan).total, 300);
+  assert.match(planToMarkdown(plan), /美食不再重复计入/);
+});
+
 
 test("dates and today's index follow the start date", () => {
   const plan = samplePlan();

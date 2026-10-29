@@ -164,6 +164,30 @@ def run(base, output, round_number):
                     page.locator('[data-field="cost"]').first.press("Tab")
                     assert "还有 2 个地点" in page.locator(".plan-budget").inner_text()
                     results.append({"width": width, "case": "zero-vs-unknown-cost", "passed": True})
+                if round_number >= 9:
+                    meal = fixture((1,))
+                    meal["days"][0]["items"][0].update(kind="food", cost=80, costKnown=True)
+                    meal["budget"]["localTransportPerDay"] = 0
+                    seed(meal)
+                    assert page.locator(".plan-total strong").inner_text() == "¥240"
+                    cost = page.locator('[data-field="cost"]').first
+                    cost.fill("200")
+                    cost.press("Tab")
+                    assert page.locator(".plan-total strong").inner_text() == "¥400"
+                    stress = fixture((2, 1))
+                    stress["travelers"] = 20
+                    stress["budget"]["mealsPerPerson"] = 10000
+                    stress["budget"]["hotelPerNight"] = 100000
+                    stress["budget"]["localTransportPerDay"] = 10000
+                    for item in stress["days"][0]["items"]:
+                        item.update(cost=100000, costKnown=True)
+                    seed(stress)
+                    scroll = page.locator(".plan-budget-scroll")
+                    assert scroll.evaluate("el => el.scrollWidth > el.clientWidth")
+                    scroll.focus()
+                    page.keyboard.press("ArrowRight")
+                    page.wait_for_function("document.querySelector('.plan-budget-scroll').scrollLeft > 0")
+                    results.append({"width": width, "case": "meal-budget-and-large-values", "passed": True})
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth"), "horizontal overflow"
                 assert not errors, errors
                 page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True, animations="disabled")

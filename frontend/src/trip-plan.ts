@@ -424,10 +424,11 @@ export function estimateBudget(plan: TripPlan): PlanBudget {
   const days = plan.days.map((day, index) => {
     const tickets = day.items.reduce((sum, item) => {
       if (item.kind !== "custom" && !item.costKnown) itemsWithoutCost += 1;
-      return sum + item.cost * travelers;
+      return sum + (item.kind === "food" ? 0 : item.cost * travelers);
     }, 0);
     const hotel = index < nights ? budget.hotelPerNight : 0;
-    const meals = budget.mealsPerPerson * travelers;
+    const listedFood = day.items.filter((item) => item.kind === "food").reduce((sum, item) => sum + item.cost * travelers, 0);
+    const meals = Math.max(budget.mealsPerPerson * travelers, listedFood);
     const transport = budget.localTransportPerDay;
     return { hotel, meals, transport, tickets, total: hotel + meals + transport + tickets };
   });
@@ -569,6 +570,7 @@ export function planToMarkdown(plan: TripPlan, siteUrl = ""): string {
   lines.push("## 预算假设", "");
   lines.push(`- 住宿：每晚 ${yuan(plan.budget.hotelPerNight)} × ${budget.nights} 晚`);
   lines.push(`- 餐饮：每人每天 ${yuan(plan.budget.mealsPerPerson)}`);
+  lines.push("- 餐饮口径：每天取餐费预算与已填美食费用合计的较高值，美食不再重复计入门票/其他；未列出的餐食请在日预算中留足。");
   lines.push(`- 市内交通：每天 ${yuan(plan.budget.localTransportPerDay)}`);
   lines.push(`- 往返大交通：${yuan(plan.budget.intercity)}；其他：${yuan(plan.budget.other)}`);
   if (budget.itemsWithoutCost) lines.push(`- 还有 ${budget.itemsWithoutCost} 个地点没有填写门票/消费，实际花费可能更高`);

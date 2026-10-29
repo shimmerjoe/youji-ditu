@@ -277,7 +277,7 @@ export function bootstrapPlannerPage(): void {
         h("strong", { text: "时间检查（按填写的时长）" }),
         h("ul", {}, ...warnings.map((issue) => h("li", { text: issue.message })))) : null,
       addForm,
-      h("footer", { class: "plan-day-foot", text: `当天参考花费 ${yuan(budget.total)}（住宿 ${yuan(budget.hotel)} · 餐饮 ${yuan(budget.meals)} · 市内交通 ${yuan(budget.transport)} · 门票/消费 ${yuan(budget.tickets)}）` }),
+      h("footer", { class: "plan-day-foot", text: `当天参考花费 ${yuan(budget.total)}（住宿 ${yuan(budget.hotel)} · 餐饮 ${yuan(budget.meals)} · 市内交通 ${yuan(budget.transport)} · 门票/其他 ${yuan(budget.tickets)}）` }),
     );
   }
 
@@ -292,6 +292,7 @@ export function bootstrapPlannerPage(): void {
       h("h3", { id: "planBudgetTitle", text: "参考预算" }),
       h("p", { class: "plan-total" }, h("strong", { text: yuan(budget.total) }), h("span", { text: `全程 · 人均 ${yuan(budget.perPerson)}` })),
       h("p", { class: "plan-hint", text: `按下方假设计算，不是实时报价。${budget.nights} 晚住宿；门票按每个安排填写的“每人费用” × ${plan.travelers} 人。金额留空表示未填，填 0 表示你的 0 元参考估算。${budget.itemsWithoutCost ? `还有 ${budget.itemsWithoutCost} 个地点没填费用，实际可能更高。` : ""}` }),
+      h("p", { class: "plan-hint", text: "每天餐饮取“日餐费预算”和“已填美食费用合计”的较高值，避免重复计算。未列出的餐食请在日预算中留足；门票/其他只计非美食安排。" }),
       h("div", { class: "plan-assumptions" },
         assumption("每晚住宿", "hotelPerNight", "整间/整组的价格"),
         assumption("每人每天餐饮", "mealsPerPerson", "早中晚加小吃"),
@@ -299,13 +300,13 @@ export function bootstrapPlannerPage(): void {
         assumption("往返大交通", "intercity", "高铁/机票全体合计"),
         assumption("其他", "other", "门票套票、购物等"),
       ),
-      h("table", { class: "plan-budget-table" },
-        h("thead", {}, h("tr", {}, h("th", { scope: "col", text: "天" }), h("th", { scope: "col", text: "住宿" }), h("th", { scope: "col", text: "餐饮" }), h("th", { scope: "col", text: "交通" }), h("th", { scope: "col", text: "门票" }), h("th", { scope: "col", text: "合计" }))),
+      h("div", { class: "plan-budget-scroll", role: "region", tabindex: 0, "aria-label": "每日预算明细，可左右滚动" }, h("table", { class: "plan-budget-table" },
+        h("thead", {}, h("tr", {}, h("th", { scope: "col", text: "天" }), h("th", { scope: "col", text: "住宿" }), h("th", { scope: "col", text: "餐饮" }), h("th", { scope: "col", text: "交通" }), h("th", { scope: "col", text: "门票/其他" }), h("th", { scope: "col", text: "合计" }))),
         h("tbody", {}, ...budget.days.map((day, index) => h("tr", {},
           h("th", { scope: "row", text: `第${index + 1}天` }),
           h("td", { text: yuan(day.hotel) }), h("td", { text: yuan(day.meals) }), h("td", { text: yuan(day.transport) }), h("td", { text: yuan(day.tickets) }), h("td", { text: yuan(day.total) }),
         ))),
-      ),
+      )),
     );
   }
 

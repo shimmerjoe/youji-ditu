@@ -857,6 +857,9 @@ a.pi-name:hover { color: var(--accent-ink); text-decoration: underline; }
 .plan-total span { color: var(--muted); font-size: 13.5px; }
 .plan-assumptions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .plan-budget-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.plan-side, .plan-budget { min-width: 0; }
+.plan-budget-scroll { max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; }
+.plan-budget-scroll:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 4px; }
 .plan-budget-table th, .plan-budget-table td { padding: 5px 4px; border-bottom: 1px solid var(--hairline); text-align: right; white-space: nowrap; }
 .plan-budget-table th[scope="row"], .plan-budget-table thead th:first-child { text-align: left; }
 .plan-checks ul { display: grid; gap: 6px; padding-left: 18px; color: var(--ink-2); font-size: 13.5px; }

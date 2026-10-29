@@ -816,6 +816,10 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .plan-items { display: grid; gap: 8px; list-style: none; }
 .plan-item { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 10px; border-radius: var(--radius); background: var(--surface-2); }
 .pi-time { width: 100%; min-height: 40px; padding: 0 6px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); font-weight: 700; }
+.pi-time-block { display: grid; gap: 4px; min-width: 0; }
+.pi-end { color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+.plan-schedule { margin-top: 10px; padding: 12px 14px; border: 1px solid var(--line); border-inline-start: 3px solid var(--warm); border-radius: var(--radius-sm); color: var(--ink-2); background: var(--warm-soft); font-size: 13px; }
+.plan-schedule ul { display: grid; gap: 5px; padding-inline-start: 18px; margin-top: 5px; }
 .pi-main { display: grid; gap: 6px; min-width: 0; }
 .pi-title { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .pi-name { color: var(--ink); font-weight: 800; font-size: 15.5px; }

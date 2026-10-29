@@ -11,6 +11,8 @@ import {
   encodeShare,
   estimateBudget,
   mapSearchUrl,
+  itemEndTime,
+  scheduleIssues,
   MAX_SHARE_CHARS,
   moveItem,
   normalizePlan,
@@ -173,6 +175,27 @@ test("dates and today's index follow the start date", () => {
   assert.equal(todayIndex(plan, "2026-10-26"), -1);
   plan.startDate = "";
   assert.equal(todayIndex(plan, "2026-10-25"), -1);
+});
+
+test("schedule checks nested overlaps, order, midnight and touching boundaries", () => {
+  const plan = createPlan("时间检查", 1);
+  addItem(plan, 0, { name: "长项目", time: "09:00", hours: 6 });
+  addItem(plan, 0, { name: "短项目", time: "10:00", hours: 1 });
+  addItem(plan, 0, { name: "另一项目", time: "12:00", hours: 1 });
+  assert.equal(scheduleIssues(plan.days[0]).filter((issue) => issue.kind === "overlap").length, 2);
+  assert.equal(itemEndTime(plan.days[0].items[0]), "15:00");
+  plan.days[0].items.reverse();
+  assert.ok(scheduleIssues(plan.days[0]).some((issue) => issue.kind === "order"));
+  const night = createPlan("夜间", 1);
+  const item = addItem(night, 0, { name: "夜间活动", time: "23:00", hours: 2 });
+  assert.ok(item);
+  assert.equal(itemEndTime(item), "次日 01:00");
+  assert.ok(scheduleIssues(night.days[0]).some((issue) => issue.kind === "overnight"));
+  assert.match(planToMarkdown(night), /跨日/);
+  const adjacent = createPlan("衔接", 1);
+  addItem(adjacent, 0, { name: "甲", time: "09:00", hours: 1 });
+  addItem(adjacent, 0, { name: "乙", time: "10:00", hours: 1 });
+  assert.equal(scheduleIssues(adjacent.days[0]).length, 0);
 });
 
 

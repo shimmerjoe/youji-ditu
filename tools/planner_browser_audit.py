@@ -123,6 +123,19 @@ def run(base, output, round_number):
                     assert "不支持" in page.locator(".plan-notice").inner_text()
                     assert page.evaluate("JSON.parse(localStorage.getItem('tay_plans')).length") == 1
                     results.append({"width": width, "case": "share-validation-preview", "passed": True})
+                if round_number >= 6:
+                    schedule = fixture()
+                    schedule["days"][0]["items"][0].update(time="09:00", hours=2)
+                    schedule["days"][0]["items"][1].update(time="10:00", hours=1)
+                    schedule["days"][1]["items"][0].update(time="23:00", hours=2)
+                    seed(schedule)
+                    assert "重叠" in page.locator(".plan-schedule").first.inner_text()
+                    assert "跨日" in page.locator(".plan-schedule").last.inner_text()
+                    assert "11:00" in page.locator(".pi-end").first.inner_text()
+                    page.locator('[data-field="time"]').nth(1).fill("12:00")
+                    page.locator('[data-field="time"]').nth(1).press("Tab")
+                    assert page.locator(".plan-day").first.locator(".plan-schedule").count() == 0
+                    results.append({"width": width, "case": "schedule-conflicts", "passed": True})
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth"), "horizontal overflow"
                 assert not errors, errors
                 page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True)

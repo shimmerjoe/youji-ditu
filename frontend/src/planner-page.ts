@@ -10,6 +10,7 @@ import {
   encodeShare,
   estimateBudget,
   localDateString,
+  itemEndTime,
   MAX_IMPORT_BYTES,
   mapSearchUrl,
   moveItem,
@@ -20,6 +21,7 @@ import {
   removeDay,
   removeItem,
   shiftItem,
+  scheduleIssues,
   sortDayByTime,
   todayIndex,
   updateItem,
@@ -206,7 +208,7 @@ export function bootstrapPlannerPage(): void {
       return h("li", { class: "plan-item today-item" },
         h("span", { class: "pi-time-label", text: item.time || "—" }),
         h("div", { class: "pi-main" }, nameNode, tags, item.note ? h("p", { class: "pi-note-text", text: item.note }) : null,
-          h("small", { class: "pi-meta", text: [`约 ${item.hours} 小时`, item.cost ? `每人约 ${yuan(item.cost)}` : "费用待核验"].join(" · ") })),
+          h("small", { class: "pi-meta", text: [itemEndTime(item) ? `预计结束 ${itemEndTime(item)}` : "未设开始时间", `约 ${item.hours} 小时`, item.cost ? `每人约 ${yuan(item.cost)}` : "费用待核验"].join(" · ") })),
         navigate,
       );
     }
@@ -215,7 +217,9 @@ export function bootstrapPlannerPage(): void {
     const hours = h("select", { "data-field": "hours", "data-item": id, "data-fk": `${id}-hours`, "aria-label": `${item.name} 停留时长` },
       ...[0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12].map((value) => h("option", { value, selected: value === item.hours, text: `${value} 小时` })));
     return h("li", { class: "plan-item", "data-item-id": id },
-      h("input", { type: "time", class: "pi-time", value: item.time, "data-field": "time", "data-item": id, "data-fk": `${id}-time`, "aria-label": `${item.name} 开始时间` }),
+      h("div", { class: "pi-time-block" },
+        h("input", { type: "time", class: "pi-time", value: item.time, "data-field": "time", "data-item": id, "data-fk": `${id}-time`, "aria-label": `${item.name} 开始时间` }),
+        h("small", { class: "pi-end", text: itemEndTime(item) ? `至 ${itemEndTime(item)}` : "时间可稍后填写" })),
       h("div", { class: "pi-main" },
         h("div", { class: "pi-title" }, nameNode, tags),
         h("div", { class: "pi-fields" },
@@ -242,6 +246,7 @@ export function bootstrapPlannerPage(): void {
     const load = dayLoad(day);
     const budget = estimateBudget(plan).days[dayIndex];
     const date = dayDate(plan, dayIndex);
+    const warnings = scheduleIssues(day);
     const head = h("header", { class: "plan-day-head" },
       h("div", {},
         h("h3", {}, `第 ${dayIndex + 1} 天`, date ? h("small", { text: formatDate(date) }) : null, highlight ? h("span", { class: "today-badge", text: "今天" }) : null),
@@ -265,7 +270,11 @@ export function bootstrapPlannerPage(): void {
       h("button", { type: "submit", class: "btn btn-ghost" }, "添加"),
     );
     return h("article", { class: `plan-day${highlight ? " is-today" : ""}`, id: `${shared ? "shared-" : ""}plan-day-${dayIndex + 1}` },
-      head, note, items, addForm,
+      head, note, items,
+      warnings.length ? h("div", { class: "plan-schedule", role: "status" },
+        h("strong", { text: "时间检查（按填写的时长）" }),
+        h("ul", {}, ...warnings.map((issue) => h("li", { text: issue.message })))) : null,
+      addForm,
       h("footer", { class: "plan-day-foot", text: `当天参考花费 ${yuan(budget.total)}（住宿 ${yuan(budget.hotel)} · 餐饮 ${yuan(budget.meals)} · 市内交通 ${yuan(budget.transport)} · 门票/消费 ${yuan(budget.tickets)}）` }),
     );
   }

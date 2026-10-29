@@ -372,6 +372,44 @@ export function dayLoad(day: PlanDay): DayLoad {
   return { hours, stops, level: "balanced", label: "节奏适中" };
 }
 
+export interface ScheduleIssue {
+  kind: "overlap" | "order" | "overnight";
+  message: string;
+}
+
+function startMinutes(item: PlanItem): number | null {
+  if (!validTime(item.time)) return null;
+  const [hour, minute] = item.time.split(":").map(Number);
+  return hour * 60 + minute;
+}
+
+function clockTime(minutes: number): string {
+  const local = minutes % 1440;
+  return `${minutes >= 1440 ? "次日 " : ""}${String(Math.floor(local / 60)).padStart(2, "0")}:${String(local % 60).padStart(2, "0")}`;
+}
+
+export function itemEndTime(item: PlanItem): string {
+  const start = startMinutes(item);
+  return start === null ? "" : clockTime(start + Math.round(item.hours * 60));
+}
+
+/** 仅按用户填写的时间/时长检查，不代表景区开放时间或实际交通。 */
+export function scheduleIssues(day: PlanDay): ScheduleIssue[] {
+  const issues: ScheduleIssue[] = [];
+  const timed = day.items.flatMap((item) => {
+    const start = startMinutes(item);
+    return start === null ? [] : [{ item, start, end: start + Math.round(item.hours * 60) }];
+  });
+  if (timed.some((entry, index) => index > 0 && entry.start < timed[index - 1].start)) issues.push({ kind: "order", message: "开始时间与列表顺序不同，可用“按时间排序”整理。" });
+  for (const entry of timed) if (entry.end >= 1440) issues.push({ kind: "overnight", message: `${entry.item.name} 预计到 ${clockTime(entry.end)}，请核对跨日日期和返程交通。` });
+  let latest: typeof timed[number] | undefined;
+  for (const entry of [...timed].sort((a, b) => a.start - b.start)) {
+    if (latest && entry.start < latest.end) issues.push({ kind: "overlap", message: `${entry.item.name}（${entry.item.time} 开始）与 ${latest.item.name}（预计至 ${clockTime(latest.end)}）时间重叠。` });
+    if (!latest || entry.end > latest.end) latest = entry;
+  }
+  return issues;
+}
+
 export function estimateBudget(plan: TripPlan): PlanBudget {
   const { budget, travelers } = plan;
   const nights = Math.max(0, plan.days.length - 1);
@@ -505,6 +543,8 @@ export function planToMarkdown(plan: TripPlan, siteUrl = ""): string {
     const load = dayLoad(day);
     lines.push(`## 第 ${index + 1} 天${date ? `（${date}）` : ""}`, "");
     lines.push(`> ${load.stops} 个安排 · 约 ${load.hours} 小时 · ${load.label} · 当天参考花费 ${yuan(budget.days[index].total)}`, "");
+    const warnings = scheduleIssues(day);
+    if (warnings.length) lines.push(`> 时间检查：${warnings.map((issue) => issue.message).join("；")}`, "");
     if (day.note) lines.push(day.note, "");
     if (!day.items.length) lines.push("- 暂无安排");
     day.items.forEach((item) => {
@@ -514,7 +554,7 @@ export function planToMarkdown(plan: TripPlan, siteUrl = ""): string {
         item.cost ? `每人约 ${yuan(item.cost)}` : item.kind === "custom" ? "" : "费用待核验",
         item.booking ? "需预约" : "",
       ].filter(Boolean).join(" · ");
-      lines.push(`- ${item.time ? `${item.time} ` : ""}${item.name}${item.city ? ` · ${item.city}` : ""}${link}：${extras}${item.note ? `。${item.note}` : ""}`);
+      lines.push(`- ${item.time ? `${item.time}–${itemEndTime(item)} ` : ""}${item.name}${item.city ? ` · ${item.city}` : ""}${link}：${extras}${item.note ? `。${item.note}` : ""}`);
     });
     lines.push("");
   });

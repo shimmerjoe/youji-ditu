@@ -27,6 +27,8 @@ export interface PlanItem {
   time: string;
   /** 预计停留小时数（0.5 – 12） */
   hours: number;
+  /** 用户为交通、排队或休息预留的分钟数；不是实时通勤预测。 */
+  bufferMinutes: number;
   /** 每人参考门票/消费（元），0 表示未填写 */
   cost: number;
   note: string;
@@ -149,6 +151,7 @@ export function normalizeItem(raw: unknown): PlanItem | null {
     href: safeHref(value.href),
     time: validTime(value.time),
     hours: Math.round(number(value.hours, 0.5, 12, kind === "food" ? 1 : 2) * 2) / 2,
+    bufferMinutes: Math.round(number(value.bufferMinutes, 0, 240, 0)),
     cost: Math.round(number(value.cost, 0, 100000, 0)),
     note: longText(value.note, 400),
     booking: value.booking === true,
@@ -359,12 +362,14 @@ export function sortDayByTime(plan: TripPlan, dayIndex: number): void {
 }
 
 export function dayLoad(day: PlanDay): DayLoad {
-  const hours = day.items.reduce((sum, item) => sum + item.hours, 0);
+  const visitHours = day.items.reduce((sum, item) => sum + item.hours, 0);
+  const bufferHours = day.items.reduce((sum, item) => sum + (item.bufferMinutes || 0), 0) / 60;
+  const hours = Math.round((visitHours + bufferHours) * 100) / 100;
   const stops = day.items.length;
   const cities = new Set(day.items.map((item) => item.cityKey).filter(Boolean));
   if (stops === 0) return { hours: 0, stops, level: "empty", label: "还没有安排" };
   // 跨城当天额外计入通勤；游玩达到 8 小时或超过 6 个点（还没算吃饭和路上）视为偏满。
-  const effective = hours + Math.max(0, cities.size - 1) * 2;
+  const effective = visitHours + Math.max(bufferHours, Math.max(0, cities.size - 1) * 2);
   // 主题乐园、徒步这类单个整天项目，再“减一个点”就没东西了，提示改为留出往返与排队时间。
   if (stops === 1 && hours >= 8) return { hours, stops, level: "full", label: "整天项目，别再加点，留出往返、排队和休息时间" };
   if (effective >= 8 || stops > 6) return { hours, stops, level: "full", label: "偏满，考虑减一个点或拆到别的天" };
@@ -398,13 +403,13 @@ export function scheduleIssues(day: PlanDay): ScheduleIssue[] {
   const issues: ScheduleIssue[] = [];
   const timed = day.items.flatMap((item) => {
     const start = startMinutes(item);
-    return start === null ? [] : [{ item, start, end: start + Math.round(item.hours * 60) }];
+    return start === null ? [] : [{ item, start, end: start + Math.round(item.hours * 60) + (item.bufferMinutes || 0) }];
   });
   if (timed.some((entry, index) => index > 0 && entry.start < timed[index - 1].start)) issues.push({ kind: "order", message: "开始时间与列表顺序不同，可用“按时间排序”整理。" });
-  for (const entry of timed) if (entry.end >= 1440) issues.push({ kind: "overnight", message: `${entry.item.name} 预计到 ${clockTime(entry.end)}，请核对跨日日期和返程交通。` });
+  for (const entry of timed) if (entry.end >= 1440) issues.push({ kind: "overnight", message: `${entry.item.name} 的游玩及预留时间延续到 ${clockTime(entry.end)}，请核对跨日日期和返程交通。` });
   let latest: typeof timed[number] | undefined;
   for (const entry of [...timed].sort((a, b) => a.start - b.start)) {
-    if (latest && entry.start < latest.end) issues.push({ kind: "overlap", message: `${entry.item.name}（${entry.item.time} 开始）与 ${latest.item.name}（预计至 ${clockTime(latest.end)}）时间重叠。` });
+    if (latest && entry.start < latest.end) issues.push({ kind: "overlap", message: `${entry.item.name}（${entry.item.time} 开始）与 ${latest.item.name}（含预留至 ${clockTime(latest.end)}）时间重叠。` });
     if (!latest || entry.end > latest.end) latest = entry;
   }
   return issues;
@@ -494,7 +499,7 @@ export function encodeShare(plan: TripPlan, options: { includeNotes?: boolean } 
       ...(includeNotes && day.note ? { o: day.note } : {}),
       i: day.items.map((item) => ({
         n: item.name, k: item.kind, c: item.city, y: item.cityKey, h: item.href,
-        t: item.time, r: item.hours, m: item.cost, ...(item.booking ? { b: 1 } : {}),
+        t: item.time, r: item.hours, g: item.bufferMinutes, m: item.cost, ...(item.booking ? { b: 1 } : {}),
         ...(includeNotes && item.note ? { o: item.note } : {}),
       })),
     })),
@@ -517,7 +522,7 @@ export function decodeShare(encoded: string): TripPlan | null {
         note: value.o,
         items: items.map((item) => {
           const v = (item && typeof item === "object" ? item : {}) as Record<string, unknown>;
-          return { name: v.n, kind: v.k, city: v.c, cityKey: v.y, href: v.h, time: v.t, hours: v.r, cost: v.m, booking: v.b === 1, note: v.o };
+          return { name: v.n, kind: v.k, city: v.c, cityKey: v.y, href: v.h, time: v.t, hours: v.r, bufferMinutes: v.g, cost: v.m, booking: v.b === 1, note: v.o };
         }),
       };
     });
@@ -551,6 +556,7 @@ export function planToMarkdown(plan: TripPlan, siteUrl = ""): string {
       const link = item.href && siteUrl ? `（[攻略](${siteUrl.replace(/\/?$/, "/")}${item.href})）` : "";
       const extras = [
         item.hours ? `约 ${item.hours} 小时` : "",
+        item.bufferMinutes ? `另留交通/休息 ${item.bufferMinutes} 分钟` : "",
         item.cost ? `每人约 ${yuan(item.cost)}` : item.kind === "custom" ? "" : "费用待核验",
         item.booking ? "需预约" : "",
       ].filter(Boolean).join(" · ");
@@ -564,6 +570,6 @@ export function planToMarkdown(plan: TripPlan, siteUrl = ""): string {
   lines.push(`- 市内交通：每天 ${yuan(plan.budget.localTransportPerDay)}`);
   lines.push(`- 往返大交通：${yuan(plan.budget.intercity)}；其他：${yuan(plan.budget.other)}`);
   if (budget.itemsWithoutCost) lines.push(`- 还有 ${budget.itemsWithoutCost} 个地点没有填写门票/消费，实际花费可能更高`);
-  lines.push("", "> 门票、开放时间和预约规则请在出发前按官方渠道复核。");
+  lines.push("", "> 时长包含手填的交通/休息预留，未填写按 0 计，不是实时通勤。门票、开放时间和预约规则请在出发前按官方渠道复核。");
   return lines.join("\n") + "\n";
 }

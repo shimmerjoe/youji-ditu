@@ -224,6 +224,8 @@ export function bootstrapPlannerPage(): void {
         h("div", { class: "pi-title" }, nameNode, tags),
         h("div", { class: "pi-fields" },
           hours,
+          h("label", { class: "pi-buffer" }, h("span", { text: "预留 min" }),
+            numberInput(`${id}-buffer`, item.bufferMinutes, { min: 0, max: 240, step: 5, "data-field": "bufferMinutes", "data-item": id, "aria-label": `${item.name} 交通或休息预留（分钟）` })),
           h("label", { class: "pi-cost" }, h("span", { text: "每人 ¥" }),
             numberInput(`${id}-cost`, item.cost, { min: 0, max: 100000, step: 1, "data-field": "cost", "data-item": id, "aria-label": `${item.name} 每人费用` })),
           h("label", { class: "pi-booking" },
@@ -345,6 +347,7 @@ export function bootstrapPlannerPage(): void {
         full.length ? h("li", { text: `第 ${full.map(({ index }) => index + 1).join("、")} 天偏满：考虑删掉一个点或挪到别的天，并留出吃饭和路上的时间。` }) : null,
         allDay.length ? h("li", { text: `第 ${allDay.map(({ index }) => index + 1).join("、")} 天是整天项目：前一晚住近一点，查好入园/开放时间和返程末班车。` }) : null,
         noCost ? h("li", { text: `${noCost} 个地点的费用待核验，预算可能偏低。` }) : null,
+        h("li", { text: "时长包含手填的交通/休息预留；0 表示尚未预留，不是实时通勤。跨城车程仍需在导航或官方时刻表核对。" }),
         h("li", { text: "准备雨天备选：每天至少留一个室内点（博物馆、商场、老街）。" }),
         h("li", { text: "出发前一天再看一次天气预警、闭馆日和末班车。" }),
       ),
@@ -609,7 +612,7 @@ export function bootstrapPlannerPage(): void {
     if (!fieldName) return;
     if (itemId) {
       const value = target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : target.value;
-      const patch: Partial<PlanItem> = fieldName === "hours" || fieldName === "cost" ? { [fieldName]: Number(value) } : { [fieldName]: value };
+      const patch: Partial<PlanItem> = fieldName === "hours" || fieldName === "cost" || fieldName === "bufferMinutes" ? { [fieldName]: Number(value) } : { [fieldName]: value };
       updateItem(plan, itemId, patch);
     } else if (fieldName === "day-note") {
       const day = plan.days[Number(target.dataset.day)];

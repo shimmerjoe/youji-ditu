@@ -198,6 +198,20 @@ test("schedule checks nested overlaps, order, midnight and touching boundaries",
   assert.equal(scheduleIssues(adjacent.days[0]).length, 0);
 });
 
+test("user travel buffers affect load and conflicts and survive share and export", () => {
+  const plan = createPlan("留白", 1);
+  const first = addItem(plan, 0, { name: "博物馆", cityKey: "a", time: "09:00", hours: 2, bufferMinutes: 60 });
+  addItem(plan, 0, { name: "午餐", cityKey: "a", time: "11:30", hours: 1 });
+  assert.ok(first);
+  assert.equal(dayLoad(plan.days[0]).hours, 4);
+  assert.ok(scheduleIssues(plan.days[0]).some((issue) => issue.kind === "overlap"));
+  assert.equal(decodeShare(encodeShare(plan))?.days[0].items[0].bufferMinutes, 60);
+  assert.match(planToMarkdown(plan), /另留交通\/休息 60 分钟/);
+  updateItem(plan, first.id, { bufferMinutes: -10 });
+  assert.equal(first.bufferMinutes, 60); // updateItem returns a new normalized object
+  assert.equal(plan.days[0].items[0].bufferMinutes, 0);
+});
+
 
 test("share links exclude personal notes unless explicitly included", () => {
   const plan = samplePlan();

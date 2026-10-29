@@ -832,6 +832,8 @@ a.pi-name:hover { color: var(--accent-ink); text-decoration: underline; }
 .pi-fields select { min-height: 36px; padding: 0 8px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
 .pi-cost { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); }
 .pi-cost input { width: 84px; min-height: 36px; padding: 0 8px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.pi-buffer { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); }
+.pi-buffer input { width: 72px; min-height: 36px; padding: 0 8px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
 .pi-booking { display: inline-flex; align-items: center; gap: 4px; color: var(--ink-2); }
 .pi-booking input { width: 18px; height: 18px; accent-color: var(--brand); }
 .pi-note { width: 100%; min-height: 36px; padding: 0 10px; border: 1px solid transparent; border-radius: var(--radius-sm); background: var(--surface); font-size: 13.5px; }

@@ -136,9 +136,23 @@ def run(base, output, round_number):
                     page.locator('[data-field="time"]').nth(1).press("Tab")
                     assert page.locator(".plan-day").first.locator(".plan-schedule").count() == 0
                     results.append({"width": width, "case": "schedule-conflicts", "passed": True})
+                if round_number >= 7:
+                    buffers = fixture((2,))
+                    buffers["days"][0]["items"][0].update(time="09:00", hours=2)
+                    buffers["days"][0]["items"][1].update(time="11:30", hours=1)
+                    seed(buffers)
+                    reserve = page.locator('[data-field="bufferMinutes"]').first
+                    reserve.fill("60")
+                    reserve.press("Tab")
+                    assert "重叠" in page.locator(".plan-schedule").inner_text()
+                    assert "约 4 小时" in page.locator(".plan-load").inner_text()
+                    page.reload()
+                    page.wait_for_selector('[data-field="bufferMinutes"]')
+                    assert page.locator('[data-field="bufferMinutes"]').first.input_value() == "60"
+                    results.append({"width": width, "case": "travel-buffer-persistence", "passed": True})
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth"), "horizontal overflow"
                 assert not errors, errors
-                page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True)
+                page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True, animations="disabled")
                 context.close()
         finally:
             browser.close()

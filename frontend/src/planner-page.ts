@@ -107,9 +107,9 @@ export function bootstrapPlannerPage(): void {
     });
   };
 
-  const shareMatch = location.hash.match(/share=([A-Za-z0-9_-]+)/);
-  if (shareMatch) sharedPreview = decodeShare(shareMatch[1]);
-  if (shareMatch && !sharedPreview) notice = "分享链接无法解析，可能被截断或修改过。";
+  const sharePayload = location.hash.startsWith("#share=") ? location.hash.slice(7) : null;
+  if (sharePayload !== null) sharedPreview = decodeShare(sharePayload);
+  if (sharePayload !== null && !sharedPreview) notice = "分享链接无法解析，可能被截断、超过长度限制或使用了不支持的版本。现有行程未改变。";
 
   const active = (): TripPlan | undefined => plans.find((plan) => plan.id === activeId) || plans[0];
 
@@ -237,7 +237,7 @@ export function bootstrapPlannerPage(): void {
     );
   }
 
-  function renderDay(plan: TripPlan, dayIndex: number, highlight: boolean, compact = false): HTMLElement {
+  function renderDay(plan: TripPlan, dayIndex: number, highlight: boolean, compact = false, shared = false): HTMLElement {
     const day = plan.days[dayIndex];
     const load = dayLoad(day);
     const budget = estimateBudget(plan).days[dayIndex];
@@ -264,7 +264,7 @@ export function bootstrapPlannerPage(): void {
       h("input", { id: `add-${day.id}`, type: "text", maxlength: 60, placeholder: "添加安排，例如：酒店寄存行李、高铁 G123", "data-fk": `${day.id}-add` }),
       h("button", { type: "submit", class: "btn btn-ghost" }, "添加"),
     );
-    return h("article", { class: `plan-day${highlight ? " is-today" : ""}`, id: `plan-day-${dayIndex + 1}` },
+    return h("article", { class: `plan-day${highlight ? " is-today" : ""}`, id: `${shared ? "shared-" : ""}plan-day-${dayIndex + 1}` },
       head, note, items, addForm,
       h("footer", { class: "plan-day-foot", text: `当天参考花费 ${yuan(budget.total)}（住宿 ${yuan(budget.hotel)} · 餐饮 ${yuan(budget.meals)} · 市内交通 ${yuan(budget.transport)} · 门票/消费 ${yuan(budget.tickets)}）` }),
     );
@@ -352,7 +352,7 @@ export function bootstrapPlannerPage(): void {
           h("button", { type: "button", class: "btn btn-primary", "data-action": "save-shared" }, "保存为我的行程"),
           h("button", { type: "button", class: "btn btn-ghost", "data-action": "close-shared" }, "关闭预览")),
       ),
-      h("div", { class: "plan-days" }, ...plan.days.map((_, index) => renderDay(plan, index, false, true))),
+      h("div", { class: "plan-days" }, ...plan.days.map((_, index) => renderDay(plan, index, false, true, true))),
     );
   }
 
@@ -523,8 +523,10 @@ export function bootstrapPlannerPage(): void {
         break;
       case "print": window.print(); return;
       case "share":
-        shareUrl = `${location.origin}${location.pathname}#share=${encodeShare(plan, { includeNotes: includeNotesInShare })}`;
-        status = includeNotesInShare ? "已生成分享链接（含备注）" : "已生成分享链接（不含备注）";
+        try {
+          shareUrl = `${location.origin}${location.pathname}#share=${encodeShare(plan, { includeNotes: includeNotesInShare })}`;
+          status = includeNotesInShare ? "已生成分享链接（含备注）" : "已生成分享链接（不含备注）";
+        } catch (error) { shareUrl = ""; status = error instanceof Error ? error.message : "分享失败，请导出 JSON 备份。"; }
         break;
       case "copy-share": {
         const input = root.querySelector<HTMLInputElement>('[data-fk="share-url"]');

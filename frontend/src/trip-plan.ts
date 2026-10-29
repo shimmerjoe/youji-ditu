@@ -9,6 +9,7 @@ export const PLAN_SCHEMA = 1;
 export const MAX_DAYS = 30;
 export const MAX_ITEMS_PER_DAY = 20;
 export const MAX_IMPORT_BYTES = 1024 * 1024;
+export const MAX_SHARE_CHARS = 16000;
 
 export type PlanItemKind = "place" | "food" | "custom";
 
@@ -436,7 +437,7 @@ function fromBase64Url(input: string): string {
   const padded = input.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(input.length / 4) * 4, "=");
   const binary = atob(padded);
   const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-  return new TextDecoder().decode(bytes);
+  return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
 }
 
 /**
@@ -460,13 +461,17 @@ export function encodeShare(plan: TripPlan, options: { includeNotes?: boolean } 
       })),
     })),
   };
-  return toBase64Url(JSON.stringify(payload));
+  const encoded = toBase64Url(JSON.stringify(payload));
+  if (encoded.length > MAX_SHARE_CHARS) throw new Error("分享链接过长，请减少安排/备注，或导出 JSON 文件分享。行程已保留。 ");
+  return encoded;
 }
 
 export function decodeShare(encoded: string): TripPlan | null {
   try {
+    if (!encoded || encoded.length > MAX_SHARE_CHARS || !/^[A-Za-z0-9_-]+$/.test(encoded)) return null;
     const raw = JSON.parse(fromBase64Url(encoded)) as Record<string, unknown>;
-    if (!raw || typeof raw !== "object" || !Array.isArray(raw.d)) return null;
+    if (!raw || typeof raw !== "object" || raw.v !== PLAN_SCHEMA || !Array.isArray(raw.d) || !raw.d.length || raw.d.length > MAX_DAYS) return null;
+    if (raw.d.some((day) => !day || typeof day !== "object" || !Array.isArray(day.i) || day.i.length > MAX_ITEMS_PER_DAY || day.i.some((item: unknown) => !item || typeof item !== "object" || !text((item as Record<string, unknown>).n, 60)))) return null;
     const days = (raw.d as unknown[]).map((day) => {
       const value = (day && typeof day === "object" ? day : {}) as Record<string, unknown>;
       const items = Array.isArray(value.i) ? value.i : [];

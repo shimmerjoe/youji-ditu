@@ -11,6 +11,7 @@ import {
   encodeShare,
   estimateBudget,
   mapSearchUrl,
+  MAX_SHARE_CHARS,
   moveItem,
   normalizePlan,
   normalizePlans,
@@ -189,6 +190,15 @@ test("share links exclude personal notes unless explicitly included", () => {
   const withNotes = decodeShare(encodeShare(plan, { includeNotes: true }));
   assert.equal(withNotes?.days[0].note, "住在王府井附近");
   assert.equal(decodeShare("%%%"), null);
+});
+
+test("share decoder rejects unsupported versions, broken shapes and unbounded links", () => {
+  const encode = (value: unknown) => Buffer.from(JSON.stringify(value)).toString("base64url");
+  for (const raw of [{ v: 999, d: [{ i: [] }] }, { v: 1, d: [] }, { v: 1, d: [{ i: [{ n: "" }] }] }, { v: 1, d: Array(31).fill({ i: [] }) }]) assert.equal(decodeShare(encode(raw)), null);
+  assert.equal(decodeShare("A".repeat(MAX_SHARE_CHARS + 1)), null);
+  const large = createPlan("长备注", 2);
+  for (let day = 0; day < 2; day += 1) for (let index = 0; index < 20; index += 1) addItem(large, day, { name: `安排${index}`, note: "长".repeat(400) });
+  assert.throws(() => encodeShare(large, { includeNotes: true }), /导出 JSON/);
 });
 
 

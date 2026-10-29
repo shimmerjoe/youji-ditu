@@ -4,6 +4,7 @@ import argparse
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import json
+import base64
 from pathlib import Path
 from threading import Thread
 from playwright.sync_api import sync_playwright
@@ -107,6 +108,21 @@ def run(base, output, round_number):
                     assert not blocked_errors, blocked_errors
                     blocked.close()
                     results.append({"width": width, "case": "blocked-storage-export", "passed": True})
+                if round_number >= 5:
+                    seed(fixture())
+                    page.locator('[data-action="share"]').click()
+                    share_url = page.locator('[data-fk="share-url"]').input_value()
+                    page.goto(share_url)
+                    page.wait_for_selector("#planPreviewTitle")
+                    ids = page.locator("[id]").evaluate_all("els => els.map(el => el.id)")
+                    assert len(ids) == len(set(ids)), "shared and active plan IDs overlap"
+                    assert page.locator(".plan-preview input, .plan-preview select, .plan-preview textarea").count() == 0
+                    invalid = base64.urlsafe_b64encode(json.dumps({"v": 99, "d": [{"i": []}]}).encode()).decode().rstrip("=")
+                    page.goto(base + "plan.html#share=" + invalid)
+                    page.wait_for_selector(".plan-notice")
+                    assert "不支持" in page.locator(".plan-notice").inner_text()
+                    assert page.evaluate("JSON.parse(localStorage.getItem('tay_plans')).length") == 1
+                    results.append({"width": width, "case": "share-validation-preview", "passed": True})
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth"), "horizontal overflow"
                 assert not errors, errors
                 page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True)

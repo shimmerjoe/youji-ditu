@@ -589,15 +589,11 @@
     return true;
   }
   function migrateStorage() {
+    try {
     let meta = parseStored(localStorage.getItem(STORAGE_META_KEY));
     const version = Number(meta && meta.version) || 1;
     if (version < STORAGE_SCHEMA) {
-      STORAGE_KNOWN_KEYS.forEach((key) => {
-        const raw = localStorage.getItem(key);
-        if (raw == null) return;
-        const value = readStored(key, raw);
-        if (!validStoredValue(key, value)) localStorage.removeItem(key);
-      });
+      // 不删除不认识/损坏的原始值；各数据模块负责提示和可恢复的备份。
       meta = { version: STORAGE_SCHEMA, migratedAt: new Date().toISOString() };
       try { localStorage.setItem(STORAGE_META_KEY, JSON.stringify(meta)); } catch (_) {}
     } else if (!meta || version !== STORAGE_SCHEMA) {
@@ -605,6 +601,7 @@
       try { localStorage.setItem(STORAGE_META_KEY, JSON.stringify(meta)); } catch (_) {}
     }
     return meta;
+    } catch (_) { return { version: STORAGE_SCHEMA, unavailable: true }; }
   }
   function emitStorageChange(key, action) {
     window.dispatchEvent(new CustomEvent("tay:storage-change", { detail: { key: key, action: action } }));
@@ -612,14 +609,13 @@
   const LS = {
     get(k, d) {
       migrateStorage();
+      try {
       const value = readStored(k, localStorage.getItem(k));
       if (value == null || !validStoredValue(k, value)) {
-        if (value == null && localStorage.getItem(k) != null) {
-          try { localStorage.removeItem(k); } catch (_) {}
-        }
         return d;
       }
       return value;
+      } catch (_) { return d; }
     },
     set(k, v) {
       migrateStorage();
@@ -630,12 +626,14 @@
       try { localStorage.removeItem(k); emitStorageChange(k, "delete"); } catch (_) {}
     },
     exportData() {
-      migrateStorage();
+      if (migrateStorage().unavailable) return null;
       const data = {};
+      try {
       STORAGE_KNOWN_KEYS.forEach((key) => {
         const value = readStored(key, localStorage.getItem(key));
         if (value != null && validStoredValue(key, value)) data[key] = value;
       });
+      } catch (_) { return null; }
       return { schemaVersion: STORAGE_SCHEMA, exportedAt: new Date().toISOString(), data: data };
     },
     importData(payload) {
@@ -1464,7 +1462,9 @@
       dataTransferStatus.classList.toggle("error", Boolean(isError));
     }
     if (dataExport) dataExport.addEventListener("click", () => {
-      downloadJson("游记地图-本机数据备份.json", LS.exportData());
+      const payload = LS.exportData();
+      if (!payload) { showTransferStatus("导出失败：本机存储无法读取，未生成空备份。请检查浏览器存储权限。", true); return; }
+      downloadJson("游记地图-本机数据备份.json", payload);
       showTransferStatus("已导出本机数据备份", false);
     });
     if (dataImport) dataImport.addEventListener("change", () => {

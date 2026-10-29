@@ -82,6 +82,31 @@ def run(base, output, round_number):
                     page.locator('[data-action="import-json"]').set_input_files({"name": "good.json", "mimeType": "application/json", "buffer": json.dumps({"schema": 1, "plans": [fixture()]}).encode()})
                     page.wait_for_function("JSON.parse(localStorage.getItem('tay_plans')).length === 2")
                     results.append({"width": width, "case": "validated-import", "passed": True})
+                if round_number >= 4:
+                    page.evaluate("localStorage.setItem('tay_plans', '{broken'); localStorage.removeItem('tay_storage_meta')")
+                    page.reload()
+                    page.wait_for_selector(".plan-notice")
+                    assert page.evaluate("localStorage.getItem('tay_plans_backup')") == "{broken"
+                    assert page.evaluate("localStorage.getItem('tay_plans')") == "{broken"
+                    assert "已另存" in page.locator(".plan-notice").inner_text()
+                    blocked = browser.new_context(viewport={"width": width, "height": height})
+                    blocked.add_init_script("Storage.prototype.getItem = function() { throw new Error('blocked'); }; Storage.prototype.setItem = function() { throw new Error('quota'); };")
+                    blocked_page = blocked.new_page()
+                    blocked_errors = []
+                    blocked_page.on("pageerror", lambda error: blocked_errors.append({"message": error.message, "stack": error.stack}))
+                    blocked_page.goto(base + "plan.html")
+                    blocked_page.locator('[data-action="new-plan"]').click()
+                    assert "保存失败" in blocked_page.locator(".plan-status").inner_text()
+                    assert "存储无法读取" in blocked_page.locator(".plan-notice").inner_text()
+                    with blocked_page.expect_download() as download:
+                        blocked_page.locator('[data-action="export-json"]').click()
+                    assert download.value.suggested_filename.endswith(".json")
+                    blocked_page.goto(base + "user.html#tab=settings")
+                    blocked_page.locator("#dataExport").click()
+                    assert "未生成空备份" in blocked_page.locator("#dataTransferStatus").inner_text()
+                    assert not blocked_errors, blocked_errors
+                    blocked.close()
+                    results.append({"width": width, "case": "blocked-storage-export", "passed": True})
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth"), "horizontal overflow"
                 assert not errors, errors
                 page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True)

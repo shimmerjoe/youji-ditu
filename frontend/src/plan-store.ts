@@ -15,6 +15,8 @@ export interface PlanLoadResult {
   repaired: boolean;
   /** 整份数据都无法解析，一份行程也没能留下 */
   unreadable?: boolean;
+  unavailable?: boolean;
+  backupSaved?: boolean;
 }
 
 function storage(): Storage | null {
@@ -32,7 +34,10 @@ function emit(key: string, action: string): void {
 
 export function loadPlans(): PlanLoadResult {
   const store = storage();
-  const raw = store?.getItem(PLANS_KEY) ?? null;
+  if (!store) return { plans: [], repaired: false, unavailable: true };
+  let raw: string | null;
+  try { raw = store.getItem(PLANS_KEY); }
+  catch { return { plans: [], repaired: false, unavailable: true }; }
   if (raw == null) return { plans: [], repaired: false };
   let parsed: unknown;
   try {
@@ -41,12 +46,18 @@ export function loadPlans(): PlanLoadResult {
     parsed = undefined;
   }
   const plans = normalizePlans(parsed);
-  const repaired = !Array.isArray(parsed) || plans.length !== parsed.length;
-  if (repaired && store && store.getItem(PLANS_BACKUP_KEY) !== raw) {
-    // 保留一份原始数据，避免修复逻辑误伤时无法找回。
-    try { store.setItem(PLANS_BACKUP_KEY, raw); } catch { /* 空间不足时放弃备份，不阻塞使用 */ }
+  const stable = (value: unknown): string | undefined => JSON.stringify(value, (_key, entry: unknown) =>
+    entry && typeof entry === "object" && !Array.isArray(entry)
+      ? Object.fromEntries(Object.entries(entry).sort(([a], [b]) => a.localeCompare(b))) : entry);
+  const repaired = !Array.isArray(parsed) || stable(plans) !== stable(parsed);
+  let backupSaved = false;
+  if (repaired) {
+    try {
+      if (store.getItem(PLANS_BACKUP_KEY) !== raw) store.setItem(PLANS_BACKUP_KEY, raw);
+      backupSaved = true;
+    } catch { /* 返回真实备份结果，不能将配额失败显示为备份成功。 */ }
   }
-  return { plans, repaired, unreadable: repaired && plans.length === 0 };
+  return { plans, repaired, unreadable: repaired && plans.length === 0, backupSaved };
 }
 
 export function savePlans(plans: TripPlan[]): boolean {
@@ -62,7 +73,8 @@ export function savePlans(plans: TripPlan[]): boolean {
 }
 
 export function loadActivePlanId(): string {
-  const raw = storage()?.getItem(ACTIVE_PLAN_KEY);
+  let raw: string | null | undefined;
+  try { raw = storage()?.getItem(ACTIVE_PLAN_KEY); } catch { return ""; }
   if (!raw) return "";
   try {
     const value: unknown = JSON.parse(raw);

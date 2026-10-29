@@ -66,9 +66,10 @@ export function bootstrapPlannerPage(): void {
   const params = new URLSearchParams(location.search);
   if (params.get("plan") && plans.some((plan) => plan.id === params.get("plan"))) activeId = params.get("plan") as string;
   let view: View = params.get("view") === "today" ? "today" : "days";
-  let notice = loaded.unreadable
-    ? `本机保存的行程数据无法读取（可能被浏览器扩展或手动修改过）。原始内容已另存为 ${PLANS_BACKUP_KEY}，可以用之前导出的 JSON 备份恢复。`
-    : loaded.repaired ? `检测到部分行程数据损坏，已保留可读取的行程；原始数据另存为 ${PLANS_BACKUP_KEY}。` : "";
+  const backupNotice = loaded.backupSaved ? `原始内容已另存为 ${PLANS_BACKUP_KEY}。` : "原始内容未能另存，请保留已有 JSON 备份，不要清空浏览器数据。";
+  let notice = loaded.unavailable ? "本机存储无法读取。可以临时编排，但保存成功前请导出 JSON 备份。"
+    : loaded.unreadable ? `本机保存的行程数据无法解析。${backupNotice}可导入之前导出的 JSON 备份恢复。`
+      : loaded.repaired ? `已整理旧格式或异常条目，并保留可读取的行程。${backupNotice}` : "";
   let status = "";
   let undoSnapshot: string | null = null;
   let undoLabel = "";

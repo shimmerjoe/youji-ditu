@@ -496,9 +496,14 @@ export function bootstrapPlannerPage(): void {
       case "add-day": remember("添加一天"); addDay(plan); persist(); break;
       case "remove-day": {
         const index = Number(target.dataset.day);
-        remember("删除这天");
-        removeDay(plan, index);
-        persist(`已删除第 ${index + 1} 天，原有安排并入相邻一天`);
+        const before = JSON.stringify(plans);
+        if (removeDay(plan, index)) {
+          undoSnapshot = before;
+          undoLabel = "删除这天";
+          persist(`已删除第 ${index + 1} 天，原有安排与备注并入相邻一天`);
+        } else {
+          status = "无法删除：相邻一天没有足够空间（最多 20 个安排、400 字备注）。请先移动安排或整理备注。原行程未改变。";
+        }
         break;
       }
       case "sort-day": sortDayByTime(plan, Number(target.dataset.day)); persist("已按时间排序"); break;
@@ -575,8 +580,8 @@ export function bootstrapPlannerPage(): void {
     const fieldName = target.dataset.field;
     const itemId = target.dataset.item || "";
     if (target.dataset.action === "move-day") {
-      moveItem(plan, itemId, Number(target.value));
-      persist(`已移到第 ${Number(target.value) + 1} 天`);
+      if (moveItem(plan, itemId, Number(target.value))) persist(`已移到第 ${Number(target.value) + 1} 天`);
+      else status = "没有移动：目标日期已排满或安排不存在。请选择其他日期，原安排仍保留。";
       render();
       return;
     }

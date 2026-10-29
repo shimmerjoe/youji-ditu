@@ -237,9 +237,13 @@ export function addDay(plan: TripPlan): boolean {
 /** 删除某天；该天条目并入前一天（第一天则并入后一天），避免误删内容。 */
 export function removeDay(plan: TripPlan, dayIndex: number): boolean {
   if (plan.days.length <= 1 || !plan.days[dayIndex]) return false;
-  const [removed] = plan.days.splice(dayIndex, 1);
-  const target = plan.days[Math.max(0, dayIndex - 1)];
-  target.items.push(...removed.items.slice(0, MAX_ITEMS_PER_DAY - target.items.length));
+  const removed = plan.days[dayIndex];
+  const target = plan.days[dayIndex === 0 ? 1 : dayIndex - 1];
+  const notes = [target.note, removed.note].filter(Boolean).join("\n");
+  if (target.items.length + removed.items.length > MAX_ITEMS_PER_DAY || notes.length > 400) return false;
+  plan.days.splice(dayIndex, 1);
+  target.items.push(...removed.items);
+  target.note = notes;
   touch(plan);
   return true;
 }

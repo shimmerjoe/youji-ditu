@@ -90,6 +90,23 @@ test("removing a day keeps its stops instead of silently deleting them", () => {
   assert.equal(removeDay(single, 0), false);
 });
 
+test("deleting an overflowing day or moving into a full day is atomic", () => {
+  const plan = createPlan("不丢数据", 2);
+  for (let day = 0; day < 2; day += 1) for (let index = 0; index < 15; index += 1) addItem(plan, day, { name: `地点${day}-${index}` });
+  const before = JSON.stringify(plan);
+  assert.equal(removeDay(plan, 1), false);
+  assert.equal(JSON.stringify(plan), before);
+  for (let index = 0; index < 5; index += 1) addItem(plan, 0, { name: `满额${index}` });
+  const full = JSON.stringify(plan);
+  assert.equal(moveItem(plan, plan.days[1].items[0].id, 0), false);
+  assert.equal(JSON.stringify(plan), full);
+  const notes = createPlan("保留备注", 2);
+  notes.days[0].note = "住在车站附近";
+  notes.days[1].note = "先寄存行李";
+  assert.ok(removeDay(notes, 1));
+  assert.equal(notes.days[0].note, "住在车站附近\n先寄存行李");
+});
+
 
 test("day load flags overfull and cross-city days", () => {
   const plan = samplePlan();

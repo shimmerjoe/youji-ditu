@@ -167,6 +167,20 @@ test("budget separates per-day, total and per-person and counts nights correctly
   assert.equal(budget.itemsWithoutCost, 1);
 });
 
+test("an explicitly entered zero cost differs from an unknown legacy zero", () => {
+  const plan = createPlan("费用状态", 1);
+  addItem(plan, 0, { name: "零元参考", cost: 0, costKnown: true });
+  addItem(plan, 0, { name: "尚未填写", cost: 0 });
+  addItem(plan, 0, { name: "旧版已填金额", cost: 50 });
+  assert.equal(estimateBudget(plan).itemsWithoutCost, 1);
+  const shared = decodeShare(encodeShare(plan));
+  assert.ok(shared);
+  assert.equal(shared.days[0].items[0].costKnown, true);
+  assert.equal(shared.days[0].items[1].costKnown, false);
+  assert.match(planToMarkdown(plan), /零元参考.*¥0（已填写）/);
+  assert.match(planToMarkdown(plan), /尚未填写.*费用待核验/);
+});
+
 
 test("dates and today's index follow the start date", () => {
   const plan = samplePlan();

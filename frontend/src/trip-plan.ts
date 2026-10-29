@@ -29,8 +29,9 @@ export interface PlanItem {
   hours: number;
   /** 用户为交通、排队或休息预留的分钟数；不是实时通勤预测。 */
   bufferMinutes: number;
-  /** 每人参考门票/消费（元），0 表示未填写 */
+  /** 每人参考门票/消费（元）；costKnown 区分未填写与已填 0 元。 */
   cost: number;
+  costKnown: boolean;
   note: string;
   /** 用户标记“需要预约” */
   booking: boolean;
@@ -153,6 +154,7 @@ export function normalizeItem(raw: unknown): PlanItem | null {
     hours: Math.round(number(value.hours, 0.5, 12, kind === "food" ? 1 : 2) * 2) / 2,
     bufferMinutes: Math.round(number(value.bufferMinutes, 0, 240, 0)),
     cost: Math.round(number(value.cost, 0, 100000, 0)),
+    costKnown: value.costKnown === true || number(value.cost, 0, 100000, 0) > 0,
     note: longText(value.note, 400),
     booking: value.booking === true,
   };
@@ -421,7 +423,7 @@ export function estimateBudget(plan: TripPlan): PlanBudget {
   let itemsWithoutCost = 0;
   const days = plan.days.map((day, index) => {
     const tickets = day.items.reduce((sum, item) => {
-      if (item.kind !== "custom" && item.cost === 0) itemsWithoutCost += 1;
+      if (item.kind !== "custom" && !item.costKnown) itemsWithoutCost += 1;
       return sum + item.cost * travelers;
     }, 0);
     const hotel = index < nights ? budget.hotelPerNight : 0;
@@ -499,7 +501,7 @@ export function encodeShare(plan: TripPlan, options: { includeNotes?: boolean } 
       ...(includeNotes && day.note ? { o: day.note } : {}),
       i: day.items.map((item) => ({
         n: item.name, k: item.kind, c: item.city, y: item.cityKey, h: item.href,
-        t: item.time, r: item.hours, g: item.bufferMinutes, m: item.cost, ...(item.booking ? { b: 1 } : {}),
+        t: item.time, r: item.hours, g: item.bufferMinutes, m: item.cost, q: item.costKnown ? 1 : 0, ...(item.booking ? { b: 1 } : {}),
         ...(includeNotes && item.note ? { o: item.note } : {}),
       })),
     })),
@@ -522,7 +524,7 @@ export function decodeShare(encoded: string): TripPlan | null {
         note: value.o,
         items: items.map((item) => {
           const v = (item && typeof item === "object" ? item : {}) as Record<string, unknown>;
-          return { name: v.n, kind: v.k, city: v.c, cityKey: v.y, href: v.h, time: v.t, hours: v.r, bufferMinutes: v.g, cost: v.m, booking: v.b === 1, note: v.o };
+          return { name: v.n, kind: v.k, city: v.c, cityKey: v.y, href: v.h, time: v.t, hours: v.r, bufferMinutes: v.g, cost: v.m, costKnown: v.q === 1, booking: v.b === 1, note: v.o };
         }),
       };
     });
@@ -557,7 +559,7 @@ export function planToMarkdown(plan: TripPlan, siteUrl = ""): string {
       const extras = [
         item.hours ? `约 ${item.hours} 小时` : "",
         item.bufferMinutes ? `另留交通/休息 ${item.bufferMinutes} 分钟` : "",
-        item.cost ? `每人约 ${yuan(item.cost)}` : item.kind === "custom" ? "" : "费用待核验",
+        item.costKnown ? `每人约 ${yuan(item.cost)}（已填写）` : item.kind === "custom" ? "" : "费用待核验",
         item.booking ? "需预约" : "",
       ].filter(Boolean).join(" · ");
       lines.push(`- ${item.time ? `${item.time}–${itemEndTime(item)} ` : ""}${item.name}${item.city ? ` · ${item.city}` : ""}${link}：${extras}${item.note ? `。${item.note}` : ""}`);

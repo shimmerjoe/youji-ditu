@@ -162,7 +162,7 @@ export function bootstrapPlannerPage(): void {
   const field = (label: string, control: HTMLElement, extra = ""): HTMLLabelElement =>
     h("label", { class: `plan-field ${extra}`.trim() }, h("span", { text: label }), control);
 
-  const numberInput = (fk: string, value: number, attrs: Attrs): HTMLInputElement =>
+  const numberInput = (fk: string, value: number | string, attrs: Attrs): HTMLInputElement =>
     h("input", { type: "number", inputmode: "numeric", value, "data-fk": fk, ...attrs });
 
   function renderEmpty(): HTMLElement {
@@ -208,7 +208,7 @@ export function bootstrapPlannerPage(): void {
       return h("li", { class: "plan-item today-item" },
         h("span", { class: "pi-time-label", text: item.time || "—" }),
         h("div", { class: "pi-main" }, nameNode, tags, item.note ? h("p", { class: "pi-note-text", text: item.note }) : null,
-          h("small", { class: "pi-meta", text: [itemEndTime(item) ? `预计结束 ${itemEndTime(item)}` : "未设开始时间", `约 ${item.hours} 小时`, item.cost ? `每人约 ${yuan(item.cost)}` : "费用待核验"].join(" · ") })),
+          h("small", { class: "pi-meta", text: [itemEndTime(item) ? `预计结束 ${itemEndTime(item)}` : "未设开始时间", `约 ${item.hours} 小时`, item.bufferMinutes ? `另留 ${item.bufferMinutes} 分钟` : "", item.costKnown ? `每人约 ${yuan(item.cost)}（已填写）` : "费用未填写"].filter(Boolean).join(" · ") })),
         navigate,
       );
     }
@@ -227,7 +227,7 @@ export function bootstrapPlannerPage(): void {
           h("label", { class: "pi-buffer" }, h("span", { text: "预留 min" }),
             numberInput(`${id}-buffer`, item.bufferMinutes, { min: 0, max: 240, step: 5, "data-field": "bufferMinutes", "data-item": id, "aria-label": `${item.name} 交通或休息预留（分钟）` })),
           h("label", { class: "pi-cost" }, h("span", { text: "每人 ¥" }),
-            numberInput(`${id}-cost`, item.cost, { min: 0, max: 100000, step: 1, "data-field": "cost", "data-item": id, "aria-label": `${item.name} 每人费用` })),
+            numberInput(`${id}-cost`, item.costKnown ? item.cost : "", { min: 0, max: 100000, step: 1, placeholder: "未填", "data-field": "cost", "data-item": id, "aria-label": `${item.name} 每人费用` })),
           h("label", { class: "pi-booking" },
             h("input", { type: "checkbox", checked: item.booking, "data-field": "booking", "data-item": id }), h("span", { text: "需预约" })),
         ),
@@ -291,7 +291,7 @@ export function bootstrapPlannerPage(): void {
     return h("section", { class: "plan-card plan-budget", "aria-labelledby": "planBudgetTitle" },
       h("h3", { id: "planBudgetTitle", text: "参考预算" }),
       h("p", { class: "plan-total" }, h("strong", { text: yuan(budget.total) }), h("span", { text: `全程 · 人均 ${yuan(budget.perPerson)}` })),
-      h("p", { class: "plan-hint", text: `按下方假设计算，不是实时报价。${budget.nights} 晚住宿；门票按每个安排填写的“每人费用” × ${plan.travelers} 人。${budget.itemsWithoutCost ? `还有 ${budget.itemsWithoutCost} 个地点没填费用，实际可能更高。` : ""}` }),
+      h("p", { class: "plan-hint", text: `按下方假设计算，不是实时报价。${budget.nights} 晚住宿；门票按每个安排填写的“每人费用” × ${plan.travelers} 人。金额留空表示未填，填 0 表示你的 0 元参考估算。${budget.itemsWithoutCost ? `还有 ${budget.itemsWithoutCost} 个地点没填费用，实际可能更高。` : ""}` }),
       h("div", { class: "plan-assumptions" },
         assumption("每晚住宿", "hotelPerNight", "整间/整组的价格"),
         assumption("每人每天餐饮", "mealsPerPerson", "早中晚加小吃"),
@@ -333,7 +333,7 @@ export function bootstrapPlannerPage(): void {
 
   function renderChecks(plan: TripPlan): HTMLElement | null {
     const bookings = plan.days.flatMap((day, index) => day.items.filter((item) => item.booking).map((item) => ({ item, index })));
-    const noCost = plan.days.flatMap((day) => day.items).filter((item) => item.kind !== "custom" && !item.cost).length;
+    const noCost = estimateBudget(plan).itemsWithoutCost;
     const loads = plan.days.map((day, index) => ({ load: dayLoad(day), index })).filter(({ load }) => load.level === "full");
     // 单个整天项目（乐园、徒步）没有“删掉一个点”的余地，单独提醒。
     const allDay = loads.filter(({ load }) => load.stops === 1);
@@ -612,7 +612,8 @@ export function bootstrapPlannerPage(): void {
     if (!fieldName) return;
     if (itemId) {
       const value = target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : target.value;
-      const patch: Partial<PlanItem> = fieldName === "hours" || fieldName === "cost" || fieldName === "bufferMinutes" ? { [fieldName]: Number(value) } : { [fieldName]: value };
+      const patch: Partial<PlanItem> = fieldName === "cost" ? { cost: Number(value), costKnown: target.value.trim() !== "" }
+        : fieldName === "hours" || fieldName === "bufferMinutes" ? { [fieldName]: Number(value) } : { [fieldName]: value };
       updateItem(plan, itemId, patch);
     } else if (fieldName === "day-note") {
       const day = plan.days[Number(target.dataset.day)];

@@ -150,6 +150,20 @@ def run(base, output, round_number):
                     page.wait_for_selector('[data-field="bufferMinutes"]')
                     assert page.locator('[data-field="bufferMinutes"]').first.input_value() == "60"
                     results.append({"width": width, "case": "travel-buffer-persistence", "passed": True})
+                if round_number >= 8:
+                    seed(fixture((2,)))
+                    cost = page.locator('[data-field="cost"]').first
+                    assert cost.input_value() == ""
+                    cost.fill("0")
+                    cost.press("Tab")
+                    assert "还有 1 个地点" in page.locator(".plan-budget").inner_text()
+                    page.reload()
+                    page.wait_for_selector('[data-field="cost"]')
+                    assert page.locator('[data-field="cost"]').first.input_value() == "0"
+                    page.locator('[data-field="cost"]').first.fill("")
+                    page.locator('[data-field="cost"]').first.press("Tab")
+                    assert "还有 2 个地点" in page.locator(".plan-budget").inner_text()
+                    results.append({"width": width, "case": "zero-vs-unknown-cost", "passed": True})
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth"), "horizontal overflow"
                 assert not errors, errors
                 page.screenshot(path=str(output / f"planner-{width}.png"), full_page=True, animations="disabled")
